@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f4ee">
+  <meta name="description" content="TIMEFORM 时间配色实验室。24个表盘，48根指针，自定义背景板与长短针颜色，发现属于你的时间。">
+  <title>TIMEFORM — 时间配色实验室</title>
+  <style>
+    :root { --paper:#f5f4ee; --ink:#313a31; --muted:#8a8e80; --line:#dfdfd3; --accent:#526549; --board:#111213; --long:#f9faf7; --short:#eef0ec; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; min-width:320px; background:var(--paper); color:var(--ink); font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; }
+    button,input,select { font:inherit; color:inherit; }
+    button,a,input,select { -webkit-tap-highlight-color:transparent; }
+    button { cursor:pointer; }
+    button { border:0; background:none; }
+    button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible { outline:2px solid #839e6b; outline-offset:4px; }
+    a { color:inherit; text-decoration:none; }
+    svg { display:block; }
+    .icon { width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; flex:none; }
+    .shell { max-width:1480px; margin:auto; padding:0 56px; }
+    .topbar { height:84px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); gap:24px; }
+    .brand { display:flex; gap:13px; align-items:center; }
+    .brand-mark { width:30px; height:30px; position:relative; border:1.4px solid currentColor; border-radius:50%; }
+    .brand-mark:before,.brand-mark:after { content:""; position:absolute; left:14px; top:14px; background:currentColor; height:1.5px; transform-origin:0 50%; }
+    .brand-mark:before { width:9px; transform:rotate(-90deg); }
+    .brand-mark:after { width:8px; transform:rotate(30deg); }
+    .brand-name { font-size:19px; letter-spacing:.22em; font-weight:600; line-height:1; }
+    .brand-sub { margin-top:5px; font-size:9px; letter-spacing:.23em; color:var(--muted); }
+    .navigation { display:flex; gap:32px; align-items:center; margin-left:60px; font-size:12px; color:#898d80; }
+    .navigation .active { color:var(--ink); position:relative; }
+    .navigation .active:after { content:""; position:absolute; width:4px; height:4px; border-radius:50%; background:#667958; bottom:-12px; left:calc(50% - 2px); }
+    .save-button { display:flex; align-items:center; gap:8px; border:1px solid #d3d6c6; border-radius:6px; padding:9px 16px; font-size:12px; background:#fafaf5; transition:background .2s; }
+    .save-button:hover { background:#e9eddf; }
+    .save-button .icon { width:15px; height:15px; }
+    .intro { padding:38px 0 30px; display:flex; align-items:end; justify-content:space-between; gap:24px; }
+    .eyebrow { display:flex; gap:9px; align-items:center; margin:0 0 12px; font-size:10px; letter-spacing:.22em; color:#878e7b; }
+    .eyebrow:before { content:""; width:18px; height:1px; background:#879473; }
+    h1 { font-size:clamp(28px,3.3vw,44px); line-height:1.35; margin:0; font-weight:500; letter-spacing:-.045em; }
+    h1 span { color:#7f8b6b; }
+    .intro-copy { color:#94988b; font-size:12px; margin:13px 0 0; letter-spacing:.04em; }
+    .intro-right { text-align:right; padding-bottom:3px; }
+    .live { display:inline-flex; align-items:center; gap:7px; font-size:10px; letter-spacing:.12em; color:#737e69; }
+    .live-dot { width:5px; height:5px; border-radius:50%; background:#82956a; box-shadow:0 0 0 3px #85966b12; }
+    .digital-time { font-size:24px; line-height:1.5; font-weight:300; letter-spacing:.09em; font-variant-numeric:tabular-nums; }
+    .date { color:#95998c; font-size:10px; letter-spacing:.045em; }
+    .workspace { display:grid; grid-template-columns:minmax(0,1fr) 334px; gap:22px; }
+    .viewer { min-width:0; }
+    .scene { min-height:400px; height:calc(100% - 57px); position:relative; display:flex; align-items:center; justify-content:center; padding:68px 36px 61px; border:1px solid #dddfd3; border-radius:10px; background:radial-gradient(ellipse at 50% 35%,#f0f0e9,#e5e7de 90%); overflow:hidden; isolation:isolate; }
+    .scene:after { content:""; position:absolute; left:0; right:0; bottom:0; height:24%; background:linear-gradient(0deg,#dcdfd441,transparent); pointer-events:none; }
+    .scene-label { position:absolute; top:22px; left:24px; color:#959b8c; font-size:9px; letter-spacing:.14em; }
+    .scene-label span { color:#6b7864; }
+    .fullscreen-button { position:absolute; right:19px; top:16px; padding:7px; border:1px solid #d2d7c7; border-radius:5px; color:#818b75; background:#f4f5ee78; }
+    .fullscreen-button:hover { background:#fff9; }
+    .clock-wrap { width:100%; position:relative; filter:drop-shadow(0 18px 14px #24322529) drop-shadow(0 3px 3px #24322518); }
+    canvas { display:block; width:100%; aspect-ratio:1000/445; height:auto; }
+    .scene-bottom { position:absolute; bottom:22px; left:24px; right:24px; display:flex; justify-content:space-between; align-items:center; color:#8d9583; font-size:9px; letter-spacing:.12em; z-index:1; }
+    .palette-chips { display:flex; gap:5px; align-items:center; }
+    .palette-chips i { width:9px; height:9px; border-radius:50%; border:1px solid #0001; }
+    .palette-chips span { margin-left:5px; letter-spacing:.04em; font-size:10px; }
+    .scene:fullscreen { width:100%; height:100%; border-radius:0; padding:8vw; }
+    .scene:fullscreen .clock-wrap { width:min(90vw,calc(80vh * 2.247)); }
+    .viewer-bar { height:57px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .clock-meta { color:#93988a; font-size:10px; display:flex; align-items:center; gap:8px; }
+    .clock-meta .divider { color:#ced1c3; }
+    .replay { display:flex; align-items:center; gap:7px; color:#57674b; font-size:11px; padding:7px 0 7px 12px; }
+    .replay .icon { width:15px; height:15px; }
+    .replay:hover { color:#273b20; }
+    .editor { background:#fbfbf7; border:1px solid #dddfd3; border-radius:10px; padding:23px 24px 0; display:flex; flex-direction:column; min-height:457px; }
+    .editor-heading { display:flex; align-items:center; justify-content:space-between; }
+    .editor-heading h2 { font-size:15px; margin:0; font-weight:600; letter-spacing:.02em; }
+    .version { font-size:9px; color:#98a18b; letter-spacing:.1em; border:1px solid #e0e4d8; border-radius:4px; padding:1px 6px; }
+    .editor-sub { margin:5px 0 20px; color:#9ba190; font-size:10px; }
+    .tabs { display:grid; grid-template-columns:repeat(3,1fr); border-bottom:1px solid #e1e4d9; margin-bottom:17px; }
+    .tab { display:flex; align-items:center; justify-content:center; gap:6px; position:relative; padding:9px 0 12px; color:#989e8e; font-size:11px; }
+    .tab .icon { width:14px; height:14px; }
+    .tab[aria-selected="true"] { color:#526549; }
+    .tab[aria-selected="true"]:after { content:""; position:absolute; bottom:-1px; height:2px; background:#6d805b; left:13px; right:13px; border-radius:3px; }
+    .tab-panel { flex:1; }
+    [hidden] { display:none!important; }
+    .classic-colors { display:flex; gap:8px; padding-bottom:10px; border-bottom:1px solid #e8eadf; margin-bottom:4px; }
+    .classic-color { display:flex; flex:1; align-items:center; justify-content:center; gap:7px; padding:7px; border:1px solid #e0e3d7; border-radius:5px; font-size:10px; color:#7c886f; background:#fff; }
+    .classic-color i { width:12px; height:12px; border-radius:50%; border:1px solid #c9cec0; }
+    .classic-color[aria-pressed="true"] { color:#526549; border-color:#9ead8d; background:#f0f4e9; }
+    .color-row { display:flex; align-items:center; gap:10px; padding:10px 0; position:relative; }
+    .part-icon { width:29px; height:29px; display:flex; align-items:center; justify-content:center; border:1px solid #e6e8dd; border-radius:5px; color:#8c9680; flex:none; background:#f5f6ee; }
+    .part-icon .icon { width:15px; height:15px; }
+    .color-name { flex:1; cursor:pointer; }
+    .color-name strong { display:block; font-size:11px; font-weight:500; }
+    .color-name span { display:block; font-size:8px; color:#a3a797; line-height:1.7; letter-spacing:.02em; }
+    .color-row.selected .part-icon { border-color:#b6c2a7; color:#5f764f; }
+    .color-control { display:flex; gap:7px; align-items:center; border:1px solid #e0e3d7; padding:5px 7px; border-radius:5px; background:white; }
+    .color-picker { width:22px; height:22px; border:1px solid #0001; border-radius:3px; overflow:hidden; cursor:pointer; position:relative; flex:none; }
+    .color-picker input { position:absolute; width:40px; height:40px; left:-9px; top:-9px; cursor:pointer; padding:0; opacity:0; }
+    .hex-input { width:67px; font:10px/1.6 "SFMono-Regular",Consolas,monospace; letter-spacing:.03em; border:0; outline:none; background:none; text-transform:uppercase; padding:2px 0; }
+    .hex-input[aria-invalid="true"] { color:#b34f3e; }
+    .quick-colors { border-top:1px solid #e8eadf; padding-top:14px; margin-top:7px; }
+    .field-heading { display:flex; align-items:center; justify-content:space-between; font-size:10px; color:#8c9580; margin-bottom:10px; }
+    .field-heading span:last-child { color:#a6ad9b; font-size:9px; }
+    .swatches { display:flex; justify-content:space-between; gap:7px; }
+    .swatch { width:24px; height:24px; border:1px solid #0001; border-radius:50%; position:relative; }
+    .swatch:hover { transform:translateY(-2px); }
+    .swatch[aria-pressed="true"]:after { content:""; position:absolute; inset:-4px; border:1px solid #9fad8c; border-radius:50%; }
+    .lengths { border-top:1px solid #e8eadf; margin-top:17px; padding-top:12px; }
+    .range-row { display:flex; align-items:center; gap:12px; margin:7px 0; }
+    .range-row label { width:46px; flex:none; color:#909883; font-size:10px; white-space:nowrap; }
+    input[type="range"] { width:100%; min-width:0; accent-color:#768b60; height:3px; cursor:pointer; }
+    .range-row output { flex:none; min-width:32px; text-align:right; font-size:10px; color:#667655; font-variant-numeric:tabular-nums; }
+    .editor-footer { border-top:1px solid #e4e7db; margin-top:15px; min-height:42px; display:flex; align-items:center; justify-content:space-between; font-size:9px; color:#a1a995; }
+    .editor-footer span { display:flex; align-items:center; gap:5px; }
+    .editor-footer span i { height:4px; width:4px; border-radius:50%; background:#8c9e77; }
+    .reset { font-size:9px; color:#7e8d70; padding:8px 0 8px 8px; }
+    .preset-section { margin-top:34px; scroll-margin-top:25px; }
+    .section-heading { display:flex; justify-content:space-between; align-items:center; margin-bottom:17px; gap:14px; }
+    .section-heading h2 { font-size:17px; font-weight:500; margin:0; letter-spacing:.02em; }
+    .section-heading p { margin:5px 0 0; color:#999e8e; font-size:10px; }
+    .section-tag { color:#909a82; letter-spacing:.13em; font-size:9px; }
+    .presets { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:13px; }
+    .preset { text-align:left; padding:7px 7px 10px; border:1px solid #dedfd4; border-radius:7px; background:#f9f9f4; position:relative; transition:border-color .2s,box-shadow .2s,transform .2s; }
+    .preset:hover { transform:translateY(-3px); border-color:#acb898; }
+    .preset[aria-pressed="true"] { border-color:#859972; box-shadow:0 0 0 1px #859972; }
+    .preset-preview { height:83px; border-radius:4px; background:#e6e8df; display:flex; align-items:center; justify-content:center; padding:12px 9px; overflow:hidden; }
+    .preset-preview svg { width:100%; max-height:64px; filter:drop-shadow(0 5px 4px #0002); }
+    .preset-name { display:flex; justify-content:space-between; align-items:center; margin:9px 4px 0; }
+    .preset-name strong { font-size:11px; font-weight:500; }
+    .preset-name .icon { width:14px; height:14px; color:#678154; opacity:0; }
+    .preset[aria-pressed="true"] .preset-name .icon { opacity:1; }
+    .preset-caption { margin:3px 4px 0; color:#a0a592; font-size:8px; letter-spacing:.05em; }
+    .motion-options { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+    .motion-choice { text-align:left; padding:10px; border:1px solid #e1e5d9; border-radius:5px; background:#fff; }
+    .motion-choice[aria-pressed="true"] { border-color:#9ead8d; background:#f0f4e9; }
+    .motion-choice strong { display:block; font-size:11px; font-weight:500; }
+    .motion-choice span { font-size:9px; color:#a0a794; display:block; margin-top:3px; }
+    .setting-block { margin-top:20px; }
+    .setting-label { color:#87917b; font-size:10px; display:block; margin-bottom:9px; }
+    .segmented { display:flex; padding:3px; background:#edf0e6; border-radius:5px; gap:3px; }
+    .segmented button { flex:1; border-radius:3px; padding:7px 3px; font-size:10px; color:#959e88; }
+    .segmented button[aria-pressed="true"] { background:#fbfcf7; color:#596d47; box-shadow:0 1px 3px #2b392214; }
+    .setting-note { font-size:9px; color:#a3aa96; margin:9px 0 0; line-height:1.8; }
+    .manual-row { display:flex; gap:8px; margin-top:17px; }
+    .manual-row button { border:1px solid #dce2d1; border-radius:5px; width:34px; background:white; }
+    .time-input { width:100%; min-width:0; text-align:center; border:1px solid #dce2d1; border-radius:5px; padding:6px; background:#fff; }
+    .check-label { display:flex; gap:8px; align-items:center; color:#8e987f; font-size:10px; margin-top:12px; }
+    input[type="checkbox"] { accent-color:#768b60; }
+    .clock-source-note { margin-top:17px; padding:13px; background:#f1f3ea; border-radius:5px; color:#8a957b; font-size:10px; line-height:1.9; }
+    .footer { display:flex; align-items:center; justify-content:space-between; gap:20px; border-top:1px solid var(--line); padding:21px 0 25px; margin-top:31px; color:#a1a692; font-size:9px; letter-spacing:.02em; }
+    .footer .footer-brand { letter-spacing:.15em; margin-right:12px; color:#79886a; }
+    .footer a { text-decoration:underline; text-underline-offset:3px; color:#8b957d; }
+    .toast { position:fixed; left:50%; bottom:28px; transform:translate(-50%,15px); padding:11px 20px; color:#f6f7ef; background:#354330; border-radius:6px; box-shadow:0 6px 30px #26321f25; font-size:12px; opacity:0; pointer-events:none; transition:opacity .2s,transform .2s; z-index:5; max-width:calc(100vw - 30px); text-align:center; }
+    .toast.visible { opacity:1; transform:translate(-50%,0); }
+    @media (min-width:1500px) { .scene { min-height:445px; } }
+    @media (max-width:1100px) { .shell { padding:0 32px; } .workspace { grid-template-columns:minmax(0,1fr) 310px; gap:17px; } .editor { padding:21px 20px 0; } .scene { padding-left:22px; padding-right:22px; } .presets { gap:9px; } .preset-preview { padding:13px 5px; height:74px; } }
+    @media (max-width:850px) { .shell { padding:0 24px; } .navigation { margin-left:0; gap:20px; } .workspace { grid-template-columns:1fr; } .scene { height:400px; padding:65px 35px; } .editor { min-height:0; } .editor-sub { margin-bottom:12px; } .tabs { margin-bottom:13px; } .color-row { padding:8px 0; } .quick-colors { margin-top:5px; } .swatches { justify-content:flex-start; gap:14px; } .presets { grid-template-columns:repeat(3,minmax(0,1fr)); gap:13px; } .preset-preview { height:90px; padding:10px 18px; } .scene:fullscreen { height:100%; } }
+    @media (max-width:520px) { .shell { padding:0 18px; } .topbar { height:70px; gap:12px; } .brand-name { font-size:15px; } .brand-sub { font-size:7px; } .brand-mark { width:25px; height:25px; } .brand-mark:before,.brand-mark:after { left:11px; top:11px; } .navigation { display:none; } .save-button { padding:8px 10px; font-size:10px; } .intro { padding:28px 0 23px; gap:10px; } h1 { font-size:29px; } .eyebrow { font-size:8px; letter-spacing:.13em; } .intro-copy { font-size:10px; max-width:240px; line-height:1.8; } .intro-right { display:none; } .scene { min-height:0; height:255px; padding:48px 18px; } .scene-label { left:16px; top:18px; font-size:8px; } .fullscreen-button { top:11px; right:13px; } .scene-bottom { left:16px; right:16px; bottom:16px; font-size:7px; } .clock-meta { font-size:8px; gap:5px; } .replay { font-size:10px; } .workspace { gap:10px; } .editor { padding:20px 21px 0; } .presets { grid-template-columns:repeat(2,minmax(0,1fr)); gap:11px; } .section-tag { display:none; } .preset-section { margin-top:27px; } .section-heading h2 { font-size:16px; } .preset-preview { height:90px; padding:12px; } .footer { display:block; font-size:8px; margin-top:25px; } .footer>span { display:block; margin-top:7px; } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*:before,*:after { transition:none!important; } .preset:hover { transform:none; } }
+  </style>
+</head>
+<body>
+<svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+  <symbol id="i-save" viewBox="0 0 24 24"><path d="M5 3h12l3 3v15H4V3h1Z"/><path d="M8 3v6h8V3M8 21v-8h8v8"/></symbol>
+  <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18h1a2 2 0 0 0 1-3.7 1.8 1.8 0 0 1 1-3.3h2a4 4 0 0 0 4-4C21 6 17 3 12 3Z"/><path d="M7 10h.01M10 6.5h.01M15 6.5h.01M6.5 14h.01" stroke-width="2.8"/></symbol>
+  <symbol id="i-motion" viewBox="0 0 24 24"><path d="M3 8h12a4 4 0 1 0-4-4M3 12h15a3 3 0 1 1-3 3M3 16h5"/></symbol>
+  <symbol id="i-time" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-board" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h.01M12 9h.01M17 9h.01M7 15h.01M12 15h.01M17 15h.01" stroke-width="2"/></symbol>
+  <symbol id="i-long" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 4v8" stroke-width="2"/></symbol>
+  <symbol id="i-short" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m12 12 4 3" stroke-width="2"/></symbol>
+  <symbol id="i-fullscreen" viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M21 16v5h-5M3 16v5h5"/></symbol>
+  <symbol id="i-replay" viewBox="0 0 24 24"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+</svg>
+<div class="shell">
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="TIMEFORM 首页"><span class="brand-mark" aria-hidden="true"></span><div><div class="brand-name">TIMEFORM</div><div class="brand-sub">THE SHAPE OF YOUR TIME</div></div></a>
+    <nav class="navigation" aria-label="主导航"><a class="active" href="#studio">配色实验室</a><a href="#presets">灵感预设 <span aria-hidden="true">↗</span></a></nav>
+    <button class="save-button" id="save" type="button"><svg class="icon"><use href="#i-save"/></svg>保存我的方案</button>
+  </header>
+  <section class="intro" id="studio">
+    <div><p class="eyebrow">KINETIC CLOCK / COLOR STUDIO</p><h1>把时间，<span>调成你的颜色。</span></h1><p class="intro-copy">24 个表盘，48 根指针。给每一刻，一点自己的色彩。</p></div>
+    <div class="intro-right"><div class="live"><i class="live-dot"></i><span id="topStatus">LIVE · 本地时间</span></div><div class="digital-time" id="digitalTime">--:--:--</div><div class="date" id="date"></div></div>
+  </section>
+  <main>
+    <div class="workspace">
+      <div class="viewer">
+        <div class="scene" id="scene">
+          <div class="scene-label">01 / <span>YOUR TIME, IN MOTION</span></div>
+          <button type="button" class="fullscreen-button" id="fullscreen" aria-label="全屏观赏" title="全屏观赏"><svg class="icon"><use href="#i-fullscreen"/></svg></button>
+          <div class="clock-wrap"><canvas id="clock" role="img" aria-label="由24个模拟钟表组成的数字时钟"></canvas></div>
+          <div class="scene-bottom"><span id="sceneStatus">LOCAL TIME · 24H</span><div class="palette-chips"><i id="chipBoard"></i><i id="chipLong"></i><i id="chipShort"></i><span id="paletteName">经典黑 / CLASSIC BLACK</span></div></div>
+        </div>
+        <div class="viewer-bar"><span class="clock-meta"><span>24 个表盘</span><span class="divider">/</span><span>48 根指针</span><span class="divider">/</span><span id="motionLabel">经典旋转</span></span><button class="replay" id="replay" type="button"><svg class="icon"><use href="#i-replay"/></svg>重播动画</button></div>
+      </div>
+      <section class="editor" aria-label="时钟定制面板">
+        <div class="editor-heading"><h2>定制你的时间</h2><span class="version">V.01</span></div><p class="editor-sub">一点颜色，一种节奏。每个细节都由你决定。</p>
+        <div class="tabs" role="tablist" aria-label="定制类别">
+          <button class="tab" id="tab-colors" role="tab" aria-selected="true" aria-controls="panel-colors" tabindex="0"><svg class="icon"><use href="#i-palette"/></svg>配色</button>
+          <button class="tab" id="tab-motion" role="tab" aria-selected="false" aria-controls="panel-motion" tabindex="-1"><svg class="icon"><use href="#i-motion"/></svg>动态</button>
+          <button class="tab" id="tab-time" role="tab" aria-selected="false" aria-controls="panel-time" tabindex="-1"><svg class="icon"><use href="#i-time"/></svg>时间</button>
+        </div>
+        <div class="tab-panel" id="panel-colors" role="tabpanel" aria-labelledby="tab-colors">
+          <div class="classic-colors" role="group" aria-label="经典配色"><button class="classic-color" type="button" data-classic="classic-black" aria-pressed="true"><i style="background:#111213" aria-hidden="true"></i>经典黑</button><button class="classic-color" type="button" data-classic="classic-white" aria-pressed="false"><i style="background:#f6f4ef" aria-hidden="true"></i>经典白</button></div>
+          <div class="color-row selected" data-part="board"><span class="part-icon"><svg class="icon"><use href="#i-board"/></svg></span><label class="color-name" for="colorBoard"><strong>背景板</strong><span>THE BACKPLATE</span></label><div class="color-control"><label class="color-picker" id="swatchBoard"><input type="color" id="colorBoard" value="#111213" aria-label="背景板颜色"></label><input class="hex-input" id="hexBoard" value="#111213" maxlength="7" aria-label="背景板十六进制颜色" spellcheck="false"></div></div>
+          <div class="color-row" data-part="long"><span class="part-icon"><svg class="icon"><use href="#i-long"/></svg></span><label class="color-name" for="colorLong"><strong>长针</strong><span>THE LONG HAND</span></label><div class="color-control"><label class="color-picker" id="swatchLong"><input type="color" id="colorLong" value="#f9faf7" aria-label="长针颜色"></label><input class="hex-input" id="hexLong" value="#F9FAF7" maxlength="7" aria-label="长针十六进制颜色" spellcheck="false"></div></div>
+          <div class="color-row" data-part="short"><span class="part-icon"><svg class="icon"><use href="#i-short"/></svg></span><label class="color-name" for="colorShort"><strong>短针</strong><span>THE SHORT HAND</span></label><div class="color-control"><label class="color-picker" id="swatchShort"><input type="color" id="colorShort" value="#eef0ec" aria-label="短针颜色"></label><input class="hex-input" id="hexShort" value="#EEF0EC" maxlength="7" aria-label="短针十六进制颜色" spellcheck="false"></div></div>
+          <div class="quick-colors"><div class="field-heading"><span>灵感色盘</span><span id="partHint">点选以应用到背景板</span></div><div class="swatches" id="quickColors" role="group" aria-label="快捷颜色"></div></div>
+          <div class="lengths"><div class="range-row"><label for="longLength">长针长度</label><input type="range" id="longLength" min="70" max="100" value="100"><output id="longLengthValue" for="longLength">100%</output></div><div class="range-row"><label for="shortLength">短针长度</label><input type="range" id="shortLength" min="55" max="100" value="100"><output id="shortLengthValue" for="shortLength">100%</output></div></div>
+        </div>
+        <div class="tab-panel" id="panel-motion" role="tabpanel" aria-labelledby="tab-motion" hidden>
+          <div class="motion-options" role="group" aria-label="指针运动预设">
+            <button class="motion-choice" data-motion="spin" aria-pressed="true"><strong>经典旋转</strong><span>先显现，再旋转归位</span></button><button class="motion-choice" data-motion="quiet" aria-pressed="false"><strong>平滑过渡</strong><span>只移动需要变化的指针</span></button>
+          </div>
+          <div class="setting-block"><div class="range-row"><label for="duration">动画时长</label><input type="range" min="1" max="10" value="4" id="duration"><output id="durationValue" for="duration">4s</output></div></div>
+          <div class="setting-block"><span class="setting-label">闲置指针</span><div class="segmented" role="group" aria-label="闲置指针显示方式"><button type="button" data-visibility="hide" aria-pressed="true">隐藏</button><button type="button" data-visibility="ghost" aria-pressed="false">微显 12%</button><button type="button" data-visibility="show" aria-pressed="false">完整显示</button></div><p class="setting-note">所有指针归位后，再淡出闲置指针。<br>动态设置用于下一次时间变换或重播。</p></div>
+        </div>
+        <div class="tab-panel" id="panel-time" role="tabpanel" aria-labelledby="tab-time" hidden>
+          <span class="setting-label">时间来源</span><div class="segmented"><button type="button" id="live" aria-pressed="true">实时时间</button><button type="button" id="manual" aria-pressed="false">手动演示</button></div>
+          <div class="manual-row" id="manualRow" hidden><button type="button" id="back" aria-label="前一分钟">−</button><input type="time" class="time-input" id="timeInput" step="60" aria-label="演示时间"><button type="button" id="forward" aria-label="后一分钟">+</button></div><label class="check-label" id="demoRow" hidden><input type="checkbox" id="autoDemo">每 12 秒前进一分钟</label>
+          <div class="setting-block"><span class="setting-label">时间格式</span><div class="segmented"><button type="button" id="format24" aria-pressed="true">24 小时</button><button type="button" id="format12" aria-pressed="false">12 小时</button></div></div>
+          <p class="clock-source-note" id="sourceNote">跟随设备的本地时间，每分钟自动变换。<br>也可以设置一个特别的时刻，看看它的形状。</p>
+        </div>
+        <div class="editor-footer"><span><i></i><span id="saveStatus">修改即时生效</span></span><button class="reset" id="reset" type="button">恢复默认 ↺</button></div>
+      </section>
+    </div>
+    <section class="preset-section" id="presets"><div class="section-heading"><div><h2>经典黑白，也有更多色彩。</h2><p>保留经典，从喜欢的一组开始。切换配色时，保持你的动态设置。</p></div><span class="section-tag">08 / COLOR PALETTES</span></div><div class="presets" id="presetGrid" role="group" aria-label="配色预设"></div></section>
+  </main>
+  <footer class="footer"><div><span class="footer-brand">TIMEFORM</span>让时间有形，让色彩自由。</div><span>独立交互实验 · 灵感来自 <a href="https://www.humanssince1982.com/en-int/collections/collectibles" target="_blank" rel="noopener noreferrer">Humans since 1982 ↗</a></span></footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const canvas = $('clock'), ctx = canvas.getContext('2d');
+  const W=1000, H=445, TAU=Math.PI*2;
+  const DIR={E:0,S:Math.PI/2,W:Math.PI,N:-Math.PI/2,P:Math.PI*.75};
+  const GLYPHS={
+    '0':['SE','SW','NS','NS','NE','NW'], '1':['PP','SS','PP','NS','PP','NN'],
+    '2':['EE','SW','SE','NW','NE','WW'], '3':['EE','SW','EE','NW','EE','NW'],
+    '4':['SS','SS','NE','NS','PP','NN'], '5':['SE','WW','NE','SW','EE','NW'],
+    '6':['SE','WW','NS','SW','NE','NW'], '7':['EE','SW','PP','NS','PP','NN'],
+    '8':['SE','SW','NE','NW','NE','NW'], '9':['SE','SW','EN','NS','EE','NW']
+  };
+  const PRESETS=[
+    {id:'classic-black',name:'经典黑',en:'CLASSIC BLACK',board:'#111213',long:'#f9faf7',short:'#eef0ec',material:'black',caption:'黑色背景板 · 经典白针'},
+    {id:'classic-white',name:'经典白',en:'CLASSIC WHITE',board:'#f6f4ef',long:'#50534f',short:'#757873',material:'white',caption:'米白背景板 · 经典黑针'},
+    {id:'moss',name:'苔原',en:'MOSS',board:'#3d493f',long:'#f3f1e7',short:'#bfcdb0',material:null,caption:'深苔与浅绿 · 自然绿意'},
+    {id:'paper',name:'纸与墨',en:'PAPER & INK',board:'#e9e6de',long:'#2a312b',short:'#858775',material:null,caption:'温润米白 · 墨色指针'},
+    {id:'dusk',name:'暮色',en:'DUSK',board:'#393746',long:'#cecce6',short:'#e8a991',material:null,caption:'柔紫与杏 · 日暮时分'},
+    {id:'ocean',name:'深海',en:'DEEP SEA',board:'#21444c',long:'#e7e9dd',short:'#91c1c6',material:null,caption:'深蓝与雾白 · 静水流深'},
+    {id:'clay',name:'赤陶',en:'TERRACOTTA',board:'#a95441',long:'#f6ecdc',short:'#e8bd90',material:null,caption:'陶红与奶油 · 日落暖调'},
+    {id:'midnight',name:'午夜',en:'MIDNIGHT',board:'#232624',long:'#dfc797',short:'#f1efe2',material:null,caption:'墨黑与香槟 · 黑金之夜'}
+  ];
+  const defaults={...PRESETS[0],motion:'spin',duration:4,longLength:100,shortLength:100,visibility:'hide',format24:true};
+  const state={...defaults,preset:'classic-black',source:'live',minuteKey:null,simulatedMinutes:0,autoDemo:false,demoLast:0,selectedPart:'board'};
+  const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const STORAGE_KEY='timeform-scheme-v1';
+  const motionNames={spin:'经典旋转',quiet:'平滑过渡'};
+  const partNames={board:'背景板',long:'长针',short:'短针'};
+  const hexPattern=/^#[0-9a-f]{6}$/i;
+  const pad=n=>String(n).padStart(2,'0');
+  const normalizeMinutes=n=>((n%1440)+1440)%1440;
+  const wrap=x=>((x%TAU)+TAU)%TAU;
+  const smooth=t=>t*t*(3-2*t);
+  const fadeEase=t=>t*t*t*(t*(t*6-15)+10);
+  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+  let savedSignature=null, toastTimer, paintedVersion=-1, paletteVersion=0, renderDirty=true, wasMoving=false;
+  const surface=document.createElement('canvas'); surface.width=W;surface.height=H;
+  const surfaceCtx=surface.getContext('2d');
+  const hands=Array.from({length:48},(_,i)=>{const a=DIR.P+(i%2?.18:-.18);return {angle:a,from:a,to:a,start:0,duration:1,used:false,opacity:0,revealFrom:0,revealStart:0,revealEnd:0,travelOpacity:0,motionEnd:0,fadeStart:0,fadeEnd:0,fadeFrom:0,fadeTo:0};});
+
+  function scheme() { return {board:state.board,long:state.long,short:state.short,material:state.material,motion:state.motion,duration:state.duration,longLength:state.longLength,shortLength:state.shortLength,visibility:state.visibility,format24:state.format24,preset:state.preset}; }
+  function signature() { return JSON.stringify(scheme()); }
+  function readSaved() {
+    try {
+      const v=JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if(!v || !['board','long','short'].every(k=>hexPattern.test(v[k])) || !['spin','quiet','wave','orbit'].includes(v.motion) || !['hide','ghost','show'].includes(v.visibility) || typeof v.format24!=='boolean') return;
+      if(!['duration','longLength','shortLength'].every(k=>typeof v[k]==='number'&&Number.isFinite(v[k]))) return;
+      const settings={board:v.board.toLowerCase(),long:v.long.toLowerCase(),short:v.short.toLowerCase(),material:PRESETS.find(p=>p.material===v.material&&p.board===v.board.toLowerCase())?.material??null,motion:Object.hasOwn(motionNames,v.motion)?v.motion:'spin',duration:clamp(v.duration,1,10),longLength:clamp(v.longLength,70,100),shortLength:Math.min(clamp(v.shortLength,55,100),clamp(v.longLength,70,100)),visibility:v.visibility,format24:v.format24,preset:PRESETS.some(p=>p.id===v.preset)?v.preset:null};
+      Object.assign(state,settings);savedSignature=signature();
+    } catch (_) { /* Storage may be unavailable in a private browser. */ }
+  }
+  readSaved();
+  if(reducedMotion)state.motion='quiet';
+  function nowMinutes(){const d=new Date();return d.getHours()*60+d.getMinutes();}
+  function currentMinutes(){return state.source==='live'?nowMinutes():state.simulatedMinutes;}
+  function displayDigits(minutes){const h=Math.floor(minutes/60);return pad(state.format24?h:h%12||12)+pad(minutes%60);}
+  function digitPose(digits){
+    const result=new Array(48);
+    for(let d=0;d<4;d++)for(let cell=0;cell<6;cell++){
+      const col=d*2+cell%2,row=Math.floor(cell/2),i=(row*8+col)*2;
+      const [a,b]=GLYPHS[digits[d]][cell];
+      result[i]={angle:DIR[a],used:a!=='P'};
+      result[i+1]={angle:DIR[b],used:b!=='P'&&b!==a};
+    }
+    return result;
+  }
+  function settleOpacity(h){return h.used||state.visibility==='show'?1:state.visibility==='ghost'?.12:0;}
+  function tween(now,start,end,from,to){const t=end<=start?Number(now>=end):clamp((now-start)/(end-start),0,1);return from+(to-from)*fadeEase(t);}
+  function interpolate(now){
+    for(const h of hands){
+      const u=clamp((now-h.start)/h.duration,0,1);
+      h.angle=u===1?wrap(h.to):h.from+(h.to-h.from)*smooth(u);
+      if(now<h.revealEnd)h.opacity=tween(now,h.revealStart,h.revealEnd,h.revealFrom,h.travelOpacity);
+      else if(now<h.fadeStart)h.opacity=h.travelOpacity;
+      else h.opacity=tween(now,h.fadeStart,h.fadeEnd,h.fadeFrom,h.fadeTo);
+    }
+  }
+  function setVisibility(mode,refresh=true){
+    if(mode===state.visibility)return;
+    const now=performance.now();interpolate(now);state.visibility=mode;
+    for(const h of hands){
+      const target=settleOpacity(h);
+      if(now<h.fadeStart){
+        // Finish the current movement before hiding a participating hand.
+        h.fadeTo=target;
+        if(target>h.travelOpacity){h.revealFrom=h.opacity;h.revealStart=now;h.revealEnd=Math.min(now+250,h.fadeStart);h.travelOpacity=target;h.fadeFrom=target;}
+      }else{
+        // Retarget from the sampled alpha, including a toggle during a fade.
+        h.revealStart=now;h.revealEnd=now;h.travelOpacity=h.opacity;h.fadeFrom=h.opacity;h.fadeTo=target;h.fadeStart=now;h.fadeEnd=now+(reducedMotion?150:350);
+      }
+    }
+    renderDirty=true;if(refresh)markChanged();
+  }
+  function animate(minutes,force=false){
+    const digits=displayDigits(minutes);if(!force&&state.minuteKey===digits)return;
+    if(force&&state.motion==='quiet'&&state.minuteKey===digits){showToast('平滑过渡在时间改变时启动，可用手动演示切换一分钟查看');return;}
+    renderDirty=true;
+    const now=performance.now();interpolate(now);
+    const target=digitPose(digits),dur=reducedMotion?300:state.duration*1000;
+    const rotating=state.motion==='spin'&&!reducedMotion;
+    const reveal=reducedMotion?60:Math.min(rotating?350:160,dur*.15),hide=reducedMotion?80:Math.min(350,dur*.18);
+    const travel=dur-reveal-hide,idleAlpha=state.visibility==='show'?1:state.visibility==='ghost'?.12:0;
+    for(let i=0;i<48;i++){
+      const h=hands[i],current=h.angle;
+      let turn=((target[i].angle-current+Math.PI)%TAU+TAU)%TAU-Math.PI;
+      if(rotating)turn=i%2?-wrap(wrap(current)-target[i].angle)-TAU:wrap(target[i].angle-wrap(current))+TAU;
+      const participating=rotating||h.used||target[i].used||h.opacity>idleAlpha+.001;
+      h.revealFrom=h.opacity;h.travelOpacity=participating?1:idleAlpha;h.used=target[i].used;
+      h.from=current;h.to=current+turn;h.start=now+reveal;h.duration=travel;h.motionEnd=h.start+travel;
+      h.revealStart=now;h.revealEnd=now+reveal;
+      h.fadeStart=h.motionEnd;h.fadeEnd=now+dur;h.fadeFrom=h.travelOpacity;h.fadeTo=settleOpacity(h);
+    }
+    state.minuteKey=digits;
+    canvas.setAttribute('aria-label',`由24个钟表组成的数字时钟，现在显示 ${digits.slice(0,2)}:${digits.slice(2)}`);
+    updateReadout();
+  }
+  function initializeTime(minutes){
+    const digits=displayDigits(minutes),pose=digitPose(digits),now=performance.now();
+    for(let i=0;i<48;i++){
+      const h=hands[i];h.angle=pose[i].angle;h.from=h.angle;h.to=h.angle;h.used=pose[i].used;
+      h.opacity=settleOpacity(h);h.revealFrom=h.opacity;h.travelOpacity=h.opacity;h.fadeFrom=h.opacity;h.fadeTo=h.opacity;
+      h.start=now;h.duration=1;h.motionEnd=now;h.revealStart=now;h.revealEnd=now;h.fadeStart=now;h.fadeEnd=now;
+    }
+    state.minuteKey=digits;canvas.setAttribute('aria-label',`由24个钟表组成的数字时钟，现在显示 ${digits.slice(0,2)}:${digits.slice(2)}`);renderDirty=true;updateReadout();
+  }
+  function sync(force=false){animate(currentMinutes(),force);}
+  function updateReadout(){
+    const d=new Date(),digits=displayDigits(currentMinutes());
+    $('digitalTime').textContent=digits.slice(0,2)+':'+digits.slice(2)+':'+pad(state.source==='live'?d.getSeconds():0);
+    $('topStatus').textContent=state.source==='live'?'LIVE · 本地时间':'DEMO · 手动时间';
+    $('date').textContent=d.toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
+    $('sceneStatus').textContent=(state.source==='live'?'LOCAL TIME':'DEMO '+digits.slice(0,2)+':'+digits.slice(2))+' · '+(state.format24?'24H':'12H');
+    $('motionLabel').textContent=motionNames[state.motion];
+  }
+  function tint(hex,amount){const n=parseInt(hex.slice(1),16),channels=[n>>16,(n>>8)&255,n&255];return '#'+channels.map(v=>Math.round(v+(amount>0?255-v:v)*amount).toString(16).padStart(2,'0')).join('');}
+  function roundRect(c,x,y,w,h,r){c.beginPath();c.roundRect(x,y,w,h,r);}
+  function drawSurface(){
+    const c=surfaceCtx,b=state.board,white=state.material==='white',black=state.material==='black';
+    c.clearRect(0,0,W,H);c.save();roundRect(c,1,1,W-2,H-2,6);c.clip();
+    const bg=c.createLinearGradient(0,0,W,H);
+    if(white){bg.addColorStop(0,'#e9e7e1');bg.addColorStop(.45,'#f6f4ef');bg.addColorStop(1,'#d8d6d0');}
+    else if(black){bg.addColorStop(0,'#242627');bg.addColorStop(.43,'#111213');bg.addColorStop(1,'#0d0e0f');}
+    else{bg.addColorStop(0,tint(b,.09));bg.addColorStop(.5,b);bg.addColorStop(1,tint(b,-.11));}
+    c.fillStyle=bg;c.fillRect(0,0,W,H);
+    c.fillStyle='#ffffff17';c.fillRect(0,0,W,2);c.fillStyle='#00000020';c.fillRect(0,H-4,W,4);
+    for(let row=0;row<3;row++)for(let col=0;col<8;col++){
+      const x=105+col*112,y=110+row*112;c.save();c.translate(x,y);
+      const rim=c.createRadialGradient(-11,-17,3,0,0,55);
+      if(white){rim.addColorStop(0,'#f4f2ed');rim.addColorStop(.82,'#e5e2dc');rim.addColorStop(.97,'#c6c4bd');rim.addColorStop(1,'#dedbd5');}
+      else if(black){rim.addColorStop(0,'#121415');rim.addColorStop(.70,'#0d0f10');rim.addColorStop(.94,'#08090a');rim.addColorStop(1,'#242628');}
+      else{rim.addColorStop(0,tint(b,-.06));rim.addColorStop(.82,tint(b,-.12));rim.addColorStop(.96,tint(b,-.24));rim.addColorStop(1,tint(b,.06));}
+      c.shadowColor=black?'#000000b8':'#0000003b';c.shadowBlur=7;c.shadowOffsetY=2;c.fillStyle=rim;c.beginPath();c.arc(0,0,53.2,0,TAU);c.fill();c.shadowBlur=0;c.shadowOffsetY=0;
+      c.strokeStyle=white?'#0000001a':'#ffffff13';c.lineWidth=1;c.beginPath();c.arc(0,0,52.2,0,TAU);c.stroke();c.strokeStyle=white?'#ffffff7a':'#00000018';c.beginPath();c.arc(0,0,49.5,0,TAU);c.stroke();c.restore();
+    }
+    c.restore();c.strokeStyle=tint(b,-.17);c.lineWidth=2;roundRect(c,1,1,W-2,H-2,6);c.stroke();paintedVersion=paletteVersion;
+  }
+  function drawHand(cx,cy,angle,short,opacity){
+    if(opacity<=.001)return;ctx.save();ctx.globalAlpha=opacity;ctx.translate(cx,cy);ctx.rotate(angle);
+    const color=short?state.short:state.long,len=49.3*(short?Math.min(state.shortLength,state.longLength):state.longLength)/100,wid=short?7.1:7.9;
+    const shade=ctx.createLinearGradient(0,-wid/2,0,wid/2);
+    const original=PRESETS.find(p=>p.material===state.material&&p.material);
+    if(original&&color===(short?original.short:original.long)){
+      const white=state.material==='white';shade.addColorStop(0,white?(short?'#555853':'#303330'):(short?'#c6c8c6':'#e8e9e7'));shade.addColorStop(.55,color);shade.addColorStop(1,white?'#383b38':(short?'#abaeab':'#c2c5c1'));
+    }else{shade.addColorStop(0,tint(color,.10));shade.addColorStop(.5,color);shade.addColorStop(1,tint(color,-.12));}
+    ctx.shadowColor='#00000038';ctx.shadowBlur=2;ctx.shadowOffsetY=1.3;ctx.fillStyle=shade;roundRect(ctx,-1.6,-wid/2,len+1.6,wid,1.5);ctx.fill();ctx.restore();
+  }
+  let animationFrame=0;
+  function draw(now){
+    const moving=hands.some(h=>now<h.fadeEnd);
+    if(!renderDirty&&!moving&&!wasMoving){animationFrame=requestAnimationFrame(draw);return;}
+    interpolate(now);if(paintedVersion!==paletteVersion)drawSurface();
+    ctx.setTransform(canvas.width/W,0,0,canvas.height/H,0,0);ctx.clearRect(0,0,W,H);ctx.drawImage(surface,0,0);
+    for(let row=0;row<3;row++)for(let col=0;col<8;col++){
+      const i=(row*8+col)*2,x=105+col*112,y=110+row*112;
+      // Keep the main stroke on top when both hands meet at the same angle.
+      drawHand(x,y,hands[i+1].angle,true,hands[i+1].opacity);drawHand(x,y,hands[i].angle,false,hands[i].opacity);
+      const opacity=Math.max(hands[i].opacity,hands[i+1].opacity);
+      if(opacity>.001){ctx.save();ctx.globalAlpha=opacity;ctx.beginPath();ctx.arc(x,y,3.1,0,TAU);ctx.fillStyle=state.long;ctx.fill();ctx.beginPath();ctx.arc(x-.6,y-.6,1,0,TAU);ctx.fillStyle=tint(state.long,.22);ctx.fill();ctx.restore();}
+    }
+    renderDirty=false;wasMoving=moving;animationFrame=requestAnimationFrame(draw);
+  }
+  function resize(){const r=canvas.getBoundingClientRect(),dpr=Math.min(2.5,window.devicePixelRatio||1),w=Math.max(1,Math.round(r.width*dpr)),h=Math.max(1,Math.round(r.height*dpr));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;renderDirty=true;}}
+  new ResizeObserver(resize).observe(canvas);window.addEventListener('resize',resize);
+  function markChanged(clearPalette=false){if(clearPalette)state.preset=null;renderDirty=true;updateControls();}
+  function choosePart(part){state.selectedPart=part;document.querySelectorAll('.color-row').forEach(r=>r.classList.toggle('selected',r.dataset.part===part));$('partHint').textContent='点选以应用到'+partNames[part];updateSwatches();}
+  function updateSwatches(){document.querySelectorAll('.swatch').forEach(b=>b.setAttribute('aria-pressed',b.dataset.color===state[state.selectedPart]));}
+  function updateControls(){
+    for(const part of ['board','long','short']){const cap=part[0].toUpperCase()+part.slice(1);$('color'+cap).value=state[part];$('hex'+cap).value=state[part].toUpperCase();$('hex'+cap).removeAttribute('aria-invalid');$('swatch'+cap).style.background=state[part];$('chip'+cap).style.background=state[part];}
+    for(const key of ['longLength','shortLength','duration']){$(key).value=state[key];$(key+'Value').textContent=state[key]+(key==='duration'?'s':'%');}
+    const preset=PRESETS.find(p=>p.id===state.preset);$('paletteName').textContent=preset?preset.name+' / '+preset.en:'我的配色 / CUSTOM';
+    document.querySelectorAll('.preset').forEach(b=>b.setAttribute('aria-pressed',b.dataset.preset===state.preset));
+    document.querySelectorAll('[data-classic]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.classic===state.preset));
+    document.querySelectorAll('[data-motion]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.motion===state.motion));
+    document.querySelectorAll('[data-visibility]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.visibility===state.visibility));
+    $('live').setAttribute('aria-pressed',state.source==='live');$('manual').setAttribute('aria-pressed',state.source==='manual');$('manualRow').hidden=state.source==='live';$('demoRow').hidden=state.source==='live';
+    $('timeInput').value=pad(Math.floor(state.simulatedMinutes/60))+':'+pad(state.simulatedMinutes%60);$('autoDemo').checked=state.autoDemo;
+    $('format24').setAttribute('aria-pressed',state.format24);$('format12').setAttribute('aria-pressed',!state.format24);
+    $('sourceNote').innerHTML=state.source==='live'?'跟随设备的本地时间，每分钟自动变换。<br>也可以设置一个特别的时刻，看看它的形状。':'正在展示手动设置的时间。<br>使用 − / + 切换分钟，或者开启自动演示。';
+    $('saveStatus').textContent=savedSignature===signature()?'已保存在此浏览器':'修改即时生效';
+    updateSwatches();updateReadout();
+  }
+  function setColor(part,value){if(!hexPattern.test(value))return;const normalized=value.toLowerCase();if(state[part]===normalized){updateControls();return;}state[part]=normalized;if(part==='board')state.material=null;paletteVersion++;markChanged(true);}
+  for(const part of ['board','long','short']){
+    const cap=part[0].toUpperCase()+part.slice(1),picker=$('color'+cap),hex=$('hex'+cap);
+    document.querySelector('.color-row[data-part="'+part+'"]').addEventListener('click',()=>choosePart(part));
+    picker.addEventListener('focus',()=>choosePart(part));picker.addEventListener('input',e=>setColor(part,e.target.value));hex.addEventListener('focus',()=>choosePart(part));
+    hex.addEventListener('input',e=>{let v=e.target.value.trim();if(!v.startsWith('#'))v='#'+v;if(hexPattern.test(v))setColor(part,v);else e.target.setAttribute('aria-invalid','true');});
+    hex.addEventListener('blur',()=>{if(hex.getAttribute('aria-invalid')==='true'){hex.value=state[part].toUpperCase();hex.removeAttribute('aria-invalid');showToast('请输入 6 位十六进制颜色，例如 #3D493F');}});
+    hex.addEventListener('keydown',e=>{if(e.key==='Enter')hex.blur();});
+  }
+  const quickColors=[['#111213','经典黑'],['#f9faf7','经典白'],['#3d493f','苔绿'],['#bfcdb0','浅苔'],['#dfc797','香槟'],['#a95441','赤陶'],['#91c1c6','雾蓝'],['#cecce6','淡紫']];
+  for(const [color,name]of quickColors){const b=document.createElement('button');b.type='button';b.className='swatch';b.dataset.color=color;b.style.background=color;b.setAttribute('aria-label','应用'+name);b.title=name+' '+color.toUpperCase();b.onclick=()=>setColor(state.selectedPart,color);$('quickColors').appendChild(b);}
+  for(const key of ['longLength','shortLength','duration'])$(key).addEventListener('input',e=>{state[key]=Number(e.target.value);state.shortLength=Math.min(state.shortLength,state.longLength);markChanged();});
+  function miniClock(p){
+    const pose=digitPose('1238');let svg=`<svg viewBox="0 0 1000 445" aria-hidden="true"><rect x="1" y="1" width="998" height="443" rx="8" fill="${p.board}"/>`;
+    for(let row=0;row<3;row++)for(let col=0;col<8;col++){
+      const i=(row*8+col)*2,x=105+col*112,y=110+row*112;svg+=`<circle cx="${x}" cy="${y}" r="52" fill="${tint(p.board,-.10)}" stroke="${tint(p.board,-.16)}" stroke-width="2"/>`;
+      for(let h=0;h<2;h++)if(pose[i+h].used){const a=pose[i+h].angle,len=49.3;svg+=`<path d="M${x},${y}l${Math.cos(a)*len},${Math.sin(a)*len}" stroke="${h?p.short:p.long}" stroke-width="7" stroke-linecap="round"/>`;}
+    }return svg+'</svg>';
+  }
+  function applyPreset(p,notify=true){Object.assign(state,{board:p.board,long:p.long,short:p.short,material:p.material,preset:p.id});paletteVersion++;renderDirty=true;updateControls();if(notify)showToast('已应用「'+p.name+'」配色');}
+  for(const p of PRESETS){const b=document.createElement('button');b.type='button';b.className='preset';b.dataset.preset=p.id;b.setAttribute('aria-label',p.name+'，'+p.caption);b.innerHTML='<div class="preset-preview">'+miniClock(p)+'</div><div class="preset-name"><strong>'+p.name+'</strong><svg class="icon"><use href="#i-check"/></svg></div><div class="preset-caption">'+p.caption+'</div>';b.onclick=()=>applyPreset(p);$('presetGrid').appendChild(b);}
+  document.querySelectorAll('[data-classic]').forEach(b=>b.onclick=()=>applyPreset(PRESETS.find(p=>p.id===b.dataset.classic)));
+  const tabIds=['colors','motion','time'];
+  function selectTab(id){for(const k of tabIds){$('tab-'+k).setAttribute('aria-selected',k===id);$('tab-'+k).tabIndex=k===id?0:-1;$('panel-'+k).hidden=k!==id;}}
+  for(const id of tabIds){$('tab-'+id).onclick=()=>selectTab(id);$('tab-'+id).addEventListener('keydown',e=>{if(['ArrowRight','ArrowLeft','Home','End'].includes(e.key)){e.preventDefault();let i=tabIds.indexOf(id);i=e.key==='Home'?0:e.key==='End'?2:(i+(e.key==='ArrowRight'?1:2))%3;selectTab(tabIds[i]);$('tab-'+tabIds[i]).focus();}});}
+  document.querySelectorAll('[data-motion]').forEach(b=>b.onclick=()=>{state.motion=reducedMotion?'quiet':b.dataset.motion;markChanged();});
+  document.querySelectorAll('[data-visibility]').forEach(b=>b.onclick=()=>setVisibility(b.dataset.visibility));
+  function chooseSource(source){if(source==='manual'&&state.source==='live')state.simulatedMinutes=nowMinutes();state.source=source;state.autoDemo=false;updateControls();sync();}
+  function advance(delta){state.simulatedMinutes=normalizeMinutes(state.simulatedMinutes+delta);updateControls();sync();state.demoLast=performance.now();}
+  $('live').onclick=()=>chooseSource('live');$('manual').onclick=()=>chooseSource('manual');$('back').onclick=()=>advance(-1);$('forward').onclick=()=>advance(1);
+  $('timeInput').onchange=e=>{const m=/^(\d{2}):(\d{2})$/.exec(e.target.value);if(!m||Number(m[1])>23||Number(m[2])>59)return;state.simulatedMinutes=Number(m[1])*60+Number(m[2]);state.autoDemo=false;updateControls();sync();};
+  $('autoDemo').onchange=e=>{state.autoDemo=e.target.checked;state.demoLast=performance.now();};
+  $('format24').onclick=()=>{state.format24=true;markChanged();sync();};$('format12').onclick=()=>{state.format24=false;markChanged();sync();};
+  $('replay').onclick=()=>sync(true);
+  function showToast(text){clearTimeout(toastTimer);$('toast').textContent=text;$('toast').classList.add('visible');toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),2700);}
+  $('save').onclick=()=>{try{localStorage.setItem(STORAGE_KEY,signature());savedSignature=signature();updateControls();showToast('方案已保存在此浏览器，下次打开自动恢复');}catch(_){showToast('此浏览器无法保存方案，请检查存储设置');}};
+  $('reset').onclick=()=>{setVisibility('hide',false);state.format24=true;state.source='live';state.autoDemo=false;state.motion=reducedMotion?'quiet':'spin';state.duration=4;state.longLength=100;state.shortLength=100;applyPreset(PRESETS[0],false);sync();showToast('已恢复「经典黑」默认方案');};
+  $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else if($('scene').requestFullscreen)await $('scene').requestFullscreen();else showToast('当前浏览器暂不支持全屏');}catch(_){showToast('当前预览无法进入全屏，请在浏览器中打开');}};
+  document.addEventListener('fullscreenchange',()=>{const text=document.fullscreenElement?'退出全屏':'全屏观赏';$('fullscreen').setAttribute('aria-label',text);$('fullscreen').title=text;resize();});
+  document.addEventListener('keydown',e=>{if(e.target.matches('input,select,button,a'))return;if(e.key==='ArrowRight'&&state.source==='manual'){e.preventDefault();advance(1);}else if(e.key==='ArrowLeft'&&state.source==='manual'){e.preventDefault();advance(-1);}else if(e.key.toLowerCase()==='r')sync(true);});
+  setInterval(()=>{if(document.hidden)return;if(state.source==='live')sync();else if(state.autoDemo&&performance.now()-state.demoLast>=Math.max(12000,state.duration*1000+2000))advance(1);updateReadout();},250);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelAnimationFrame(animationFrame);else{resize();sync();animationFrame=requestAnimationFrame(draw);}});
+  state.simulatedMinutes=nowMinutes();resize();updateControls();initializeTime(currentMinutes());animationFrame=requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>
