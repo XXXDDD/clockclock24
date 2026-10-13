@@ -252,7 +252,7 @@ const TAU=Math.PI*2;
   const fadeEase=t=>t*t*t*(t*(t*6-15)+10);
   const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 
-  const surface=document.createElement('canvas'); 
+  const surface=document.createElement('canvas');
   const surfaceCtx=surface.getContext('2d');
   const hands=Array.from({length:48},(_,i)=>{const a=DIR.P+(i%2?.18:-.18);return {angle:a,from:a,to:a,start:0,duration:1,used:false,opacity:0,revealFrom:0,revealStart:0,revealEnd:0,travelOpacity:0,motionEnd:0,fadeStart:0,fadeEnd:0,fadeFrom:0,fadeTo:0};});
 
