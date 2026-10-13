@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="TIMEFORM 可定制时钟壁纸。离线运行，适配横屏、竖屏和超宽屏，支持 Lively 与网页壁纸工具。">
+  <title>TIMEFORM · 时钟壁纸</title>
+  <style>:root{color-scheme:dark;--wallpaper-bg:#000;--paper:#f5f4ee;--ink:#313a31;--muted:#899080;--line:#dddfd3;--accent:#526549}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--wallpaper-bg)}body{font:13px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink)}[hidden]{display:none!important}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,label:focus-within{outline:2px solid #8b9d77;outline-offset:3px}button{border:1px solid var(--line);background:#fcfcf8;color:var(--ink);border-radius:6px}#previewArea{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}#viewport{position:relative;flex:none;width:100%;height:100%;overflow:hidden;background:var(--wallpaper-bg)}#clock{display:block;position:absolute;pointer-events:none}
+body[data-editing="true"]{color-scheme:light;background:var(--paper)}body[data-editing="true"] #previewArea{top:66px;right:390px;background:radial-gradient(ellipse at 40% 40%,#e9ebe2,#dde1d4)}body[data-editing="true"] #viewport{border-radius:12px;box-shadow:0 22px 45px #25311f25}#editorHeader{position:absolute;top:0;left:0;right:0;height:66px;padding:0 30px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:var(--paper);z-index:2}.brand{font-size:18px;letter-spacing:.2em;font-weight:600}.brand-detail{font-size:11px;letter-spacing:.1em;margin-left:18px;color:var(--muted)}.text-button{border:0;background:transparent;font-size:11px;color:var(--accent);padding:9px}#editor{position:absolute;top:66px;bottom:0;right:0;width:390px;overflow-y:auto;overscroll-behavior:contain;background:#fbfbf7;border-left:1px solid var(--line);padding:26px 27px 24px}.editor-intro{margin-bottom:25px}.eyebrow{font-size:9px;letter-spacing:.19em;color:#7e8b6f}h1{font-size:21px;line-height:1.4;font-weight:500;letter-spacing:-.03em;margin:8px 0 12px}.editor-intro p{font-size:11px;color:var(--muted);margin:0}section{border-top:1px solid var(--line);padding-top:19px;margin-top:20px}h2{font-size:12px;font-weight:600;margin:0 0 14px;display:flex;justify-content:space-between}h2 span{font-size:9px;color:var(--muted);font-weight:400}#presets{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.preset{border-radius:5px;padding:8px 3px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:9px}.preset-swatch{width:29px;height:19px;border-radius:3px;position:relative;border:1px solid #0001}.preset-swatch:before{content:"";position:absolute;width:15px;height:2px;left:7px;top:8px;background:var(--hand)}.preset[aria-pressed="true"]{border-color:#82966d;background:#eff4e8}.color-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px 12px}.color-field label{display:block;font-size:10px;color:#69745f;margin-bottom:6px}.color-inputs{display:flex;align-items:center;border:1px solid var(--line);border-radius:5px;padding:5px;background:#fff;gap:7px}.color-inputs input[type="color"]{width:26px;height:25px;padding:0;border:0;background:transparent;cursor:pointer;flex:none}.color-inputs input[type="text"]{width:100%;min-width:0;border:0;background:none;font:10px Consolas,monospace;text-transform:uppercase;color:#5a6452}.field{margin:14px 0}.field-heading{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#69745f;margin-bottom:7px;gap:8px}.field output{font-size:10px;color:#627453;font-variant-numeric:tabular-nums}.field select,.field input[type="text"]{width:100%;min-width:0;padding:7px 9px;border:1px solid var(--line);border-radius:5px;background:#fff;color:#45523c;font-size:11px}.field input[type="range"]{width:100%;height:4px;accent-color:#71855b;display:block;margin:10px 0 15px}.field-check{display:flex;align-items:center;gap:8px;font-size:11px}.field-check input{accent-color:#71855b}.help{font-size:10px;color:#929987;margin:7px 0;line-height:1.8}.field input[aria-invalid="true"],.color-inputs input[aria-invalid="true"]{outline:1px solid #b34f3e}.primary-button{display:flex;width:100%;align-items:center;justify-content:space-between;background:#526549;border-color:#526549;color:#f6f8f0;padding:11px 13px;font-size:12px;margin:16px 0 8px}.primary-button span{font-size:10px;opacity:.75}.button-pair{display:flex;gap:8px}.button-pair button{flex:1;padding:8px 5px;font-size:10px}.small-actions{display:flex;justify-content:space-between;align-items:center;margin:13px 0 0;gap:8px}.small-actions button,.small-actions label{border:0;background:none;padding:3px 0;font-size:9px;color:#768768;cursor:pointer}.small-actions label{border-radius:3px}#notice{font-size:10px;color:#8b947f;min-height:32px;line-height:1.8;margin-bottom:0}#urlFallback{width:100%;margin-top:8px;font-size:10px;padding:8px}#previewCaption{position:absolute;bottom:25px;left:30px;right:30px;display:flex;align-items:center;justify-content:space-between;gap:14px;font-size:10px;color:#7c8770}#previewCaption label{display:flex;align-items:center;gap:10px}#previewCaption select{font-size:10px;background:#eef1e6;border:1px solid #cbd2bf;border-radius:5px;padding:6px;color:#58694b}#layoutReadout{font-size:9px;letter-spacing:.04em;white-space:nowrap}
+@media(max-width:960px){#editor{width:340px;padding:23px 22px}body[data-editing="true"] #previewArea{right:340px}#previewCaption{left:18px;right:18px;bottom:18px;flex-direction:column;align-items:flex-start;gap:5px}.brand-detail{display:none}}
+@media(max-width:680px){#editorHeader{height:56px;padding:0 18px}.brand{font-size:15px}body[data-editing="true"] #previewArea{top:56px;right:0;bottom:auto;height:34vh;min-height:170px}#editor{top:calc(56px + max(34vh,170px));width:100%;left:0;border-left:0;border-top:1px solid var(--line);padding:22px 24px}#previewCaption{bottom:8px;left:16px;right:16px;flex-direction:row;align-items:center}#previewCaption label{font-size:0;gap:0}#previewCaption select{font-size:9px;padding:4px}#layoutReadout{font-size:8px}.editor-intro{margin-bottom:18px}h1{font-size:20px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+#returnSettings{position:fixed;right:20px;bottom:20px;padding:7px 13px;font-size:11px;background:#f5f4eedd;z-index:5}
+</style>
+</head>
+<body data-editor="0">
+  <header id="editorHeader" hidden>
+    <div><span class="brand">TIMEFORM</span><span class="brand-detail">壁纸工作台</span></div>
+    <button id="hideSettings" class="text-button">全屏预览 ↗</button>
+  </header>
+  <main id="previewArea">
+    <div id="viewport"><canvas id="clock" role="img" aria-label="由24个模拟钟表组成的数字时钟"></canvas></div>
+    <div id="previewCaption" hidden>
+      <label>预览屏幕 <select id="previewSize" aria-label="预览屏幕尺寸">
+        <option value="1920x1080">1920 × 1080 · 横屏</option>
+        <option value="2560x1440">2560 × 1440 · 2K</option>
+        <option value="3840x2160">3840 × 2160 · 4K</option>
+        <option value="3440x1440">3440 × 1440 · 超宽屏</option>
+        <option value="1080x1920">1080 × 1920 · 竖屏</option>
+        <option value="1280x1024">1280 × 1024 · 5:4</option>
+        <option value="auto">当前窗口</option>
+      </select></label>
+      <span id="layoutReadout" aria-live="polite"></span>
+    </div>
+  </main>
+  <button id="returnSettings" hidden>返回设置</button>
+  <aside id="editor" hidden aria-label="壁纸设置">
+    <div class="editor-intro"><span class="eyebrow">MAKE TIME YOURS</span><h1>让时间，适合你的屏幕。</h1><p>调好配色，带到下一台电脑。<br>横屏、竖屏与超宽屏，时钟始终完整。</p></div>
+    <form id="settingsForm" onsubmit="return false">
+      <section><h2>选择一个起点 <span>8 组配色</span></h2><div id="presets"></div></section>
+      <section><h2>颜色 <span>独立调节</span></h2><div id="fields-colors" class="color-grid"></div></section>
+      <section><h2>屏幕适配</h2><div id="fields-screen"></div></section>
+      <section><h2>指针与动画</h2><div id="fields-motion"></div></section>
+      <section><h2>时间</h2><div id="fields-time"></div></section>
+    </form>
+    <section class="export-section">
+      <h2>带走这份时钟</h2>
+      <p class="help">Windows 导入 Lively 包。Mac 或其他网页壁纸工具使用通用 HTML 或壁纸网址。</p>
+      <button id="downloadLively" class="primary-button">下载 Lively 壁纸包 <span>ZIP ↓</span></button>
+      <div class="button-pair"><button id="downloadHtml">下载通用 HTML</button><button id="copyUrl">复制壁纸网址</button></div>
+      <div class="small-actions"><button id="exportConfig">导出配色配置</button><label for="importConfig">导入配色配置<input id="importConfig" type="file" accept=".json,application/json" hidden></label><button id="resetConfig">恢复默认</button></div>
+      <p id="notice" role="status" aria-live="polite">配色会保存在此浏览器，也可导出后带到其他电脑。</p>
+      <input id="urlFallback" aria-label="壁纸网址" readonly hidden>
+    </section>
+  </aside>
+  <script type="application/json" id="timeform-config">{"background":"#000000","board":"#111213","long":"#f9faf7","short":"#eef0ec","layout":"auto","scale":90,"padding":0,"offsetX":0,"offsetY":0,"motion":"spin","duration":4,"visibility":"hide","longLength":100,"shortLength":100,"format24":true,"timezone":""}</script>
+  <script>(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.TimeformSettings = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+  // One schema drives the web editor, Lively controls, URL parameters and exports.
+  const fields = {
+    background: { type: 'color', text: '屏幕背景', value: '#000000', group: 'colors' },
+    board: { type: 'color', text: '时钟背景板', value: '#111213', group: 'colors' },
+    long: { type: 'color', text: '长针颜色', value: '#f9faf7', group: 'colors' },
+    short: { type: 'color', text: '短针颜色', value: '#eef0ec', group: 'colors' },
+    layout: { type: 'dropdown', text: '数字排列', value: 'auto', values: ['auto', 'landscape', 'portrait'], items: ['自动适配', '横排 HHMM', '上下两排 HH / MM'], group: 'screen' },
+    scale: { type: 'slider', text: '时钟大小', min: 20, max: 100, step: 1, value: 90, unit: '%', group: 'screen' },
+    padding: { type: 'slider', text: '屏幕安全边距', min: 0, max: 160, step: 1, value: 0, unit: 'px', group: 'screen' },
+    offsetX: { type: 'slider', text: '水平位置', min: -100, max: 100, step: 1, value: 0, unit: '%', help: '负值向左，正值向右；始终保留完整时钟。', group: 'screen' },
+    offsetY: { type: 'slider', text: '垂直位置', min: -100, max: 100, step: 1, value: 0, unit: '%', help: '负值向上，正值向下；始终保留完整时钟。', group: 'screen' },
+    motion: { type: 'dropdown', text: '换时动画', value: 'spin', values: ['spin', 'quiet', 'none'], items: ['经典旋转', '平滑过渡', '立即换时'], group: 'motion' },
+    duration: { type: 'slider', text: '动画时长', min: 1, max: 10, step: 1, value: 4, unit: 's', group: 'motion' },
+    visibility: { type: 'dropdown', text: '闲置指针', value: 'hide', values: ['hide', 'ghost', 'show'], items: ['归位后隐藏', '微光显示', '全部显示'], group: 'motion' },
+    longLength: { type: 'slider', text: '长针长度', min: 70, max: 100, step: 1, value: 100, unit: '%', group: 'motion' },
+    shortLength: { type: 'slider', text: '短针长度', min: 55, max: 100, step: 1, value: 100, unit: '%', group: 'motion' },
+    format24: { type: 'checkbox', text: '24 小时制', value: true, group: 'time' },
+    timezone: { type: 'textbox', text: '时区', value: '', help: '留空跟随电脑；也可填 Asia/Hong_Kong、Europe/London 等。', group: 'time' }
+  };
+  const defaults = Object.fromEntries(Object.entries(fields).map(([key, field]) => [key, field.value]));
+  const metadata = { AppVersion: '2.2.1.0', Title: 'TIMEFORM · 可定制时钟', Desc: '24 表盘时钟；颜色、位置、动画可独立设置，自动适配横屏、竖屏和超宽屏。完全离线。', Author: 'TIMEFORM', Type: 1, FileName: 'index.html', IsAbsolutePath: false, Thumbnail: 'thumbnail.jpg', Preview: null, Arguments: null, Contact: 'https://github.com/XXXDDD/clockclock24', License: null, Version: 2 };
+  const presets = [
+    { name: '经典黑', board: '#111213', long: '#f9faf7', short: '#eef0ec', background: '#000000' },
+    { name: '经典白', board: '#f6f4ef', long: '#50534f', short: '#757873', background: '#e9e6de' },
+    { name: '苔原', board: '#3d493f', long: '#f3f1e7', short: '#bfcdb0', background: '#171e19' },
+    { name: '纸与墨', board: '#e9e6de', long: '#2a312b', short: '#858775', background: '#d3d0c7' },
+    { name: '暮色', board: '#393746', long: '#cecce6', short: '#e8a991', background: '#17151e' },
+    { name: '深海', board: '#21444c', long: '#e7e9dd', short: '#91c1c6', background: '#0a1b20' },
+    { name: '赤陶', board: '#a95441', long: '#f6ecdc', short: '#e8bd90', background: '#301c19' },
+    { name: '午夜', board: '#232624', long: '#dfc797', short: '#f1efe2', background: '#080b09' }
+  ];
+  function decode(key, value) {
+    const field = fields[key];
+    if (!field) return undefined;
+    if (field.type === 'color') {
+      if (typeof value !== 'string') return undefined;
+      const hex = value.startsWith('#') ? value : '#' + value;
+      return /^#[0-9a-f]{6}$/i.test(hex) ? hex.toLowerCase() : undefined;
+    }
+    if (field.type === 'slider') {
+      if (value === '' || value === null || typeof value === 'boolean') return undefined;
+      const number = Number(value);
+      return Number.isFinite(number) ? Math.round(Math.max(field.min, Math.min(field.max, number)) / field.step) * field.step : undefined;
+    }
+    if (field.type === 'dropdown') {
+      if (field.values.includes(value)) return value;
+      // Lively sends dropdown item indexes, including on first load.
+      if (typeof value !== 'boolean' && value !== '' && value !== null && Number.isInteger(Number(value))) return field.values[Number(value)];
+      return undefined;
+    }
+    if (field.type === 'checkbox') {
+      if (value === true || value === 'true' || value === '1' || value === 1) return true;
+      if (value === false || value === 'false' || value === '0' || value === 0) return false;
+      return undefined;
+    }
+    if (key === 'timezone' && typeof value === 'string') {
+      const zone = value.trim();
+      try { if (zone) new Intl.DateTimeFormat('en', { timeZone: zone }); return zone; }
+      catch (_) { return undefined; }
+    }
+    return undefined;
+  }
+  function normalize(input = {}, base = defaults) {
+    const result = { ...defaults, ...base };
+    for (const key of Object.keys(fields)) {
+      const value = decode(key, input[key]);
+      if (value !== undefined) result[key] = value;
+    }
+    result.shortLength = Math.min(result.shortLength, result.longLength);
+    return Object.fromEntries(Object.keys(fields).map(key => [key, result[key]]));
+  }
+  function fromSearch(search) {
+    return Object.fromEntries([...new URLSearchParams(search)].filter(([key]) => Object.hasOwn(fields, key)));
+  }
+  function toSearch(config, base = defaults) {
+    const values = normalize(config), initial = normalize(base);
+    const parameters = new URLSearchParams();
+    for (const [key, value] of Object.entries(values)) {
+      if (value !== initial[key]) parameters.set(key, typeof value === 'string' ? value.replace(/^#/, '') : String(value));
+    }
+    return parameters.toString();
+  }
+  function livelyProperties(config = defaults) {
+    const values = normalize(config);
+    return Object.fromEntries(Object.entries(fields).map(([key, field]) => {
+      const { group, values: choices, unit, ...control } = field;
+      control.value = choices ? choices.indexOf(values[key]) : values[key];
+      return [key, control];
+    }));
+  }
+  function importConfig(text) {
+    const data = JSON.parse(text);
+    if (!data || data.version !== 1 || !data.settings || typeof data.settings !== 'object' || Array.isArray(data.settings)) throw new Error('请选择 TIMEFORM 导出的第 1 版配色配置。');
+    for (const key of Object.keys(fields)) {
+      if (Object.hasOwn(data.settings, key) && decode(key, data.settings[key]) === undefined) throw new Error('配置中的「' + fields[key].text + '」无效。');
+    }
+    return normalize(data.settings);
+  }
+  function exportConfig(config) { return JSON.stringify({ version: 1, settings: normalize(config) }, null, 2); }
+  function geometry(width, height, input = defaults) {
+    const config = normalize(input);
+    width = Math.max(1, Number(width) || 1); height = Math.max(1, Number(height) || 1);
+    const padding = Math.min(config.padding, (width - 1) / 2, (height - 1) / 2);
+    const availableWidth = (width - padding * 2) * config.scale / 100;
+    const availableHeight = (height - padding * 2) * config.scale / 100;
+    const shapes = { landscape: { w: 1000, h: 445 }, portrait: { w: 552, h: 805 } };
+    const fit = shape => Math.min(availableWidth / shape.w, availableHeight / shape.h);
+    const layout = config.layout === 'auto' ? (fit(shapes.portrait) > fit(shapes.landscape) ? 'portrait' : 'landscape') : config.layout;
+    const shape = shapes[layout], factor = fit(shape), w = shape.w * factor, h = shape.h * factor;
+    const x = (width - w) / 2 + (width - padding * 2 - w) / 2 * config.offsetX / 100;
+    const y = (height - h) / 2 + (height - padding * 2 - h) / 2 * config.offsetY / 100;
+    const points = [];
+    for (let digit = 0; digit < 4; digit++) for (let cell = 0; cell < 6; cell++) {
+      const originalRow = Math.floor(cell / 2), originalCol = digit * 2 + cell % 2;
+      const col = layout === 'portrait' ? (digit % 2) * 2 + cell % 2 : originalCol;
+      const row = layout === 'portrait' ? Math.floor(digit / 2) * 3 + originalRow : originalRow;
+      points.push({ x: 105 + col * 112, y: 110 + row * 112 + (layout === 'portrait' && digit >= 2 ? 24 : 0), i: (originalRow * 8 + originalCol) * 2 });
+    }
+    return { layout, x, y, width: w, height: h, boardWidth: shape.w, boardHeight: shape.h, points, padding };
+  }
+  return { fields, defaults, metadata, presets, decode, normalize, fromSearch, toSearch, livelyProperties, importConfig, exportConfig, geometry };
+});
+
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.TimeformZip = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+  const encoder = new TextEncoder();
+  const table = Array.from({ length: 256 }, (_, value) => {
+    for (let bit = 0; bit < 8; bit++) value = value & 1 ? 0xedb88320 ^ (value >>> 1) : value >>> 1;
+    return value >>> 0;
+  });
+  function crc32(data) {
+    let crc = 0xffffffff;
+    for (const byte of data) crc = table[(crc ^ byte) & 255] ^ (crc >>> 8);
+    return (crc ^ 0xffffffff) >>> 0;
+  }
+  function create(files) {
+    const local = [], central = [];
+    let offset = 0, centralLength = 0;
+    for (const [filename, content] of Object.entries(files)) {
+      if (/^[/\\]|(^|[/\\])\.\.([/\\]|$)/.test(filename)) throw new Error('Unsafe ZIP path');
+      const name = encoder.encode(filename), data = typeof content === 'string' ? encoder.encode(content) : new Uint8Array(content);
+      const checksum = crc32(data), header = new Uint8Array(30 + name.length), view = new DataView(header.buffer);
+      view.setUint32(0, 0x04034b50, true); view.setUint16(4, 20, true); view.setUint16(6, 0x800, true);
+      view.setUint16(12, 0x5021, true); // Fixed 2020-01-01 date for reproducible builds.
+      view.setUint32(14, checksum, true); view.setUint32(18, data.length, true); view.setUint32(22, data.length, true); view.setUint16(26, name.length, true); header.set(name, 30);
+      const entry = new Uint8Array(46 + name.length), info = new DataView(entry.buffer);
+      info.setUint32(0, 0x02014b50, true); info.setUint16(4, 20, true); info.setUint16(6, 20, true); info.setUint16(8, 0x800, true); info.setUint16(14, 0x5021, true);
+      info.setUint32(16, checksum, true); info.setUint32(20, data.length, true); info.setUint32(24, data.length, true); info.setUint16(28, name.length, true); info.setUint32(42, offset, true); entry.set(name, 46);
+      local.push(header, data); central.push(entry); offset += header.length + data.length; centralLength += entry.length;
+    }
+    const end = new Uint8Array(22), footer = new DataView(end.buffer);
+    footer.setUint32(0, 0x06054b50, true); footer.setUint16(8, central.length, true); footer.setUint16(10, central.length, true); footer.setUint32(12, centralLength, true); footer.setUint32(16, offset, true);
+    const result = new Uint8Array(offset + centralLength + end.length);
+    let cursor = 0;
+    for (const chunk of [...local, ...central, end]) { result.set(chunk, cursor); cursor += chunk.length; }
+    return result;
+  }
+  return { create, crc32 };
+});
+
+(function(root){
+'use strict';
+root.TimeformRenderer={create};
+function create(canvas,initial,readViewport){
+const Spec=root.TimeformSettings,ctx=canvas.getContext('2d');
+const PRESETS=[{board:'#111213',long:'#f9faf7',short:'#eef0ec',material:'black'},{board:'#f6f4ef',long:'#50534f',short:'#757873',material:'white'}];
+const state={...Spec.normalize(initial),source:'live',minuteKey:null,material:null};
+const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let W=1000,H=445,points=[],paintedVersion=-1,paletteVersion=0,renderDirty=true,animationFrame=0,wasMoving=false,disposed=false,geometry=null,timeFormatter=null,frameCount=0;
+const TAU=Math.PI*2;
+  const DIR={E:0,S:Math.PI/2,W:Math.PI,N:-Math.PI/2,P:Math.PI*.75};
+  const GLYPHS={
+    '0':['SE','SW','NS','NS','NE','NW'], '1':['PP','SS','PP','NS','PP','NN'],
+    '2':['EE','SW','SE','NW','NE','WW'], '3':['EE','SW','EE','NW','EE','NW'],
+    '4':['SS','SS','NE','NS','PP','NN'], '5':['SE','WW','NE','SW','EE','NW'],
+    '6':['SE','WW','NS','SW','NE','NW'], '7':['EE','SW','PP','NS','PP','NN'],
+    '8':['SE','SW','NE','NW','NE','NW'], '9':['SE','SW','EN','NS','EE','NW']
+  };
+
+  const pad=n=>String(n).padStart(2,'0');
+  const normalizeMinutes=n=>((n%1440)+1440)%1440;
+  const wrap=x=>((x%TAU)+TAU)%TAU;
+  const smooth=t=>t*t*(3-2*t);
+  const fadeEase=t=>t*t*t*(t*(t*6-15)+10);
+  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+
+  const surface=document.createElement('canvas'); 
+  const surfaceCtx=surface.getContext('2d');
+  const hands=Array.from({length:48},(_,i)=>{const a=DIR.P+(i%2?.18:-.18);return {angle:a,from:a,to:a,start:0,duration:1,used:false,opacity:0,revealFrom:0,revealStart:0,revealEnd:0,travelOpacity:0,motionEnd:0,fadeStart:0,fadeEnd:0,fadeFrom:0,fadeTo:0};});
+
+
+
+  function displayDigits(minutes){const h=Math.floor(minutes/60);return pad(state.format24?h:h%12||12)+pad(minutes%60);}
+  function digitPose(digits){
+    const result=new Array(48);
+    for(let d=0;d<4;d++)for(let cell=0;cell<6;cell++){
+      const col=d*2+cell%2,row=Math.floor(cell/2),i=(row*8+col)*2;
+      const [a,b]=GLYPHS[digits[d]][cell];
+      result[i]={angle:DIR[a],used:a!=='P'};
+      result[i+1]={angle:DIR[b],used:b!=='P'&&b!==a};
+    }
+    return result;
+  }
+  function settleOpacity(h){return h.used||state.visibility==='show'?1:state.visibility==='ghost'?.12:0;}
+  function tween(now,start,end,from,to){const t=end<=start?Number(now>=end):clamp((now-start)/(end-start),0,1);return from+(to-from)*fadeEase(t);}
+  function interpolate(now){
+    for(const h of hands){
+      const u=clamp((now-h.start)/h.duration,0,1);
+      h.angle=u===1?wrap(h.to):h.from+(h.to-h.from)*smooth(u);
+      if(now<h.revealEnd)h.opacity=tween(now,h.revealStart,h.revealEnd,h.revealFrom,h.travelOpacity);
+      else if(now<h.fadeStart)h.opacity=h.travelOpacity;
+      else h.opacity=tween(now,h.fadeStart,h.fadeEnd,h.fadeFrom,h.fadeTo);
+    }
+  }
+
+
+  function animate(minutes,force=false){
+    const digits=displayDigits(minutes);if(!force&&state.minuteKey===digits)return;
+    if(state.motion==='none'){initializeTime(minutes);return;}
+    renderDirty=true;
+    const now=performance.now();interpolate(now);
+    const target=digitPose(digits),dur=reducedMotion?300:state.duration*1000;
+    const rotating=state.motion==='spin'&&!reducedMotion;
+    const reveal=reducedMotion?60:Math.min(rotating?350:160,dur*.15),hide=reducedMotion?80:Math.min(350,dur*.18);
+    const travel=dur-reveal-hide,idleAlpha=state.visibility==='show'?1:state.visibility==='ghost'?.12:0;
+    for(let i=0;i<48;i++){
+      const h=hands[i],current=h.angle;
+      let turn=((target[i].angle-current+Math.PI)%TAU+TAU)%TAU-Math.PI;
+      if(rotating)turn=i%2?-wrap(wrap(current)-target[i].angle)-TAU:wrap(target[i].angle-wrap(current))+TAU;
+      const participating=rotating||h.used||target[i].used||h.opacity>idleAlpha+.001;
+      h.revealFrom=h.opacity;h.travelOpacity=participating?1:idleAlpha;h.used=target[i].used;
+      h.from=current;h.to=current+turn;h.start=now+reveal;h.duration=travel;h.motionEnd=h.start+travel;
+      h.revealStart=now;h.revealEnd=now+reveal;
+      h.fadeStart=h.motionEnd;h.fadeEnd=now+dur;h.fadeFrom=h.travelOpacity;h.fadeTo=settleOpacity(h);
+    }
+    state.minuteKey=digits;
+    canvas.setAttribute('aria-label',`由24个钟表组成的数字时钟，现在显示 ${digits.slice(0,2)}:${digits.slice(2)}`);
+    requestRender();
+  }
+  function initializeTime(minutes){
+    const digits=displayDigits(minutes),pose=digitPose(digits),now=performance.now();
+    for(let i=0;i<48;i++){
+      const h=hands[i];h.angle=pose[i].angle;h.from=h.angle;h.to=h.angle;h.used=pose[i].used;
+      h.opacity=settleOpacity(h);h.revealFrom=h.opacity;h.travelOpacity=h.opacity;h.fadeFrom=h.opacity;h.fadeTo=h.opacity;
+      h.start=now;h.duration=1;h.motionEnd=now;h.revealStart=now;h.revealEnd=now;h.fadeStart=now;h.fadeEnd=now;
+    }
+    state.minuteKey=digits;canvas.setAttribute('aria-label',`由24个钟表组成的数字时钟，现在显示 ${digits.slice(0,2)}:${digits.slice(2)}`);renderDirty=true;requestRender();
+  }
+  function sync(force=false){animate(currentMinutes(),force);}
+
+
+  function tint(hex,amount){const n=parseInt(hex.slice(1),16),channels=[n>>16,(n>>8)&255,n&255];return '#'+channels.map(v=>Math.round(v+(amount>0?255-v:v)*amount).toString(16).padStart(2,'0')).join('');}
+  function roundRect(c,x,y,w,h,r){
+    c.beginPath();if(typeof c.roundRect==='function'){c.roundRect(x,y,w,h,r);return;}
+    c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);c.lineTo(x+w,y+h-r);c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);c.lineTo(x+r,y+h);c.quadraticCurveTo(x,y+h,x,y+h-r);c.lineTo(x,y+r);c.quadraticCurveTo(x,y,x+r,y);c.closePath();
+  }
+  function drawSurface(){
+    const c=surfaceCtx,b=state.board,white=state.material==='white',black=state.material==='black';
+    c.clearRect(0,0,W,H);c.save();roundRect(c,1,1,W-2,H-2,6);c.clip();
+    const bg=c.createLinearGradient(0,0,W,H);
+    if(white){bg.addColorStop(0,'#e9e7e1');bg.addColorStop(.45,'#f6f4ef');bg.addColorStop(1,'#d8d6d0');}
+    else if(black){bg.addColorStop(0,'#242627');bg.addColorStop(.43,'#111213');bg.addColorStop(1,'#0d0e0f');}
+    else{bg.addColorStop(0,tint(b,.09));bg.addColorStop(.5,b);bg.addColorStop(1,tint(b,-.11));}
+    c.fillStyle=bg;c.fillRect(0,0,W,H);
+    c.fillStyle='#ffffff17';c.fillRect(0,0,W,2);c.fillStyle='#00000020';c.fillRect(0,H-4,W,4);
+    for(const {x,y} of points){c.save();c.translate(x,y);
+      const rim=c.createRadialGradient(-11,-17,3,0,0,55);
+      if(white){rim.addColorStop(0,'#f4f2ed');rim.addColorStop(.82,'#e5e2dc');rim.addColorStop(.97,'#c6c4bd');rim.addColorStop(1,'#dedbd5');}
+      else if(black){rim.addColorStop(0,'#121415');rim.addColorStop(.70,'#0d0f10');rim.addColorStop(.94,'#08090a');rim.addColorStop(1,'#242628');}
+      else{rim.addColorStop(0,tint(b,-.06));rim.addColorStop(.82,tint(b,-.12));rim.addColorStop(.96,tint(b,-.24));rim.addColorStop(1,tint(b,.06));}
+      c.shadowColor=black?'#000000b8':'#0000003b';c.shadowBlur=7;c.shadowOffsetY=2;c.fillStyle=rim;c.beginPath();c.arc(0,0,53.2,0,TAU);c.fill();c.shadowBlur=0;c.shadowOffsetY=0;
+      c.strokeStyle=white?'#0000001a':'#ffffff13';c.lineWidth=1;c.beginPath();c.arc(0,0,52.2,0,TAU);c.stroke();c.strokeStyle=white?'#ffffff7a':'#00000018';c.beginPath();c.arc(0,0,49.5,0,TAU);c.stroke();c.restore();
+    }
+    c.restore();c.strokeStyle=tint(b,-.17);c.lineWidth=2;roundRect(c,1,1,W-2,H-2,6);c.stroke();paintedVersion=paletteVersion;
+  }
+  function drawHand(cx,cy,angle,short,opacity){
+    if(opacity<=.001)return;ctx.save();ctx.globalAlpha=opacity;ctx.translate(cx,cy);ctx.rotate(angle);
+    const color=short?state.short:state.long,len=49.3*(short?Math.min(state.shortLength,state.longLength):state.longLength)/100,wid=short?7.1:7.9;
+    const shade=ctx.createLinearGradient(0,-wid/2,0,wid/2);
+    const original=PRESETS.find(p=>p.material===state.material&&p.material);
+    if(original&&color===(short?original.short:original.long)){
+      const white=state.material==='white';shade.addColorStop(0,white?(short?'#555853':'#303330'):(short?'#c6c8c6':'#e8e9e7'));shade.addColorStop(.55,color);shade.addColorStop(1,white?'#383b38':(short?'#abaeab':'#c2c5c1'));
+    }else{shade.addColorStop(0,tint(color,.10));shade.addColorStop(.5,color);shade.addColorStop(1,tint(color,-.12));}
+    ctx.shadowColor='#00000038';ctx.shadowBlur=2;ctx.shadowOffsetY=1.3;ctx.fillStyle=shade;roundRect(ctx,-1.6,-wid/2,len+1.6,wid,1.5);ctx.fill();ctx.restore();
+  }
+
+
+  function setVisibility(mode,refresh=true){
+    if(mode===state.visibility)return;
+    const now=performance.now();interpolate(now);state.visibility=mode;
+    for(const h of hands){
+      const target=settleOpacity(h);
+      if(now<h.fadeStart){
+        // Finish the current movement before hiding a participating hand.
+        h.fadeTo=target;
+        if(target>h.travelOpacity){h.revealFrom=h.opacity;h.revealStart=now;h.revealEnd=Math.min(now+250,h.fadeStart);h.travelOpacity=target;h.fadeFrom=target;}
+      }else{
+        // Retarget from the sampled alpha, including a toggle during a fade.
+        h.revealStart=now;h.revealEnd=now;h.travelOpacity=h.opacity;h.fadeFrom=h.opacity;h.fadeTo=target;h.fadeStart=now;h.fadeEnd=now+(reducedMotion?150:350);
+      }
+    }
+    renderDirty=true;requestRender();
+  }
+
+function updateFormatter(){timeFormatter=state.timezone?new Intl.DateTimeFormat('en-GB',{timeZone:state.timezone,hour:'2-digit',minute:'2-digit',hourCycle:'h23'}):null;}
+function nowMinutes(){
+ const date=new Date();if(!timeFormatter)return date.getHours()*60+date.getMinutes();
+ const parts=timeFormatter.formatToParts(date),hour=Number(parts.find(p=>p.type==='hour').value),minute=Number(parts.find(p=>p.type==='minute').value);
+ return (hour%24)*60+minute;
+}
+function currentMinutes(){return nowMinutes();}
+function requestRender(){if(!disposed&&!animationFrame&&!document.hidden)animationFrame=requestAnimationFrame(draw);}
+function draw(now){
+ animationFrame=0;if(disposed)return;
+ const moving=hands.some(h=>now<h.fadeEnd);
+ if(!renderDirty&&!moving&&!wasMoving)return;
+ interpolate(now);if(paintedVersion!==paletteVersion)drawSurface();
+ ctx.setTransform(canvas.width/W,0,0,canvas.height/H,0,0);ctx.clearRect(0,0,W,H);ctx.drawImage(surface,0,0,W,H);
+ for(const {x,y,i} of points){
+  drawHand(x,y,hands[i+1].angle,true,hands[i+1].opacity);drawHand(x,y,hands[i].angle,false,hands[i].opacity);
+  const opacity=Math.max(hands[i].opacity,hands[i+1].opacity);
+  if(opacity>.001){ctx.save();ctx.globalAlpha=opacity;ctx.beginPath();ctx.arc(x,y,3.1,0,TAU);ctx.fillStyle=state.long;ctx.fill();ctx.beginPath();ctx.arc(x-.6,y-.6,1,0,TAU);ctx.fillStyle=tint(state.long,.22);ctx.fill();ctx.restore();}
+ }
+ frameCount++;renderDirty=false;wasMoving=moving;if(moving)requestRender();
+}
+function resize(){
+ const viewport=readViewport();geometry=Spec.geometry(viewport.width,viewport.height,state);
+ W=geometry.boardWidth;H=geometry.boardHeight;points=geometry.points;
+ const displayScale=Math.min((viewport.displayWidth||viewport.width)/viewport.width,(viewport.displayHeight||viewport.height)/viewport.height);
+ const width=geometry.width*displayScale,height=geometry.height*displayScale;
+ canvas.style.width=width+'px';canvas.style.height=height+'px';canvas.style.left=geometry.x*displayScale+'px';canvas.style.top=geometry.y*displayScale+'px';
+ const dpr=Math.min(2,window.devicePixelRatio||1,Math.sqrt(8000000/Math.max(1,width*height))),w=Math.max(1,Math.floor(width*dpr)),h=Math.max(1,Math.floor(height*dpr));
+ if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;surface.width=w;surface.height=h;}
+ surfaceCtx.setTransform(w/W,0,0,h/H,0,0);paletteVersion++;renderDirty=true;requestRender();
+}
+function update(config){
+ const next=Spec.normalize(config,state),previous={...state},visibility=next.visibility;
+ Object.assign(state,next,{visibility:previous.visibility});
+ state.material=state.board==='#111213'?'black':state.board==='#f6f4ef'?'white':null;
+ if(previous.board!==state.board||previous.long!==state.long||previous.short!==state.short)paletteVersion++;
+ if(previous.timezone!==state.timezone){updateFormatter();initializeTime(nowMinutes());}
+ else if(previous.format24!==state.format24)initializeTime(nowMinutes());
+ if(visibility!==previous.visibility)setVisibility(visibility);
+ if(['layout','scale','padding','offsetX','offsetY'].some(k=>previous[k]!==state[k]))resize();
+ renderDirty=true;requestRender();
+}
+function resume(){if(document.hidden){cancelAnimationFrame(animationFrame);animationFrame=0;}else{resize();initializeTime(nowMinutes());}}
+function thumbnail(){
+ const image=document.createElement('canvas');image.width=960;image.height=540;const c=image.getContext('2d');c.fillStyle=state.background;c.fillRect(0,0,960,540);
+ const factor=Math.min(900/canvas.width,480/canvas.height),w=canvas.width*factor,h=canvas.height*factor;c.drawImage(canvas,(960-w)/2,(540-h)/2,w,h);return image.toDataURL('image/jpeg',.88);
+}
+updateFormatter();state.material=state.board==='#111213'?'black':state.board==='#f6f4ef'?'white':null;
+resize();initializeTime(nowMinutes());
+const timer=setInterval(()=>{if(!document.hidden)sync();},1000);
+document.addEventListener('visibilitychange',resume);
+return {update,resize,thumbnail,getStats:()=>({frameCount,geometry,pixelWidth:canvas.width,pixelHeight:canvas.height,display:state.minuteKey,animating:hands.some(h=>performance.now()<h.fadeEnd)}),dispose(){disposed=true;cancelAnimationFrame(animationFrame);clearInterval(timer);document.removeEventListener('visibilitychange',resume);}};
+}
+})(globalThis);
+
+(function (root) {
+  'use strict';
+  const Spec = root.TimeformSettings;
+  const embedded = JSON.parse(document.getElementById('timeform-config').textContent);
+  const storageKey = 'timeform-wallpaper-v1';
+  let config = Spec.normalize(embedded);
+  if (document.body.dataset.editor === '1') {
+    try { const saved = localStorage.getItem(storageKey); if (saved) config = Spec.importConfig(saved); } catch (_) { /* Exports work even if storage is unavailable. */ }
+  }
+  config = Spec.normalize(Spec.fromSearch(location.search), config);
+  const viewport = document.getElementById('viewport'), area = document.getElementById('previewArea');
+  const canvas = document.getElementById('clock');
+  let editing = false, previewResolution = [1920, 1080];
+  const openedAsEditor = document.body.dataset.editor === '1' || new URLSearchParams(location.search).get('settings') === '1';
+  function dimensions() {
+    const width = viewport.clientWidth || 1, height = viewport.clientHeight || 1;
+    return editing && previewResolution ? { width: previewResolution[0], height: previewResolution[1], displayWidth: width, displayHeight: height } : { width, height };
+  }
+  function arrange() {
+    if (!editing) { viewport.style.width = '100%'; viewport.style.height = '100%'; return; }
+    const availableWidth = Math.max(1, area.clientWidth - 40), availableHeight = Math.max(1, area.clientHeight - 100);
+    const ratio = previewResolution ? previewResolution[0] / previewResolution[1] : availableWidth / availableHeight;
+    const width = Math.min(availableWidth, availableHeight * ratio);
+    viewport.style.width = width + 'px'; viewport.style.height = width / ratio + 'px';
+  }
+  function paintBackground() {
+    document.documentElement.style.setProperty('--wallpaper-bg', config.background);
+    document.querySelector('meta[name="theme-color"]').content = config.background;
+  }
+  paintBackground();
+  const renderer = root.TimeformRenderer.create(canvas, config, dimensions);
+  function refresh() {
+    arrange(); renderer.resize();
+    const stats = renderer.getStats(), d = dimensions();
+    document.getElementById('layoutReadout').textContent = Math.round(d.width) + ' × ' + Math.round(d.height) + ' · ' + (stats.geometry.layout === 'portrait' ? '上下两排' : '横排') + ' · 完整显示';
+  }
+  function updateConfig(patch) {
+    config = Spec.normalize(patch, config); paintBackground(); renderer.update(config);
+    if (editing) try { localStorage.setItem(storageKey, Spec.exportConfig(config)); } catch (_) { /* Optional convenience only. */ }
+    document.dispatchEvent(new CustomEvent('timeform-config-change', { detail: { ...config } }));
+    refresh(); return { ...config };
+  }
+  function setEditing(open) {
+    editing = Boolean(open); document.body.dataset.editing = String(editing);
+    for (const id of ['editor', 'editorHeader', 'previewCaption']) document.getElementById(id).hidden = !editing;
+    document.getElementById('returnSettings').hidden = editing || !openedAsEditor;
+    refresh();
+  }
+  const metadata = Spec.metadata;
+  function exportHtml() {
+    const clone = document.documentElement.cloneNode(true);
+    const body = clone.querySelector('body'); body.dataset.editor = '0'; body.dataset.editing = 'false';
+    for (const id of ['editor', 'editorHeader', 'previewCaption', 'returnSettings']) clone.querySelector('#' + id).hidden = true;
+    for (const id of ['presets', 'fields-colors', 'fields-screen', 'fields-motion', 'fields-time']) clone.querySelector('#' + id).replaceChildren();
+    clone.querySelector('#urlFallback').hidden = true;
+    clone.querySelector('#timeform-config').textContent = JSON.stringify(config).replace(/</g, '\\u003c');
+    clone.querySelector('#viewport').removeAttribute('style'); clone.querySelector('#clock').removeAttribute('style');
+    return '<!doctype html>\n' + clone.outerHTML;
+  }
+  function url() {
+    const target = new URL(location.href);
+    if (target.pathname.endsWith('/configure.html')) target.pathname = target.pathname.replace(/configure\.html$/, 'index.html');
+    target.search = Spec.toSearch(config, embedded); target.hash = ''; return target.href;
+  }
+  function livelyPackage() {
+    const data = atob(renderer.thumbnail().split(',')[1]);
+    return root.TimeformZip.create({ 'index.html': exportHtml(), 'LivelyInfo.json': JSON.stringify(metadata, null, 2), 'LivelyProperties.json': JSON.stringify(Spec.livelyProperties(config), null, 2), 'thumbnail.jpg': Uint8Array.from(data, c => c.charCodeAt(0)) });
+  }
+  root.TimeformWallpaper = { getConfig: () => ({ ...config }), updateConfig, setEditing, setPreviewResolution(value) { previewResolution = value; refresh(); }, exportHtml, url, livelyPackage, metadata, renderer };
+  root.livelyPropertyListener = (name, value) => { const decoded = Spec.decode(name, value); if (decoded !== undefined) updateConfig({ [name]: decoded }); };
+  window.addEventListener('resize', refresh);
+  window.addEventListener('keydown', event => {
+    if (event.target.closest('input,select,button,a')) return;
+    if (event.key.toLowerCase() === 's') setEditing(!editing);
+    else if (event.key === 'Escape' && editing) setEditing(false);
+  });
+  setEditing(openedAsEditor);
+})(globalThis);
+
+(function (root) {
+  'use strict';
+  const Spec = root.TimeformSettings, app = root.TimeformWallpaper;
+  const controls = new Map(), presetButtons = [];
+  const notice = text => { document.getElementById('notice').textContent = text; };
+  function accept(key, value, input) {
+    const decoded = Spec.decode(key, value);
+    if (decoded === undefined) { input.setAttribute('aria-invalid', 'true'); notice('请检查「' + Spec.fields[key].text + '」：' + (key === 'timezone' ? '使用有效时区，例如 Asia/Hong_Kong。' : '颜色需为六位 HEX，例如 #111213。')); return; }
+    input.removeAttribute('aria-invalid'); app.updateConfig({ [key]: decoded }); notice('预览已更新。导出后即可带到其他电脑。');
+  }
+  for (const [key, field] of Object.entries(Spec.fields)) {
+    const wrapper = document.createElement('div'); wrapper.className = field.type === 'color' ? 'color-field' : 'field';
+    const label = document.createElement('label'); label.htmlFor = 'setting-' + key; label.textContent = field.text;
+    const input = document.createElement(field.type === 'dropdown' ? 'select' : 'input'); input.id = 'setting-' + key;
+    const entry = { input, hex: null, output: null };
+    if (field.type === 'color') {
+      input.type = 'color'; const hex = document.createElement('input'); hex.type = 'text'; hex.maxLength = 7; hex.setAttribute('aria-label', field.text + ' HEX'); hex.spellcheck = false;
+      const group = document.createElement('div'); group.className = 'color-inputs'; group.append(input, hex); wrapper.append(label, group); entry.hex = hex;
+      input.addEventListener('input', () => accept(key, input.value, input)); hex.addEventListener('change', () => accept(key, hex.value.trim(), hex));
+    } else if (field.type === 'checkbox') {
+      input.type = 'checkbox'; label.className = 'field-check'; label.prepend(input); wrapper.append(label); input.addEventListener('change', () => accept(key, input.checked, input));
+    } else {
+      const heading = document.createElement('div'); heading.className = 'field-heading'; heading.append(label); wrapper.append(heading, input);
+      if (field.type === 'dropdown') {
+        field.values.forEach((value, index) => { const option = document.createElement('option'); option.value = value; option.textContent = field.items[index]; input.append(option); });
+        input.addEventListener('change', () => accept(key, input.value, input));
+      } else if (field.type === 'slider') {
+        input.type = 'range'; input.min = field.min; input.max = field.max; input.step = field.step;
+        const output = document.createElement('output'); output.htmlFor = input.id; heading.append(output); entry.output = output; input.addEventListener('input', () => accept(key, input.value, input));
+      } else { input.type = 'text'; input.placeholder = '跟随电脑时区'; input.addEventListener('change', () => accept(key, input.value, input)); }
+      if (field.help) { const help = document.createElement('p'); help.className = 'help'; help.textContent = field.help; wrapper.append(help); }
+    }
+    controls.set(key, entry); document.getElementById('fields-' + field.group).append(wrapper);
+  }
+  for (const preset of Spec.presets) {
+    const button = document.createElement('button'); button.type = 'button'; button.className = 'preset'; button.setAttribute('aria-label', '应用' + preset.name);
+    const swatch = document.createElement('span'); swatch.className = 'preset-swatch'; swatch.style.background = preset.board; swatch.style.setProperty('--hand', preset.long);
+    const name = document.createElement('span'); name.textContent = preset.name; button.append(swatch, name);
+    button.addEventListener('click', () => { app.updateConfig(preset); notice('已应用「' + preset.name + '」，各部分颜色仍可独立调节。'); });
+    document.getElementById('presets').append(button); presetButtons.push({ button, preset });
+  }
+  function showValues() {
+    const config = app.getConfig();
+    for (const [key, entry] of controls) {
+      entry.input.type === 'checkbox' ? entry.input.checked = config[key] : entry.input.value = config[key];
+      if (entry.hex && document.activeElement !== entry.hex) { entry.hex.value = config[key].toUpperCase(); entry.hex.removeAttribute('aria-invalid'); }
+      if (entry.output) entry.output.textContent = config[key] + Spec.fields[key].unit;
+    }
+    for (const { button, preset } of presetButtons) button.setAttribute('aria-pressed', String(['background', 'board', 'long', 'short'].every(key => config[key] === preset[key])));
+  }
+  function download(filename, content, type) {
+    const objectUrl = URL.createObjectURL(new Blob([content], { type }));
+    const anchor = document.createElement('a'); anchor.href = objectUrl; anchor.download = filename; anchor.click(); setTimeout(() => URL.revokeObjectURL(objectUrl), 30000);
+  }
+  document.addEventListener('timeform-config-change', showValues); showValues();
+  document.getElementById('previewSize').addEventListener('change', event => app.setPreviewResolution(event.target.value === 'auto' ? null : event.target.value.split('x').map(Number)));
+  document.getElementById('hideSettings').addEventListener('click', () => app.setEditing(false));
+  document.getElementById('returnSettings').addEventListener('click', () => app.setEditing(true));
+  document.getElementById('downloadHtml').addEventListener('click', () => { download('TIMEFORM-wallpaper.html', app.exportHtml(), 'text/html;charset=utf-8'); notice('通用 HTML 已导出。打开即是你刚才设置的配色；按 S 可继续设置。'); });
+  document.getElementById('downloadLively').addEventListener('click', () => { download('TIMEFORM-Lively.zip', app.livelyPackage(), 'application/zip'); notice('Lively 包已导出。把 ZIP 拖进 Lively，即可使用这份配色。'); });
+  document.getElementById('exportConfig').addEventListener('click', () => { download('TIMEFORM-colors.json', Spec.exportConfig(app.getConfig()), 'application/json'); notice('配色配置已导出，导入到其他电脑的壁纸工作台即可恢复。'); });
+  document.getElementById('importConfig').addEventListener('change', async event => {
+    const file = event.target.files[0]; if (!file) return;
+    try { if (file.size > 65536) throw new Error('配置文件过大，请选择 TIMEFORM 导出的 JSON 文件。'); app.updateConfig(Spec.importConfig(await file.text())); notice('配色配置已导入。'); }
+    catch (error) { notice(error.message); } finally { event.target.value = ''; }
+  });
+  document.getElementById('resetConfig').addEventListener('click', () => { app.updateConfig(Spec.defaults); notice('已恢复经典黑与自动适配。'); });
+  document.getElementById('copyUrl').addEventListener('click', async () => {
+    const url = app.url();
+    try { await navigator.clipboard.writeText(url); notice(location.protocol === 'file:' ? '本地网址已复制；换电脑请导出 HTML。在线工作台可生成跨电脑网址。' : '壁纸网址已复制，粘贴到 Plash 等网页壁纸工具即可。'); }
+    catch (_) { const fallback = document.getElementById('urlFallback'); fallback.hidden = false; fallback.value = url; fallback.focus(); fallback.select(); notice('请复制下方的壁纸网址。'); }
+  });
+})(globalThis);
+</script>
+</body>
+</html>

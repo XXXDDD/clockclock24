@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "settings": {
+    "background": "#000000",
+    "board": "#111213",
+    "long": "#f9faf7",
+    "short": "#eef0ec",
+    "layout": "auto",
+    "scale": 90,
+    "padding": 0,
+    "offsetX": 0,
+    "offsetY": 0,
+    "motion": "spin",
+    "duration": 4,
+    "visibility": "hide",
+    "longLength": 100,
+    "shortLength": 100,
+    "format24": true,
+    "timezone": ""
+  }
+}

@@ -1,0 +1,20 @@
+name: Validate portable wallpaper
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm test
+      - run: node scripts/build-wallpaper.cjs --check
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TIMEFORM-wallpapers
+          path: downloads/

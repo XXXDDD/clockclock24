@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="TIMEFORM 可定制时钟壁纸。离线运行，适配横屏、竖屏和超宽屏，支持 Lively 与网页壁纸工具。">
+  <title>TIMEFORM · 时钟壁纸</title>
+  <style>/* BUILD:STYLES */</style>
+</head>
+<body data-editor="BUILD:EDITOR">
+  <header id="editorHeader" hidden>
+    <div><span class="brand">TIMEFORM</span><span class="brand-detail">壁纸工作台</span></div>
+    <button id="hideSettings" class="text-button">全屏预览 ↗</button>
+  </header>
+  <main id="previewArea">
+    <div id="viewport"><canvas id="clock" role="img" aria-label="由24个模拟钟表组成的数字时钟"></canvas></div>
+    <div id="previewCaption" hidden>
+      <label>预览屏幕 <select id="previewSize" aria-label="预览屏幕尺寸">
+        <option value="1920x1080">1920 × 1080 · 横屏</option>
+        <option value="2560x1440">2560 × 1440 · 2K</option>
+        <option value="3840x2160">3840 × 2160 · 4K</option>
+        <option value="3440x1440">3440 × 1440 · 超宽屏</option>
+        <option value="1080x1920">1080 × 1920 · 竖屏</option>
+        <option value="1280x1024">1280 × 1024 · 5:4</option>
+        <option value="auto">当前窗口</option>
+      </select></label>
+      <span id="layoutReadout" aria-live="polite"></span>
+    </div>
+  </main>
+  <button id="returnSettings" hidden>返回设置</button>
+  <aside id="editor" hidden aria-label="壁纸设置">
+    <div class="editor-intro"><span class="eyebrow">MAKE TIME YOURS</span><h1>让时间，适合你的屏幕。</h1><p>调好配色，带到下一台电脑。<br>横屏、竖屏与超宽屏，时钟始终完整。</p></div>
+    <form id="settingsForm" onsubmit="return false">
+      <section><h2>选择一个起点 <span>8 组配色</span></h2><div id="presets"></div></section>
+      <section><h2>颜色 <span>独立调节</span></h2><div id="fields-colors" class="color-grid"></div></section>
+      <section><h2>屏幕适配</h2><div id="fields-screen"></div></section>
+      <section><h2>指针与动画</h2><div id="fields-motion"></div></section>
+      <section><h2>时间</h2><div id="fields-time"></div></section>
+    </form>
+    <section class="export-section">
+      <h2>带走这份时钟</h2>
+      <p class="help">Windows 导入 Lively 包。Mac 或其他网页壁纸工具使用通用 HTML 或壁纸网址。</p>
+      <button id="downloadLively" class="primary-button">下载 Lively 壁纸包 <span>ZIP ↓</span></button>
+      <div class="button-pair"><button id="downloadHtml">下载通用 HTML</button><button id="copyUrl">复制壁纸网址</button></div>
+      <div class="small-actions"><button id="exportConfig">导出配色配置</button><label for="importConfig">导入配色配置<input id="importConfig" type="file" accept=".json,application/json" hidden></label><button id="resetConfig">恢复默认</button></div>
+      <p id="notice" role="status" aria-live="polite">配色会保存在此浏览器，也可导出后带到其他电脑。</p>
+      <input id="urlFallback" aria-label="壁纸网址" readonly hidden>
+    </section>
+  </aside>
+  <script type="application/json" id="timeform-config">/* BUILD:CONFIG */</script>
+  <script>/* BUILD:SCRIPTS */</script>
+</body>
+</html>
