@@ -1,4 +1,4 @@
-name: Validate portable wallpaper
+name: Validate TIMEFORM workbench and wallpaper
 on:
   push:
   pull_request:
@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: 22
       - run: npm test
-      - run: node scripts/build-wallpaper.cjs --check
+      - run: npm run check
       - uses: actions/upload-artifact@v4
         with:
           name: TIMEFORM-wallpapers

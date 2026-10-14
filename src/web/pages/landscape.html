@@ -1,0 +1,38 @@
+<section class="page-heading">
+  <div><div class="eyebrow">横屏 / 型号调试</div><h1 id="modelName">ClockClock 24</h1><p id="modelDescription">选择阵列型号，在同一处校准布局、配色与换时动画。</p></div>
+  <div class="heading-meta"><span class="status-dot"></span><span id="clockCount">24 个表盘</span><span class="separator">/</span><span id="handCount">48 根指针</span><span id="arraySize" class="model-badge">8 × 3</span></div>
+</section>
+<section class="model-picker" aria-label="横屏阵列型号"><div class="model-picker-label">阵列型号<span>各型号独立保存配置</span></div><div id="modelOptions" class="model-options"></div></section>
+<div class="workspace">
+  <section class="viewer" aria-label="时钟预览与调试">
+    <div class="preview-toolbar">
+      <div class="preview-title"><span>目标画布</span><strong id="resolutionLabel">1920 × 1080</strong></div>
+      <div class="preview-actions"><label class="sr-only" for="previewPreset">画布尺寸预设</label><select id="previewPreset"><option value="1920x1080">1920 × 1080 · 16:9</option><option value="2560x1440">2560 × 1440 · 16:9</option><option value="3440x1440">3440 × 1440 · 超宽</option><option value="1280x1024">1280 × 1024 · 5:4</option><option value="1080x1920">1080 × 1920 · 竖向画布</option><option value="custom">自定义尺寸</option></select><button id="fullscreen" type="button">全屏预览</button></div>
+    </div>
+    <div class="stage" id="stage"><div id="viewport"><canvas id="clock" role="img" aria-label="ClockClock 24"></canvas></div></div>
+    <div class="transport">
+      <div class="transport-main"><button id="pause" class="primary" type="button" aria-pressed="false">暂停</button><button id="replay" type="button">重播动画</button><button id="step" type="button" disabled>单步 100 ms</button></div>
+      <div class="minute-controls"><button id="previousMinute" type="button" aria-label="前一分钟">−1 分</button><button id="nextMinute" type="button" aria-label="后一分钟">+1 分</button></div>
+    </div>
+    <div class="readout" aria-label="调试状态">
+      <div><span>显示时间</span><strong id="displayTime">--:--</strong></div>
+      <div><span>播放状态</span><strong id="playbackStatus">读取中</strong></div>
+      <div><span>背景板尺寸</span><strong id="boardSize">1000 × 445</strong></div>
+      <div><span>渲染尺寸</span><strong id="renderSize">--</strong></div>
+    </div>
+    <p class="preview-note">画布按比例缩放预览。竖向画布仍展示横屏型号；独立竖排型号见竖排页面。</p>
+    <details class="snapshot"><summary>当前配置快照 <span>JSON</span></summary><textarea id="configSnapshot" readonly aria-label="当前配置 JSON" spellcheck="false"></textarea></details>
+  </section>
+  <aside id="editor" class="editor" aria-label="ClockClock 24 专业配置">
+    <div class="editor-title"><div><h2>专业配置</h2><p>数值与滑块同步，修改即时预览。</p></div><span id="editorModel" class="model-badge">CC24</span></div>
+    <div class="config-actions"><button id="save" type="button">保存方案</button><button id="exportConfig" type="button">导出 JSON</button><label class="file-button" for="importConfig">导入 JSON</label><input id="importConfig" type="file" accept=".json,application/json" class="sr-only"><button id="reset" type="button">恢复默认</button></div>
+    <p id="notice" class="notice" role="status" aria-live="polite">加载配置中。</p>
+    <div class="editor-scroll">
+      <section class="control-section"><h3>配色 <span>独立调节</span></h3><div id="presets" class="presets"></div><div id="fields-colors" class="color-grid"></div></section>
+      <section class="control-section"><h3>画布与位置 <span>输出空间</span></h3><div id="fields-screen"></div><p class="field-help">位置以剩余留白为范围，±100% 对齐两侧边缘。</p></section>
+      <section class="control-section"><h3>表盘与指针 <span>型号几何</span></h3><div id="fields-geometry"></div><p class="field-help">设计单位属于型号内部坐标，随整体缩放等比变化。短针长度不超过长针。</p></section>
+      <section class="control-section"><h3>动画与播放 <span>整体编排</span></h3><div id="fields-motion"></div></section>
+      <section class="control-section"><h3>时间与换时 <span>调试输入</span></h3><div id="fields-time"></div></section>
+    </div>
+  </aside>
+</div>

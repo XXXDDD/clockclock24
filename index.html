@@ -4,475 +4,949 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f5f4ee">
-  <meta name="description" content="TIMEFORM 时间配色实验室。24个表盘，48根指针，自定义背景板与长短针颜色，发现属于你的时间。">
-  <title>TIMEFORM — 时间配色实验室</title>
-  <style>
-    :root { --paper:#f5f4ee; --ink:#313a31; --muted:#8a8e80; --line:#dfdfd3; --accent:#526549; --board:#111213; --long:#f9faf7; --short:#eef0ec; }
-    * { box-sizing:border-box; }
-    html { scroll-behavior:smooth; }
-    body { margin:0; min-width:320px; background:var(--paper); color:var(--ink); font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; }
-    button,input,select { font:inherit; color:inherit; }
-    button,a,input,select { -webkit-tap-highlight-color:transparent; }
-    button { cursor:pointer; }
-    button { border:0; background:none; }
-    button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible { outline:2px solid #839e6b; outline-offset:4px; }
-    a { color:inherit; text-decoration:none; }
-    svg { display:block; }
-    .icon { width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; flex:none; }
-    .shell { max-width:1480px; margin:auto; padding:0 56px; }
-    .topbar { height:84px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); gap:24px; }
-    .brand { display:flex; gap:13px; align-items:center; }
-    .brand-mark { width:30px; height:30px; position:relative; border:1.4px solid currentColor; border-radius:50%; }
-    .brand-mark:before,.brand-mark:after { content:""; position:absolute; left:14px; top:14px; background:currentColor; height:1.5px; transform-origin:0 50%; }
-    .brand-mark:before { width:9px; transform:rotate(-90deg); }
-    .brand-mark:after { width:8px; transform:rotate(30deg); }
-    .brand-name { font-size:19px; letter-spacing:.22em; font-weight:600; line-height:1; }
-    .brand-sub { margin-top:5px; font-size:9px; letter-spacing:.23em; color:var(--muted); }
-    .navigation { display:flex; gap:32px; align-items:center; margin-left:60px; font-size:12px; color:#898d80; }
-    .navigation .active { color:var(--ink); position:relative; }
-    .navigation .active:after { content:""; position:absolute; width:4px; height:4px; border-radius:50%; background:#667958; bottom:-12px; left:calc(50% - 2px); }
-    .save-button { display:flex; align-items:center; gap:8px; border:1px solid #d3d6c6; border-radius:6px; padding:9px 16px; font-size:12px; background:#fafaf5; transition:background .2s; }
-    .save-button:hover { background:#e9eddf; }
-    .save-button .icon { width:15px; height:15px; }
-    .intro { padding:38px 0 30px; display:flex; align-items:end; justify-content:space-between; gap:24px; }
-    .eyebrow { display:flex; gap:9px; align-items:center; margin:0 0 12px; font-size:10px; letter-spacing:.22em; color:#878e7b; }
-    .eyebrow:before { content:""; width:18px; height:1px; background:#879473; }
-    h1 { font-size:clamp(28px,3.3vw,44px); line-height:1.35; margin:0; font-weight:500; letter-spacing:-.045em; }
-    h1 span { color:#7f8b6b; }
-    .intro-copy { color:#94988b; font-size:12px; margin:13px 0 0; letter-spacing:.04em; }
-    .intro-right { text-align:right; padding-bottom:3px; }
-    .live { display:inline-flex; align-items:center; gap:7px; font-size:10px; letter-spacing:.12em; color:#737e69; }
-    .live-dot { width:5px; height:5px; border-radius:50%; background:#82956a; box-shadow:0 0 0 3px #85966b12; }
-    .digital-time { font-size:24px; line-height:1.5; font-weight:300; letter-spacing:.09em; font-variant-numeric:tabular-nums; }
-    .date { color:#95998c; font-size:10px; letter-spacing:.045em; }
-    .workspace { display:grid; grid-template-columns:minmax(0,1fr) 334px; gap:22px; }
-    .viewer { min-width:0; }
-    .scene { min-height:400px; height:calc(100% - 57px); position:relative; display:flex; align-items:center; justify-content:center; padding:68px 36px 61px; border:1px solid #dddfd3; border-radius:10px; background:radial-gradient(ellipse at 50% 35%,#f0f0e9,#e5e7de 90%); overflow:hidden; isolation:isolate; }
-    .scene:after { content:""; position:absolute; left:0; right:0; bottom:0; height:24%; background:linear-gradient(0deg,#dcdfd441,transparent); pointer-events:none; }
-    .scene-label { position:absolute; top:22px; left:24px; color:#959b8c; font-size:9px; letter-spacing:.14em; }
-    .scene-label span { color:#6b7864; }
-    .fullscreen-button { position:absolute; right:19px; top:16px; padding:7px; border:1px solid #d2d7c7; border-radius:5px; color:#818b75; background:#f4f5ee78; }
-    .fullscreen-button:hover { background:#fff9; }
-    .clock-wrap { width:100%; position:relative; filter:drop-shadow(0 18px 14px #24322529) drop-shadow(0 3px 3px #24322518); }
-    canvas { display:block; width:100%; aspect-ratio:1000/445; height:auto; }
-    .scene-bottom { position:absolute; bottom:22px; left:24px; right:24px; display:flex; justify-content:space-between; align-items:center; color:#8d9583; font-size:9px; letter-spacing:.12em; z-index:1; }
-    .palette-chips { display:flex; gap:5px; align-items:center; }
-    .palette-chips i { width:9px; height:9px; border-radius:50%; border:1px solid #0001; }
-    .palette-chips span { margin-left:5px; letter-spacing:.04em; font-size:10px; }
-    .scene:fullscreen { width:100%; height:100%; border-radius:0; padding:8vw; }
-    .scene:fullscreen .clock-wrap { width:min(90vw,calc(80vh * 2.247)); }
-    .viewer-bar { height:57px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
-    .clock-meta { color:#93988a; font-size:10px; display:flex; align-items:center; gap:8px; }
-    .clock-meta .divider { color:#ced1c3; }
-    .replay { display:flex; align-items:center; gap:7px; color:#57674b; font-size:11px; padding:7px 0 7px 12px; }
-    .replay .icon { width:15px; height:15px; }
-    .replay:hover { color:#273b20; }
-    .editor { background:#fbfbf7; border:1px solid #dddfd3; border-radius:10px; padding:23px 24px 0; display:flex; flex-direction:column; min-height:457px; }
-    .editor-heading { display:flex; align-items:center; justify-content:space-between; }
-    .editor-heading h2 { font-size:15px; margin:0; font-weight:600; letter-spacing:.02em; }
-    .version { font-size:9px; color:#98a18b; letter-spacing:.1em; border:1px solid #e0e4d8; border-radius:4px; padding:1px 6px; }
-    .editor-sub { margin:5px 0 20px; color:#9ba190; font-size:10px; }
-    .tabs { display:grid; grid-template-columns:repeat(3,1fr); border-bottom:1px solid #e1e4d9; margin-bottom:17px; }
-    .tab { display:flex; align-items:center; justify-content:center; gap:6px; position:relative; padding:9px 0 12px; color:#989e8e; font-size:11px; }
-    .tab .icon { width:14px; height:14px; }
-    .tab[aria-selected="true"] { color:#526549; }
-    .tab[aria-selected="true"]:after { content:""; position:absolute; bottom:-1px; height:2px; background:#6d805b; left:13px; right:13px; border-radius:3px; }
-    .tab-panel { flex:1; }
-    [hidden] { display:none!important; }
-    .classic-colors { display:flex; gap:8px; padding-bottom:10px; border-bottom:1px solid #e8eadf; margin-bottom:4px; }
-    .classic-color { display:flex; flex:1; align-items:center; justify-content:center; gap:7px; padding:7px; border:1px solid #e0e3d7; border-radius:5px; font-size:10px; color:#7c886f; background:#fff; }
-    .classic-color i { width:12px; height:12px; border-radius:50%; border:1px solid #c9cec0; }
-    .classic-color[aria-pressed="true"] { color:#526549; border-color:#9ead8d; background:#f0f4e9; }
-    .color-row { display:flex; align-items:center; gap:10px; padding:10px 0; position:relative; }
-    .part-icon { width:29px; height:29px; display:flex; align-items:center; justify-content:center; border:1px solid #e6e8dd; border-radius:5px; color:#8c9680; flex:none; background:#f5f6ee; }
-    .part-icon .icon { width:15px; height:15px; }
-    .color-name { flex:1; cursor:pointer; }
-    .color-name strong { display:block; font-size:11px; font-weight:500; }
-    .color-name span { display:block; font-size:8px; color:#a3a797; line-height:1.7; letter-spacing:.02em; }
-    .color-row.selected .part-icon { border-color:#b6c2a7; color:#5f764f; }
-    .color-control { display:flex; gap:7px; align-items:center; border:1px solid #e0e3d7; padding:5px 7px; border-radius:5px; background:white; }
-    .color-picker { width:22px; height:22px; border:1px solid #0001; border-radius:3px; overflow:hidden; cursor:pointer; position:relative; flex:none; }
-    .color-picker input { position:absolute; width:40px; height:40px; left:-9px; top:-9px; cursor:pointer; padding:0; opacity:0; }
-    .hex-input { width:67px; font:10px/1.6 "SFMono-Regular",Consolas,monospace; letter-spacing:.03em; border:0; outline:none; background:none; text-transform:uppercase; padding:2px 0; }
-    .hex-input[aria-invalid="true"] { color:#b34f3e; }
-    .quick-colors { border-top:1px solid #e8eadf; padding-top:14px; margin-top:7px; }
-    .field-heading { display:flex; align-items:center; justify-content:space-between; font-size:10px; color:#8c9580; margin-bottom:10px; }
-    .field-heading span:last-child { color:#a6ad9b; font-size:9px; }
-    .swatches { display:flex; justify-content:space-between; gap:7px; }
-    .swatch { width:24px; height:24px; border:1px solid #0001; border-radius:50%; position:relative; }
-    .swatch:hover { transform:translateY(-2px); }
-    .swatch[aria-pressed="true"]:after { content:""; position:absolute; inset:-4px; border:1px solid #9fad8c; border-radius:50%; }
-    .lengths { border-top:1px solid #e8eadf; margin-top:17px; padding-top:12px; }
-    .range-row { display:flex; align-items:center; gap:12px; margin:7px 0; }
-    .range-row label { width:46px; flex:none; color:#909883; font-size:10px; white-space:nowrap; }
-    input[type="range"] { width:100%; min-width:0; accent-color:#768b60; height:3px; cursor:pointer; }
-    .range-row output { flex:none; min-width:32px; text-align:right; font-size:10px; color:#667655; font-variant-numeric:tabular-nums; }
-    .editor-footer { border-top:1px solid #e4e7db; margin-top:15px; min-height:42px; display:flex; align-items:center; justify-content:space-between; font-size:9px; color:#a1a995; }
-    .editor-footer span { display:flex; align-items:center; gap:5px; }
-    .editor-footer span i { height:4px; width:4px; border-radius:50%; background:#8c9e77; }
-    .reset { font-size:9px; color:#7e8d70; padding:8px 0 8px 8px; }
-    .preset-section { margin-top:34px; scroll-margin-top:25px; }
-    .section-heading { display:flex; justify-content:space-between; align-items:center; margin-bottom:17px; gap:14px; }
-    .section-heading h2 { font-size:17px; font-weight:500; margin:0; letter-spacing:.02em; }
-    .section-heading p { margin:5px 0 0; color:#999e8e; font-size:10px; }
-    .section-tag { color:#909a82; letter-spacing:.13em; font-size:9px; }
-    .presets { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:13px; }
-    .preset { text-align:left; padding:7px 7px 10px; border:1px solid #dedfd4; border-radius:7px; background:#f9f9f4; position:relative; transition:border-color .2s,box-shadow .2s,transform .2s; }
-    .preset:hover { transform:translateY(-3px); border-color:#acb898; }
-    .preset[aria-pressed="true"] { border-color:#859972; box-shadow:0 0 0 1px #859972; }
-    .preset-preview { height:83px; border-radius:4px; background:#e6e8df; display:flex; align-items:center; justify-content:center; padding:12px 9px; overflow:hidden; }
-    .preset-preview svg { width:100%; max-height:64px; filter:drop-shadow(0 5px 4px #0002); }
-    .preset-name { display:flex; justify-content:space-between; align-items:center; margin:9px 4px 0; }
-    .preset-name strong { font-size:11px; font-weight:500; }
-    .preset-name .icon { width:14px; height:14px; color:#678154; opacity:0; }
-    .preset[aria-pressed="true"] .preset-name .icon { opacity:1; }
-    .preset-caption { margin:3px 4px 0; color:#a0a592; font-size:8px; letter-spacing:.05em; }
-    .motion-options { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
-    .motion-choice { text-align:left; padding:10px; border:1px solid #e1e5d9; border-radius:5px; background:#fff; }
-    .motion-choice[aria-pressed="true"] { border-color:#9ead8d; background:#f0f4e9; }
-    .motion-choice strong { display:block; font-size:11px; font-weight:500; }
-    .motion-choice span { font-size:9px; color:#a0a794; display:block; margin-top:3px; }
-    .setting-block { margin-top:20px; }
-    .setting-label { color:#87917b; font-size:10px; display:block; margin-bottom:9px; }
-    .segmented { display:flex; padding:3px; background:#edf0e6; border-radius:5px; gap:3px; }
-    .segmented button { flex:1; border-radius:3px; padding:7px 3px; font-size:10px; color:#959e88; }
-    .segmented button[aria-pressed="true"] { background:#fbfcf7; color:#596d47; box-shadow:0 1px 3px #2b392214; }
-    .setting-note { font-size:9px; color:#a3aa96; margin:9px 0 0; line-height:1.8; }
-    .manual-row { display:flex; gap:8px; margin-top:17px; }
-    .manual-row button { border:1px solid #dce2d1; border-radius:5px; width:34px; background:white; }
-    .time-input { width:100%; min-width:0; text-align:center; border:1px solid #dce2d1; border-radius:5px; padding:6px; background:#fff; }
-    .check-label { display:flex; gap:8px; align-items:center; color:#8e987f; font-size:10px; margin-top:12px; }
-    input[type="checkbox"] { accent-color:#768b60; }
-    .clock-source-note { margin-top:17px; padding:13px; background:#f1f3ea; border-radius:5px; color:#8a957b; font-size:10px; line-height:1.9; }
-    .footer { display:flex; align-items:center; justify-content:space-between; gap:20px; border-top:1px solid var(--line); padding:21px 0 25px; margin-top:31px; color:#a1a692; font-size:9px; letter-spacing:.02em; }
-    .footer .footer-brand { letter-spacing:.15em; margin-right:12px; color:#79886a; }
-    .footer a { text-decoration:underline; text-underline-offset:3px; color:#8b957d; }
-    .toast { position:fixed; left:50%; bottom:28px; transform:translate(-50%,15px); padding:11px 20px; color:#f6f7ef; background:#354330; border-radius:6px; box-shadow:0 6px 30px #26321f25; font-size:12px; opacity:0; pointer-events:none; transition:opacity .2s,transform .2s; z-index:5; max-width:calc(100vw - 30px); text-align:center; }
-    .toast.visible { opacity:1; transform:translate(-50%,0); }
-    @media (min-width:1500px) { .scene { min-height:445px; } }
-    @media (max-width:1100px) { .shell { padding:0 32px; } .workspace { grid-template-columns:minmax(0,1fr) 310px; gap:17px; } .editor { padding:21px 20px 0; } .scene { padding-left:22px; padding-right:22px; } .presets { gap:9px; } .preset-preview { padding:13px 5px; height:74px; } }
-    @media (max-width:850px) { .shell { padding:0 24px; } .navigation { margin-left:0; gap:20px; } .workspace { grid-template-columns:1fr; } .scene { height:400px; padding:65px 35px; } .editor { min-height:0; } .editor-sub { margin-bottom:12px; } .tabs { margin-bottom:13px; } .color-row { padding:8px 0; } .quick-colors { margin-top:5px; } .swatches { justify-content:flex-start; gap:14px; } .presets { grid-template-columns:repeat(3,minmax(0,1fr)); gap:13px; } .preset-preview { height:90px; padding:10px 18px; } .scene:fullscreen { height:100%; } }
-    @media (max-width:520px) { .shell { padding:0 18px; } .topbar { height:70px; gap:12px; } .brand-name { font-size:15px; } .brand-sub { font-size:7px; } .brand-mark { width:25px; height:25px; } .brand-mark:before,.brand-mark:after { left:11px; top:11px; } .navigation { display:none; } .save-button { padding:8px 10px; font-size:10px; } .intro { padding:28px 0 23px; gap:10px; } h1 { font-size:29px; } .eyebrow { font-size:8px; letter-spacing:.13em; } .intro-copy { font-size:10px; max-width:240px; line-height:1.8; } .intro-right { display:none; } .scene { min-height:0; height:255px; padding:48px 18px; } .scene-label { left:16px; top:18px; font-size:8px; } .fullscreen-button { top:11px; right:13px; } .scene-bottom { left:16px; right:16px; bottom:16px; font-size:7px; } .clock-meta { font-size:8px; gap:5px; } .replay { font-size:10px; } .workspace { gap:10px; } .editor { padding:20px 21px 0; } .presets { grid-template-columns:repeat(2,minmax(0,1fr)); gap:11px; } .section-tag { display:none; } .preset-section { margin-top:27px; } .section-heading h2 { font-size:16px; } .preset-preview { height:90px; padding:12px; } .footer { display:block; font-size:8px; margin-top:25px; } .footer>span { display:block; margin-top:7px; } }
-    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*:before,*:after { transition:none!important; } .preset:hover { transform:none; } }
-  </style>
+  <meta name="description" content="TIMEFORM 开发工作台，按种类配置与调试动态时钟。">
+  <title>TIMEFORM · 横屏调试</title>
+  <style>:root{color-scheme:light;--paper:#f5f4ee;--ink:#313a31;--muted:#79816f;--line:#dedfd3;--accent:#526549}
+*{box-sizing:border-box}body{margin:0;min-width:320px;background:var(--paper);color:var(--ink);font:13px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}button,input,select,textarea{font:inherit;color:inherit}a{color:inherit;text-decoration:none}button,.file-button,.button-link{cursor:pointer}button{background:#fcfcf8;border:1px solid var(--line);border-radius:5px;padding:7px 11px;font-size:11px}button:hover,.file-button:hover{background:#edf0e6}button:disabled{opacity:.45;cursor:default}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid #82976c;outline-offset:3px}[hidden]{display:none!important}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.topbar{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:28px;padding:0 38px;border-bottom:1px solid var(--line);background:#fafaf5}.brand{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:600;letter-spacing:.16em;white-space:nowrap}.brand-mark{width:24px;height:24px;border:1.3px solid var(--ink);border-radius:50%;position:relative;flex:none}.brand-mark:before,.brand-mark:after{content:"";position:absolute;width:7px;height:1px;background:var(--ink);left:11px;top:11px;transform-origin:left}.brand-mark:before{transform:rotate(-90deg)}.brand-mark:after{transform:rotate(35deg)}.dev-badge{letter-spacing:.03em;font-size:10px;font-weight:400;border:1px solid #c8d2bb;background:#eef3e6;color:#5d754a;padding:3px 8px;border-radius:4px;margin-left:5px}.navigation{display:flex;gap:6px}.navigation a{display:flex;gap:9px;align-items:center;padding:9px 15px;border-radius:5px;color:#737f66;font-size:12px}.navigation a span{font-size:9px;color:#969e8b}.navigation a[aria-current="page"]{background:#e8edde;color:#42583a}.navigation a:hover{background:#eef1e8}.top-note{font-size:10px;color:#8b9580;white-space:nowrap}.shell{max-width:1600px;padding:0 38px;margin:auto}.page-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:28px 0 25px}.eyebrow{color:#869078;font-size:10px;letter-spacing:.07em;margin-bottom:5px}h1{font-weight:500;font-size:27px;letter-spacing:-.02em;line-height:1.3;margin:0}.page-heading p{font-size:11px;color:#88927d;margin:7px 0 0}.heading-meta{font-size:11px;color:#7c896f;display:flex;gap:10px;align-items:center}.status-dot{width:5px;height:5px;border-radius:50%;background:#7c9165}.separator{color:#b3bba6}.model-badge{font-size:9px;padding:2px 7px;border:1px solid #d7ddcb;border-radius:4px;color:#7b8c68;white-space:nowrap}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 370px;gap:23px;align-items:start}.viewer{min-width:0}.preview-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:51px;padding:0 15px;border:1px solid var(--line);border-radius:9px 9px 0 0;background:#fafaf5}.preview-title{display:flex;align-items:center;gap:12px;white-space:nowrap}.preview-title span{font-size:10px;color:#8a947e}.preview-title strong{font:11px Consolas,monospace;font-weight:400}.preview-actions{display:flex;gap:7px}.preview-actions select{background:#f4f5ed;border:1px solid var(--line);border-radius:5px;padding:5px;font-size:10px;max-width:200px}.stage{height:clamp(280px,40vw,560px);min-height:280px;background:radial-gradient(ellipse at 40% 35%,#e9eae1,#dce1d2);padding:32px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);border-top:0;overflow:hidden}.stage:fullscreen{height:100vh;width:100vw;border:0;padding:32px}#viewport{position:relative;overflow:hidden;flex:none;background:#000;border-radius:2px;box-shadow:0 18px 35px #27371b1b}#clock{display:block;position:absolute}.transport{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid var(--line);border-top:0;padding:12px 15px;border-radius:0 0 9px 9px;background:#fafaf5}.transport-main,.minute-controls{display:flex;gap:7px}.primary{background:#526549;color:#f6f8f0;border:1px solid #526549}.primary:hover{background:#43583a}.readout{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:18px 0 0;background:#eeefe5;border-radius:6px;padding:15px 17px;gap:16px}.readout div{min-width:0}.readout span{display:block;font-size:9px;color:#929b86;margin-bottom:4px}.readout strong{display:block;font:12px Consolas,"Microsoft YaHei",monospace;font-weight:400;color:#637457;white-space:nowrap}.preview-note{color:#8b9580;font-size:10px;margin:12px 0 18px;line-height:1.8}.snapshot{border:1px solid var(--line);border-radius:6px;background:#fafaf5}.snapshot summary{font-size:11px;color:#718362;cursor:pointer;padding:12px 15px}.snapshot summary span{float:right;font:9px Consolas,monospace;color:#9ba78b}.snapshot textarea{width:calc(100% - 30px);height:260px;resize:vertical;display:block;margin:0 15px 15px;border:1px solid var(--line);border-radius:4px;background:#f2f4eb;padding:12px;color:#5c6f4f;font:11px/1.7 Consolas,monospace}
+.editor{background:#fbfbf7;border:1px solid var(--line);border-radius:9px;overflow:hidden}.editor-title{display:flex;align-items:center;justify-content:space-between;padding:19px 20px 13px}.editor-title h2{margin:0;font-size:14px;font-weight:600}.editor-title p{margin:3px 0 0;font-size:10px;color:#929c84}.config-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;padding:0 20px}.config-actions button,.file-button{font-size:10px;padding:7px 3px;text-align:center;white-space:nowrap}.file-button{border:1px solid var(--line);border-radius:5px;background:#fcfcf8}.notice{font-size:10px;line-height:1.8;color:#879879;margin:10px 20px 0;min-height:36px}.notice[data-error="true"]{color:#aa4b39}.editor-scroll{max-height:calc(100vh - 270px);min-height:320px;overflow-y:auto;padding:0 20px 22px;scrollbar-width:thin}.control-section{border-top:1px solid #e3e6d9;padding-top:17px;margin-top:16px}.control-section h3{font-size:11px;font-weight:600;margin:0 0 13px;display:flex;justify-content:space-between}.control-section h3 span{font-size:9px;font-weight:400;color:#9ba38e}.presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:15px}.preset{font-size:9px;padding:7px 2px;display:flex;gap:5px;align-items:center;flex-direction:column}.preset[aria-pressed="true"]{background:#edf2e5;border-color:#95a782}.preset-swatch{width:24px;height:15px;border:1px solid #0001;border-radius:2px;position:relative}.preset-swatch:after{content:"";position:absolute;width:12px;height:2px;top:6px;left:5px;background:var(--hand)}.color-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.field{margin-bottom:13px}.field-label{display:flex;align-items:center;justify-content:space-between;font-size:10px;color:#7c896e;margin-bottom:6px;gap:6px}.field-label .bounds{font-size:8px;color:#a0aa94;white-space:nowrap}.color-inputs{border:1px solid var(--line);border-radius:4px;display:flex;gap:7px;align-items:center;padding:5px;background:#fff}.color-inputs input[type="color"]{width:25px;height:24px;padding:0;border:0;background:none;flex:none;cursor:pointer}.color-inputs input[type="text"]{width:100%;min-width:0;border:0;background:none;font:10px Consolas,monospace;text-transform:uppercase;padding:0}.field input[type="number"],.field input[type="time"],.field input[type="text"],.field select{border:1px solid var(--line);border-radius:4px;background:#fff;min-width:0;padding:6px 8px;width:100%;font-size:11px}.color-inputs input[type="text"]{border:0;padding:0;font-size:10px}.numeric-controls{display:flex;align-items:center;gap:10px}.numeric-controls input[type="range"]{flex:1;width:0;accent-color:#71855a;margin:0;min-width:35px;height:4px}.numeric-controls input[type="number"]{width:79px;flex:none;font-variant-numeric:tabular-nums}.field .check-label{display:flex;gap:7px;align-items:center;font-size:10px;color:#7c896e}.field input[type="checkbox"]{accent-color:#71855a}.field input[aria-invalid="true"]{outline:1px solid #b65e49}.field input:disabled{background:#eff0e8;color:#a1a793}.field-help{color:#a0a892;font-size:9px;line-height:1.8;margin:6px 0 0}.empty-state{display:flex;flex-direction:column;align-items:center;text-align:center;min-height:480px;justify-content:center;padding:45px 25px;border:1px dashed #cbd3bc;border-radius:10px;background:#edf0e6}.empty-symbol{font-size:62px;line-height:1;margin-bottom:23px;color:#8c9e76;font-weight:200}.portrait-symbol{font-size:75px}.empty-state h2{font-size:20px;font-weight:500;margin:0 0 12px;color:#617653}.empty-state p{font-size:12px;color:#8d9980;margin:3px 0;max-width:450px}.button-link{display:inline-block;padding:9px 17px;font-size:11px;border-radius:5px;margin-top:26px}.footer{max-width:1600px;margin:30px auto 0;padding:18px 38px 22px;color:#a1aa92;font-size:9px;display:flex;justify-content:space-between;gap:15px}
+@media(min-width:1600px){.editor-scroll{max-height:660px}}@media(max-width:1100px){.topbar,.shell{padding-left:24px;padding-right:24px}.top-note{display:none}.workspace{grid-template-columns:minmax(0,1fr) 340px;gap:16px}.preview-title span{display:none}.stage{padding:20px}.readout{gap:10px;padding:13px}.readout strong{font-size:10px}.preview-toolbar{padding:0 10px}.preview-actions select{max-width:157px}.transport{flex-wrap:wrap}}
+@media(max-width:820px){.topbar{flex-wrap:wrap;gap:10px;padding-top:15px;padding-bottom:10px}.navigation{width:100%;justify-content:space-between}.navigation a{padding:7px 9px}.page-heading{padding-top:24px}.heading-meta{display:none}.workspace{grid-template-columns:1fr}.stage{height:380px}.editor-scroll{max-height:none;min-height:0}.editor{margin-top:2px}.control-section{scroll-margin-top:10px}.editor-title{padding-top:20px}.editor-scroll{padding-bottom:23px}}
+@media(max-width:460px){.shell,.topbar{padding-left:16px;padding-right:16px}.navigation a span{font-size:8px}.navigation a{font-size:11px;gap:5px}.preview-toolbar{gap:5px;min-height:57px}.preview-title strong{font-size:9px}.preview-actions select{max-width:123px;font-size:9px}.preview-actions button{font-size:9px;padding:6px}.stage{height:290px;min-height:240px;padding:15px}.transport{padding:10px;gap:8px}.transport button{font-size:10px;padding:6px 8px}.readout{grid-template-columns:1fr 1fr;gap:15px}.page-heading p{max-width:290px}.empty-state{min-height:420px}.footer{padding-left:16px;padding-right:16px;font-size:8px}}
+.model-picker{margin:0 0 22px;padding:14px 16px;background:#fafaf5;border:1px solid var(--line);border-radius:9px;display:flex;align-items:center;gap:24px}.model-picker-label{font-size:11px;white-space:nowrap}.model-picker-label span{display:block;font-size:9px;color:#8b9580;margin-top:3px}.model-options{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;flex:1}.model-option{display:flex;flex-direction:column;align-items:flex-start;padding:11px 14px;gap:4px;text-align:left}.model-option strong{font-size:12px;font-weight:500}.model-option span{font-size:9px;color:#8b9580}.model-option[aria-pressed="true"]{background:#e8edde;border-color:#95a782;color:#42583a}.model-option[aria-pressed="true"] span{color:#6b7e5b}
+@media(max-width:820px){.model-picker{align-items:stretch;flex-direction:column;gap:11px}.model-picker-label{display:flex;justify-content:space-between}.model-picker-label span{margin:0}.model-option{padding:9px 10px}.model-option strong{font-size:10px}.model-option span{font-size:8px}}
+@media(max-width:460px){.model-options{grid-template-columns:repeat(2,minmax(0,1fr))}.model-picker{padding:12px}.model-option:last-child{grid-column:1/-1}.navigation a[data-kind="landscape"] span{display:none}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
 </head>
-<body>
-<svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
-  <symbol id="i-save" viewBox="0 0 24 24"><path d="M5 3h12l3 3v15H4V3h1Z"/><path d="M8 3v6h8V3M8 21v-8h8v8"/></symbol>
-  <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18h1a2 2 0 0 0 1-3.7 1.8 1.8 0 0 1 1-3.3h2a4 4 0 0 0 4-4C21 6 17 3 12 3Z"/><path d="M7 10h.01M10 6.5h.01M15 6.5h.01M6.5 14h.01" stroke-width="2.8"/></symbol>
-  <symbol id="i-motion" viewBox="0 0 24 24"><path d="M3 8h12a4 4 0 1 0-4-4M3 12h15a3 3 0 1 1-3 3M3 16h5"/></symbol>
-  <symbol id="i-time" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></symbol>
-  <symbol id="i-board" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h.01M12 9h.01M17 9h.01M7 15h.01M12 15h.01M17 15h.01" stroke-width="2"/></symbol>
-  <symbol id="i-long" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 4v8" stroke-width="2"/></symbol>
-  <symbol id="i-short" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m12 12 4 3" stroke-width="2"/></symbol>
-  <symbol id="i-fullscreen" viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M21 16v5h-5M3 16v5h5"/></symbol>
-  <symbol id="i-replay" viewBox="0 0 24 24"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></symbol>
-  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
-</svg>
-<div class="shell">
+<body data-category="landscape">
   <header class="topbar">
-    <a class="brand" href="#" aria-label="TIMEFORM 首页"><span class="brand-mark" aria-hidden="true"></span><div><div class="brand-name">TIMEFORM</div><div class="brand-sub">THE SHAPE OF YOUR TIME</div></div></a>
-    <nav class="navigation" aria-label="主导航"><a class="active" href="#studio">配色实验室</a><a href="#presets">灵感预设 <span aria-hidden="true">↗</span></a></nav>
-    <button class="save-button" id="save" type="button"><svg class="icon"><use href="#i-save"/></svg>保存我的方案</button>
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>TIMEFORM</span><span class="dev-badge">开发模式</span></a>
+    <nav class="navigation" aria-label="时钟种类">
+      <a href="index.html" data-kind="landscape">横屏<span>24 / 72 / 120 / 144 / 288</span></a>
+      <a href="circular.html" data-kind="circular">圆形<span>待整理</span></a>
+      <a href="portrait.html" data-kind="portrait">竖排<span>待整理</span></a>
+    </nav>
+    <span class="top-note">配置 · 预览 · 调试</span>
   </header>
-  <section class="intro" id="studio">
-    <div><p class="eyebrow">KINETIC CLOCK / COLOR STUDIO</p><h1>把时间，<span>调成你的颜色。</span></h1><p class="intro-copy">24 个表盘，48 根指针。给每一刻，一点自己的色彩。</p></div>
-    <div class="intro-right"><div class="live"><i class="live-dot"></i><span id="topStatus">LIVE · 本地时间</span></div><div class="digital-time" id="digitalTime">--:--:--</div><div class="date" id="date"></div></div>
-  </section>
-  <main>
-    <div class="workspace">
-      <div class="viewer">
-        <div class="scene" id="scene">
-          <div class="scene-label">01 / <span>YOUR TIME, IN MOTION</span></div>
-          <button type="button" class="fullscreen-button" id="fullscreen" aria-label="全屏观赏" title="全屏观赏"><svg class="icon"><use href="#i-fullscreen"/></svg></button>
-          <div class="clock-wrap"><canvas id="clock" role="img" aria-label="由24个模拟钟表组成的数字时钟"></canvas></div>
-          <div class="scene-bottom"><span id="sceneStatus">LOCAL TIME · 24H</span><div class="palette-chips"><i id="chipBoard"></i><i id="chipLong"></i><i id="chipShort"></i><span id="paletteName">经典黑 / CLASSIC BLACK</span></div></div>
-        </div>
-        <div class="viewer-bar"><span class="clock-meta"><span>24 个表盘</span><span class="divider">/</span><span>48 根指针</span><span class="divider">/</span><span id="motionLabel">经典旋转</span></span><button class="replay" id="replay" type="button"><svg class="icon"><use href="#i-replay"/></svg>重播动画</button></div>
-      </div>
-      <section class="editor" aria-label="时钟定制面板">
-        <div class="editor-heading"><h2>定制你的时间</h2><span class="version">V.01</span></div><p class="editor-sub">一点颜色，一种节奏。每个细节都由你决定。</p>
-        <div class="tabs" role="tablist" aria-label="定制类别">
-          <button class="tab" id="tab-colors" role="tab" aria-selected="true" aria-controls="panel-colors" tabindex="0"><svg class="icon"><use href="#i-palette"/></svg>配色</button>
-          <button class="tab" id="tab-motion" role="tab" aria-selected="false" aria-controls="panel-motion" tabindex="-1"><svg class="icon"><use href="#i-motion"/></svg>动态</button>
-          <button class="tab" id="tab-time" role="tab" aria-selected="false" aria-controls="panel-time" tabindex="-1"><svg class="icon"><use href="#i-time"/></svg>时间</button>
-        </div>
-        <div class="tab-panel" id="panel-colors" role="tabpanel" aria-labelledby="tab-colors">
-          <div class="classic-colors" role="group" aria-label="经典配色"><button class="classic-color" type="button" data-classic="classic-black" aria-pressed="true"><i style="background:#111213" aria-hidden="true"></i>经典黑</button><button class="classic-color" type="button" data-classic="classic-white" aria-pressed="false"><i style="background:#f6f4ef" aria-hidden="true"></i>经典白</button></div>
-          <div class="color-row selected" data-part="board"><span class="part-icon"><svg class="icon"><use href="#i-board"/></svg></span><label class="color-name" for="colorBoard"><strong>背景板</strong><span>THE BACKPLATE</span></label><div class="color-control"><label class="color-picker" id="swatchBoard"><input type="color" id="colorBoard" value="#111213" aria-label="背景板颜色"></label><input class="hex-input" id="hexBoard" value="#111213" maxlength="7" aria-label="背景板十六进制颜色" spellcheck="false"></div></div>
-          <div class="color-row" data-part="long"><span class="part-icon"><svg class="icon"><use href="#i-long"/></svg></span><label class="color-name" for="colorLong"><strong>长针</strong><span>THE LONG HAND</span></label><div class="color-control"><label class="color-picker" id="swatchLong"><input type="color" id="colorLong" value="#f9faf7" aria-label="长针颜色"></label><input class="hex-input" id="hexLong" value="#F9FAF7" maxlength="7" aria-label="长针十六进制颜色" spellcheck="false"></div></div>
-          <div class="color-row" data-part="short"><span class="part-icon"><svg class="icon"><use href="#i-short"/></svg></span><label class="color-name" for="colorShort"><strong>短针</strong><span>THE SHORT HAND</span></label><div class="color-control"><label class="color-picker" id="swatchShort"><input type="color" id="colorShort" value="#eef0ec" aria-label="短针颜色"></label><input class="hex-input" id="hexShort" value="#EEF0EC" maxlength="7" aria-label="短针十六进制颜色" spellcheck="false"></div></div>
-          <div class="quick-colors"><div class="field-heading"><span>灵感色盘</span><span id="partHint">点选以应用到背景板</span></div><div class="swatches" id="quickColors" role="group" aria-label="快捷颜色"></div></div>
-          <div class="lengths"><div class="range-row"><label for="longLength">长针长度</label><input type="range" id="longLength" min="70" max="100" value="100"><output id="longLengthValue" for="longLength">100%</output></div><div class="range-row"><label for="shortLength">短针长度</label><input type="range" id="shortLength" min="55" max="100" value="100"><output id="shortLengthValue" for="shortLength">100%</output></div></div>
-        </div>
-        <div class="tab-panel" id="panel-motion" role="tabpanel" aria-labelledby="tab-motion" hidden>
-          <div class="motion-options" role="group" aria-label="指针运动预设">
-            <button class="motion-choice" data-motion="spin" aria-pressed="true"><strong>经典旋转</strong><span>先显现，再旋转归位</span></button><button class="motion-choice" data-motion="quiet" aria-pressed="false"><strong>平滑过渡</strong><span>只移动需要变化的指针</span></button>
-          </div>
-          <div class="setting-block"><div class="range-row"><label for="duration">动画时长</label><input type="range" min="1" max="10" value="4" id="duration"><output id="durationValue" for="duration">4s</output></div></div>
-          <div class="setting-block"><span class="setting-label">闲置指针</span><div class="segmented" role="group" aria-label="闲置指针显示方式"><button type="button" data-visibility="hide" aria-pressed="true">隐藏</button><button type="button" data-visibility="ghost" aria-pressed="false">微显 12%</button><button type="button" data-visibility="show" aria-pressed="false">完整显示</button></div><p class="setting-note">所有指针归位后，再淡出闲置指针。<br>动态设置用于下一次时间变换或重播。</p></div>
-        </div>
-        <div class="tab-panel" id="panel-time" role="tabpanel" aria-labelledby="tab-time" hidden>
-          <span class="setting-label">时间来源</span><div class="segmented"><button type="button" id="live" aria-pressed="true">实时时间</button><button type="button" id="manual" aria-pressed="false">手动演示</button></div>
-          <div class="manual-row" id="manualRow" hidden><button type="button" id="back" aria-label="前一分钟">−</button><input type="time" class="time-input" id="timeInput" step="60" aria-label="演示时间"><button type="button" id="forward" aria-label="后一分钟">+</button></div><label class="check-label" id="demoRow" hidden><input type="checkbox" id="autoDemo">每 12 秒前进一分钟</label>
-          <div class="setting-block"><span class="setting-label">时间格式</span><div class="segmented"><button type="button" id="format24" aria-pressed="true">24 小时</button><button type="button" id="format12" aria-pressed="false">12 小时</button></div></div>
-          <p class="clock-source-note" id="sourceNote">跟随设备的本地时间，每分钟自动变换。<br>也可以设置一个特别的时刻，看看它的形状。</p>
-        </div>
-        <div class="editor-footer"><span><i></i><span id="saveStatus">修改即时生效</span></span><button class="reset" id="reset" type="button">恢复默认 ↺</button></div>
-      </section>
+  <main class="shell"><section class="page-heading">
+  <div><div class="eyebrow">横屏 / 型号调试</div><h1 id="modelName">ClockClock 24</h1><p id="modelDescription">选择阵列型号，在同一处校准布局、配色与换时动画。</p></div>
+  <div class="heading-meta"><span class="status-dot"></span><span id="clockCount">24 个表盘</span><span class="separator">/</span><span id="handCount">48 根指针</span><span id="arraySize" class="model-badge">8 × 3</span></div>
+</section>
+<section class="model-picker" aria-label="横屏阵列型号"><div class="model-picker-label">阵列型号<span>各型号独立保存配置</span></div><div id="modelOptions" class="model-options"></div></section>
+<div class="workspace">
+  <section class="viewer" aria-label="时钟预览与调试">
+    <div class="preview-toolbar">
+      <div class="preview-title"><span>目标画布</span><strong id="resolutionLabel">1920 × 1080</strong></div>
+      <div class="preview-actions"><label class="sr-only" for="previewPreset">画布尺寸预设</label><select id="previewPreset"><option value="1920x1080">1920 × 1080 · 16:9</option><option value="2560x1440">2560 × 1440 · 16:9</option><option value="3440x1440">3440 × 1440 · 超宽</option><option value="1280x1024">1280 × 1024 · 5:4</option><option value="1080x1920">1080 × 1920 · 竖向画布</option><option value="custom">自定义尺寸</option></select><button id="fullscreen" type="button">全屏预览</button></div>
     </div>
-    <section class="preset-section" id="presets"><div class="section-heading"><div><h2>经典黑白，也有更多色彩。</h2><p>保留经典，从喜欢的一组开始。切换配色时，保持你的动态设置。</p></div><span class="section-tag">08 / COLOR PALETTES</span></div><div class="presets" id="presetGrid" role="group" aria-label="配色预设"></div></section>
-  </main>
-  <footer class="footer"><div><span class="footer-brand">TIMEFORM</span>让时间有形，让色彩自由。</div><span>独立交互实验 · 灵感来自 <a href="https://www.humanssince1982.com/en-int/collections/collectibles" target="_blank" rel="noopener noreferrer">Humans since 1982 ↗</a></span></footer>
+    <div class="stage" id="stage"><div id="viewport"><canvas id="clock" role="img" aria-label="ClockClock 24"></canvas></div></div>
+    <div class="transport">
+      <div class="transport-main"><button id="pause" class="primary" type="button" aria-pressed="false">暂停</button><button id="replay" type="button">重播动画</button><button id="step" type="button" disabled>单步 100 ms</button></div>
+      <div class="minute-controls"><button id="previousMinute" type="button" aria-label="前一分钟">−1 分</button><button id="nextMinute" type="button" aria-label="后一分钟">+1 分</button></div>
+    </div>
+    <div class="readout" aria-label="调试状态">
+      <div><span>显示时间</span><strong id="displayTime">--:--</strong></div>
+      <div><span>播放状态</span><strong id="playbackStatus">读取中</strong></div>
+      <div><span>背景板尺寸</span><strong id="boardSize">1000 × 445</strong></div>
+      <div><span>渲染尺寸</span><strong id="renderSize">--</strong></div>
+    </div>
+    <p class="preview-note">画布按比例缩放预览。竖向画布仍展示横屏型号；独立竖排型号见竖排页面。</p>
+    <details class="snapshot"><summary>当前配置快照 <span>JSON</span></summary><textarea id="configSnapshot" readonly aria-label="当前配置 JSON" spellcheck="false"></textarea></details>
+  </section>
+  <aside id="editor" class="editor" aria-label="ClockClock 24 专业配置">
+    <div class="editor-title"><div><h2>专业配置</h2><p>数值与滑块同步，修改即时预览。</p></div><span id="editorModel" class="model-badge">CC24</span></div>
+    <div class="config-actions"><button id="save" type="button">保存方案</button><button id="exportConfig" type="button">导出 JSON</button><label class="file-button" for="importConfig">导入 JSON</label><input id="importConfig" type="file" accept=".json,application/json" class="sr-only"><button id="reset" type="button">恢复默认</button></div>
+    <p id="notice" class="notice" role="status" aria-live="polite">加载配置中。</p>
+    <div class="editor-scroll">
+      <section class="control-section"><h3>配色 <span>独立调节</span></h3><div id="presets" class="presets"></div><div id="fields-colors" class="color-grid"></div></section>
+      <section class="control-section"><h3>画布与位置 <span>输出空间</span></h3><div id="fields-screen"></div><p class="field-help">位置以剩余留白为范围，±100% 对齐两侧边缘。</p></section>
+      <section class="control-section"><h3>表盘与指针 <span>型号几何</span></h3><div id="fields-geometry"></div><p class="field-help">设计单位属于型号内部坐标，随整体缩放等比变化。短针长度不超过长针。</p></section>
+      <section class="control-section"><h3>动画与播放 <span>整体编排</span></h3><div id="fields-motion"></div></section>
+      <section class="control-section"><h3>时间与换时 <span>调试输入</span></h3><div id="fields-time"></div></section>
+    </div>
+  </aside>
 </div>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script>
-(() => {
+</main>
+  <footer class="footer"><span>TIMEFORM 开发工作台</span><span>网页版先行 · 型号分别设计</span></footer>
+  <script>(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).Math = api;
+})(globalThis, function () {
   'use strict';
-  const $ = id => document.getElementById(id);
-  const canvas = $('clock'), ctx = canvas.getContext('2d');
-  const W=1000, H=445, TAU=Math.PI*2;
-  const DIR={E:0,S:Math.PI/2,W:Math.PI,N:-Math.PI/2,P:Math.PI*.75};
-  const GLYPHS={
-    '0':['SE','SW','NS','NS','NE','NW'], '1':['PP','SS','PP','NS','PP','NN'],
-    '2':['EE','SW','SE','NW','NE','WW'], '3':['EE','SW','EE','NW','EE','NW'],
-    '4':['SS','SS','NE','NS','PP','NN'], '5':['SE','WW','NE','SW','EE','NW'],
-    '6':['SE','WW','NS','SW','NE','NW'], '7':['EE','SW','PP','NS','PP','NN'],
-    '8':['SE','SW','NE','NW','NE','NW'], '9':['SE','SW','EN','NS','EE','NW']
-  };
-  const PRESETS=[
-    {id:'classic-black',name:'经典黑',en:'CLASSIC BLACK',board:'#111213',long:'#f9faf7',short:'#eef0ec',material:'black',caption:'黑色背景板 · 经典白针'},
-    {id:'classic-white',name:'经典白',en:'CLASSIC WHITE',board:'#f6f4ef',long:'#50534f',short:'#757873',material:'white',caption:'米白背景板 · 经典黑针'},
-    {id:'moss',name:'苔原',en:'MOSS',board:'#3d493f',long:'#f3f1e7',short:'#bfcdb0',material:null,caption:'深苔与浅绿 · 自然绿意'},
-    {id:'paper',name:'纸与墨',en:'PAPER & INK',board:'#e9e6de',long:'#2a312b',short:'#858775',material:null,caption:'温润米白 · 墨色指针'},
-    {id:'dusk',name:'暮色',en:'DUSK',board:'#393746',long:'#cecce6',short:'#e8a991',material:null,caption:'柔紫与杏 · 日暮时分'},
-    {id:'ocean',name:'深海',en:'DEEP SEA',board:'#21444c',long:'#e7e9dd',short:'#91c1c6',material:null,caption:'深蓝与雾白 · 静水流深'},
-    {id:'clay',name:'赤陶',en:'TERRACOTTA',board:'#a95441',long:'#f6ecdc',short:'#e8bd90',material:null,caption:'陶红与奶油 · 日落暖调'},
-    {id:'midnight',name:'午夜',en:'MIDNIGHT',board:'#232624',long:'#dfc797',short:'#f1efe2',material:null,caption:'墨黑与香槟 · 黑金之夜'}
-  ];
-  const defaults={...PRESETS[0],motion:'spin',duration:4,longLength:100,shortLength:100,visibility:'hide',format24:true};
-  const state={...defaults,preset:'classic-black',source:'live',minuteKey:null,simulatedMinutes:0,autoDemo:false,demoLast:0,selectedPart:'board'};
-  const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const STORAGE_KEY='timeform-scheme-v1';
-  const motionNames={spin:'经典旋转',quiet:'平滑过渡'};
-  const partNames={board:'背景板',long:'长针',short:'短针'};
-  const hexPattern=/^#[0-9a-f]{6}$/i;
-  const pad=n=>String(n).padStart(2,'0');
-  const normalizeMinutes=n=>((n%1440)+1440)%1440;
-  const wrap=x=>((x%TAU)+TAU)%TAU;
-  const smooth=t=>t*t*(3-2*t);
-  const fadeEase=t=>t*t*t*(t*(t*6-15)+10);
-  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
-  let savedSignature=null, toastTimer, paintedVersion=-1, paletteVersion=0, renderDirty=true, wasMoving=false;
-  const surface=document.createElement('canvas'); surface.width=W;surface.height=H;
-  const surfaceCtx=surface.getContext('2d');
-  const hands=Array.from({length:48},(_,i)=>{const a=DIR.P+(i%2?.18:-.18);return {angle:a,from:a,to:a,start:0,duration:1,used:false,opacity:0,revealFrom:0,revealStart:0,revealEnd:0,travelOpacity:0,motionEnd:0,fadeStart:0,fadeEnd:0,fadeFrom:0,fadeTo:0};});
-
-  function scheme() { return {board:state.board,long:state.long,short:state.short,material:state.material,motion:state.motion,duration:state.duration,longLength:state.longLength,shortLength:state.shortLength,visibility:state.visibility,format24:state.format24,preset:state.preset}; }
-  function signature() { return JSON.stringify(scheme()); }
-  function readSaved() {
-    try {
-      const v=JSON.parse(localStorage.getItem(STORAGE_KEY));
-      if(!v || !['board','long','short'].every(k=>hexPattern.test(v[k])) || !['spin','quiet','wave','orbit'].includes(v.motion) || !['hide','ghost','show'].includes(v.visibility) || typeof v.format24!=='boolean') return;
-      if(!['duration','longLength','shortLength'].every(k=>typeof v[k]==='number'&&Number.isFinite(v[k]))) return;
-      const settings={board:v.board.toLowerCase(),long:v.long.toLowerCase(),short:v.short.toLowerCase(),material:PRESETS.find(p=>p.material===v.material&&p.board===v.board.toLowerCase())?.material??null,motion:Object.hasOwn(motionNames,v.motion)?v.motion:'spin',duration:clamp(v.duration,1,10),longLength:clamp(v.longLength,70,100),shortLength:Math.min(clamp(v.shortLength,55,100),clamp(v.longLength,70,100)),visibility:v.visibility,format24:v.format24,preset:PRESETS.some(p=>p.id===v.preset)?v.preset:null};
-      Object.assign(state,settings);savedSignature=signature();
-    } catch (_) { /* Storage may be unavailable in a private browser. */ }
+  const TAU = Math.PI * 2;
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const wrap = value => ((value % TAU) + TAU) % TAU;
+  const normalizeMinutes = value => ((value % 1440) + 1440) % 1440;
+  const smooth = value => value * value * (3 - 2 * value);
+  const fadeEase = value => value * value * value * (value * (value * 6 - 15) + 10);
+  function tween(now, start, end, from, to) {
+    const progress = end <= start ? Number(now >= end) : clamp((now - start) / (end - start), 0, 1);
+    return from + (to - from) * fadeEase(progress);
   }
-  readSaved();
-  if(reducedMotion)state.motion='quiet';
-  function nowMinutes(){const d=new Date();return d.getHours()*60+d.getMinutes();}
-  function currentMinutes(){return state.source==='live'?nowMinutes():state.simulatedMinutes;}
-  function displayDigits(minutes){const h=Math.floor(minutes/60);return pad(state.format24?h:h%12||12)+pad(minutes%60);}
-  function digitPose(digits){
-    const result=new Array(48);
-    for(let d=0;d<4;d++)for(let cell=0;cell<6;cell++){
-      const col=d*2+cell%2,row=Math.floor(cell/2),i=(row*8+col)*2;
-      const [a,b]=GLYPHS[digits[d]][cell];
-      result[i]={angle:DIR[a],used:a!=='P'};
-      result[i+1]={angle:DIR[b],used:b!=='P'&&b!==a};
+  return { TAU, clamp, wrap, normalizeMinutes, smooth, tween };
+});
+
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).Palette = api;
+})(globalThis, function () {
+  'use strict';
+  const presets = [
+    { id: 'classic-black', name: '经典黑', background: '#000000', board: '#111213', long: '#f9faf7', short: '#eef0ec' },
+    { id: 'classic-white', name: '经典白', background: '#e9e6de', board: '#f6f4ef', long: '#50534f', short: '#757873' },
+    { id: 'moss', name: '苔原', background: '#171e19', board: '#3d493f', long: '#f3f1e7', short: '#bfcdb0' },
+    { id: 'paper', name: '纸与墨', background: '#d3d0c7', board: '#e9e6de', long: '#2a312b', short: '#858775' },
+    { id: 'dusk', name: '暮色', background: '#17151e', board: '#393746', long: '#cecce6', short: '#e8a991' },
+    { id: 'ocean', name: '深海', background: '#0a1b20', board: '#21444c', long: '#e7e9dd', short: '#91c1c6' },
+    { id: 'clay', name: '赤陶', background: '#301c19', board: '#a95441', long: '#f6ecdc', short: '#e8bd90' },
+    { id: 'midnight', name: '午夜', background: '#080b09', board: '#232624', long: '#dfc797', short: '#f1efe2' }
+  ];
+  const fields = {
+    background: { type: 'color', label: '画布背景', value: '#000000', group: 'colors' },
+    board: { type: 'color', label: '背景板', value: '#111213', group: 'colors' },
+    long: { type: 'color', label: '长针', value: '#f9faf7', group: 'colors' },
+    short: { type: 'color', label: '短针', value: '#eef0ec', group: 'colors' }
+  };
+  const colors = config => Object.fromEntries(['background', 'board', 'long', 'short'].map(key => [key, config[key]]));
+  const material = config => config.board === '#111213' ? 'black' : config.board === '#f6f4ef' ? 'white' : null;
+  function tint(hex, amount) {
+    const value = parseInt(hex.slice(1), 16);
+    return '#' + [value >> 16, (value >> 8) & 255, value & 255].map(channel =>
+      Math.round(channel + (amount > 0 ? 255 - channel : channel) * amount).toString(16).padStart(2, '0')).join('');
+  }
+  function roundRect(context, x, y, width, height, radius) {
+    context.beginPath();
+    if (typeof context.roundRect === 'function') { context.roundRect(x, y, width, height, radius); return; }
+    context.moveTo(x + radius, y); context.lineTo(x + width - radius, y);
+    context.quadraticCurveTo(x + width, y, x + width, y + radius);
+    context.lineTo(x + width, y + height - radius);
+    context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    context.lineTo(x + radius, y + height);
+    context.quadraticCurveTo(x, y + height, x, y + height - radius);
+    context.lineTo(x, y + radius); context.quadraticCurveTo(x, y, x + radius, y); context.closePath();
+  }
+  function drawBoard(context, width, height, config) {
+    const kind = material(config), board = config.board;
+    context.save(); roundRect(context, 1, 1, width - 2, height - 2, 6); context.clip();
+    const gradient = context.createLinearGradient(0, 0, width, height);
+    const stops = kind === 'white' ? ['#e9e7e1', '#f6f4ef', '#d8d6d0'] : kind === 'black' ? ['#242627', '#111213', '#0d0e0f'] : [tint(board, .09), board, tint(board, -.11)];
+    stops.forEach((color, index) => gradient.addColorStop([0, kind === 'white' ? .45 : kind === 'black' ? .43 : .5, 1][index], color));
+    context.fillStyle = gradient; context.fillRect(0, 0, width, height);
+    context.fillStyle = '#ffffff17'; context.fillRect(0, 0, width, 2);
+    context.fillStyle = '#00000020'; context.fillRect(0, height - 4, width, 4); context.restore();
+    context.strokeStyle = tint(board, -.17); context.lineWidth = 2;
+    roundRect(context, 1, 1, width - 2, height - 2, 6); context.stroke();
+  }
+  return { fields, presets, colors, material, tint, roundRect, drawBoard };
+});
+
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).Config = api;
+})(globalThis, function () {
+  'use strict';
+  function decode(field, value, strict = false) {
+    if (value === undefined || value === null) return undefined;
+    if (field.type === 'color') {
+      if (typeof value !== 'string') return undefined;
+      const color = value.startsWith('#') ? value : '#' + value;
+      return /^#[0-9a-f]{6}$/i.test(color) ? color.toLowerCase() : undefined;
+    }
+    if (field.type === 'number') {
+      if (value === '' || typeof value === 'boolean' || !['string', 'number'].includes(typeof value)) return undefined;
+      let number = Number(value);
+      if (!Number.isFinite(number) || (strict && (number < field.min || number > field.max))) return undefined;
+      number = Math.max(field.min, Math.min(field.max, number));
+      return Number((Math.round((number - field.min) / field.step) * field.step + field.min).toFixed(6));
+    }
+    if (field.type === 'select') return field.options.some(option => option[0] === value) ? value : undefined;
+    if (field.type === 'checkbox') {
+      if ([true, 'true', '1', 1].includes(value)) return true;
+      if ([false, 'false', '0', 0].includes(value)) return false;
+      return undefined;
+    }
+    if (field.type === 'time') return typeof value === 'string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(value) ? value : undefined;
+    if (field.type === 'timezone' && typeof value === 'string') {
+      const zone = value.trim();
+      try { if (zone) new Intl.DateTimeFormat('en', { timeZone: zone }); return zone; } catch (_) { return undefined; }
+    }
+    return undefined;
+  }
+  function normalize(fields, input = {}, base = {}) {
+    return Object.fromEntries(Object.entries(fields).map(([key, field]) => [key, decode(field, input[key]) ?? decode(field, base[key]) ?? field.value]));
+  }
+  function serialize(model, settings) {
+    return JSON.stringify({ version: 2, type: model.type, model: model.id, settings: model.Settings.normalize(settings) }, null, 2);
+  }
+  function parse(model, text) {
+    const data = JSON.parse(text);
+    if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('请选择有效的 TIMEFORM 配置。');
+    let input;
+    if (data.version === 2) {
+      if (data.type !== model.type || data.model !== model.id) throw new Error('配置所属种类或型号与当前页面不一致。');
+      input = data.settings;
+    } else if (data.version === 1) input = data.settings;
+    else if (data.version === undefined && typeof data.board === 'string') input = data;
+    else throw new Error('无法识别此配置版本。');
+    if (!input || typeof input !== 'object' || Array.isArray(input)) throw new Error('配置参数格式无效。');
+    input = { ...input };
+    if (data.version !== 2 && ['wave', 'orbit'].includes(input.motion)) input.motion = 'spin';
+    for (const [key, field] of Object.entries(model.Settings.fields)) {
+      if (Object.hasOwn(input, key) && decode(field, input[key], true) === undefined) throw new Error('「' + field.label + '」无效，请检查单位和范围。');
+    }
+    return model.Settings.normalize(input);
+  }
+  return { decode, normalize, serialize, parse };
+});
+
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).Time = api;
+})(globalThis, function () {
+  'use strict';
+  const normalizeMinutes = value => ((value % 1440) + 1440) % 1440;
+  const minutesFromText = text => Number(text.slice(0, 2)) * 60 + Number(text.slice(3, 5));
+  const textFromMinutes = value => {
+    const minute = normalizeMinutes(value);
+    return String(Math.floor(minute / 60)).padStart(2, '0') + ':' + String(minute % 60).padStart(2, '0');
+  };
+  function createSource(readDate = () => new Date()) {
+    let cachedZone, formatter;
+    function read(config) {
+      if (config.source === 'manual') return minutesFromText(config.manualTime);
+      const date = readDate();
+      if (!config.timezone) return date.getHours() * 60 + date.getMinutes();
+      if (cachedZone !== config.timezone) {
+        formatter = new Intl.DateTimeFormat('en-GB', { timeZone: config.timezone, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+        cachedZone = config.timezone;
+      }
+      const parts = formatter.formatToParts(date);
+      return Number(parts.find(part => part.type === 'hour').value) % 24 * 60 + Number(parts.find(part => part.type === 'minute').value);
+    }
+    return { read };
+  }
+  // One monotonic timeline drives the whole array, including paused single steps.
+  function createPlayback(readNow = () => performance.now()) {
+    let position = 0, anchor = readNow(), paused = false, speed = 1;
+    function now() {
+      const current = readNow();
+      if (!paused) position += Math.max(0, current - anchor) * speed;
+      anchor = current; return position;
+    }
+    function setPaused(value) { now(); paused = Boolean(value); }
+    function setSpeed(value) {
+      if (!Number.isFinite(value) || value <= 0) throw new Error('播放速度必须大于零。');
+      now(); speed = value;
+    }
+    function step(milliseconds = 100) { if (paused) position += Math.max(0, milliseconds); return now(); }
+    return { now, setPaused, setSpeed, step, get paused() { return paused; }, get speed() { return speed; } };
+  }
+  return { createSource, createPlayback, normalizeMinutes, minutesFromText, textFromMinutes };
+});
+
+(function (root, factory) {
+  const api = factory(typeof module === 'object' && module.exports ? require('./palette.js') : root.Timeform.Palette);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).SingleClock = api;
+})(globalThis, function (Palette) {
+  'use strict';
+  const TAU = Math.PI * 2;
+  function local(context, point) {
+    context.save(); context.translate(point.x, point.y); context.scale(point.radius / 53.2, point.radius / 53.2);
+  }
+  // Geometry and hand poses are inputs; this component has no time or model state.
+  function drawFace(context, point, config) {
+    local(context, point);
+    const kind = Palette.material(config), white = kind === 'white', black = kind === 'black';
+    const rim = context.createRadialGradient(-11, -17, 3, 0, 0, 55);
+    const stops = white ? [[0, '#f4f2ed'], [.82, '#e5e2dc'], [.97, '#c6c4bd'], [1, '#dedbd5']] : black ? [[0, '#121415'], [.70, '#0d0f10'], [.94, '#08090a'], [1, '#242628']] : [[0, Palette.tint(config.board, -.06)], [.82, Palette.tint(config.board, -.12)], [.96, Palette.tint(config.board, -.24)], [1, Palette.tint(config.board, .06)]];
+    stops.forEach(([offset, color]) => rim.addColorStop(offset, color));
+    context.shadowColor = black ? '#000000b8' : '#0000003b'; context.shadowBlur = 7; context.shadowOffsetY = 2;
+    context.fillStyle = rim; context.beginPath(); context.arc(0, 0, 53.2, 0, TAU); context.fill();
+    context.shadowBlur = 0; context.shadowOffsetY = 0; context.lineWidth = 1;
+    context.strokeStyle = white ? '#0000001a' : '#ffffff13'; context.beginPath(); context.arc(0, 0, 52.2, 0, TAU); context.stroke();
+    context.strokeStyle = white ? '#ffffff7a' : '#00000018'; context.beginPath(); context.arc(0, 0, 49.5, 0, TAU); context.stroke();
+    context.restore();
+  }
+  function drawHand(context, angle, opacity, secondary, config) {
+    if (opacity <= .001) return;
+    context.save(); context.globalAlpha = opacity; context.rotate(angle);
+    const color = secondary ? config.short : config.long;
+    const length = 49.3 * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100;
+    const width = secondary ? config.shortWidth : config.longWidth;
+    const shade = context.createLinearGradient(0, -width / 2, 0, width / 2);
+    const kind = Palette.material(config), original = Palette.presets.find(preset => preset.id === 'classic-' + kind);
+    if (original && color === (secondary ? original.short : original.long)) {
+      shade.addColorStop(0, kind === 'white' ? (secondary ? '#555853' : '#303330') : (secondary ? '#c6c8c6' : '#e8e9e7'));
+      shade.addColorStop(.55, color); shade.addColorStop(1, kind === 'white' ? '#383b38' : (secondary ? '#abaeab' : '#c2c5c1'));
+    } else { shade.addColorStop(0, Palette.tint(color, .10)); shade.addColorStop(.5, color); shade.addColorStop(1, Palette.tint(color, -.12)); }
+    context.shadowColor = '#00000038'; context.shadowBlur = 2; context.shadowOffsetY = 1.3; context.fillStyle = shade;
+    Palette.roundRect(context, -1.6, -width / 2, length + 1.6, width, Math.min(1.5, width / 2)); context.fill(); context.restore();
+  }
+  function drawHands(context, point, poses, config) {
+    local(context, point);
+    // Preserve the original stroke order when the two hands overlap.
+    drawHand(context, poses[1].angle, poses[1].opacity, true, config);
+    drawHand(context, poses[0].angle, poses[0].opacity, false, config);
+    const opacity = Math.max(poses[0].opacity, poses[1].opacity);
+    if (opacity > .001) {
+      context.globalAlpha = opacity; context.fillStyle = config.long; context.beginPath(); context.arc(0, 0, 3.1, 0, TAU); context.fill();
+      context.fillStyle = Palette.tint(config.long, .22); context.beginPath(); context.arc(-.6, -.6, 1, 0, TAU); context.fill();
+    }
+    context.restore();
+  }
+  return { drawFace, drawHands };
+});
+
+(function (root, factory) {
+  const api = factory(typeof module === 'object' && module.exports ? require('./math.js') : root.Timeform.Math);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).HandAnimation = api;
+})(globalThis, function (Maths) {
+  'use strict';
+  const { TAU, clamp, wrap, smooth, tween } = Maths;
+  // The caller supplies one timeline. No DOM, timers, storage or host integration.
+  function create({ Settings, digitPose, displayDigits, handCount, phase = () => 0 }, initial, { reducedMotion = false } = {}) {
+    const state = { ...Settings.normalize(initial), minuteKey: null };
+    const hands = Array.from({ length: handCount }, (_, index) => {
+      const angle = Math.PI * .75 + (index % 2 ? .18 : -.18);
+      return { angle, from: angle, to: angle, start: 0, duration: 1, used: false, opacity: 0, revealFrom: 0, revealStart: 0, revealEnd: 0, travelOpacity: 0, motionEnd: 0, fadeStart: 0, fadeEnd: 0, fadeFrom: 0, fadeTo: 0 };
+    });
+    const settleOpacity = hand => hand.used || state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
+    function sample(now) {
+      for (const hand of hands) {
+        const progress = clamp((now - hand.start) / hand.duration, 0, 1);
+        hand.angle = progress === 1 ? wrap(hand.to) : hand.from + (hand.to - hand.from) * smooth(progress);
+        if (now < hand.revealEnd) hand.opacity = tween(now, hand.revealStart, hand.revealEnd, hand.revealFrom, hand.travelOpacity);
+        else if (now < hand.fadeStart) hand.opacity = hand.travelOpacity;
+        else hand.opacity = tween(now, hand.fadeStart, hand.fadeEnd, hand.fadeFrom, hand.fadeTo);
+      }
+      return hands;
+    }
+    function initialize(minutes, now) {
+      const digits = displayDigits(minutes, state.format24), pose = digitPose(digits);
+      for (let index = 0; index < handCount; index++) {
+        const hand = hands[index]; hand.angle = pose[index].angle; hand.from = hand.angle; hand.to = hand.angle; hand.used = pose[index].used;
+        hand.opacity = settleOpacity(hand); hand.revealFrom = hand.opacity; hand.travelOpacity = hand.opacity; hand.fadeFrom = hand.opacity; hand.fadeTo = hand.opacity;
+        hand.start = now; hand.duration = 1; hand.motionEnd = now; hand.revealStart = now; hand.revealEnd = now; hand.fadeStart = now; hand.fadeEnd = now;
+      }
+      state.minuteKey = digits;
+    }
+    function animate(minutes, now, force = false) {
+      const digits = displayDigits(minutes, state.format24);
+      if (!force && state.minuteKey === digits) return false;
+      if (state.motion === 'none') { initialize(minutes, now); return true; }
+      if (force && state.motion === 'quiet' && state.minuteKey === digits) return false;
+      sample(now);
+      const target = digitPose(digits), duration = reducedMotion ? 300 : state.duration * 1000;
+      const rotating = ['spin', 'wave'].includes(state.motion) && !reducedMotion;
+      const reveal = reducedMotion ? 60 : Math.min(rotating ? 350 : 160, duration * .15);
+      const hide = reducedMotion ? 80 : Math.min(350, duration * .18);
+      const travel = duration - reveal - hide, idleAlpha = state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
+      for (let index = 0; index < handCount; index++) {
+        const hand = hands[index], current = hand.angle;
+        let turn = ((target[index].angle - current + Math.PI) % TAU + TAU) % TAU - Math.PI;
+        if (rotating) turn = index % 2 ? -wrap(wrap(current) - target[index].angle) - TAU : wrap(target[index].angle - wrap(current)) + TAU;
+        const participating = rotating || hand.used || target[index].used || hand.opacity > idleAlpha + .001;
+        hand.revealFrom = hand.opacity; hand.travelOpacity = participating ? 1 : idleAlpha; hand.used = target[index].used;
+        const delay = state.motion === 'wave' && !reducedMotion ? travel * .3 * clamp(phase(index), 0, 1) : 0;
+        hand.from = current; hand.to = current + turn; hand.start = now + reveal + delay; hand.duration = travel - delay; hand.motionEnd = now + duration - hide;
+        hand.revealStart = now; hand.revealEnd = now + reveal;
+        hand.fadeStart = hand.motionEnd; hand.fadeEnd = now + duration; hand.fadeFrom = hand.travelOpacity; hand.fadeTo = settleOpacity(hand);
+      }
+      state.minuteKey = digits; return true;
+    }
+    function setVisibility(mode, now) {
+      if (mode === state.visibility) return;
+      sample(now); state.visibility = mode;
+      for (const hand of hands) {
+        const target = settleOpacity(hand);
+        if (now < hand.fadeStart) {
+          hand.fadeTo = target;
+          if (target > hand.travelOpacity) {
+            hand.revealFrom = hand.opacity; hand.revealStart = now; hand.revealEnd = Math.min(now + 250, hand.fadeStart);
+            hand.travelOpacity = target; hand.fadeFrom = target;
+          }
+        } else {
+          hand.revealStart = now; hand.revealEnd = now; hand.travelOpacity = hand.opacity; hand.fadeFrom = hand.opacity; hand.fadeTo = target;
+          hand.fadeStart = now; hand.fadeEnd = now + (reducedMotion ? 150 : 350);
+        }
+      }
+    }
+    function update(config, now) {
+      const next = Settings.normalize(config, state), visibility = next.visibility;
+      const reformat = next.format24 !== state.format24;
+      Object.assign(state, next, { visibility: state.visibility });
+      setVisibility(visibility, now); return { reformat };
+    }
+    return { state, hands, sample, initialize, animate, setVisibility, update, isAnimating: now => hands.some(hand => now < hand.fadeEnd) };
+  }
+  return { create };
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('../../shared/config.js') : root.Timeform.Config,
+    commonJS ? require('../../shared/palette.js') : root.Timeform.Palette);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).ClockClock24Settings = api;
+})(globalThis, function (Config, Palette) {
+  'use strict';
+  const number = (label, value, min, max, step, unit, group) => ({ type: 'number', label, value, min, max, step, unit, group });
+  const fields = {
+    ...Palette.fields,
+    canvasWidth: number('画布宽度', 1920, 240, 7680, 1, 'px', 'screen'),
+    canvasHeight: number('画布高度', 1080, 240, 7680, 1, 'px', 'screen'),
+    scale: number('整体缩放', 90, 20, 100, 1, '%', 'screen'),
+    padding: number('画布安全边距', 0, 0, 160, 1, 'px', 'screen'),
+    offsetX: number('水平位置', 0, -100, 100, 1, '%', 'screen'),
+    offsetY: number('垂直位置', 0, -100, 100, 1, '%', 'screen'),
+    radius: number('表盘半径', 53.2, 20, 80, .1, '设计单位', 'geometry'),
+    gap: number('表盘间隙', 5.6, 0, 40, .1, '设计单位', 'geometry'),
+    longLength: number('长针长度', 100, 70, 100, 1, '%', 'geometry'),
+    shortLength: number('短针长度', 100, 55, 100, 1, '%', 'geometry'),
+    longWidth: number('长针粗细', 7.9, 2, 14, .1, '设计单位', 'geometry'),
+    shortWidth: number('短针粗细', 7.1, 2, 14, .1, '设计单位', 'geometry'),
+    motion: { type: 'select', label: '换时动画', value: 'spin', options: [['spin', '经典旋转'], ['quiet', '平滑过渡'], ['none', '立即换时']], group: 'motion' },
+    duration: number('动画时长', 4, 1, 10, .1, 's', 'motion'),
+    visibility: { type: 'select', label: '闲置指针', value: 'hide', options: [['hide', '归位后隐藏'], ['ghost', '微光显示'], ['show', '全部显示']], group: 'motion' },
+    playbackSpeed: number('调试播放速度', 1, .1, 3, .1, '倍', 'motion'),
+    format24: { type: 'checkbox', label: '24 小时制', value: true, group: 'time' },
+    timezone: { type: 'timezone', label: '时区', value: '', group: 'time', help: '留空跟随设备，例如 Asia/Hong_Kong。' },
+    source: { type: 'select', label: '时间来源', value: 'live', options: [['live', '设备时间'], ['manual', '指定时间']], group: 'time' },
+    manualTime: { type: 'time', label: '指定时间', value: '12:38', group: 'time' },
+    autoDemo: { type: 'checkbox', label: '指定时间自动逐分钟切换', value: false, group: 'time' },
+    demoInterval: number('自动切换间隔', 5, 1, 20, .1, 's', 'time')
+  };
+  function normalize(input = {}, base = {}) {
+    const settings = Config.normalize(fields, input, base);
+    settings.shortLength = Math.min(settings.shortLength, settings.longLength);
+    return settings;
+  }
+  return { fields, defaults: normalize(), normalize };
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('../../shared/math.js') : root.Timeform.Math,
+    commonJS ? require('./settings.js') : root.Timeform.ClockClock24Settings,
+    commonJS ? require('../../shared/hand-animation.js') : root.Timeform.HandAnimation);
+  if (commonJS) module.exports = api;
+  else (root.Timeform ||= {}).ClockClock24 = api;
+})(globalThis, function (Maths, Settings, HandAnimation) {
+  'use strict';
+  const { normalizeMinutes } = Maths;
+  const DIR = { E: 0, S: Math.PI / 2, W: Math.PI, N: -Math.PI / 2, P: Math.PI * .75 };
+  // Original 2 × 3 glyphs and 8 × 3 array; these belong to this model only.
+  const GLYPHS = {
+    '0': ['SE', 'SW', 'NS', 'NS', 'NE', 'NW'], '1': ['PP', 'SS', 'PP', 'NS', 'PP', 'NN'],
+    '2': ['EE', 'SW', 'SE', 'NW', 'NE', 'WW'], '3': ['EE', 'SW', 'EE', 'NW', 'EE', 'NW'],
+    '4': ['SS', 'SS', 'NE', 'NS', 'PP', 'NN'], '5': ['SE', 'WW', 'NE', 'SW', 'EE', 'NW'],
+    '6': ['SE', 'WW', 'NS', 'SW', 'NE', 'NW'], '7': ['EE', 'SW', 'PP', 'NS', 'PP', 'NN'],
+    '8': ['SE', 'SW', 'NE', 'NW', 'NE', 'NW'], '9': ['SE', 'SW', 'EN', 'NS', 'EE', 'NW']
+  };
+  function displayDigits(minutes, format24 = true) {
+    const value = normalizeMinutes(minutes), hour = Math.floor(value / 60);
+    return String(format24 ? hour : hour % 12 || 12).padStart(2, '0') + String(value % 60).padStart(2, '0');
+  }
+  function digitPose(digits) {
+    const result = new Array(48);
+    for (let digit = 0; digit < 4; digit++) for (let cell = 0; cell < 6; cell++) {
+      const index = (Math.floor(cell / 2) * 8 + digit * 2 + cell % 2) * 2;
+      const [a, b] = GLYPHS[digits[digit]][cell];
+      result[index] = { angle: DIR[a], used: a !== 'P' };
+      result[index + 1] = { angle: DIR[b], used: b !== 'P' && b !== a };
     }
     return result;
   }
-  function settleOpacity(h){return h.used||state.visibility==='show'?1:state.visibility==='ghost'?.12:0;}
-  function tween(now,start,end,from,to){const t=end<=start?Number(now>=end):clamp((now-start)/(end-start),0,1);return from+(to-from)*fadeEase(t);}
-  function interpolate(now){
-    for(const h of hands){
-      const u=clamp((now-h.start)/h.duration,0,1);
-      h.angle=u===1?wrap(h.to):h.from+(h.to-h.from)*smooth(u);
-      if(now<h.revealEnd)h.opacity=tween(now,h.revealStart,h.revealEnd,h.revealFrom,h.travelOpacity);
-      else if(now<h.fadeStart)h.opacity=h.travelOpacity;
-      else h.opacity=tween(now,h.fadeStart,h.fadeEnd,h.fadeFrom,h.fadeTo);
+  function geometry(width, height, input) {
+    const config = Settings.normalize(input), radius = config.radius, step = radius * 2 + config.gap;
+    const boardWidth = 1000 + (step - 112) * 7 + (radius - 53.2) * 2;
+    const boardHeight = 445 + (step - 112) * 2 + (radius - 53.2) * 2;
+    const padding = Math.min(config.padding, (width - 1) / 2, (height - 1) / 2);
+    const availableWidth = Math.max(1, width - padding * 2), availableHeight = Math.max(1, height - padding * 2);
+    const factor = Math.min(availableWidth / boardWidth, availableHeight / boardHeight) * config.scale / 100;
+    const displayWidth = boardWidth * factor, displayHeight = boardHeight * factor;
+    const x = (width - displayWidth) / 2 + (availableWidth - displayWidth) / 2 * config.offsetX / 100;
+    const y = (height - displayHeight) / 2 + (availableHeight - displayHeight) / 2 * config.offsetY / 100;
+    const points = [], radiusDelta = radius - 53.2;
+    for (let row = 0; row < 3; row++) for (let col = 0; col < 8; col++) {
+      points.push({ x: 105 + radiusDelta + col * step, y: 110 + radiusDelta + row * step, radius, i: (row * 8 + col) * 2 });
     }
+    return { x, y, width: displayWidth, height: displayHeight, boardWidth, boardHeight, points, padding, layout: 'landscape' };
   }
-  function setVisibility(mode,refresh=true){
-    if(mode===state.visibility)return;
-    const now=performance.now();interpolate(now);state.visibility=mode;
-    for(const h of hands){
-      const target=settleOpacity(h);
-      if(now<h.fadeStart){
-        // Finish the current movement before hiding a participating hand.
-        h.fadeTo=target;
-        if(target>h.travelOpacity){h.revealFrom=h.opacity;h.revealStart=now;h.revealEnd=Math.min(now+250,h.fadeStart);h.travelOpacity=target;h.fadeFrom=target;}
-      }else{
-        // Retarget from the sampled alpha, including a toggle during a fade.
-        h.revealStart=now;h.revealEnd=now;h.travelOpacity=h.opacity;h.fadeFrom=h.opacity;h.fadeTo=target;h.fadeStart=now;h.fadeEnd=now+(reducedMotion?150:350);
+  function create(initial, options) {
+    return HandAnimation.create({ Settings, digitPose, displayDigits, handCount: 48 }, initial, options);
+  }
+  return { id: 'clockclock24', type: 'landscape', name: 'ClockClock 24', badge: 'CC24', columns: 8, rows: 3, count: 24, description: '紧凑横向布局，保留经典 2 × 3 数字字形。', Settings, create, geometry, displayDigits, digitPose };
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('../../shared/config.js') : root.Timeform.Config,
+    commonJS ? require('../clockclock24/settings.js') : root.Timeform.ClockClock24Settings);
+  if (commonJS) module.exports = api;
+  else (root.Timeform ||= {}).AMTSettings = api;
+})(globalThis, function (Config, Base) {
+  'use strict';
+  // The large arrays share control units, but have their own typography and motion.
+  const fields = {
+    ...Base.fields,
+    radius: { ...Base.fields.radius, value: 43, min: 20, max: 65 },
+    gap: { ...Base.fields.gap, value: 4.3 },
+    longWidth: { ...Base.fields.longWidth, value: 6.2 },
+    shortWidth: { ...Base.fields.shortWidth, value: 6.2 },
+    motion: { ...Base.fields.motion, value: 'wave', options: [['wave', '逐列波浪收束'], ['spin', '同步旋转'], ['quiet', '平滑过渡'], ['none', '立即换时']] },
+    duration: { ...Base.fields.duration, value: 6 },
+    visibility: { ...Base.fields.visibility, value: 'show', help: '参考图保留闲置指针的斜线；也可选择归位后隐藏或微光显示。' }
+  };
+  function normalize(input = {}, base = {}) {
+    const settings = Config.normalize(fields, input, base);
+    settings.shortLength = Math.min(settings.shortLength, settings.longLength);
+    return settings;
+  }
+  return { fields, defaults: normalize(), normalize };
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('../../shared/math.js') : root.Timeform.Math,
+    commonJS ? require('./settings.js') : root.Timeform.AMTSettings,
+    commonJS ? require('../../shared/hand-animation.js') : root.Timeform.HandAnimation);
+  if (commonJS) module.exports = api;
+  else (root.Timeform ||= {}).AMTModels = api;
+})(globalThis, function (Maths, Settings, HandAnimation) {
+  'use strict';
+  const IDLE = Math.PI * .75;
+  const DIR = { E: 0, S: Math.PI / 2, W: Math.PI, N: -Math.PI / 2, P: IDLE };
+  function displayDigits(minutes, format24 = true) {
+    const value = Maths.normalizeMinutes(minutes), hour = Math.floor(value / 60);
+    return String(format24 ? hour : hour % 12 || 12).padStart(2, '0') + String(value % 60).padStart(2, '0');
+  }
+  // Trace orthogonal paths through clock centres. A centre can carry at most two directions.
+  function trace(pose, columns, path, originX, originY) {
+    const directions = new Map();
+    function add(x, y, dx, dy) {
+      const index = ((y + originY) * columns + x + originX) * 2;
+      if (!directions.has(index)) directions.set(index, new Set());
+      directions.get(index).add(Math.atan2(dy, dx));
+    }
+    for (let i = 1; i < path.length; i++) {
+      let [x, y] = path[i - 1];
+      const [endX, endY] = path[i], dx = Math.sign(endX - x), dy = Math.sign(endY - y);
+      while (x !== endX || y !== endY) {
+        add(x, y, dx, dy); x += dx; y += dy; add(x, y, -dx, -dy);
       }
     }
-    renderDirty=true;if(refresh)markChanged();
-  }
-  function animate(minutes,force=false){
-    const digits=displayDigits(minutes);if(!force&&state.minuteKey===digits)return;
-    if(force&&state.motion==='quiet'&&state.minuteKey===digits){showToast('平滑过渡在时间改变时启动，可用手动演示切换一分钟查看');return;}
-    renderDirty=true;
-    const now=performance.now();interpolate(now);
-    const target=digitPose(digits),dur=reducedMotion?300:state.duration*1000;
-    const rotating=state.motion==='spin'&&!reducedMotion;
-    const reveal=reducedMotion?60:Math.min(rotating?350:160,dur*.15),hide=reducedMotion?80:Math.min(350,dur*.18);
-    const travel=dur-reveal-hide,idleAlpha=state.visibility==='show'?1:state.visibility==='ghost'?.12:0;
-    for(let i=0;i<48;i++){
-      const h=hands[i],current=h.angle;
-      let turn=((target[i].angle-current+Math.PI)%TAU+TAU)%TAU-Math.PI;
-      if(rotating)turn=i%2?-wrap(wrap(current)-target[i].angle)-TAU:wrap(target[i].angle-wrap(current))+TAU;
-      const participating=rotating||h.used||target[i].used||h.opacity>idleAlpha+.001;
-      h.revealFrom=h.opacity;h.travelOpacity=participating?1:idleAlpha;h.used=target[i].used;
-      h.from=current;h.to=current+turn;h.start=now+reveal;h.duration=travel;h.motionEnd=h.start+travel;
-      h.revealStart=now;h.revealEnd=now+reveal;
-      h.fadeStart=h.motionEnd;h.fadeEnd=now+dur;h.fadeFrom=h.travelOpacity;h.fadeTo=settleOpacity(h);
+    for (const [index, set] of directions) {
+      const angles = [...set];
+      if (angles.length > 2) throw new Error('数字字形超出两根指针。');
+      pose[index] = { angle: angles[0], used: true };
+      pose[index + 1] = { angle: angles[1] ?? angles[0], used: angles.length === 2 };
     }
-    state.minuteKey=digits;
-    canvas.setAttribute('aria-label',`由24个钟表组成的数字时钟，现在显示 ${digits.slice(0,2)}:${digits.slice(2)}`);
-    updateReadout();
   }
-  function initializeTime(minutes){
-    const digits=displayDigits(minutes),pose=digitPose(digits),now=performance.now();
-    for(let i=0;i<48;i++){
-      const h=hands[i];h.angle=pose[i].angle;h.from=h.angle;h.to=h.angle;h.used=pose[i].used;
-      h.opacity=settleOpacity(h);h.revealFrom=h.opacity;h.travelOpacity=h.opacity;h.fadeFrom=h.opacity;h.fadeTo=h.opacity;
-      h.start=now;h.duration=1;h.motionEnd=now;h.revealStart=now;h.revealEnd=now;h.fadeStart=now;h.fadeEnd=now;
+  // Outlines of the broad digital strokes, including the inner counters.
+  // A 3-clock-wide counter collapses into a vertical stroke; at width 5 it is a box.
+  function glyphPaths(digit, width) {
+    const right = width - 1, inner = right - 1;
+    const box = (left, top, endX, endY) => [[left, top], [endX, top], [endX, endY], [left, endY], [left, top]];
+    return {
+      '0': [box(0, 0, right, 5), box(1, 1, inner, 4)],
+      '1': [box(inner, 0, right, 5)],
+      '2': [[[0, 0], [right, 0], [right, 3], [1, 3], [1, 4], [right, 4], [right, 5], [0, 5], [0, 2], [inner, 2], [inner, 1], [0, 1], [0, 0]]],
+      '3': [[[0, 0], [right, 0], [right, 5], [0, 5], [0, 4], [inner, 4], [inner, 3], [0, 3], [0, 2], [inner, 2], [inner, 1], [0, 1], [0, 0]]],
+      '4': [[[0, 0], [1, 0], [1, 2], [inner, 2], [inner, 0], [right, 0], [right, 5], [inner, 5], [inner, 3], [0, 3], [0, 0]]],
+      '5': [[[0, 0], [right, 0], [right, 1], [1, 1], [1, 2], [right, 2], [right, 5], [0, 5], [0, 4], [inner, 4], [inner, 3], [0, 3], [0, 0]]],
+      '6': [[[0, 0], [right, 0], [right, 1], [1, 1], [1, 2], [right, 2], [right, 5], [0, 5], [0, 0]], box(1, 3, inner, 4)],
+      '7': [[[0, 0], [right, 0], [right, 5], [inner, 5], [inner, 1], [0, 1], [0, 0]]],
+      '8': [box(0, 0, right, 5), box(1, 1, inner, 2), box(1, 3, inner, 4)],
+      '9': [[[0, 0], [right, 0], [right, 5], [0, 5], [0, 4], [inner, 4], [inner, 3], [0, 3], [0, 0]], box(1, 1, inner, 2)]
+    }[digit];
+  }
+  function glyphPose(digit, width) {
+    if (digit === '4' && width === 3) {
+      // The narrow four has a shared top join: match the two-hand poses in the AMT72 photo.
+      return ['SE', 'SW', 'SW', 'NS', 'NS', 'NS', 'NS', 'NE', 'NS', 'NE', 'SW', 'NS', 'PP', 'NS', 'NS', 'PP', 'NE', 'NW'].flatMap(([a, b]) => [
+        { angle: DIR[a], used: a !== 'P' }, { angle: DIR[b], used: b !== 'P' && b !== a }
+      ]);
     }
-    state.minuteKey=digits;canvas.setAttribute('aria-label',`由24个钟表组成的数字时钟，现在显示 ${digits.slice(0,2)}:${digits.slice(2)}`);renderDirty=true;updateReadout();
+    const pose = Array.from({ length: width * 6 * 2 }, () => ({ angle: IDLE, used: false }));
+    for (const path of glyphPaths(digit, width)) trace(pose, width, path, 0, 0);
+    return pose;
   }
-  function sync(force=false){animate(currentMinutes(),force);}
-  function updateReadout(){
-    const d=new Date(),digits=displayDigits(currentMinutes());
-    $('digitalTime').textContent=digits.slice(0,2)+':'+digits.slice(2)+':'+pad(state.source==='live'?d.getSeconds():0);
-    $('topStatus').textContent=state.source==='live'?'LIVE · 本地时间':'DEMO · 手动时间';
-    $('date').textContent=d.toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
-    $('sceneStatus').textContent=(state.source==='live'?'LOCAL TIME':'DEMO '+digits.slice(0,2)+':'+digits.slice(2))+' · '+(state.format24?'24H':'12H');
-    $('motionLabel').textContent=motionNames[state.motion];
-  }
-  function tint(hex,amount){const n=parseInt(hex.slice(1),16),channels=[n>>16,(n>>8)&255,n&255];return '#'+channels.map(v=>Math.round(v+(amount>0?255-v:v)*amount).toString(16).padStart(2,'0')).join('');}
-  function roundRect(c,x,y,w,h,r){c.beginPath();c.roundRect(x,y,w,h,r);}
-  function drawSurface(){
-    const c=surfaceCtx,b=state.board,white=state.material==='white',black=state.material==='black';
-    c.clearRect(0,0,W,H);c.save();roundRect(c,1,1,W-2,H-2,6);c.clip();
-    const bg=c.createLinearGradient(0,0,W,H);
-    if(white){bg.addColorStop(0,'#e9e7e1');bg.addColorStop(.45,'#f6f4ef');bg.addColorStop(1,'#d8d6d0');}
-    else if(black){bg.addColorStop(0,'#242627');bg.addColorStop(.43,'#111213');bg.addColorStop(1,'#0d0e0f');}
-    else{bg.addColorStop(0,tint(b,.09));bg.addColorStop(.5,b);bg.addColorStop(1,tint(b,-.11));}
-    c.fillStyle=bg;c.fillRect(0,0,W,H);
-    c.fillStyle='#ffffff17';c.fillRect(0,0,W,2);c.fillStyle='#00000020';c.fillRect(0,H-4,W,4);
-    for(let row=0;row<3;row++)for(let col=0;col<8;col++){
-      const x=105+col*112,y=110+row*112;c.save();c.translate(x,y);
-      const rim=c.createRadialGradient(-11,-17,3,0,0,55);
-      if(white){rim.addColorStop(0,'#f4f2ed');rim.addColorStop(.82,'#e5e2dc');rim.addColorStop(.97,'#c6c4bd');rim.addColorStop(1,'#dedbd5');}
-      else if(black){rim.addColorStop(0,'#121415');rim.addColorStop(.70,'#0d0f10');rim.addColorStop(.94,'#08090a');rim.addColorStop(1,'#242628');}
-      else{rim.addColorStop(0,tint(b,-.06));rim.addColorStop(.82,tint(b,-.12));rim.addColorStop(.96,tint(b,-.24));rim.addColorStop(1,tint(b,.06));}
-      c.shadowColor=black?'#000000b8':'#0000003b';c.shadowBlur=7;c.shadowOffsetY=2;c.fillStyle=rim;c.beginPath();c.arc(0,0,53.2,0,TAU);c.fill();c.shadowBlur=0;c.shadowOffsetY=0;
-      c.strokeStyle=white?'#0000001a':'#ffffff13';c.lineWidth=1;c.beginPath();c.arc(0,0,52.2,0,TAU);c.stroke();c.strokeStyle=white?'#ffffff7a':'#00000018';c.beginPath();c.arc(0,0,49.5,0,TAU);c.stroke();c.restore();
+  function define({ count, columns, rows, digitWidth, digitColumns, colon = [], frameAspect, reference, description }) {
+    const id = 'amt' + count, name = 'A million Times ' + count;
+    const glyphs = Object.fromEntries(Array.from({ length: 10 }, (_, digit) => [digit, glyphPose(String(digit), digitWidth)]));
+    const digitHeight = 6, digitRow = (rows - digitHeight) / 2;
+    function digitPose(digits) {
+      const pose = Array.from({ length: count * 2 }, () => ({ angle: IDLE, used: false }));
+      for (let digit = 0; digit < 4; digit++) {
+        const glyph = glyphs[digits[digit]];
+        for (let row = 0; row < digitHeight; row++) for (let col = 0; col < digitWidth; col++) {
+          const target = ((row + digitRow) * columns + digitColumns[digit] + col) * 2, source = (row * digitWidth + col) * 2;
+          pose[target] = { ...glyph[source] }; pose[target + 1] = { ...glyph[source + 1] };
+        }
+      }
+      for (const [x, y] of colon) trace(pose, columns, [[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]], x, y);
+      return pose;
     }
-    c.restore();c.strokeStyle=tint(b,-.17);c.lineWidth=2;roundRect(c,1,1,W-2,H-2,6);c.stroke();paintedVersion=paletteVersion;
-  }
-  function drawHand(cx,cy,angle,short,opacity){
-    if(opacity<=.001)return;ctx.save();ctx.globalAlpha=opacity;ctx.translate(cx,cy);ctx.rotate(angle);
-    const color=short?state.short:state.long,len=49.3*(short?Math.min(state.shortLength,state.longLength):state.longLength)/100,wid=short?7.1:7.9;
-    const shade=ctx.createLinearGradient(0,-wid/2,0,wid/2);
-    const original=PRESETS.find(p=>p.material===state.material&&p.material);
-    if(original&&color===(short?original.short:original.long)){
-      const white=state.material==='white';shade.addColorStop(0,white?(short?'#555853':'#303330'):(short?'#c6c8c6':'#e8e9e7'));shade.addColorStop(.55,color);shade.addColorStop(1,white?'#383b38':(short?'#abaeab':'#c2c5c1'));
-    }else{shade.addColorStop(0,tint(color,.10));shade.addColorStop(.5,color);shade.addColorStop(1,tint(color,-.12));}
-    ctx.shadowColor='#00000038';ctx.shadowBlur=2;ctx.shadowOffsetY=1.3;ctx.fillStyle=shade;roundRect(ctx,-1.6,-wid/2,len+1.6,wid,1.5);ctx.fill();ctx.restore();
-  }
-  let animationFrame=0;
-  function draw(now){
-    const moving=hands.some(h=>now<h.fadeEnd);
-    if(!renderDirty&&!moving&&!wasMoving){animationFrame=requestAnimationFrame(draw);return;}
-    interpolate(now);if(paintedVersion!==paletteVersion)drawSurface();
-    ctx.setTransform(canvas.width/W,0,0,canvas.height/H,0,0);ctx.clearRect(0,0,W,H);ctx.drawImage(surface,0,0);
-    for(let row=0;row<3;row++)for(let col=0;col<8;col++){
-      const i=(row*8+col)*2,x=105+col*112,y=110+row*112;
-      // Keep the main stroke on top when both hands meet at the same angle.
-      drawHand(x,y,hands[i+1].angle,true,hands[i+1].opacity);drawHand(x,y,hands[i].angle,false,hands[i].opacity);
-      const opacity=Math.max(hands[i].opacity,hands[i+1].opacity);
-      if(opacity>.001){ctx.save();ctx.globalAlpha=opacity;ctx.beginPath();ctx.arc(x,y,3.1,0,TAU);ctx.fillStyle=state.long;ctx.fill();ctx.beginPath();ctx.arc(x-.6,y-.6,1,0,TAU);ctx.fillStyle=tint(state.long,.22);ctx.fill();ctx.restore();}
+    function geometry(width, height, input) {
+      const config = Settings.normalize(input), radius = config.radius, step = radius * 2 + config.gap;
+      const gridWidth = radius * 2 + (columns - 1) * step, gridHeight = radius * 2 + (rows - 1) * step;
+      const edge = radius * 1.15;
+      let boardWidth = gridWidth + edge * 2, boardHeight = gridHeight + edge * 2;
+      // Preserve the reference panel proportions without stretching the circular faces.
+      if (boardWidth / boardHeight > frameAspect) boardHeight = boardWidth / frameAspect;
+      else boardWidth = boardHeight * frameAspect;
+      const originX = (boardWidth - gridWidth) / 2 + radius, originY = (boardHeight - gridHeight) / 2 + radius;
+      const padding = Math.min(config.padding, (width - 1) / 2, (height - 1) / 2);
+      const availableWidth = Math.max(1, width - padding * 2), availableHeight = Math.max(1, height - padding * 2);
+      const factor = Math.min(availableWidth / boardWidth, availableHeight / boardHeight) * config.scale / 100;
+      const displayWidth = boardWidth * factor, displayHeight = boardHeight * factor;
+      const x = (width - displayWidth) / 2 + (availableWidth - displayWidth) / 2 * config.offsetX / 100;
+      const y = (height - displayHeight) / 2 + (availableHeight - displayHeight) / 2 * config.offsetY / 100;
+      const points = Array.from({ length: count }, (_, index) => ({
+        x: originX + index % columns * step, y: originY + Math.floor(index / columns) * step, radius, i: index * 2
+      }));
+      return { x, y, width: displayWidth, height: displayHeight, boardWidth, boardHeight, points, padding, layout: 'landscape' };
     }
-    renderDirty=false;wasMoving=moving;animationFrame=requestAnimationFrame(draw);
+    function create(initial, options) {
+      return HandAnimation.create({ Settings, displayDigits, digitPose, handCount: count * 2,
+        phase: index => Math.floor(index / 2) % columns / (columns - 1) }, initial, options);
+    }
+    return { id, type: 'landscape', name, badge: 'AMT' + count, count, columns, rows, digitWidth, digitHeight, digitColumns, digitRow, colon, frameAspect, reference, description, Settings, digitPose, displayDigits, geometry, create };
   }
-  function resize(){const r=canvas.getBoundingClientRect(),dpr=Math.min(2.5,window.devicePixelRatio||1),w=Math.max(1,Math.round(r.width*dpr)),h=Math.max(1,Math.round(r.height*dpr));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;renderDirty=true;}}
-  new ResizeObserver(resize).observe(canvas);window.addEventListener('resize',resize);
-  function markChanged(clearPalette=false){if(clearPalette)state.preset=null;renderDirty=true;updateControls();}
-  function choosePart(part){state.selectedPart=part;document.querySelectorAll('.color-row').forEach(r=>r.classList.toggle('selected',r.dataset.part===part));$('partHint').textContent='点选以应用到'+partNames[part];updateSwatches();}
-  function updateSwatches(){document.querySelectorAll('.swatch').forEach(b=>b.setAttribute('aria-pressed',b.dataset.color===state[state.selectedPart]));}
-  function updateControls(){
-    for(const part of ['board','long','short']){const cap=part[0].toUpperCase()+part.slice(1);$('color'+cap).value=state[part];$('hex'+cap).value=state[part].toUpperCase();$('hex'+cap).removeAttribute('aria-invalid');$('swatch'+cap).style.background=state[part];$('chip'+cap).style.background=state[part];}
-    for(const key of ['longLength','shortLength','duration']){$(key).value=state[key];$(key+'Value').textContent=state[key]+(key==='duration'?'s':'%');}
-    const preset=PRESETS.find(p=>p.id===state.preset);$('paletteName').textContent=preset?preset.name+' / '+preset.en:'我的配色 / CUSTOM';
-    document.querySelectorAll('.preset').forEach(b=>b.setAttribute('aria-pressed',b.dataset.preset===state.preset));
-    document.querySelectorAll('[data-classic]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.classic===state.preset));
-    document.querySelectorAll('[data-motion]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.motion===state.motion));
-    document.querySelectorAll('[data-visibility]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.visibility===state.visibility));
-    $('live').setAttribute('aria-pressed',state.source==='live');$('manual').setAttribute('aria-pressed',state.source==='manual');$('manualRow').hidden=state.source==='live';$('demoRow').hidden=state.source==='live';
-    $('timeInput').value=pad(Math.floor(state.simulatedMinutes/60))+':'+pad(state.simulatedMinutes%60);$('autoDemo').checked=state.autoDemo;
-    $('format24').setAttribute('aria-pressed',state.format24);$('format12').setAttribute('aria-pressed',!state.format24);
-    $('sourceNote').innerHTML=state.source==='live'?'跟随设备的本地时间，每分钟自动变换。<br>也可以设置一个特别的时刻，看看它的形状。':'正在展示手动设置的时间。<br>使用 − / + 切换分钟，或者开启自动演示。';
-    $('saveStatus').textContent=savedSignature===signature()?'已保存在此浏览器':'修改即时生效';
-    updateSwatches();updateReadout();
+  return [
+    define({ count: 72, columns: 12, rows: 6, digitWidth: 3, digitColumns: [0, 3, 6, 9], frameAspect: 173 / 95, reference: 'https://www.humanssince1982.com/en-int/products/a-million-times-72-black-sterling', description: '12 × 6 阵列，四个 3 × 6 轮廓数字铺满表盘，无冒号。' }),
+    define({ count: 120, columns: 15, rows: 8, digitWidth: 3, digitColumns: [1, 4, 8, 11], frameAspect: 212 / 121, reference: 'https://www.humanssince1982.com/en-int/products/a-million-times-120-black', description: '15 × 8 阵列，3 × 6 轮廓数字居中，外围与时分之间留白。' }),
+    define({ count: 144, columns: 18, rows: 8, digitWidth: 3, digitColumns: [2, 5, 10, 13], colon: [[8, 2], [8, 4]], frameAspect: 262.4 / 130.4, reference: 'https://www.humanssince1982.com/en-int/products/a-million-times-144-black', description: '18 × 8 阵列，3 × 6 轮廓数字、双方形冒号与两侧留白。' }),
+    define({ count: 288, columns: 24, rows: 12, digitWidth: 5, digitColumns: [1, 6, 13, 18], colon: [[11, 4], [11, 6]], frameAspect: 345.6 / 187.2, reference: 'https://www.humanssince1982.com/en-int/products/a-million-times-288-black', description: '24 × 12 阵列，5 × 6 宽幅轮廓数字与双方形冒号，上下各留三排表盘。' })
+  ];
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('./clockclock24/model.js') : root.Timeform.ClockClock24,
+    commonJS ? require('./amt/model.js') : root.Timeform.AMTModels,
+    commonJS ? require('../shared/config.js') : root.Timeform.Config);
+  if (commonJS) module.exports = api;
+  else (root.Timeform ||= {}).Landscape = api;
+})(globalThis, function (ClockClock24, AMTModels, Config) {
+  'use strict';
+  const models = [ClockClock24, ...AMTModels];
+  const get = id => models.find(model => model.id === id);
+  function parse(text) {
+    const data = JSON.parse(text);
+    const model = data?.version === 2 ? get(data.model) : ClockClock24;
+    if (!model) throw new Error('此横屏型号暂不支持。');
+    return { model, settings: Config.parse(model, text) };
   }
-  function setColor(part,value){if(!hexPattern.test(value))return;const normalized=value.toLowerCase();if(state[part]===normalized){updateControls();return;}state[part]=normalized;if(part==='board')state.material=null;paletteVersion++;markChanged(true);}
-  for(const part of ['board','long','short']){
-    const cap=part[0].toUpperCase()+part.slice(1),picker=$('color'+cap),hex=$('hex'+cap);
-    document.querySelector('.color-row[data-part="'+part+'"]').addEventListener('click',()=>choosePart(part));
-    picker.addEventListener('focus',()=>choosePart(part));picker.addEventListener('input',e=>setColor(part,e.target.value));hex.addEventListener('focus',()=>choosePart(part));
-    hex.addEventListener('input',e=>{let v=e.target.value.trim();if(!v.startsWith('#'))v='#'+v;if(hexPattern.test(v))setColor(part,v);else e.target.setAttribute('aria-invalid','true');});
-    hex.addEventListener('blur',()=>{if(hex.getAttribute('aria-invalid')==='true'){hex.value=state[part].toUpperCase();hex.removeAttribute('aria-invalid');showToast('请输入 6 位十六进制颜色，例如 #3D493F');}});
-    hex.addEventListener('keydown',e=>{if(e.key==='Enter')hex.blur();});
+  return { models, get, parse };
+});
+
+(function (root) {
+  'use strict';
+  const { Palette, SingleClock, Time } = root.Timeform;
+  function create(canvas, config, model, readViewport) {
+    const context = canvas.getContext('2d'), surface = document.createElement('canvas'), surfaceContext = surface.getContext('2d');
+    const playback = Time.createPlayback(), source = Time.createSource();
+    playback.setSpeed(config.playbackSpeed);
+    const instance = model.create(config, { reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches });
+    let settings = { ...config }, geometry, frame = 0, frames = 0, dirty = true, surfaceDirty = true, disposed = false;
+    let demoAt = playback.now();
+    function request() { if (!disposed && !document.hidden && !frame) frame = requestAnimationFrame(draw); }
+    function resize() {
+      const viewport = readViewport(); geometry = model.geometry(viewport.width, viewport.height, settings);
+      const factor = Math.min(viewport.displayWidth / viewport.width, viewport.displayHeight / viewport.height);
+      const width = geometry.width * factor, height = geometry.height * factor;
+      Object.assign(canvas.style, { width: width + 'px', height: height + 'px', left: geometry.x * factor + 'px', top: geometry.y * factor + 'px' });
+      const dpr = Math.min(2.5, window.devicePixelRatio || 1, Math.sqrt(8000000 / Math.max(1, width * height)));
+      canvas.width = surface.width = Math.max(1, Math.round(width * dpr)); canvas.height = surface.height = Math.max(1, Math.round(height * dpr));
+      surfaceContext.setTransform(surface.width / geometry.boardWidth, 0, 0, surface.height / geometry.boardHeight, 0, 0);
+      dirty = surfaceDirty = true; request();
+    }
+    function paintSurface() {
+      surfaceContext.clearRect(0, 0, geometry.boardWidth, geometry.boardHeight);
+      Palette.drawBoard(surfaceContext, geometry.boardWidth, geometry.boardHeight, settings);
+      geometry.points.forEach(point => SingleClock.drawFace(surfaceContext, point, settings));
+      surfaceDirty = false;
+    }
+    function draw() {
+      frame = 0; if (disposed) return;
+      const now = playback.now();
+      instance.sample(now); if (surfaceDirty) paintSurface();
+      context.setTransform(canvas.width / geometry.boardWidth, 0, 0, canvas.height / geometry.boardHeight, 0, 0);
+      context.clearRect(0, 0, geometry.boardWidth, geometry.boardHeight);
+      context.drawImage(surface, 0, 0, geometry.boardWidth, geometry.boardHeight);
+      geometry.points.forEach(point => SingleClock.drawHands(context, point, [instance.hands[point.i], instance.hands[point.i + 1]], settings));
+      const digits = instance.state.minuteKey;
+      canvas.setAttribute('aria-label', model.name + '，现在显示 ' + digits.slice(0, 2) + ':' + digits.slice(2));
+      frames++; dirty = false;
+      if (!playback.paused && instance.isAnimating(now)) request();
+    }
+    function update(next) {
+      const previous = settings; settings = model.Settings.normalize(next, settings);
+      playback.setSpeed(settings.playbackSpeed);
+      const now = playback.now(), result = instance.update(settings, now);
+      if (previous.board !== settings.board || previous.radius !== settings.radius || previous.gap !== settings.gap) surfaceDirty = true;
+      if (result.reformat) instance.initialize(source.read(settings), now);
+      else if (['source', 'manualTime', 'timezone'].some(key => previous[key] !== settings[key])) instance.animate(source.read(settings), now);
+      if (['radius', 'gap', 'scale', 'padding', 'offsetX', 'offsetY', 'canvasWidth', 'canvasHeight'].some(key => previous[key] !== settings[key])) resize();
+      if (previous.autoDemo !== settings.autoDemo || previous.source !== settings.source || previous.demoInterval !== settings.demoInterval) demoAt = now;
+      dirty = true; request();
+    }
+    function tick() {
+      if (document.hidden || playback.paused) return;
+      const now = playback.now();
+      if (settings.source === 'manual' && settings.autoDemo && now - demoAt >= settings.demoInterval * 1000) {
+        const count = Math.floor((now - demoAt) / (settings.demoInterval * 1000)); demoAt += count * settings.demoInterval * 1000;
+        settings.manualTime = Time.textFromMinutes(Time.minutesFromText(settings.manualTime) + count);
+        document.dispatchEvent(new CustomEvent('timeform-auto-time', { detail: settings.manualTime }));
+      }
+      if (instance.animate(source.read(settings), now)) request();
+      if (dirty) request();
+    }
+    function setPaused(value) {
+      playback.setPaused(value);
+      if (playback.paused) { cancelAnimationFrame(frame); frame = 0; }
+      else { tick(); request(); }
+      dirty = true; request();
+    }
+    function replay() { const changed = instance.animate(source.read(settings), playback.now(), true); if (changed) request(); return changed; }
+    function step(milliseconds = 100) { playback.step(milliseconds); dirty = true; request(); }
+    function restoreVisibility() {
+      if (document.hidden) { cancelAnimationFrame(frame); frame = 0; }
+      else { if (!playback.paused) tick(); resize(); }
+    }
+    resize(); instance.initialize(source.read(settings), playback.now());
+    const timer = setInterval(tick, 100);
+    document.addEventListener('visibilitychange', restoreVisibility);
+    return {
+      update, resize, replay, step, setPaused,
+      getStats() {
+        const now = playback.now();
+        return { display: instance.state.minuteKey, geometry, frames, timeline: now, paused: playback.paused, animating: instance.isAnimating(now), pixelWidth: canvas.width, pixelHeight: canvas.height };
+      },
+      dispose() { disposed = true; cancelAnimationFrame(frame); clearInterval(timer); document.removeEventListener('visibilitychange', restoreVisibility); }
+    };
   }
-  const quickColors=[['#111213','经典黑'],['#f9faf7','经典白'],['#3d493f','苔绿'],['#bfcdb0','浅苔'],['#dfc797','香槟'],['#a95441','赤陶'],['#91c1c6','雾蓝'],['#cecce6','淡紫']];
-  for(const [color,name]of quickColors){const b=document.createElement('button');b.type='button';b.className='swatch';b.dataset.color=color;b.style.background=color;b.setAttribute('aria-label','应用'+name);b.title=name+' '+color.toUpperCase();b.onclick=()=>setColor(state.selectedPart,color);$('quickColors').appendChild(b);}
-  for(const key of ['longLength','shortLength','duration'])$(key).addEventListener('input',e=>{state[key]=Number(e.target.value);state.shortLength=Math.min(state.shortLength,state.longLength);markChanged();});
-  function miniClock(p){
-    const pose=digitPose('1238');let svg=`<svg viewBox="0 0 1000 445" aria-hidden="true"><rect x="1" y="1" width="998" height="443" rx="8" fill="${p.board}"/>`;
-    for(let row=0;row<3;row++)for(let col=0;col<8;col++){
-      const i=(row*8+col)*2,x=105+col*112,y=110+row*112;svg+=`<circle cx="${x}" cy="${y}" r="52" fill="${tint(p.board,-.10)}" stroke="${tint(p.board,-.16)}" stroke-width="2"/>`;
-      for(let h=0;h<2;h++)if(pose[i+h].used){const a=pose[i+h].angle,len=49.3;svg+=`<path d="M${x},${y}l${Math.cos(a)*len},${Math.sin(a)*len}" stroke="${h?p.short:p.long}" stroke-width="7" stroke-linecap="round"/>`;}
-    }return svg+'</svg>';
+  root.Timeform.Renderer = { create };
+})(globalThis);
+
+(function (root) {
+  'use strict';
+  const category = document.body.dataset.category;
+  document.querySelectorAll('.navigation a').forEach(link => { if (link.dataset.kind === category) link.setAttribute('aria-current', 'page'); });
+  if (category !== 'landscape') return;
+  const { Landscape, Config, Palette, Time, Renderer } = root.Timeform;
+  const byId = id => document.getElementById(id);
+  const selectedKey = 'timeform-dev-landscape-model-v2';
+  const parameters = Object.fromEntries(new URLSearchParams(location.search));
+  let selected = 'clockclock24';
+  try { selected = localStorage.getItem(selectedKey) || selected; } catch (_) {}
+  let model = Landscape.get(parameters.model) || Landscape.get(selected) || Landscape.models[0];
+  let fields = model.Settings.fields;
+  const storageKey = () => 'timeform-dev-landscape-' + model.id + '-v2';
+  const controls = new Map(), configurations = new Map(), presetButtons = [], modelButtons = [];
+  const source = Time.createSource();
+  let settings, renderer, storageAvailable = true, startupMessage = '配置已加载，修改即时预览。';
+  function notice(message, error = false) { byId('notice').textContent = message; byId('notice').dataset.error = String(error); }
+  function restore() {
+    if (configurations.has(model.id)) return { ...configurations.get(model.id) };
+    let restored = model.Settings.normalize();
+    try {
+      const saved = localStorage.getItem(storageKey());
+      if (saved) restored = Config.parse(model, saved);
+      else if (model.id === 'clockclock24') {
+        const legacy = localStorage.getItem('timeform-wallpaper-v1') || localStorage.getItem('timeform-scheme-v1');
+        if (legacy) { restored = Config.parse(model, legacy); startupMessage = '已恢复旧版配色与设置，当前使用 ClockClock 24。'; }
+      }
+    } catch (_) { startupMessage = '此型号的本地配置无法恢复，已使用默认参数；可继续调试并导出 JSON。'; }
+    return restored;
   }
-  function applyPreset(p,notify=true){Object.assign(state,{board:p.board,long:p.long,short:p.short,material:p.material,preset:p.id});paletteVersion++;renderDirty=true;updateControls();if(notify)showToast('已应用「'+p.name+'」配色');}
-  for(const p of PRESETS){const b=document.createElement('button');b.type='button';b.className='preset';b.dataset.preset=p.id;b.setAttribute('aria-label',p.name+'，'+p.caption);b.innerHTML='<div class="preset-preview">'+miniClock(p)+'</div><div class="preset-name"><strong>'+p.name+'</strong><svg class="icon"><use href="#i-check"/></svg></div><div class="preset-caption">'+p.caption+'</div>';b.onclick=()=>applyPreset(p);$('presetGrid').appendChild(b);}
-  document.querySelectorAll('[data-classic]').forEach(b=>b.onclick=()=>applyPreset(PRESETS.find(p=>p.id===b.dataset.classic)));
-  const tabIds=['colors','motion','time'];
-  function selectTab(id){for(const k of tabIds){$('tab-'+k).setAttribute('aria-selected',k===id);$('tab-'+k).tabIndex=k===id?0:-1;$('panel-'+k).hidden=k!==id;}}
-  for(const id of tabIds){$('tab-'+id).onclick=()=>selectTab(id);$('tab-'+id).addEventListener('keydown',e=>{if(['ArrowRight','ArrowLeft','Home','End'].includes(e.key)){e.preventDefault();let i=tabIds.indexOf(id);i=e.key==='Home'?0:e.key==='End'?2:(i+(e.key==='ArrowRight'?1:2))%3;selectTab(tabIds[i]);$('tab-'+tabIds[i]).focus();}});}
-  document.querySelectorAll('[data-motion]').forEach(b=>b.onclick=()=>{state.motion=reducedMotion?'quiet':b.dataset.motion;markChanged();});
-  document.querySelectorAll('[data-visibility]').forEach(b=>b.onclick=()=>setVisibility(b.dataset.visibility));
-  function chooseSource(source){if(source==='manual'&&state.source==='live')state.simulatedMinutes=nowMinutes();state.source=source;state.autoDemo=false;updateControls();sync();}
-  function advance(delta){state.simulatedMinutes=normalizeMinutes(state.simulatedMinutes+delta);updateControls();sync();state.demoLast=performance.now();}
-  $('live').onclick=()=>chooseSource('live');$('manual').onclick=()=>chooseSource('manual');$('back').onclick=()=>advance(-1);$('forward').onclick=()=>advance(1);
-  $('timeInput').onchange=e=>{const m=/^(\d{2}):(\d{2})$/.exec(e.target.value);if(!m||Number(m[1])>23||Number(m[2])>59)return;state.simulatedMinutes=Number(m[1])*60+Number(m[2]);state.autoDemo=false;updateControls();sync();};
-  $('autoDemo').onchange=e=>{state.autoDemo=e.target.checked;state.demoLast=performance.now();};
-  $('format24').onclick=()=>{state.format24=true;markChanged();sync();};$('format12').onclick=()=>{state.format24=false;markChanged();sync();};
-  $('replay').onclick=()=>sync(true);
-  function showToast(text){clearTimeout(toastTimer);$('toast').textContent=text;$('toast').classList.add('visible');toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),2700);}
-  $('save').onclick=()=>{try{localStorage.setItem(STORAGE_KEY,signature());savedSignature=signature();updateControls();showToast('方案已保存在此浏览器，下次打开自动恢复');}catch(_){showToast('此浏览器无法保存方案，请检查存储设置');}};
-  $('reset').onclick=()=>{setVisibility('hide',false);state.format24=true;state.source='live';state.autoDemo=false;state.motion=reducedMotion?'quiet':'spin';state.duration=4;state.longLength=100;state.shortLength=100;applyPreset(PRESETS[0],false);sync();showToast('已恢复「经典黑」默认方案');};
-  $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else if($('scene').requestFullscreen)await $('scene').requestFullscreen();else showToast('当前浏览器暂不支持全屏');}catch(_){showToast('当前预览无法进入全屏，请在浏览器中打开');}};
-  document.addEventListener('fullscreenchange',()=>{const text=document.fullscreenElement?'退出全屏':'全屏观赏';$('fullscreen').setAttribute('aria-label',text);$('fullscreen').title=text;resize();});
-  document.addEventListener('keydown',e=>{if(e.target.matches('input,select,button,a'))return;if(e.key==='ArrowRight'&&state.source==='manual'){e.preventDefault();advance(1);}else if(e.key==='ArrowLeft'&&state.source==='manual'){e.preventDefault();advance(-1);}else if(e.key.toLowerCase()==='r')sync(true);});
-  setInterval(()=>{if(document.hidden)return;if(state.source==='live')sync();else if(state.autoDemo&&performance.now()-state.demoLast>=Math.max(12000,state.duration*1000+2000))advance(1);updateReadout();},250);
-  document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelAnimationFrame(animationFrame);else{resize();sync();animationFrame=requestAnimationFrame(draw);}});
-  state.simulatedMinutes=nowMinutes();resize();updateControls();initializeTime(currentMinutes());animationFrame=requestAnimationFrame(draw);
-})();
+  settings = restore();
+  settings = model.Settings.normalize(parameters, settings);
+  const viewport = byId('viewport'), stage = byId('stage');
+  function arrange() {
+    const style = getComputedStyle(stage);
+    const availableWidth = Math.max(1, stage.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight));
+    const availableHeight = Math.max(1, stage.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom));
+    const factor = Math.min(availableWidth / settings.canvasWidth, availableHeight / settings.canvasHeight);
+    viewport.style.width = settings.canvasWidth * factor + 'px'; viewport.style.height = settings.canvasHeight * factor + 'px';
+    viewport.style.background = settings.background;
+  }
+  arrange();
+  function createRenderer() {
+    return Renderer.create(byId('clock'), settings, model, () => ({
+      width: settings.canvasWidth, height: settings.canvasHeight, displayWidth: viewport.clientWidth, displayHeight: viewport.clientHeight
+    }));
+  }
+  renderer = createRenderer();
+  function persist() {
+    configurations.set(model.id, { ...settings });
+    try { localStorage.setItem(storageKey(), Config.serialize(model, settings)); localStorage.setItem(selectedKey, model.id); storageAvailable = true; }
+    catch (_) { storageAvailable = false; }
+  }
+  function refreshValues() {
+    byId('modelName').textContent = model.name; byId('modelDescription').textContent = model.description;
+    byId('clockCount').textContent = model.count + ' 个表盘'; byId('handCount').textContent = model.count * 2 + ' 根指针';
+    byId('arraySize').textContent = model.columns + ' × ' + model.rows; byId('editorModel').textContent = model.badge;
+    byId('editor').setAttribute('aria-label', model.name + ' 专业配置');
+    byId('clock').setAttribute('aria-label', model.name + '，现在显示 ' + byId('displayTime').textContent);
+    for (const { button, entry } of modelButtons) button.setAttribute('aria-pressed', String(entry.id === model.id));
+    for (const [key, entry] of controls) {
+      if (entry.input.type === 'checkbox') entry.input.checked = settings[key];
+      else entry.input.value = settings[key];
+      entry.input.removeAttribute('aria-invalid');
+      if (entry.hex) { entry.hex.value = settings[key].toUpperCase(); entry.hex.removeAttribute('aria-invalid'); }
+      if (entry.range) entry.range.value = settings[key];
+    }
+    for (const { button, preset } of presetButtons) button.setAttribute('aria-pressed', String(Object.keys(Palette.colors(settings)).every(key => settings[key] === preset[key])));
+    controls.get('manualTime').input.disabled = settings.source !== 'manual';
+    controls.get('autoDemo').input.disabled = settings.source !== 'manual';
+    controls.get('demoInterval').input.disabled = settings.source !== 'manual' || !settings.autoDemo;
+    controls.get('demoInterval').range.disabled = controls.get('demoInterval').input.disabled;
+    byId('resolutionLabel').textContent = settings.canvasWidth + ' × ' + settings.canvasHeight;
+    const size = settings.canvasWidth + 'x' + settings.canvasHeight;
+    byId('previewPreset').value = [...byId('previewPreset').options].some(option => option.value === size) ? size : 'custom';
+    byId('configSnapshot').value = Config.serialize(model, settings);
+  }
+  function update(patch, message = '预览已更新。') {
+    settings = model.Settings.normalize(patch, settings); arrange(); renderer.update(settings); refreshValues(); persist();
+    notice(storageAvailable ? message : message + ' 浏览器无法保存，请导出 JSON。'); refreshStats();
+  }
+  function accept(key, value, input) {
+    const decoded = Config.decode(fields[key], value, true);
+    if (decoded === undefined) {
+      input.setAttribute('aria-invalid', 'true');
+      notice('「' + fields[key].label + '」无效，请检查格式与有效范围。', true); return;
+    }
+    update({ [key]: decoded });
+  }
+  function buildControls() {
+    controls.clear();
+    for (const group of ['colors', 'screen', 'geometry', 'motion', 'time']) byId('fields-' + group).replaceChildren();
+    for (const [key, field] of Object.entries(fields)) {
+      const wrapper = document.createElement('div'); wrapper.className = 'field';
+      const label = document.createElement('label'); label.htmlFor = 'setting-' + key; label.textContent = field.label;
+      const heading = document.createElement('div'); heading.className = 'field-label'; heading.append(label);
+      const input = document.createElement(field.type === 'select' ? 'select' : 'input'); input.id = 'setting-' + key;
+      const entry = { input, hex: null, range: null };
+      if (field.type === 'color') {
+        input.type = 'color';
+        const hex = document.createElement('input'); hex.type = 'text'; hex.maxLength = 7; hex.spellcheck = false; hex.setAttribute('aria-label', field.label + ' HEX');
+        const group = document.createElement('div'); group.className = 'color-inputs'; group.append(input, hex); wrapper.append(heading, group); entry.hex = hex;
+        input.addEventListener('input', () => accept(key, input.value, input)); hex.addEventListener('change', () => accept(key, hex.value.trim(), hex));
+      } else if (field.type === 'checkbox') {
+        input.type = 'checkbox'; label.className = 'check-label'; label.prepend(input); wrapper.append(label);
+        input.addEventListener('change', () => accept(key, input.checked, input));
+      } else if (field.type === 'number') {
+        input.type = 'number'; input.min = field.min; input.max = field.max; input.step = field.step;
+        const bounds = document.createElement('span'); bounds.className = 'bounds'; bounds.textContent = field.min + '–' + field.max + ' ' + field.unit; heading.append(bounds);
+        const range = document.createElement('input'); range.type = 'range'; range.min = field.min; range.max = field.max; range.step = field.step; range.setAttribute('aria-label', field.label + '滑块');
+        const group = document.createElement('div'); group.className = 'numeric-controls'; group.append(range, input); wrapper.append(heading, group); entry.range = range;
+        input.addEventListener('input', () => accept(key, input.value, input));
+        input.addEventListener('change', () => accept(key, input.value, input)); range.addEventListener('input', () => accept(key, range.value, range));
+      } else {
+        if (field.type === 'select') {
+          field.options.forEach(([value, text]) => { const option = document.createElement('option'); option.value = value; option.textContent = text; input.append(option); });
+        } else { input.type = field.type === 'time' ? 'time' : 'text'; if (field.type === 'timezone') input.placeholder = '跟随设备'; }
+        wrapper.append(heading, input); input.addEventListener('change', () => accept(key, input.value, input));
+        if (field.type === 'time') input.addEventListener('input', () => accept(key, input.value, input));
+      }
+      if (field.help) { const help = document.createElement('p'); help.className = 'field-help'; help.textContent = field.help; wrapper.append(help); }
+      controls.set(key, entry); byId('fields-' + field.group).append(wrapper);
+    }
+  }
+  buildControls();
+  function selectModel(next, imported) {
+    if (next.id === model.id && !imported) return;
+    persist();
+    const paused = renderer.getStats().paused;
+    renderer.dispose(); model = next; fields = model.Settings.fields;
+    startupMessage = '已切换到 ' + model.name + '，该型号的配置已恢复。';
+    settings = imported || restore(); buildControls(); arrange(); renderer = createRenderer(); renderer.setPaused(paused);
+    const url = new URL(location.href);
+    for (const key of Object.keys(fields)) url.searchParams.delete(key);
+    url.searchParams.set('model', model.id);
+    try { history.replaceState(null, '', url); } catch (_) {}
+    refreshValues(); refreshStats(); persist();
+    notice(storageAvailable ? startupMessage : startupMessage + ' 浏览器无法保存，请导出 JSON。');
+  }
+  for (const entry of Landscape.models) {
+    const button = document.createElement('button'); button.type = 'button'; button.className = 'model-option';
+    button.setAttribute('aria-label', '选择 ' + entry.name);
+    const name = document.createElement('strong'); name.textContent = entry.badge === 'CC24' ? entry.name : 'AMT ' + entry.count;
+    const detail = document.createElement('span'); detail.textContent = entry.count + ' 个表盘 · ' + entry.columns + ' × ' + entry.rows;
+    button.append(name, detail); button.addEventListener('click', () => selectModel(entry));
+    byId('modelOptions').append(button); modelButtons.push({ button, entry });
+  }
+  for (const preset of Palette.presets) {
+    const button = document.createElement('button'); button.type = 'button'; button.className = 'preset'; button.setAttribute('aria-label', '应用' + preset.name);
+    const swatch = document.createElement('span'); swatch.className = 'preset-swatch'; swatch.style.background = preset.board; swatch.style.setProperty('--hand', preset.long);
+    const name = document.createElement('span'); name.textContent = preset.name; button.append(swatch, name);
+    button.addEventListener('click', () => update(Palette.colors(preset), '已应用「' + preset.name + '」，动画与布局设置保持。'));
+    byId('presets').append(button); presetButtons.push({ button, preset });
+  }
+  function refreshStats() {
+    const stats = renderer.getStats(), digits = stats.display;
+    byId('displayTime').textContent = digits.slice(0, 2) + ':' + digits.slice(2);
+    byId('playbackStatus').textContent = (stats.paused ? '已暂停' : stats.animating ? '过渡中' : '已归位') + ' · ' + settings.playbackSpeed + '×';
+    byId('boardSize').textContent = Math.round(stats.geometry.boardWidth * 10) / 10 + ' × ' + Math.round(stats.geometry.boardHeight * 10) / 10;
+    byId('renderSize').textContent = stats.pixelWidth + ' × ' + stats.pixelHeight + ' px';
+    byId('pause').textContent = stats.paused ? '继续' : '暂停'; byId('pause').setAttribute('aria-pressed', String(stats.paused)); byId('step').disabled = !stats.paused;
+  }
+  byId('pause').addEventListener('click', () => { renderer.setPaused(!renderer.getStats().paused); refreshStats(); });
+  byId('step').addEventListener('click', () => { renderer.step(100); refreshStats(); });
+  byId('replay').addEventListener('click', () => {
+    const changed = renderer.replay();
+    notice(changed ? '动画已重播；暂停时可用单步检查。' : '当前为平滑过渡，请切换一分钟观察变化。'); refreshStats();
+  });
+  function advance(delta) { update({ source: 'manual', manualTime: Time.textFromMinutes(source.read(settings) + delta), autoDemo: false }, '已切换到指定时间。'); }
+  byId('previousMinute').addEventListener('click', () => advance(-1)); byId('nextMinute').addEventListener('click', () => advance(1));
+  byId('previewPreset').addEventListener('change', event => {
+    if (event.target.value === 'custom') { controls.get('canvasWidth').input.focus(); return; }
+    const [canvasWidth, canvasHeight] = event.target.value.split('x').map(Number); update({ canvasWidth, canvasHeight });
+  });
+  byId('save').addEventListener('click', () => { persist(); notice(storageAvailable ? '方案已保存到当前浏览器。' : '当前浏览器无法保存，请导出 JSON。', !storageAvailable); });
+  byId('exportConfig').addEventListener('click', () => {
+    const url = URL.createObjectURL(new Blob([Config.serialize(model, settings)], { type: 'application/json;charset=utf-8' }));
+    const anchor = document.createElement('a'); anchor.href = url; anchor.download = 'TIMEFORM-' + model.badge + '.json'; anchor.click(); setTimeout(() => URL.revokeObjectURL(url), 30000); notice('配置已导出，包含种类、型号与参数。');
+  });
+  byId('importConfig').addEventListener('change', async event => {
+    const file = event.target.files[0]; if (!file) return;
+    try {
+      if (file.size > 65536) throw new Error('请选择小于 64 KB 的配置文件。');
+      const imported = Landscape.parse(await file.text());
+      selectModel(imported.model, imported.settings);
+      notice('方案已导入，当前为 ' + model.name + '。');
+    } catch (error) { notice(error.message, true); } finally { event.target.value = ''; }
+  });
+  byId('reset').addEventListener('click', () => { renderer.setPaused(false); update(model.Settings.defaults, '已恢复经典黑和默认调试参数。'); });
+  byId('fullscreen').addEventListener('click', async () => {
+    try { if (document.fullscreenElement) await document.exitFullscreen(); else await stage.requestFullscreen(); }
+    catch (_) { notice('此浏览器暂不支持全屏预览。', true); }
+  });
+  function resize() { arrange(); renderer.resize(); refreshStats(); }
+  const observer = new ResizeObserver(resize); observer.observe(stage);
+  window.addEventListener('resize', resize); document.addEventListener('fullscreenchange', resize);
+  document.addEventListener('timeform-auto-time', event => { settings.manualTime = event.detail; refreshValues(); persist(); refreshStats(); });
+  const statsTimer = setInterval(refreshStats, 250);
+  window.addEventListener('pagehide', event => {
+    if (event.persisted) return;
+    renderer.dispose(); observer.disconnect(); clearInterval(statsTimer);
+  });
+  window.addEventListener('pageshow', event => { if (event.persisted) resize(); });
+  root.Timeform.Workbench = { getConfig: () => ({ ...settings }), getModel: () => model.id, update, get renderer() { return renderer; } };
+  try { localStorage.setItem(selectedKey, model.id); } catch (_) { storageAvailable = false; }
+  refreshValues(); notice(startupMessage); refreshStats();
+})(globalThis);
 </script>
 </body>
 </html>

@@ -1,66 +1,35 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const path = require('node:path');
-const vm = require('node:vm');
+const Model = require('../src/models/clockclock24/model.js');
+const Config = require('../src/shared/config.js');
+const Palette = require('../src/shared/palette.js');
+const SingleClock = require('../src/shared/single-clock.js');
+const Time = require('../src/shared/time.js');
 
-// Exercise the actual inline animation code without a browser or dependencies.
-// The small DOM stand-in lets the page initialize; checks concern motion and alpha.
-function loadClock({ reducedMotion = false, saved = null, canvasFactory = null } = {}) {
+// Test the extracted model directly, with one explicit timeline for all 48 hands.
+function loadClock({ reducedMotion = false, saved = null } = {}) {
   let now = 1000;
-  let storage = saved ? JSON.stringify(saved) : null;
-  const elements = new Map();
+  const instance = Model.create(saved ? Config.parse(Model, JSON.stringify(saved)) : {}, { reducedMotion });
   const context = new Proxy({}, {
-    get(target, key) {
-      if (key in target) return target[key];
+    get(_, key) {
       if (key === 'createLinearGradient' || key === 'createRadialGradient') return () => ({ addColorStop() {} });
       return () => {};
     }
   });
-  function element(tagName) {
-    const attrs = new Map();
-    const node = {
-      dataset: {}, style: {}, value: '', checked: false, hidden: false,
-      classList: { add() {}, remove() {}, toggle() {} },
-      addEventListener() {}, appendChild() {}, focus() {}, blur() {},
-      setAttribute(key, value) { attrs.set(key, String(value)); },
-      getAttribute(key) { return attrs.get(key) ?? null; },
-      removeAttribute(key) { attrs.delete(key); },
-      getContext() { return context; },
-      getBoundingClientRect() { return { width: 1000, height: 445 }; }
-    };
-    if (tagName === 'canvas' && canvasFactory) {
-      const canvas = canvasFactory(1000, 445);
-      delete node.getContext;
-      Object.assign(canvas, node);
-      return canvas;
+  instance.initialize(0, now);
+  return {
+    state: instance.state, hands: instance.hands, PRESETS: Palette.presets,
+    digitPose: Model.digitPose, displayDigits: minutes => Model.displayDigits(minutes, instance.state.format24),
+    interpolate: instance.sample, animate: (minutes, force) => instance.animate(minutes, now, force),
+    initializeTime: minutes => instance.initialize(minutes, now), setVisibility: mode => instance.setVisibility(mode, now),
+    applyPreset: preset => instance.update(Palette.colors(preset), now), setColor: (key, value) => instance.update({ [key]: value }, now),
+    at(value) { now = value; }, now: () => now,
+    draw(time) {
+      instance.sample(time); const geometry = Model.geometry(1920, 1080, instance.state);
+      Palette.drawBoard(context, geometry.boardWidth, geometry.boardHeight, instance.state);
+      geometry.points.forEach(point => { SingleClock.drawFace(context, point, instance.state); SingleClock.drawHands(context, point, instance.hands.slice(point.i, point.i + 2), instance.state); });
     }
-    return node;
-  }
-  const document = {
-    hidden: false,
-    getElementById(id) { if (!elements.has(id)) elements.set(id, element(id === 'clock' ? 'canvas' : undefined)); return elements.get(id); },
-    createElement: element,
-    querySelector: element,
-    querySelectorAll() { return []; },
-    addEventListener() {}
   };
-  const sandbox = {
-    document, window: { matchMedia: () => ({ matches: reducedMotion }), addEventListener() {}, devicePixelRatio: 1 },
-    performance: { now: () => now },
-    localStorage: { getItem: () => storage, setItem: (_, value) => { storage = value; } },
-    ResizeObserver: class { observe() {} },
-    requestAnimationFrame: () => 1, cancelAnimationFrame() {},
-    setInterval() {}, setTimeout: () => 1, clearTimeout() {}
-  };
-  const html = fs.readFileSync(path.join(__dirname, '../index.html'), 'utf8');
-  const code = html.match(/<script>([\s\S]*?)<\/script>/)[1];
-  const instrumented = code.replace(/\}\)\(\);\s*$/, `
-    globalThis.clock = { state, hands, PRESETS, digitPose, interpolate, animate, initializeTime,
-      setVisibility, applyPreset, setColor, scheme, advance, displayDigits, draw };
-  })();`);
-  vm.runInNewContext(instrumented, sandbox, { filename: 'clockclock24.html' });
-  return { ...sandbox.clock, elements, at(value) { now = value; }, now: () => now };
 }
 
 const TAU = Math.PI * 2;
@@ -88,8 +57,8 @@ function assertSettled(clock, minutes) {
 
 test('classic black is the default; opening displays the time immediately', () => {
   const c = loadClock();
-  assert.equal(c.state.preset, 'classic-black');
-  assert.equal(c.state.material, 'black');
+  assert.equal(c.state.board, '#111213');
+  assert.equal(Palette.material(c.state), 'black');
   assert.equal(c.state.longLength, 100);
   assert.equal(c.state.shortLength, 100);
   assert.equal(c.PRESETS.length, 8);
@@ -193,19 +162,15 @@ test('palette changes preserve motion, lengths, visibility and the running trans
     c.draw(c.now());
   }
   c.applyPreset(c.PRESETS[0], false); c.setColor('long', '#ff9900');
-  assert.equal(c.state.material, 'black');
-  c.setColor('board', '#123456'); assert.equal(c.state.material, null);
+  assert.equal(Palette.material(c.state), 'black');
+  c.setColor('board', '#123456'); assert.equal(Palette.material(c.state), null);
 });
 
 test('old saved palettes migrate without losing custom colors', () => {
   const c = loadClock({ saved: { board: '#21444c', long: '#dfb977', short: '#9acaca', motion: 'wave', duration: 4, longLength: 100, shortLength: 94, visibility: 'ghost', format24: true, preset: null } });
   assert.equal(c.state.board, '#21444c'); assert.equal(c.state.short, '#9acaca');
   assert.equal(c.state.motion, 'spin'); assert.equal(c.state.visibility, 'ghost');
-  c.initializeTime(1439); c.state.source = 'manual'; c.state.simulatedMinutes = 1439;
-  c.advance(1); assert.equal(c.state.simulatedMinutes, 0);
-  c.elements.get('reset').onclick();
-  assert.equal(c.state.source, 'live'); assert.equal(c.state.preset, 'classic-black');
-  assert.equal(c.state.shortLength, 100); assert.equal(c.state.visibility, 'hide');
+  assert.equal(Time.textFromMinutes(Time.minutesFromText('23:59') + 1), '00:00');
 });
 
 test('reduced motion uses short, continuous transitions with no full rotations', () => {
