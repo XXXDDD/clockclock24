@@ -1,0 +1,121 @@
+{
+  "background": {
+    "type": "color",
+    "text": "屏幕背景",
+    "value": "#000000"
+  },
+  "board": {
+    "type": "color",
+    "text": "时钟背景板",
+    "value": "#111213"
+  },
+  "long": {
+    "type": "color",
+    "text": "长针颜色",
+    "value": "#f9faf7"
+  },
+  "short": {
+    "type": "color",
+    "text": "短针颜色",
+    "value": "#eef0ec"
+  },
+  "layout": {
+    "type": "dropdown",
+    "text": "数字排列",
+    "value": 0,
+    "items": [
+      "自动适配",
+      "横排 HHMM",
+      "上下两排 HH / MM"
+    ]
+  },
+  "scale": {
+    "type": "slider",
+    "text": "时钟大小",
+    "min": 20,
+    "max": 100,
+    "step": 1,
+    "value": 90
+  },
+  "padding": {
+    "type": "slider",
+    "text": "屏幕安全边距",
+    "min": 0,
+    "max": 160,
+    "step": 1,
+    "value": 0
+  },
+  "offsetX": {
+    "type": "slider",
+    "text": "水平位置",
+    "min": -100,
+    "max": 100,
+    "step": 1,
+    "value": 0,
+    "help": "负值向左，正值向右；始终保留完整时钟。"
+  },
+  "offsetY": {
+    "type": "slider",
+    "text": "垂直位置",
+    "min": -100,
+    "max": 100,
+    "step": 1,
+    "value": 0,
+    "help": "负值向上，正值向下；始终保留完整时钟。"
+  },
+  "motion": {
+    "type": "dropdown",
+    "text": "换时动画",
+    "value": 0,
+    "items": [
+      "经典旋转",
+      "平滑过渡",
+      "立即换时"
+    ]
+  },
+  "duration": {
+    "type": "slider",
+    "text": "动画时长",
+    "min": 1,
+    "max": 10,
+    "step": 1,
+    "value": 4
+  },
+  "visibility": {
+    "type": "dropdown",
+    "text": "闲置指针",
+    "value": 0,
+    "items": [
+      "归位后隐藏",
+      "微光显示",
+      "全部显示"
+    ]
+  },
+  "longLength": {
+    "type": "slider",
+    "text": "长针长度",
+    "min": 70,
+    "max": 100,
+    "step": 1,
+    "value": 100
+  },
+  "shortLength": {
+    "type": "slider",
+    "text": "短针长度",
+    "min": 55,
+    "max": 100,
+    "step": 1,
+    "value": 100
+  },
+  "format24": {
+    "type": "checkbox",
+    "text": "24 小时制",
+    "value": true
+  },
+  "timezone": {
+    "type": "textbox",
+    "text": "时区",
+    "value": "",
+    "help": "留空跟随电脑；也可填 Asia/Hong_Kong、Europe/London 等。"
+  }
+}
