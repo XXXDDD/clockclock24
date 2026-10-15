@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#000000"><title>TIMEFORM · 五型号 Lively 壁纸</title>
+  <style>/* BUILD:STYLES */</style>
+</head>
+<body data-editor="BUILD:EDITOR" data-editing="false">
+  <header id="editorHeader" class="topbar" hidden><div class="brand"><span class="brand-mark" aria-hidden="true"></span>TIMEFORM <span class="dev-badge">Lively 本地测试版</span></div><button id="hideSettings" type="button">纯壁纸预览</button></header>
+  <main class="shell">
+    <section class="page-heading"><div><div class="eyebrow">壁纸配置 / 五种型号</div><h1 id="modelName">A million Times 144</h1><p id="modelDescription">选择型号，调好参数，导出你的 Lively 壁纸。</p></div><span id="clockCount" class="model-badge">144 个表盘</span></section>
+    <section class="model-picker" aria-label="壁纸阵列型号"><div class="model-picker-label">阵列型号<span>切换保留自定义设置</span></div><div id="modelOptions" class="model-options"></div></section>
+    <div class="workspace">
+      <section class="viewer" aria-label="壁纸预览">
+        <div class="preview-toolbar"><div class="preview-title"><span>目标屏幕</span><strong id="resolutionLabel">1920 × 1080</strong></div><div class="preview-actions"><label class="sr-only" for="previewSize">预览屏幕尺寸</label><select id="previewSize"><option value="1920x1080">1920 × 1080 · 横屏</option><option value="2560x1440">2560 × 1440 · 2K</option><option value="3840x2160">3840 × 2160 · 4K</option><option value="3440x1440">3440 × 1440 · 超宽</option><option value="1080x1920">1080 × 1920 · 竖屏</option><option value="auto">当前窗口</option></select></div></div>
+        <div class="stage" id="previewArea"><div id="viewport"><canvas id="clock" role="img" aria-label="多表盘时钟壁纸"></canvas></div></div>
+        <div class="transport"><div class="transport-main"><button id="pause" type="button" class="primary">暂停</button><button id="replay" type="button">重播动画</button><button id="step" type="button" disabled>单步 100 ms</button></div><div class="minute-controls"><button id="previousMinute" type="button">−1 分</button><button id="nextMinute" type="button">+1 分</button></div></div>
+        <div class="readout"><div><span>显示时间</span><strong id="displayTime">--:--</strong></div><div><span>播放状态</span><strong id="playbackStatus">读取中</strong></div><div><span>背景板尺寸</span><strong id="boardSize">--</strong></div><div><span>渲染尺寸</span><strong id="renderSize">--</strong></div></div>
+        <p class="preview-note">导入 Lively 后自动使用实际屏幕尺寸。五种型号保持各自的横屏阵列，等比适配超宽屏与竖向屏幕。</p>
+        <details class="snapshot"><summary>当前壁纸配置 <span>JSON</span></summary><textarea id="configSnapshot" readonly aria-label="当前壁纸配置 JSON" spellcheck="false"></textarea></details>
+      </section>
+      <aside id="editor" class="editor" aria-label="Lively 壁纸自定义" hidden>
+        <div class="editor-title"><div><h2>自定义壁纸</h2><p>预览和 Lively 使用相同的时钟实现。</p></div><span id="editorModel" class="model-badge">AMT144</span></div>
+        <div class="config-actions"><button id="downloadLively" type="button" class="primary">导出 Lively ZIP</button><button id="downloadHtml" type="button">导出离线 HTML</button><button id="exportConfig" type="button">导出 JSON</button><label class="file-button" for="importConfig">导入 JSON</label><input id="importConfig" type="file" accept=".json,application/json" class="sr-only"></div>
+        <div class="lively-actions"><button id="resetConfig" type="button">恢复当前型号默认设置</button></div>
+        <p id="notice" class="notice" role="status" aria-live="polite">本地配置可保存并导出。</p>
+        <div class="editor-scroll">
+          <section class="control-section"><h3>型号 <span>五种阵列</span></h3><div id="fields-model"></div></section>
+          <section class="control-section"><h3>配色 <span>预设与独立颜色</span></h3><div id="presets" class="presets"></div><div id="fields-palette"></div><div id="fields-colors" class="color-grid"></div></section>
+          <section class="control-section"><h3>大小与位置 <span>实际屏幕</span></h3><div id="fields-screen"></div></section>
+          <section class="control-section"><h3>表盘与指针 <span>精确数值</span></h3><div id="fields-geometry"></div></section>
+          <section class="control-section"><h3>动画与播放 <span>可暂停验证</span></h3><div id="fields-motion"></div></section>
+          <section class="control-section"><h3>时间 <span>实时或指定时间</span></h3><div id="fields-time"></div></section>
+        </div>
+      </aside>
+    </div>
+  </main>
+  <button id="returnSettings" type="button" hidden>返回配置</button>
+  <script type="application/json" id="timeform-config">/* BUILD:CONFIG */</script>
+  <script>/* BUILD:SCRIPTS */</script>
+</body>
+</html>

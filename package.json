@@ -7,7 +7,9 @@
     "test": "node --test",
     "check": "node scripts/build.cjs --check && node scripts/build-wallpaper.cjs --check",
     "dev": "node scripts/serve.cjs",
-    "build:wallpaper": "node scripts/build-wallpaper.cjs"
+    "build:wallpaper": "node scripts/build-wallpaper.cjs",
+    "build:lively": "node scripts/build-lively.cjs --publish",
+    "check:lively": "node scripts/build-lively.cjs --publish --check"
   },
   "engines": {
     "node": ">=18"

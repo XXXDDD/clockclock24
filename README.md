@@ -18,15 +18,18 @@
 
 圆形和竖排目前提供独立分类页面，专属型号待接入。
 
-## ClockClock 24 桌面壁纸
+## 五型号 Lively 桌面壁纸
 
-已有的 [壁纸工作台](wallpaper/configure.html)、[纯壁纸页面](wallpaper/index.html) 和下载链接继续可用。这套平台适配目前使用 ClockClock 24；大型 AMT 阵列在上面的网页工作台使用。
+[壁纸工作台](wallpaper/configure.html) 和 [纯壁纸页面](wallpaper/index.html) 已接入 ClockClock 24、AMT72、AMT120、AMT144、AMT288，默认 AMT144，使用与网页工作台相同的字形、阵列和动画基础。安装包完全离线运行。
 
-- Windows：下载 [Lively 导入包](downloads/TIMEFORM-Lively.zip)，拖入 Lively 后选择显示器；卡片菜单「自定义」可调整配色和布局。
-- 其他网页壁纸工具：下载 [通用 HTML](downloads/TIMEFORM-wallpaper.html)，或在壁纸工作台复制配置网址。
+- Windows：下载 [五型号 Lively 导入包](downloads/TIMEFORM-Lively.zip)，拖入 Lively 新建壁纸；右键新卡片选择「自定义」即可切换五种型号。
+- 可调整八组配色与独立颜色、缩放与位置、表盘半径和间隙、两根指针的长度和粗细、动画与闲置指针显隐、时区与指定时间，并支持宿主暂停恢复。
+- 其他网页壁纸工具：下载 [通用 HTML](downloads/TIMEFORM-wallpaper.html)，或使用壁纸工作台导出当前方案。
 - 壁纸工作台可导出 Lively ZIP、离线 HTML 和 JSON 配置；导出文件离线可用。
 
 详细说明见 [wallpaper/README.md](wallpaper/README.md)。
+
+旧版 Lively 卡片保存了自己的设置副本；请导入新 ZIP，才能看到新增型号和自定义项。仓库也提供 [与本地测试版相同的 ZIP](TIMEFORM-五型号-Lively.zip)。
 
 ## 本地开发和验证
 
@@ -51,7 +54,8 @@ npm run check
 - `src/shared/`：单表盘、配色、配置、时间与指针动画基础。
 - `src/models/`：ClockClock 24 和各 AMT 型号的字形、几何和编排。
 - `src/web/`：分类页面、预览和专业配置面板。
-- `wallpaper/src/`：现有 ClockClock 24 壁纸平台适配。
-- `scripts/build.cjs`：网页工作台构建；`scripts/build-wallpaper.cjs`：壁纸和下载文件构建。
+- `src/lively/`：五型号壁纸配置、宿主回调、浏览器配置页和导出；复用共享型号与绘制。
+- `wallpaper/`、`lively-wallpaper/`：生成的壁纸页面和 Lively 配置；`wallpaper/src/` 保留旧版适配代码供兼容回归检查。
+- `scripts/build.cjs`：网页工作台构建；`scripts/build-lively.cjs`：新版壁纸和下载文件构建；`scripts/build-wallpaper.cjs` 保留原有构建命令并调用新版构建。
 
 产品范围见 [product.md](product.md)，架构见 [architect.md](architect.md)。这是独立二维网页实验。

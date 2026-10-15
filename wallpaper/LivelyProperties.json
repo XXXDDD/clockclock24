@@ -1,121 +1,227 @@
 {
+  "sectionmodel": {
+    "type": "label",
+    "value": "型号"
+  },
+  "model": {
+    "text": "阵列型号",
+    "type": "dropdown",
+    "value": 3,
+    "items": [
+      "ClockClock 24 · 8 × 3",
+      "A million Times 72 · 12 × 6",
+      "A million Times 120 · 15 × 8",
+      "A million Times 144 · 18 × 8",
+      "A million Times 288 · 24 × 12"
+    ]
+  },
+  "sectionpalette": {
+    "type": "label",
+    "value": "配色方案"
+  },
+  "preset": {
+    "text": "配色方案",
+    "type": "dropdown",
+    "value": 0,
+    "items": [
+      "自定义（使用下方独立颜色）",
+      "经典黑",
+      "经典白",
+      "苔原",
+      "纸与墨",
+      "暮色",
+      "深海",
+      "赤陶",
+      "午夜"
+    ],
+    "help": "想单独修改背景或指针颜色，请选择自定义。"
+  },
+  "sectioncolors": {
+    "type": "label",
+    "value": "独立颜色（自定义配色时生效）"
+  },
   "background": {
+    "text": "画布背景",
     "type": "color",
-    "text": "屏幕背景",
     "value": "#000000"
   },
   "board": {
+    "text": "背景板",
     "type": "color",
-    "text": "时钟背景板",
     "value": "#111213"
   },
   "long": {
+    "text": "长针",
     "type": "color",
-    "text": "长针颜色",
     "value": "#f9faf7"
   },
   "short": {
+    "text": "短针",
     "type": "color",
-    "text": "短针颜色",
     "value": "#eef0ec"
   },
-  "layout": {
-    "type": "dropdown",
-    "text": "数字排列",
-    "value": 0,
-    "items": [
-      "自动适配",
-      "横排 HHMM",
-      "上下两排 HH / MM"
-    ]
+  "sectionscreen": {
+    "type": "label",
+    "value": "大小与位置"
   },
   "scale": {
+    "text": "整体缩放（%）",
     "type": "slider",
-    "text": "时钟大小",
+    "value": 90,
     "min": 20,
     "max": 100,
-    "step": 1,
-    "value": 90
+    "step": 1
   },
   "padding": {
+    "text": "画布安全边距（px）",
     "type": "slider",
-    "text": "屏幕安全边距",
+    "value": 0,
     "min": 0,
     "max": 160,
-    "step": 1,
-    "value": 0
+    "step": 1
   },
   "offsetX": {
+    "text": "水平位置（%）",
     "type": "slider",
-    "text": "水平位置",
+    "value": 0,
     "min": -100,
     "max": 100,
-    "step": 1,
-    "value": 0,
-    "help": "负值向左，正值向右；始终保留完整时钟。"
+    "step": 1
   },
   "offsetY": {
+    "text": "垂直位置（%）",
     "type": "slider",
-    "text": "垂直位置",
+    "value": 0,
     "min": -100,
     "max": 100,
-    "step": 1,
-    "value": 0,
-    "help": "负值向上，正值向下；始终保留完整时钟。"
+    "step": 1
+  },
+  "sectiongeometry": {
+    "type": "label",
+    "value": "表盘与指针"
+  },
+  "radius": {
+    "text": "表盘半径（设计单位）",
+    "type": "textbox",
+    "value": "43",
+    "help": "有效范围 20–65，可输入小数。"
+  },
+  "gap": {
+    "text": "表盘间隙（设计单位）",
+    "type": "textbox",
+    "value": "4.3",
+    "help": "有效范围 0–40，可输入小数。"
+  },
+  "longLength": {
+    "text": "长针长度（%）",
+    "type": "slider",
+    "value": 100,
+    "min": 70,
+    "max": 100,
+    "step": 1
+  },
+  "shortLength": {
+    "text": "短针长度（%）",
+    "type": "slider",
+    "value": 100,
+    "min": 55,
+    "max": 100,
+    "step": 1
+  },
+  "longWidth": {
+    "text": "长针粗细（设计单位）",
+    "type": "textbox",
+    "value": "6.2",
+    "help": "有效范围 2–14，可输入小数。"
+  },
+  "shortWidth": {
+    "text": "短针粗细（设计单位）",
+    "type": "textbox",
+    "value": "6.2",
+    "help": "有效范围 2–14，可输入小数。"
+  },
+  "sectionmotion": {
+    "type": "label",
+    "value": "动画与播放"
   },
   "motion": {
-    "type": "dropdown",
     "text": "换时动画",
+    "type": "dropdown",
     "value": 0,
     "items": [
-      "经典旋转",
+      "逐列波浪收束",
+      "同步旋转",
       "平滑过渡",
       "立即换时"
     ]
   },
   "duration": {
-    "type": "slider",
-    "text": "动画时长",
-    "min": 1,
-    "max": 10,
-    "step": 1,
-    "value": 4
+    "text": "动画时长（s）",
+    "type": "textbox",
+    "value": "6",
+    "help": "有效范围 1–10，可输入小数。"
   },
   "visibility": {
-    "type": "dropdown",
     "text": "闲置指针",
-    "value": 0,
+    "type": "dropdown",
+    "value": 2,
     "items": [
       "归位后隐藏",
       "微光显示",
       "全部显示"
-    ]
+    ],
+    "help": "参考图保留闲置指针的斜线；也可选择归位后隐藏或微光显示。"
   },
-  "longLength": {
-    "type": "slider",
-    "text": "长针长度",
-    "min": 70,
-    "max": 100,
-    "step": 1,
-    "value": 100
+  "playbackSpeed": {
+    "text": "调试播放速度（倍）",
+    "type": "textbox",
+    "value": "1",
+    "help": "有效范围 0.1–3，可输入小数。"
   },
-  "shortLength": {
-    "type": "slider",
-    "text": "短针长度",
-    "min": 55,
-    "max": 100,
-    "step": 1,
-    "value": 100
+  "paused": {
+    "text": "暂停播放（验证用）",
+    "type": "checkbox",
+    "value": false
+  },
+  "sectiontime": {
+    "type": "label",
+    "value": "时间"
   },
   "format24": {
-    "type": "checkbox",
     "text": "24 小时制",
+    "type": "checkbox",
     "value": true
   },
   "timezone": {
-    "type": "textbox",
     "text": "时区",
+    "type": "textbox",
     "value": "",
-    "help": "留空跟随电脑；也可填 Asia/Hong_Kong、Europe/London 等。"
+    "help": "留空跟随设备，例如 Asia/Hong_Kong。"
+  },
+  "source": {
+    "text": "时间来源",
+    "type": "dropdown",
+    "value": 0,
+    "items": [
+      "设备时间",
+      "指定时间"
+    ]
+  },
+  "manualTime": {
+    "text": "指定时间",
+    "type": "textbox",
+    "value": "12:38",
+    "help": "指定时间模式使用，格式 HH:MM，例如 09:34。"
+  },
+  "autoDemo": {
+    "text": "指定时间自动逐分钟切换",
+    "type": "checkbox",
+    "value": false
+  },
+  "demoInterval": {
+    "text": "自动切换间隔（s）",
+    "type": "textbox",
+    "value": "5",
+    "help": "有效范围 1–20，可输入小数。"
   }
 }

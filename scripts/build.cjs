@@ -3,11 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
-const modules = [
-  'src/shared/math.js', 'src/shared/palette.js', 'src/shared/config.js', 'src/shared/time.js', 'src/shared/single-clock.js',
-  'src/shared/hand-animation.js', 'src/models/clockclock24/settings.js', 'src/models/clockclock24/model.js',
-  'src/models/amt/settings.js', 'src/models/amt/model.js', 'src/models/landscape.js', 'src/web/renderer.js', 'src/web/workbench.js'
-];
+const modules = [...require('./modules.cjs'), 'src/web/workbench.js'];
 const pages = [
   { category: 'landscape', title: '横屏调试', names: ['index.html', 'clockclock24.html'] },
   { category: 'circular', title: '圆形调试', names: ['circular.html'] },

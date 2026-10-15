@@ -1,15 +1,15 @@
 {
   "AppVersion": "2.2.1.0",
-  "Title": "TIMEFORM · 可定制时钟",
-  "Desc": "24 表盘时钟；颜色、位置、动画可独立设置，自动适配横屏、竖屏和超宽屏。完全离线。",
+  "Title": "TIMEFORM · 五型号时钟 · 本地测试版",
+  "Desc": "24、72、120、144、288 五种横屏阵列；配色、大小、位置、表盘、指针、时间和动画可自定义。离线运行。",
   "Author": "TIMEFORM",
   "Type": 1,
   "FileName": "index.html",
   "IsAbsolutePath": false,
   "Thumbnail": "thumbnail.jpg",
   "Preview": null,
-  "Arguments": null,
+  "Arguments": "--pause-event true",
   "Contact": "https://github.com/XXXDDD/clockclock24",
   "License": null,
-  "Version": 2
+  "Version": 3
 }

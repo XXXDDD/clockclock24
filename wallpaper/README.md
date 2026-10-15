@@ -1,59 +1,34 @@
-# TIMEFORM · 可定制时钟壁纸
+# TIMEFORM 五型号 Lively 本地测试版
 
-同一个离线网页用于 Windows 的 Lively、Mac 的网页壁纸工具和普通浏览器。默认仍是经典黑底白针。无需安装开发依赖。
+一个包包含 ClockClock 24、AMT72、AMT120、AMT144、AMT288。默认 AMT144，使用与网页工作台相同的字形、表盘和动画基础。全部离线运行。
 
-## Windows：直接导入 Lively
+## 在 Lively 验证
 
-1. 安装 [Lively Wallpaper](https://www.rocksdanister.com/lively/)。
-2. 下载仓库的 [`downloads/TIMEFORM-Lively.zip`](../downloads/TIMEFORM-Lively.zip)，把 ZIP 拖进 Lively，选择需要的显示器。
-3. 在壁纸卡片的菜单中打开「自定义」。可以分别调整屏幕背景、背景板、长针、短针颜色，以及排列、大小、边距、位置、针长、动画、闲置指针、12/24 小时制和时区。
+1. 把 `TIMEFORM-五型号-Lively.zip` 拖入 Lively，作为一个新壁纸导入。
+2. 应用到目标显示器，右键新壁纸卡片选择「自定义」。
+3. 在「阵列型号」选择五种型号；切换型号保留当前配色、尺寸和动画参数。
+4. 调整后关闭自定义面板，再打开检查参数；重启壁纸后也应保持。
 
-Lively 会替每个显示器保存设置。源文件使用官方 [LivelyProperties 接口](https://github.com/lively-community/lively/wiki/Web-Guide-IV-%3A-Interaction)，不包含本机屏幕编号或绝对路径。
+Lively 会保存导入包自己的设置副本，因此请导入新 ZIP；原来的旧壁纸卡片不会因修改源文件自动增加新控制项。官方说明：[Lively Properties](https://github.com/lively-community/lively/wiki/Web-Guide-IV-:-Interaction)。
 
-## 先配色，再带去其他电脑
+## 可调整内容
 
-打开 [`configure.html`](configure.html)，可以离线预览并导出。选择预览屏幕后，页面会模拟横屏、2K、4K、超宽屏、竖屏或 5:4 屏幕。
+- 五种型号、八组配色预设、独立屏幕背景／背景板／两根指针颜色。
+- 整体缩放、安全边距、水平与垂直位置。
+- 表盘半径、间隙、长短针长度和粗细。
+- 逐列波浪、同步旋转、平滑过渡、立即换时；动画时长、速度和闲置指针显隐。
+- 12／24 小时制、时区、实时或指定时间、指定时间逐分钟演示，以及暂停。
 
-- **下载 Lively 壁纸包**：包含当前配色的 ZIP；换 Windows 电脑直接导入，仍保留全部 Lively 自定义项。
-- **下载通用 HTML**：包含全部样式、程序和当前配置的单个 HTML 文件；不依赖其他文件、字体、CDN 或浏览器缓存。
-- **导出 / 导入配色配置**：用版本化 JSON 保存并迁移配置；不会迁移屏幕身份信息。
-- **复制壁纸网址**：在线工作台生成携带配置的 URL；不同电脑、浏览器或网页壁纸工具可用同一个网址。本地 `file:` 网址只适用于当前电脑，换电脑应传输 HTML 文件。
+在 Lively 中选择「自定义」配色后，下面四项独立颜色生效。精细数值使用文本输入，可以填写小数；指定时间格式为 `HH:MM`。
 
-网页工作台会在当前浏览器保存编辑结果。纯壁纸入口使用文件内嵌配置、URL 参数或宿主工具的设置，避免另一块屏幕意外读到相同浏览器缓存。在普通浏览器中按 `S` 打开 / 收起设置，`Esc` 收起；壁纸默认不显示控制面板。Lively 使用卡片菜单的「自定义」，无需开启键盘交互。
+每个型号保持原有横屏阵列，屏幕大小自动适配，表盘保持圆形。表盘半径在这个通用配置中为 20–65 设计单位。
 
-## Mac：Plash 或其他网页壁纸工具
+已启用宿主暂停事件；Lively 暂停或恢复壁纸时，指针动画同步暂停或恢复。[官方暂停接口](https://github.com/lively-community/lively/wiki/Web-Guide-V-:-System-Data#--pause-event)。
 
-[Plash 官方说明](https://sindresorhus.com/plash)支持远程和本地网页，并可选择显示器。可以在 Plash 中选择已导出的 HTML，或使用在线工作台生成的壁纸网址。不要把 ZIP 当作 Mac 壁纸导入。
+## 在浏览器预览
 
-如果所用版本或其他工具只接收 HTTP 地址，可以使用 GitHub Pages 的壁纸网址；也可以在下载文件所在文件夹启动本地服务：
+直接打开 `configure.html`，调整参数后导出新的 Lively ZIP、离线 HTML 或 JSON。配置页的「恢复当前型号默认设置」会应用该型号推荐参数。可导入当前壁纸配置、网页版型号配置和旧版配色配置。
 
-```sh
-python3 -m http.server 8765 --bind 127.0.0.1
-```
+`index.html` 是纯壁纸；`configure.html` 是配置页。纯壁纸预览可返回配置页。配置页保存到浏览器，Lively 设置由 Lively 独立保存。
 
-然后将 `http://127.0.0.1:8765/TIMEFORM-wallpaper.html` 添加到该工具。使用本地服务时需要保持服务运行。Plash 的 `plash:add` 自定义协议不支持本地文件 URL；这与它在应用内加载本地网页的功能不同。
-
-当前代码已在 Windows 的 Edge 与 Lively WebView2 中验证。没有 Mac 实机验证；Mac 端使用标准网页接口，不依赖 Lively。系统桌面的显示器选择、开机启动由壁纸工具管理。
-
-## 屏幕适配规则
-
-- 自动适配比较两种排列的可用尺寸：横排 `HHMM`，或上方 `HH`、下方 `MM`。选能让表盘更大的完整布局。
-- 每种排列保持比例；不拉伸、不裁切，始终保留 24 个表盘。
-- 大小同时受屏幕宽、高约束。安全边距以实际显示器 CSS 像素计，预览时按比例显示。
-- 水平 / 垂直位置表示剩余空间中的偏移，范围为 −100% 到 +100%。到达极限仍不会把时钟推出屏幕。
-- 默认跟随当前电脑时间。时区留空可自动切换到新电脑的本地时间；填 `Asia/Hong_Kong` 等 IANA 时区可保持固定时区。
-- 静止时不持续重绘；换时才启动动画，页面隐藏后暂停，恢复时直接同步正确时间。高 DPI 渲染受像素预算限制。
-
-## 仓库维护
-
-`src/config.js` 是全部配置的唯一定义。网页控件、URL 编解码、JSON 导入导出、Lively 控件和默认值从同一份定义生成。`src/renderer.js` 保留原时钟的字形、材质和指针动画，并共享给所有导出格式。
-
-```sh
-npm run build
-npm test
-node scripts/build-wallpaper.cjs --check
-```
-
-构建只需要 Node.js 18 或更新版本，无第三方依赖；ZIP 可重复生成。编辑源文件后请一起提交生成的 `index.html`、`configure.html`、`LivelyProperties.json` 和 `downloads/` 文件。CI 会检查源码与下载文件一致。
-
-GitHub Pages 继续从 `main` 根目录发布；本目录合并到 `main` 并部署后，入口分别是 `/clockclock24/wallpaper/index.html` 和 `/clockclock24/wallpaper/configure.html`。
+推荐验证时间：AMT72 的 `09:34`；AMT120／144／288 的 `09:35`。同时检查超宽屏、针长／粗细、位置、午夜换日和宿主暂停恢复。

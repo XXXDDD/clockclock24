@@ -1,189 +1,726 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#000000">
-  <meta name="description" content="TIMEFORM 可定制时钟壁纸。离线运行，适配横屏、竖屏和超宽屏，支持 Lively 与网页壁纸工具。">
-  <title>TIMEFORM · 时钟壁纸</title>
-  <style>:root{color-scheme:dark;--wallpaper-bg:#000;--paper:#f5f4ee;--ink:#313a31;--muted:#899080;--line:#dddfd3;--accent:#526549}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--wallpaper-bg)}body{font:13px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink)}[hidden]{display:none!important}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,label:focus-within{outline:2px solid #8b9d77;outline-offset:3px}button{border:1px solid var(--line);background:#fcfcf8;color:var(--ink);border-radius:6px}#previewArea{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}#viewport{position:relative;flex:none;width:100%;height:100%;overflow:hidden;background:var(--wallpaper-bg)}#clock{display:block;position:absolute;pointer-events:none}
-body[data-editing="true"]{color-scheme:light;background:var(--paper)}body[data-editing="true"] #previewArea{top:66px;right:390px;background:radial-gradient(ellipse at 40% 40%,#e9ebe2,#dde1d4)}body[data-editing="true"] #viewport{border-radius:12px;box-shadow:0 22px 45px #25311f25}#editorHeader{position:absolute;top:0;left:0;right:0;height:66px;padding:0 30px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:var(--paper);z-index:2}.brand{font-size:18px;letter-spacing:.2em;font-weight:600}.brand-detail{font-size:11px;letter-spacing:.1em;margin-left:18px;color:var(--muted)}.text-button{border:0;background:transparent;font-size:11px;color:var(--accent);padding:9px}#editor{position:absolute;top:66px;bottom:0;right:0;width:390px;overflow-y:auto;overscroll-behavior:contain;background:#fbfbf7;border-left:1px solid var(--line);padding:26px 27px 24px}.editor-intro{margin-bottom:25px}.eyebrow{font-size:9px;letter-spacing:.19em;color:#7e8b6f}h1{font-size:21px;line-height:1.4;font-weight:500;letter-spacing:-.03em;margin:8px 0 12px}.editor-intro p{font-size:11px;color:var(--muted);margin:0}section{border-top:1px solid var(--line);padding-top:19px;margin-top:20px}h2{font-size:12px;font-weight:600;margin:0 0 14px;display:flex;justify-content:space-between}h2 span{font-size:9px;color:var(--muted);font-weight:400}#presets{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.preset{border-radius:5px;padding:8px 3px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:9px}.preset-swatch{width:29px;height:19px;border-radius:3px;position:relative;border:1px solid #0001}.preset-swatch:before{content:"";position:absolute;width:15px;height:2px;left:7px;top:8px;background:var(--hand)}.preset[aria-pressed="true"]{border-color:#82966d;background:#eff4e8}.color-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px 12px}.color-field label{display:block;font-size:10px;color:#69745f;margin-bottom:6px}.color-inputs{display:flex;align-items:center;border:1px solid var(--line);border-radius:5px;padding:5px;background:#fff;gap:7px}.color-inputs input[type="color"]{width:26px;height:25px;padding:0;border:0;background:transparent;cursor:pointer;flex:none}.color-inputs input[type="text"]{width:100%;min-width:0;border:0;background:none;font:10px Consolas,monospace;text-transform:uppercase;color:#5a6452}.field{margin:14px 0}.field-heading{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#69745f;margin-bottom:7px;gap:8px}.field output{font-size:10px;color:#627453;font-variant-numeric:tabular-nums}.field select,.field input[type="text"]{width:100%;min-width:0;padding:7px 9px;border:1px solid var(--line);border-radius:5px;background:#fff;color:#45523c;font-size:11px}.field input[type="range"]{width:100%;height:4px;accent-color:#71855b;display:block;margin:10px 0 15px}.field-check{display:flex;align-items:center;gap:8px;font-size:11px}.field-check input{accent-color:#71855b}.help{font-size:10px;color:#929987;margin:7px 0;line-height:1.8}.field input[aria-invalid="true"],.color-inputs input[aria-invalid="true"]{outline:1px solid #b34f3e}.primary-button{display:flex;width:100%;align-items:center;justify-content:space-between;background:#526549;border-color:#526549;color:#f6f8f0;padding:11px 13px;font-size:12px;margin:16px 0 8px}.primary-button span{font-size:10px;opacity:.75}.button-pair{display:flex;gap:8px}.button-pair button{flex:1;padding:8px 5px;font-size:10px}.small-actions{display:flex;justify-content:space-between;align-items:center;margin:13px 0 0;gap:8px}.small-actions button,.small-actions label{border:0;background:none;padding:3px 0;font-size:9px;color:#768768;cursor:pointer}.small-actions label{border-radius:3px}#notice{font-size:10px;color:#8b947f;min-height:32px;line-height:1.8;margin-bottom:0}#urlFallback{width:100%;margin-top:8px;font-size:10px;padding:8px}#previewCaption{position:absolute;bottom:25px;left:30px;right:30px;display:flex;align-items:center;justify-content:space-between;gap:14px;font-size:10px;color:#7c8770}#previewCaption label{display:flex;align-items:center;gap:10px}#previewCaption select{font-size:10px;background:#eef1e6;border:1px solid #cbd2bf;border-radius:5px;padding:6px;color:#58694b}#layoutReadout{font-size:9px;letter-spacing:.04em;white-space:nowrap}
-@media(max-width:960px){#editor{width:340px;padding:23px 22px}body[data-editing="true"] #previewArea{right:340px}#previewCaption{left:18px;right:18px;bottom:18px;flex-direction:column;align-items:flex-start;gap:5px}.brand-detail{display:none}}
-@media(max-width:680px){#editorHeader{height:56px;padding:0 18px}.brand{font-size:15px}body[data-editing="true"] #previewArea{top:56px;right:0;bottom:auto;height:34vh;min-height:170px}#editor{top:calc(56px + max(34vh,170px));width:100%;left:0;border-left:0;border-top:1px solid var(--line);padding:22px 24px}#previewCaption{bottom:8px;left:16px;right:16px;flex-direction:row;align-items:center}#previewCaption label{font-size:0;gap:0}#previewCaption select{font-size:9px;padding:4px}#layoutReadout{font-size:8px}.editor-intro{margin-bottom:18px}h1{font-size:20px}}
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#000000"><title>TIMEFORM · 五型号 Lively 壁纸</title>
+  <style>:root{color-scheme:light;--paper:#f5f4ee;--ink:#313a31;--muted:#79816f;--line:#dedfd3;--accent:#526549}
+*{box-sizing:border-box}body{margin:0;min-width:320px;background:var(--paper);color:var(--ink);font:13px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}button,input,select,textarea{font:inherit;color:inherit}a{color:inherit;text-decoration:none}button,.file-button,.button-link{cursor:pointer}button{background:#fcfcf8;border:1px solid var(--line);border-radius:5px;padding:7px 11px;font-size:11px}button:hover,.file-button:hover{background:#edf0e6}button:disabled{opacity:.45;cursor:default}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid #82976c;outline-offset:3px}[hidden]{display:none!important}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.topbar{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:28px;padding:0 38px;border-bottom:1px solid var(--line);background:#fafaf5}.brand{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:600;letter-spacing:.16em;white-space:nowrap}.brand-mark{width:24px;height:24px;border:1.3px solid var(--ink);border-radius:50%;position:relative;flex:none}.brand-mark:before,.brand-mark:after{content:"";position:absolute;width:7px;height:1px;background:var(--ink);left:11px;top:11px;transform-origin:left}.brand-mark:before{transform:rotate(-90deg)}.brand-mark:after{transform:rotate(35deg)}.dev-badge{letter-spacing:.03em;font-size:10px;font-weight:400;border:1px solid #c8d2bb;background:#eef3e6;color:#5d754a;padding:3px 8px;border-radius:4px;margin-left:5px}.navigation{display:flex;gap:6px}.navigation a{display:flex;gap:9px;align-items:center;padding:9px 15px;border-radius:5px;color:#737f66;font-size:12px}.navigation a span{font-size:9px;color:#969e8b}.navigation a[aria-current="page"]{background:#e8edde;color:#42583a}.navigation a:hover{background:#eef1e8}.top-note{font-size:10px;color:#8b9580;white-space:nowrap}.shell{max-width:1600px;padding:0 38px;margin:auto}.page-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:28px 0 25px}.eyebrow{color:#869078;font-size:10px;letter-spacing:.07em;margin-bottom:5px}h1{font-weight:500;font-size:27px;letter-spacing:-.02em;line-height:1.3;margin:0}.page-heading p{font-size:11px;color:#88927d;margin:7px 0 0}.heading-meta{font-size:11px;color:#7c896f;display:flex;gap:10px;align-items:center}.status-dot{width:5px;height:5px;border-radius:50%;background:#7c9165}.separator{color:#b3bba6}.model-badge{font-size:9px;padding:2px 7px;border:1px solid #d7ddcb;border-radius:4px;color:#7b8c68;white-space:nowrap}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 370px;gap:23px;align-items:start}.viewer{min-width:0}.preview-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:51px;padding:0 15px;border:1px solid var(--line);border-radius:9px 9px 0 0;background:#fafaf5}.preview-title{display:flex;align-items:center;gap:12px;white-space:nowrap}.preview-title span{font-size:10px;color:#8a947e}.preview-title strong{font:11px Consolas,monospace;font-weight:400}.preview-actions{display:flex;gap:7px}.preview-actions select{background:#f4f5ed;border:1px solid var(--line);border-radius:5px;padding:5px;font-size:10px;max-width:200px}.stage{height:clamp(280px,40vw,560px);min-height:280px;background:radial-gradient(ellipse at 40% 35%,#e9eae1,#dce1d2);padding:32px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);border-top:0;overflow:hidden}.stage:fullscreen{height:100vh;width:100vw;border:0;padding:32px}#viewport{position:relative;overflow:hidden;flex:none;background:#000;border-radius:2px;box-shadow:0 18px 35px #27371b1b}#clock{display:block;position:absolute}.transport{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid var(--line);border-top:0;padding:12px 15px;border-radius:0 0 9px 9px;background:#fafaf5}.transport-main,.minute-controls{display:flex;gap:7px}.primary{background:#526549;color:#f6f8f0;border:1px solid #526549}.primary:hover{background:#43583a}.readout{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:18px 0 0;background:#eeefe5;border-radius:6px;padding:15px 17px;gap:16px}.readout div{min-width:0}.readout span{display:block;font-size:9px;color:#929b86;margin-bottom:4px}.readout strong{display:block;font:12px Consolas,"Microsoft YaHei",monospace;font-weight:400;color:#637457;white-space:nowrap}.preview-note{color:#8b9580;font-size:10px;margin:12px 0 18px;line-height:1.8}.snapshot{border:1px solid var(--line);border-radius:6px;background:#fafaf5}.snapshot summary{font-size:11px;color:#718362;cursor:pointer;padding:12px 15px}.snapshot summary span{float:right;font:9px Consolas,monospace;color:#9ba78b}.snapshot textarea{width:calc(100% - 30px);height:260px;resize:vertical;display:block;margin:0 15px 15px;border:1px solid var(--line);border-radius:4px;background:#f2f4eb;padding:12px;color:#5c6f4f;font:11px/1.7 Consolas,monospace}
+.editor{background:#fbfbf7;border:1px solid var(--line);border-radius:9px;overflow:hidden}.editor-title{display:flex;align-items:center;justify-content:space-between;padding:19px 20px 13px}.editor-title h2{margin:0;font-size:14px;font-weight:600}.editor-title p{margin:3px 0 0;font-size:10px;color:#929c84}.config-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;padding:0 20px}.config-actions button,.file-button{font-size:10px;padding:7px 3px;text-align:center;white-space:nowrap}.file-button{border:1px solid var(--line);border-radius:5px;background:#fcfcf8}.notice{font-size:10px;line-height:1.8;color:#879879;margin:10px 20px 0;min-height:36px}.notice[data-error="true"]{color:#aa4b39}.editor-scroll{max-height:calc(100vh - 270px);min-height:320px;overflow-y:auto;padding:0 20px 22px;scrollbar-width:thin}.control-section{border-top:1px solid #e3e6d9;padding-top:17px;margin-top:16px}.control-section h3{font-size:11px;font-weight:600;margin:0 0 13px;display:flex;justify-content:space-between}.control-section h3 span{font-size:9px;font-weight:400;color:#9ba38e}.presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:15px}.preset{font-size:9px;padding:7px 2px;display:flex;gap:5px;align-items:center;flex-direction:column}.preset[aria-pressed="true"]{background:#edf2e5;border-color:#95a782}.preset-swatch{width:24px;height:15px;border:1px solid #0001;border-radius:2px;position:relative}.preset-swatch:after{content:"";position:absolute;width:12px;height:2px;top:6px;left:5px;background:var(--hand)}.color-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.field{margin-bottom:13px}.field-label{display:flex;align-items:center;justify-content:space-between;font-size:10px;color:#7c896e;margin-bottom:6px;gap:6px}.field-label .bounds{font-size:8px;color:#a0aa94;white-space:nowrap}.color-inputs{border:1px solid var(--line);border-radius:4px;display:flex;gap:7px;align-items:center;padding:5px;background:#fff}.color-inputs input[type="color"]{width:25px;height:24px;padding:0;border:0;background:none;flex:none;cursor:pointer}.color-inputs input[type="text"]{width:100%;min-width:0;border:0;background:none;font:10px Consolas,monospace;text-transform:uppercase;padding:0}.field input[type="number"],.field input[type="time"],.field input[type="text"],.field select{border:1px solid var(--line);border-radius:4px;background:#fff;min-width:0;padding:6px 8px;width:100%;font-size:11px}.color-inputs input[type="text"]{border:0;padding:0;font-size:10px}.numeric-controls{display:flex;align-items:center;gap:10px}.numeric-controls input[type="range"]{flex:1;width:0;accent-color:#71855a;margin:0;min-width:35px;height:4px}.numeric-controls input[type="number"]{width:79px;flex:none;font-variant-numeric:tabular-nums}.field .check-label{display:flex;gap:7px;align-items:center;font-size:10px;color:#7c896e}.field input[type="checkbox"]{accent-color:#71855a}.field input[aria-invalid="true"]{outline:1px solid #b65e49}.field input:disabled{background:#eff0e8;color:#a1a793}.field-help{color:#a0a892;font-size:9px;line-height:1.8;margin:6px 0 0}.empty-state{display:flex;flex-direction:column;align-items:center;text-align:center;min-height:480px;justify-content:center;padding:45px 25px;border:1px dashed #cbd3bc;border-radius:10px;background:#edf0e6}.empty-symbol{font-size:62px;line-height:1;margin-bottom:23px;color:#8c9e76;font-weight:200}.portrait-symbol{font-size:75px}.empty-state h2{font-size:20px;font-weight:500;margin:0 0 12px;color:#617653}.empty-state p{font-size:12px;color:#8d9980;margin:3px 0;max-width:450px}.button-link{display:inline-block;padding:9px 17px;font-size:11px;border-radius:5px;margin-top:26px}.footer{max-width:1600px;margin:30px auto 0;padding:18px 38px 22px;color:#a1aa92;font-size:9px;display:flex;justify-content:space-between;gap:15px}
+@media(min-width:1600px){.editor-scroll{max-height:660px}}@media(max-width:1100px){.topbar,.shell{padding-left:24px;padding-right:24px}.top-note{display:none}.workspace{grid-template-columns:minmax(0,1fr) 340px;gap:16px}.preview-title span{display:none}.stage{padding:20px}.readout{gap:10px;padding:13px}.readout strong{font-size:10px}.preview-toolbar{padding:0 10px}.preview-actions select{max-width:157px}.transport{flex-wrap:wrap}}
+@media(max-width:820px){.topbar{flex-wrap:wrap;gap:10px;padding-top:15px;padding-bottom:10px}.navigation{width:100%;justify-content:space-between}.navigation a{padding:7px 9px}.page-heading{padding-top:24px}.heading-meta{display:none}.workspace{grid-template-columns:1fr}.stage{height:380px}.editor-scroll{max-height:none;min-height:0}.editor{margin-top:2px}.control-section{scroll-margin-top:10px}.editor-title{padding-top:20px}.editor-scroll{padding-bottom:23px}}
+@media(max-width:460px){.shell,.topbar{padding-left:16px;padding-right:16px}.navigation a span{font-size:8px}.navigation a{font-size:11px;gap:5px}.preview-toolbar{gap:5px;min-height:57px}.preview-title strong{font-size:9px}.preview-actions select{max-width:123px;font-size:9px}.preview-actions button{font-size:9px;padding:6px}.stage{height:290px;min-height:240px;padding:15px}.transport{padding:10px;gap:8px}.transport button{font-size:10px;padding:6px 8px}.readout{grid-template-columns:1fr 1fr;gap:15px}.page-heading p{max-width:290px}.empty-state{min-height:420px}.footer{padding-left:16px;padding-right:16px;font-size:8px}}
+.model-picker{margin:0 0 22px;padding:14px 16px;background:#fafaf5;border:1px solid var(--line);border-radius:9px;display:flex;align-items:center;gap:24px}.model-picker-label{font-size:11px;white-space:nowrap}.model-picker-label span{display:block;font-size:9px;color:#8b9580;margin-top:3px}.model-options{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;flex:1}.model-option{display:flex;flex-direction:column;align-items:flex-start;padding:11px 14px;gap:4px;text-align:left}.model-option strong{font-size:12px;font-weight:500}.model-option span{font-size:9px;color:#8b9580}.model-option[aria-pressed="true"]{background:#e8edde;border-color:#95a782;color:#42583a}.model-option[aria-pressed="true"] span{color:#6b7e5b}
+@media(max-width:820px){.model-picker{align-items:stretch;flex-direction:column;gap:11px}.model-picker-label{display:flex;justify-content:space-between}.model-picker-label span{margin:0}.model-option{padding:9px 10px}.model-option strong{font-size:10px}.model-option span{font-size:8px}}
+@media(max-width:460px){.model-options{grid-template-columns:repeat(2,minmax(0,1fr))}.model-picker{padding:12px}.model-option:last-child{grid-column:1/-1}.navigation a[data-kind="landscape"] span{display:none}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
-#returnSettings{position:fixed;right:20px;bottom:20px;padding:7px 13px;font-size:11px;background:#f5f4eedd;z-index:5}
+
+.lively-actions{padding:10px 20px 0}.lively-actions button{width:100%;font-size:10px}.editor-scroll{max-height:calc(100vh - 345px)}#returnSettings{position:fixed;right:22px;top:22px;z-index:10;background:#fafaf5dd}
+body[data-editing="false"]{min-width:0;background:var(--wallpaper-bg,#000);overflow:hidden}body[data-editing="false"] .shell{padding:0;max-width:none}body[data-editing="false"] .page-heading,body[data-editing="false"] .model-picker,body[data-editing="false"] .preview-toolbar,body[data-editing="false"] .transport,body[data-editing="false"] .readout,body[data-editing="false"] .preview-note,body[data-editing="false"] .snapshot{display:none}body[data-editing="false"] .workspace{display:block}body[data-editing="false"] #previewArea{position:fixed;inset:0;width:100vw;height:100vh;min-height:0;padding:0;border:0;background:var(--wallpaper-bg,#000)}body[data-editing="false"] #viewport{width:100%;height:100%;border-radius:0;box-shadow:none}
+@media(max-width:820px){body[data-editing="true"] .editor-scroll{max-height:none}}
 </style>
 </head>
-<body data-editor="0">
-  <header id="editorHeader" hidden>
-    <div><span class="brand">TIMEFORM</span><span class="brand-detail">壁纸工作台</span></div>
-    <button id="hideSettings" class="text-button">全屏预览 ↗</button>
-  </header>
-  <main id="previewArea">
-    <div id="viewport"><canvas id="clock" role="img" aria-label="由24个模拟钟表组成的数字时钟"></canvas></div>
-    <div id="previewCaption" hidden>
-      <label>预览屏幕 <select id="previewSize" aria-label="预览屏幕尺寸">
-        <option value="1920x1080">1920 × 1080 · 横屏</option>
-        <option value="2560x1440">2560 × 1440 · 2K</option>
-        <option value="3840x2160">3840 × 2160 · 4K</option>
-        <option value="3440x1440">3440 × 1440 · 超宽屏</option>
-        <option value="1080x1920">1080 × 1920 · 竖屏</option>
-        <option value="1280x1024">1280 × 1024 · 5:4</option>
-        <option value="auto">当前窗口</option>
-      </select></label>
-      <span id="layoutReadout" aria-live="polite"></span>
+<body data-editor="0" data-editing="false">
+  <header id="editorHeader" class="topbar" hidden><div class="brand"><span class="brand-mark" aria-hidden="true"></span>TIMEFORM <span class="dev-badge">Lively 本地测试版</span></div><button id="hideSettings" type="button">纯壁纸预览</button></header>
+  <main class="shell">
+    <section class="page-heading"><div><div class="eyebrow">壁纸配置 / 五种型号</div><h1 id="modelName">A million Times 144</h1><p id="modelDescription">选择型号，调好参数，导出你的 Lively 壁纸。</p></div><span id="clockCount" class="model-badge">144 个表盘</span></section>
+    <section class="model-picker" aria-label="壁纸阵列型号"><div class="model-picker-label">阵列型号<span>切换保留自定义设置</span></div><div id="modelOptions" class="model-options"></div></section>
+    <div class="workspace">
+      <section class="viewer" aria-label="壁纸预览">
+        <div class="preview-toolbar"><div class="preview-title"><span>目标屏幕</span><strong id="resolutionLabel">1920 × 1080</strong></div><div class="preview-actions"><label class="sr-only" for="previewSize">预览屏幕尺寸</label><select id="previewSize"><option value="1920x1080">1920 × 1080 · 横屏</option><option value="2560x1440">2560 × 1440 · 2K</option><option value="3840x2160">3840 × 2160 · 4K</option><option value="3440x1440">3440 × 1440 · 超宽</option><option value="1080x1920">1080 × 1920 · 竖屏</option><option value="auto">当前窗口</option></select></div></div>
+        <div class="stage" id="previewArea"><div id="viewport"><canvas id="clock" role="img" aria-label="多表盘时钟壁纸"></canvas></div></div>
+        <div class="transport"><div class="transport-main"><button id="pause" type="button" class="primary">暂停</button><button id="replay" type="button">重播动画</button><button id="step" type="button" disabled>单步 100 ms</button></div><div class="minute-controls"><button id="previousMinute" type="button">−1 分</button><button id="nextMinute" type="button">+1 分</button></div></div>
+        <div class="readout"><div><span>显示时间</span><strong id="displayTime">--:--</strong></div><div><span>播放状态</span><strong id="playbackStatus">读取中</strong></div><div><span>背景板尺寸</span><strong id="boardSize">--</strong></div><div><span>渲染尺寸</span><strong id="renderSize">--</strong></div></div>
+        <p class="preview-note">导入 Lively 后自动使用实际屏幕尺寸。五种型号保持各自的横屏阵列，等比适配超宽屏与竖向屏幕。</p>
+        <details class="snapshot"><summary>当前壁纸配置 <span>JSON</span></summary><textarea id="configSnapshot" readonly aria-label="当前壁纸配置 JSON" spellcheck="false"></textarea></details>
+      </section>
+      <aside id="editor" class="editor" aria-label="Lively 壁纸自定义" hidden>
+        <div class="editor-title"><div><h2>自定义壁纸</h2><p>预览和 Lively 使用相同的时钟实现。</p></div><span id="editorModel" class="model-badge">AMT144</span></div>
+        <div class="config-actions"><button id="downloadLively" type="button" class="primary">导出 Lively ZIP</button><button id="downloadHtml" type="button">导出离线 HTML</button><button id="exportConfig" type="button">导出 JSON</button><label class="file-button" for="importConfig">导入 JSON</label><input id="importConfig" type="file" accept=".json,application/json" class="sr-only"></div>
+        <div class="lively-actions"><button id="resetConfig" type="button">恢复当前型号默认设置</button></div>
+        <p id="notice" class="notice" role="status" aria-live="polite">本地配置可保存并导出。</p>
+        <div class="editor-scroll">
+          <section class="control-section"><h3>型号 <span>五种阵列</span></h3><div id="fields-model"></div></section>
+          <section class="control-section"><h3>配色 <span>预设与独立颜色</span></h3><div id="presets" class="presets"></div><div id="fields-palette"></div><div id="fields-colors" class="color-grid"></div></section>
+          <section class="control-section"><h3>大小与位置 <span>实际屏幕</span></h3><div id="fields-screen"></div></section>
+          <section class="control-section"><h3>表盘与指针 <span>精确数值</span></h3><div id="fields-geometry"></div></section>
+          <section class="control-section"><h3>动画与播放 <span>可暂停验证</span></h3><div id="fields-motion"></div></section>
+          <section class="control-section"><h3>时间 <span>实时或指定时间</span></h3><div id="fields-time"></div></section>
+        </div>
+      </aside>
     </div>
   </main>
-  <button id="returnSettings" hidden>返回设置</button>
-  <aside id="editor" hidden aria-label="壁纸设置">
-    <div class="editor-intro"><span class="eyebrow">MAKE TIME YOURS</span><h1>让时间，适合你的屏幕。</h1><p>调好配色，带到下一台电脑。<br>横屏、竖屏与超宽屏，时钟始终完整。</p></div>
-    <form id="settingsForm" onsubmit="return false">
-      <section><h2>选择一个起点 <span>8 组配色</span></h2><div id="presets"></div></section>
-      <section><h2>颜色 <span>独立调节</span></h2><div id="fields-colors" class="color-grid"></div></section>
-      <section><h2>屏幕适配</h2><div id="fields-screen"></div></section>
-      <section><h2>指针与动画</h2><div id="fields-motion"></div></section>
-      <section><h2>时间</h2><div id="fields-time"></div></section>
-    </form>
-    <section class="export-section">
-      <h2>带走这份时钟</h2>
-      <p class="help">Windows 导入 Lively 包。Mac 或其他网页壁纸工具使用通用 HTML 或壁纸网址。</p>
-      <button id="downloadLively" class="primary-button">下载 Lively 壁纸包 <span>ZIP ↓</span></button>
-      <div class="button-pair"><button id="downloadHtml">下载通用 HTML</button><button id="copyUrl">复制壁纸网址</button></div>
-      <div class="small-actions"><button id="exportConfig">导出配色配置</button><label for="importConfig">导入配色配置<input id="importConfig" type="file" accept=".json,application/json" hidden></label><button id="resetConfig">恢复默认</button></div>
-      <p id="notice" role="status" aria-live="polite">配色会保存在此浏览器，也可导出后带到其他电脑。</p>
-      <input id="urlFallback" aria-label="壁纸网址" readonly hidden>
-    </section>
-  </aside>
-  <script type="application/json" id="timeform-config">{"background":"#000000","board":"#111213","long":"#f9faf7","short":"#eef0ec","layout":"auto","scale":90,"padding":0,"offsetX":0,"offsetY":0,"motion":"spin","duration":4,"visibility":"hide","longLength":100,"shortLength":100,"format24":true,"timezone":""}</script>
+  <button id="returnSettings" type="button" hidden>返回配置</button>
+  <script type="application/json" id="timeform-config">{"model":"amt144","preset":"custom","background":"#000000","board":"#111213","long":"#f9faf7","short":"#eef0ec","scale":90,"padding":0,"offsetX":0,"offsetY":0,"radius":43,"gap":4.3,"longLength":100,"shortLength":100,"longWidth":6.2,"shortWidth":6.2,"motion":"wave","duration":6,"visibility":"show","playbackSpeed":1,"format24":true,"timezone":"","source":"live","manualTime":"12:38","autoDemo":false,"demoInterval":5,"paused":false}</script>
   <script>(function (root, factory) {
   const api = factory();
   if (typeof module === 'object' && module.exports) module.exports = api;
-  else root.TimeformSettings = api;
-})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  else (root.Timeform ||= {}).Math = api;
+})(globalThis, function () {
   'use strict';
-  // One schema drives the web editor, Lively controls, URL parameters and exports.
-  const fields = {
-    background: { type: 'color', text: '屏幕背景', value: '#000000', group: 'colors' },
-    board: { type: 'color', text: '时钟背景板', value: '#111213', group: 'colors' },
-    long: { type: 'color', text: '长针颜色', value: '#f9faf7', group: 'colors' },
-    short: { type: 'color', text: '短针颜色', value: '#eef0ec', group: 'colors' },
-    layout: { type: 'dropdown', text: '数字排列', value: 'auto', values: ['auto', 'landscape', 'portrait'], items: ['自动适配', '横排 HHMM', '上下两排 HH / MM'], group: 'screen' },
-    scale: { type: 'slider', text: '时钟大小', min: 20, max: 100, step: 1, value: 90, unit: '%', group: 'screen' },
-    padding: { type: 'slider', text: '屏幕安全边距', min: 0, max: 160, step: 1, value: 0, unit: 'px', group: 'screen' },
-    offsetX: { type: 'slider', text: '水平位置', min: -100, max: 100, step: 1, value: 0, unit: '%', help: '负值向左，正值向右；始终保留完整时钟。', group: 'screen' },
-    offsetY: { type: 'slider', text: '垂直位置', min: -100, max: 100, step: 1, value: 0, unit: '%', help: '负值向上，正值向下；始终保留完整时钟。', group: 'screen' },
-    motion: { type: 'dropdown', text: '换时动画', value: 'spin', values: ['spin', 'quiet', 'none'], items: ['经典旋转', '平滑过渡', '立即换时'], group: 'motion' },
-    duration: { type: 'slider', text: '动画时长', min: 1, max: 10, step: 1, value: 4, unit: 's', group: 'motion' },
-    visibility: { type: 'dropdown', text: '闲置指针', value: 'hide', values: ['hide', 'ghost', 'show'], items: ['归位后隐藏', '微光显示', '全部显示'], group: 'motion' },
-    longLength: { type: 'slider', text: '长针长度', min: 70, max: 100, step: 1, value: 100, unit: '%', group: 'motion' },
-    shortLength: { type: 'slider', text: '短针长度', min: 55, max: 100, step: 1, value: 100, unit: '%', group: 'motion' },
-    format24: { type: 'checkbox', text: '24 小时制', value: true, group: 'time' },
-    timezone: { type: 'textbox', text: '时区', value: '', help: '留空跟随电脑；也可填 Asia/Hong_Kong、Europe/London 等。', group: 'time' }
-  };
-  const defaults = Object.fromEntries(Object.entries(fields).map(([key, field]) => [key, field.value]));
-  const metadata = { AppVersion: '2.2.1.0', Title: 'TIMEFORM · 可定制时钟', Desc: '24 表盘时钟；颜色、位置、动画可独立设置，自动适配横屏、竖屏和超宽屏。完全离线。', Author: 'TIMEFORM', Type: 1, FileName: 'index.html', IsAbsolutePath: false, Thumbnail: 'thumbnail.jpg', Preview: null, Arguments: null, Contact: 'https://github.com/XXXDDD/clockclock24', License: null, Version: 2 };
+  const TAU = Math.PI * 2;
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const wrap = value => ((value % TAU) + TAU) % TAU;
+  const normalizeMinutes = value => ((value % 1440) + 1440) % 1440;
+  const smooth = value => value * value * (3 - 2 * value);
+  const fadeEase = value => value * value * value * (value * (value * 6 - 15) + 10);
+  function tween(now, start, end, from, to) {
+    const progress = end <= start ? Number(now >= end) : clamp((now - start) / (end - start), 0, 1);
+    return from + (to - from) * fadeEase(progress);
+  }
+  return { TAU, clamp, wrap, normalizeMinutes, smooth, tween };
+});
+
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).Palette = api;
+})(globalThis, function () {
+  'use strict';
   const presets = [
-    { name: '经典黑', board: '#111213', long: '#f9faf7', short: '#eef0ec', background: '#000000' },
-    { name: '经典白', board: '#f6f4ef', long: '#50534f', short: '#757873', background: '#e9e6de' },
-    { name: '苔原', board: '#3d493f', long: '#f3f1e7', short: '#bfcdb0', background: '#171e19' },
-    { name: '纸与墨', board: '#e9e6de', long: '#2a312b', short: '#858775', background: '#d3d0c7' },
-    { name: '暮色', board: '#393746', long: '#cecce6', short: '#e8a991', background: '#17151e' },
-    { name: '深海', board: '#21444c', long: '#e7e9dd', short: '#91c1c6', background: '#0a1b20' },
-    { name: '赤陶', board: '#a95441', long: '#f6ecdc', short: '#e8bd90', background: '#301c19' },
-    { name: '午夜', board: '#232624', long: '#dfc797', short: '#f1efe2', background: '#080b09' }
+    { id: 'classic-black', name: '经典黑', background: '#000000', board: '#111213', long: '#f9faf7', short: '#eef0ec' },
+    { id: 'classic-white', name: '经典白', background: '#e9e6de', board: '#f6f4ef', long: '#50534f', short: '#757873' },
+    { id: 'moss', name: '苔原', background: '#171e19', board: '#3d493f', long: '#f3f1e7', short: '#bfcdb0' },
+    { id: 'paper', name: '纸与墨', background: '#d3d0c7', board: '#e9e6de', long: '#2a312b', short: '#858775' },
+    { id: 'dusk', name: '暮色', background: '#17151e', board: '#393746', long: '#cecce6', short: '#e8a991' },
+    { id: 'ocean', name: '深海', background: '#0a1b20', board: '#21444c', long: '#e7e9dd', short: '#91c1c6' },
+    { id: 'clay', name: '赤陶', background: '#301c19', board: '#a95441', long: '#f6ecdc', short: '#e8bd90' },
+    { id: 'midnight', name: '午夜', background: '#080b09', board: '#232624', long: '#dfc797', short: '#f1efe2' }
   ];
-  function decode(key, value) {
-    const field = fields[key];
-    if (!field) return undefined;
+  const fields = {
+    background: { type: 'color', label: '画布背景', value: '#000000', group: 'colors' },
+    board: { type: 'color', label: '背景板', value: '#111213', group: 'colors' },
+    long: { type: 'color', label: '长针', value: '#f9faf7', group: 'colors' },
+    short: { type: 'color', label: '短针', value: '#eef0ec', group: 'colors' }
+  };
+  const colors = config => Object.fromEntries(['background', 'board', 'long', 'short'].map(key => [key, config[key]]));
+  const material = config => config.board === '#111213' ? 'black' : config.board === '#f6f4ef' ? 'white' : null;
+  function tint(hex, amount) {
+    const value = parseInt(hex.slice(1), 16);
+    return '#' + [value >> 16, (value >> 8) & 255, value & 255].map(channel =>
+      Math.round(channel + (amount > 0 ? 255 - channel : channel) * amount).toString(16).padStart(2, '0')).join('');
+  }
+  function roundRect(context, x, y, width, height, radius) {
+    context.beginPath();
+    if (typeof context.roundRect === 'function') { context.roundRect(x, y, width, height, radius); return; }
+    context.moveTo(x + radius, y); context.lineTo(x + width - radius, y);
+    context.quadraticCurveTo(x + width, y, x + width, y + radius);
+    context.lineTo(x + width, y + height - radius);
+    context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    context.lineTo(x + radius, y + height);
+    context.quadraticCurveTo(x, y + height, x, y + height - radius);
+    context.lineTo(x, y + radius); context.quadraticCurveTo(x, y, x + radius, y); context.closePath();
+  }
+  function drawBoard(context, width, height, config) {
+    const kind = material(config), board = config.board;
+    context.save(); roundRect(context, 1, 1, width - 2, height - 2, 6); context.clip();
+    const gradient = context.createLinearGradient(0, 0, width, height);
+    const stops = kind === 'white' ? ['#e9e7e1', '#f6f4ef', '#d8d6d0'] : kind === 'black' ? ['#242627', '#111213', '#0d0e0f'] : [tint(board, .09), board, tint(board, -.11)];
+    stops.forEach((color, index) => gradient.addColorStop([0, kind === 'white' ? .45 : kind === 'black' ? .43 : .5, 1][index], color));
+    context.fillStyle = gradient; context.fillRect(0, 0, width, height);
+    context.fillStyle = '#ffffff17'; context.fillRect(0, 0, width, 2);
+    context.fillStyle = '#00000020'; context.fillRect(0, height - 4, width, 4); context.restore();
+    context.strokeStyle = tint(board, -.17); context.lineWidth = 2;
+    roundRect(context, 1, 1, width - 2, height - 2, 6); context.stroke();
+  }
+  return { fields, presets, colors, material, tint, roundRect, drawBoard };
+});
+
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).Config = api;
+})(globalThis, function () {
+  'use strict';
+  function decode(field, value, strict = false) {
+    if (value === undefined || value === null) return undefined;
     if (field.type === 'color') {
       if (typeof value !== 'string') return undefined;
-      const hex = value.startsWith('#') ? value : '#' + value;
-      return /^#[0-9a-f]{6}$/i.test(hex) ? hex.toLowerCase() : undefined;
+      const color = value.startsWith('#') ? value : '#' + value;
+      return /^#[0-9a-f]{6}$/i.test(color) ? color.toLowerCase() : undefined;
     }
-    if (field.type === 'slider') {
-      if (value === '' || value === null || typeof value === 'boolean') return undefined;
-      const number = Number(value);
-      return Number.isFinite(number) ? Math.round(Math.max(field.min, Math.min(field.max, number)) / field.step) * field.step : undefined;
+    if (field.type === 'number') {
+      if (value === '' || typeof value === 'boolean' || !['string', 'number'].includes(typeof value)) return undefined;
+      let number = Number(value);
+      if (!Number.isFinite(number) || (strict && (number < field.min || number > field.max))) return undefined;
+      number = Math.max(field.min, Math.min(field.max, number));
+      return Number((Math.round((number - field.min) / field.step) * field.step + field.min).toFixed(6));
     }
-    if (field.type === 'dropdown') {
-      if (field.values.includes(value)) return value;
-      // Lively sends dropdown item indexes, including on first load.
-      if (typeof value !== 'boolean' && value !== '' && value !== null && Number.isInteger(Number(value))) return field.values[Number(value)];
-      return undefined;
-    }
+    if (field.type === 'select') return field.options.some(option => option[0] === value) ? value : undefined;
     if (field.type === 'checkbox') {
-      if (value === true || value === 'true' || value === '1' || value === 1) return true;
-      if (value === false || value === 'false' || value === '0' || value === 0) return false;
+      if ([true, 'true', '1', 1].includes(value)) return true;
+      if ([false, 'false', '0', 0].includes(value)) return false;
       return undefined;
     }
-    if (key === 'timezone' && typeof value === 'string') {
+    if (field.type === 'time') return typeof value === 'string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(value) ? value : undefined;
+    if (field.type === 'timezone' && typeof value === 'string') {
       const zone = value.trim();
-      try { if (zone) new Intl.DateTimeFormat('en', { timeZone: zone }); return zone; }
-      catch (_) { return undefined; }
+      try { if (zone) new Intl.DateTimeFormat('en', { timeZone: zone }); return zone; } catch (_) { return undefined; }
     }
     return undefined;
   }
-  function normalize(input = {}, base = defaults) {
-    const result = { ...defaults, ...base };
-    for (const key of Object.keys(fields)) {
-      const value = decode(key, input[key]);
-      if (value !== undefined) result[key] = value;
-    }
-    result.shortLength = Math.min(result.shortLength, result.longLength);
-    return Object.fromEntries(Object.keys(fields).map(key => [key, result[key]]));
+  function normalize(fields, input = {}, base = {}) {
+    return Object.fromEntries(Object.entries(fields).map(([key, field]) => [key, decode(field, input[key]) ?? decode(field, base[key]) ?? field.value]));
   }
-  function fromSearch(search) {
-    return Object.fromEntries([...new URLSearchParams(search)].filter(([key]) => Object.hasOwn(fields, key)));
+  function serialize(model, settings) {
+    return JSON.stringify({ version: 2, type: model.type, model: model.id, settings: model.Settings.normalize(settings) }, null, 2);
   }
-  function toSearch(config, base = defaults) {
-    const values = normalize(config), initial = normalize(base);
-    const parameters = new URLSearchParams();
-    for (const [key, value] of Object.entries(values)) {
-      if (value !== initial[key]) parameters.set(key, typeof value === 'string' ? value.replace(/^#/, '') : String(value));
-    }
-    return parameters.toString();
-  }
-  function livelyProperties(config = defaults) {
-    const values = normalize(config);
-    return Object.fromEntries(Object.entries(fields).map(([key, field]) => {
-      const { group, values: choices, unit, ...control } = field;
-      control.value = choices ? choices.indexOf(values[key]) : values[key];
-      return [key, control];
-    }));
-  }
-  function importConfig(text) {
+  function parse(model, text) {
     const data = JSON.parse(text);
-    if (!data || data.version !== 1 || !data.settings || typeof data.settings !== 'object' || Array.isArray(data.settings)) throw new Error('请选择 TIMEFORM 导出的第 1 版配色配置。');
-    for (const key of Object.keys(fields)) {
-      if (Object.hasOwn(data.settings, key) && decode(key, data.settings[key]) === undefined) throw new Error('配置中的「' + fields[key].text + '」无效。');
+    if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('请选择有效的 TIMEFORM 配置。');
+    let input;
+    if (data.version === 2) {
+      if (data.type !== model.type || data.model !== model.id) throw new Error('配置所属种类或型号与当前页面不一致。');
+      input = data.settings;
+    } else if (data.version === 1) input = data.settings;
+    else if (data.version === undefined && typeof data.board === 'string') input = data;
+    else throw new Error('无法识别此配置版本。');
+    if (!input || typeof input !== 'object' || Array.isArray(input)) throw new Error('配置参数格式无效。');
+    input = { ...input };
+    if (data.version !== 2 && ['wave', 'orbit'].includes(input.motion)) input.motion = 'spin';
+    for (const [key, field] of Object.entries(model.Settings.fields)) {
+      if (Object.hasOwn(input, key) && decode(field, input[key], true) === undefined) throw new Error('「' + field.label + '」无效，请检查单位和范围。');
     }
-    return normalize(data.settings);
+    return model.Settings.normalize(input);
   }
-  function exportConfig(config) { return JSON.stringify({ version: 1, settings: normalize(config) }, null, 2); }
-  function geometry(width, height, input = defaults) {
-    const config = normalize(input);
-    width = Math.max(1, Number(width) || 1); height = Math.max(1, Number(height) || 1);
-    const padding = Math.min(config.padding, (width - 1) / 2, (height - 1) / 2);
-    const availableWidth = (width - padding * 2) * config.scale / 100;
-    const availableHeight = (height - padding * 2) * config.scale / 100;
-    const shapes = { landscape: { w: 1000, h: 445 }, portrait: { w: 552, h: 805 } };
-    const fit = shape => Math.min(availableWidth / shape.w, availableHeight / shape.h);
-    const layout = config.layout === 'auto' ? (fit(shapes.portrait) > fit(shapes.landscape) ? 'portrait' : 'landscape') : config.layout;
-    const shape = shapes[layout], factor = fit(shape), w = shape.w * factor, h = shape.h * factor;
-    const x = (width - w) / 2 + (width - padding * 2 - w) / 2 * config.offsetX / 100;
-    const y = (height - h) / 2 + (height - padding * 2 - h) / 2 * config.offsetY / 100;
-    const points = [];
-    for (let digit = 0; digit < 4; digit++) for (let cell = 0; cell < 6; cell++) {
-      const originalRow = Math.floor(cell / 2), originalCol = digit * 2 + cell % 2;
-      const col = layout === 'portrait' ? (digit % 2) * 2 + cell % 2 : originalCol;
-      const row = layout === 'portrait' ? Math.floor(digit / 2) * 3 + originalRow : originalRow;
-      points.push({ x: 105 + col * 112, y: 110 + row * 112 + (layout === 'portrait' && digit >= 2 ? 24 : 0), i: (originalRow * 8 + originalCol) * 2 });
-    }
-    return { layout, x, y, width: w, height: h, boardWidth: shape.w, boardHeight: shape.h, points, padding };
-  }
-  return { fields, defaults, metadata, presets, decode, normalize, fromSearch, toSearch, livelyProperties, importConfig, exportConfig, geometry };
+  return { decode, normalize, serialize, parse };
 });
+
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).Time = api;
+})(globalThis, function () {
+  'use strict';
+  const normalizeMinutes = value => ((value % 1440) + 1440) % 1440;
+  const minutesFromText = text => Number(text.slice(0, 2)) * 60 + Number(text.slice(3, 5));
+  const textFromMinutes = value => {
+    const minute = normalizeMinutes(value);
+    return String(Math.floor(minute / 60)).padStart(2, '0') + ':' + String(minute % 60).padStart(2, '0');
+  };
+  function createSource(readDate = () => new Date()) {
+    let cachedZone, formatter;
+    function read(config) {
+      if (config.source === 'manual') return minutesFromText(config.manualTime);
+      const date = readDate();
+      if (!config.timezone) return date.getHours() * 60 + date.getMinutes();
+      if (cachedZone !== config.timezone) {
+        formatter = new Intl.DateTimeFormat('en-GB', { timeZone: config.timezone, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+        cachedZone = config.timezone;
+      }
+      const parts = formatter.formatToParts(date);
+      return Number(parts.find(part => part.type === 'hour').value) % 24 * 60 + Number(parts.find(part => part.type === 'minute').value);
+    }
+    return { read };
+  }
+  // One monotonic timeline drives the whole array, including paused single steps.
+  function createPlayback(readNow = () => performance.now()) {
+    let position = 0, anchor = readNow(), paused = false, speed = 1;
+    function now() {
+      const current = readNow();
+      if (!paused) position += Math.max(0, current - anchor) * speed;
+      anchor = current; return position;
+    }
+    function setPaused(value) { now(); paused = Boolean(value); }
+    function setSpeed(value) {
+      if (!Number.isFinite(value) || value <= 0) throw new Error('播放速度必须大于零。');
+      now(); speed = value;
+    }
+    function step(milliseconds = 100) { if (paused) position += Math.max(0, milliseconds); return now(); }
+    return { now, setPaused, setSpeed, step, get paused() { return paused; }, get speed() { return speed; } };
+  }
+  return { createSource, createPlayback, normalizeMinutes, minutesFromText, textFromMinutes };
+});
+
+(function (root, factory) {
+  const api = factory(typeof module === 'object' && module.exports ? require('./palette.js') : root.Timeform.Palette);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).SingleClock = api;
+})(globalThis, function (Palette) {
+  'use strict';
+  const TAU = Math.PI * 2;
+  function local(context, point) {
+    context.save(); context.translate(point.x, point.y); context.scale(point.radius / 53.2, point.radius / 53.2);
+  }
+  // Geometry and hand poses are inputs; this component has no time or model state.
+  function drawFace(context, point, config) {
+    local(context, point);
+    const kind = Palette.material(config), white = kind === 'white', black = kind === 'black';
+    const rim = context.createRadialGradient(-11, -17, 3, 0, 0, 55);
+    const stops = white ? [[0, '#f4f2ed'], [.82, '#e5e2dc'], [.97, '#c6c4bd'], [1, '#dedbd5']] : black ? [[0, '#121415'], [.70, '#0d0f10'], [.94, '#08090a'], [1, '#242628']] : [[0, Palette.tint(config.board, -.06)], [.82, Palette.tint(config.board, -.12)], [.96, Palette.tint(config.board, -.24)], [1, Palette.tint(config.board, .06)]];
+    stops.forEach(([offset, color]) => rim.addColorStop(offset, color));
+    context.shadowColor = black ? '#000000b8' : '#0000003b'; context.shadowBlur = 7; context.shadowOffsetY = 2;
+    context.fillStyle = rim; context.beginPath(); context.arc(0, 0, 53.2, 0, TAU); context.fill();
+    context.shadowBlur = 0; context.shadowOffsetY = 0; context.lineWidth = 1;
+    context.strokeStyle = white ? '#0000001a' : '#ffffff13'; context.beginPath(); context.arc(0, 0, 52.2, 0, TAU); context.stroke();
+    context.strokeStyle = white ? '#ffffff7a' : '#00000018'; context.beginPath(); context.arc(0, 0, 49.5, 0, TAU); context.stroke();
+    context.restore();
+  }
+  function drawHand(context, angle, opacity, secondary, config) {
+    if (opacity <= .001) return;
+    context.save(); context.globalAlpha = opacity; context.rotate(angle);
+    const color = secondary ? config.short : config.long;
+    const length = 49.3 * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100;
+    const width = secondary ? config.shortWidth : config.longWidth;
+    const shade = context.createLinearGradient(0, -width / 2, 0, width / 2);
+    const kind = Palette.material(config), original = Palette.presets.find(preset => preset.id === 'classic-' + kind);
+    if (original && color === (secondary ? original.short : original.long)) {
+      shade.addColorStop(0, kind === 'white' ? (secondary ? '#555853' : '#303330') : (secondary ? '#c6c8c6' : '#e8e9e7'));
+      shade.addColorStop(.55, color); shade.addColorStop(1, kind === 'white' ? '#383b38' : (secondary ? '#abaeab' : '#c2c5c1'));
+    } else { shade.addColorStop(0, Palette.tint(color, .10)); shade.addColorStop(.5, color); shade.addColorStop(1, Palette.tint(color, -.12)); }
+    context.shadowColor = '#00000038'; context.shadowBlur = 2; context.shadowOffsetY = 1.3; context.fillStyle = shade;
+    Palette.roundRect(context, -1.6, -width / 2, length + 1.6, width, Math.min(1.5, width / 2)); context.fill(); context.restore();
+  }
+  function drawHands(context, point, poses, config) {
+    local(context, point);
+    // Preserve the original stroke order when the two hands overlap.
+    drawHand(context, poses[1].angle, poses[1].opacity, true, config);
+    drawHand(context, poses[0].angle, poses[0].opacity, false, config);
+    const opacity = Math.max(poses[0].opacity, poses[1].opacity);
+    if (opacity > .001) {
+      context.globalAlpha = opacity; context.fillStyle = config.long; context.beginPath(); context.arc(0, 0, 3.1, 0, TAU); context.fill();
+      context.fillStyle = Palette.tint(config.long, .22); context.beginPath(); context.arc(-.6, -.6, 1, 0, TAU); context.fill();
+    }
+    context.restore();
+  }
+  return { drawFace, drawHands };
+});
+
+(function (root, factory) {
+  const api = factory(typeof module === 'object' && module.exports ? require('./math.js') : root.Timeform.Math);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).HandAnimation = api;
+})(globalThis, function (Maths) {
+  'use strict';
+  const { TAU, clamp, wrap, smooth, tween } = Maths;
+  // The caller supplies one timeline. No DOM, timers, storage or host integration.
+  function create({ Settings, digitPose, displayDigits, handCount, phase = () => 0 }, initial, { reducedMotion = false } = {}) {
+    const state = { ...Settings.normalize(initial), minuteKey: null };
+    const hands = Array.from({ length: handCount }, (_, index) => {
+      const angle = Math.PI * .75 + (index % 2 ? .18 : -.18);
+      return { angle, from: angle, to: angle, start: 0, duration: 1, used: false, opacity: 0, revealFrom: 0, revealStart: 0, revealEnd: 0, travelOpacity: 0, motionEnd: 0, fadeStart: 0, fadeEnd: 0, fadeFrom: 0, fadeTo: 0 };
+    });
+    const settleOpacity = hand => hand.used || state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
+    function sample(now) {
+      for (const hand of hands) {
+        const progress = clamp((now - hand.start) / hand.duration, 0, 1);
+        hand.angle = progress === 1 ? wrap(hand.to) : hand.from + (hand.to - hand.from) * smooth(progress);
+        if (now < hand.revealEnd) hand.opacity = tween(now, hand.revealStart, hand.revealEnd, hand.revealFrom, hand.travelOpacity);
+        else if (now < hand.fadeStart) hand.opacity = hand.travelOpacity;
+        else hand.opacity = tween(now, hand.fadeStart, hand.fadeEnd, hand.fadeFrom, hand.fadeTo);
+      }
+      return hands;
+    }
+    function initialize(minutes, now) {
+      const digits = displayDigits(minutes, state.format24), pose = digitPose(digits);
+      for (let index = 0; index < handCount; index++) {
+        const hand = hands[index]; hand.angle = pose[index].angle; hand.from = hand.angle; hand.to = hand.angle; hand.used = pose[index].used;
+        hand.opacity = settleOpacity(hand); hand.revealFrom = hand.opacity; hand.travelOpacity = hand.opacity; hand.fadeFrom = hand.opacity; hand.fadeTo = hand.opacity;
+        hand.start = now; hand.duration = 1; hand.motionEnd = now; hand.revealStart = now; hand.revealEnd = now; hand.fadeStart = now; hand.fadeEnd = now;
+      }
+      state.minuteKey = digits;
+    }
+    function animate(minutes, now, force = false) {
+      const digits = displayDigits(minutes, state.format24);
+      if (!force && state.minuteKey === digits) return false;
+      if (state.motion === 'none') { initialize(minutes, now); return true; }
+      if (force && state.motion === 'quiet' && state.minuteKey === digits) return false;
+      sample(now);
+      const target = digitPose(digits), duration = reducedMotion ? 300 : state.duration * 1000;
+      const rotating = ['spin', 'wave'].includes(state.motion) && !reducedMotion;
+      const reveal = reducedMotion ? 60 : Math.min(rotating ? 350 : 160, duration * .15);
+      const hide = reducedMotion ? 80 : Math.min(350, duration * .18);
+      const travel = duration - reveal - hide, idleAlpha = state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
+      for (let index = 0; index < handCount; index++) {
+        const hand = hands[index], current = hand.angle;
+        let turn = ((target[index].angle - current + Math.PI) % TAU + TAU) % TAU - Math.PI;
+        if (rotating) turn = index % 2 ? -wrap(wrap(current) - target[index].angle) - TAU : wrap(target[index].angle - wrap(current)) + TAU;
+        const participating = rotating || hand.used || target[index].used || hand.opacity > idleAlpha + .001;
+        hand.revealFrom = hand.opacity; hand.travelOpacity = participating ? 1 : idleAlpha; hand.used = target[index].used;
+        const delay = state.motion === 'wave' && !reducedMotion ? travel * .3 * clamp(phase(index), 0, 1) : 0;
+        hand.from = current; hand.to = current + turn; hand.start = now + reveal + delay; hand.duration = travel - delay; hand.motionEnd = now + duration - hide;
+        hand.revealStart = now; hand.revealEnd = now + reveal;
+        hand.fadeStart = hand.motionEnd; hand.fadeEnd = now + duration; hand.fadeFrom = hand.travelOpacity; hand.fadeTo = settleOpacity(hand);
+      }
+      state.minuteKey = digits; return true;
+    }
+    function setVisibility(mode, now) {
+      if (mode === state.visibility) return;
+      sample(now); state.visibility = mode;
+      for (const hand of hands) {
+        const target = settleOpacity(hand);
+        if (now < hand.fadeStart) {
+          hand.fadeTo = target;
+          if (target > hand.travelOpacity) {
+            hand.revealFrom = hand.opacity; hand.revealStart = now; hand.revealEnd = Math.min(now + 250, hand.fadeStart);
+            hand.travelOpacity = target; hand.fadeFrom = target;
+          }
+        } else {
+          hand.revealStart = now; hand.revealEnd = now; hand.travelOpacity = hand.opacity; hand.fadeFrom = hand.opacity; hand.fadeTo = target;
+          hand.fadeStart = now; hand.fadeEnd = now + (reducedMotion ? 150 : 350);
+        }
+      }
+    }
+    function update(config, now) {
+      const next = Settings.normalize(config, state), visibility = next.visibility;
+      const reformat = next.format24 !== state.format24;
+      Object.assign(state, next, { visibility: state.visibility });
+      setVisibility(visibility, now); return { reformat };
+    }
+    return { state, hands, sample, initialize, animate, setVisibility, update, isAnimating: now => hands.some(hand => now < hand.fadeEnd) };
+  }
+  return { create };
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('../../shared/config.js') : root.Timeform.Config,
+    commonJS ? require('../../shared/palette.js') : root.Timeform.Palette);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).ClockClock24Settings = api;
+})(globalThis, function (Config, Palette) {
+  'use strict';
+  const number = (label, value, min, max, step, unit, group) => ({ type: 'number', label, value, min, max, step, unit, group });
+  const fields = {
+    ...Palette.fields,
+    canvasWidth: number('画布宽度', 1920, 240, 7680, 1, 'px', 'screen'),
+    canvasHeight: number('画布高度', 1080, 240, 7680, 1, 'px', 'screen'),
+    scale: number('整体缩放', 90, 20, 100, 1, '%', 'screen'),
+    padding: number('画布安全边距', 0, 0, 160, 1, 'px', 'screen'),
+    offsetX: number('水平位置', 0, -100, 100, 1, '%', 'screen'),
+    offsetY: number('垂直位置', 0, -100, 100, 1, '%', 'screen'),
+    radius: number('表盘半径', 53.2, 20, 80, .1, '设计单位', 'geometry'),
+    gap: number('表盘间隙', 5.6, 0, 40, .1, '设计单位', 'geometry'),
+    longLength: number('长针长度', 100, 70, 100, 1, '%', 'geometry'),
+    shortLength: number('短针长度', 100, 55, 100, 1, '%', 'geometry'),
+    longWidth: number('长针粗细', 7.9, 2, 14, .1, '设计单位', 'geometry'),
+    shortWidth: number('短针粗细', 7.1, 2, 14, .1, '设计单位', 'geometry'),
+    motion: { type: 'select', label: '换时动画', value: 'spin', options: [['spin', '经典旋转'], ['quiet', '平滑过渡'], ['none', '立即换时']], group: 'motion' },
+    duration: number('动画时长', 4, 1, 10, .1, 's', 'motion'),
+    visibility: { type: 'select', label: '闲置指针', value: 'hide', options: [['hide', '归位后隐藏'], ['ghost', '微光显示'], ['show', '全部显示']], group: 'motion' },
+    playbackSpeed: number('调试播放速度', 1, .1, 3, .1, '倍', 'motion'),
+    format24: { type: 'checkbox', label: '24 小时制', value: true, group: 'time' },
+    timezone: { type: 'timezone', label: '时区', value: '', group: 'time', help: '留空跟随设备，例如 Asia/Hong_Kong。' },
+    source: { type: 'select', label: '时间来源', value: 'live', options: [['live', '设备时间'], ['manual', '指定时间']], group: 'time' },
+    manualTime: { type: 'time', label: '指定时间', value: '12:38', group: 'time' },
+    autoDemo: { type: 'checkbox', label: '指定时间自动逐分钟切换', value: false, group: 'time' },
+    demoInterval: number('自动切换间隔', 5, 1, 20, .1, 's', 'time')
+  };
+  function normalize(input = {}, base = {}) {
+    const settings = Config.normalize(fields, input, base);
+    settings.shortLength = Math.min(settings.shortLength, settings.longLength);
+    return settings;
+  }
+  return { fields, defaults: normalize(), normalize };
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('../../shared/math.js') : root.Timeform.Math,
+    commonJS ? require('./settings.js') : root.Timeform.ClockClock24Settings,
+    commonJS ? require('../../shared/hand-animation.js') : root.Timeform.HandAnimation);
+  if (commonJS) module.exports = api;
+  else (root.Timeform ||= {}).ClockClock24 = api;
+})(globalThis, function (Maths, Settings, HandAnimation) {
+  'use strict';
+  const { normalizeMinutes } = Maths;
+  const DIR = { E: 0, S: Math.PI / 2, W: Math.PI, N: -Math.PI / 2, P: Math.PI * .75 };
+  // Original 2 × 3 glyphs and 8 × 3 array; these belong to this model only.
+  const GLYPHS = {
+    '0': ['SE', 'SW', 'NS', 'NS', 'NE', 'NW'], '1': ['PP', 'SS', 'PP', 'NS', 'PP', 'NN'],
+    '2': ['EE', 'SW', 'SE', 'NW', 'NE', 'WW'], '3': ['EE', 'SW', 'EE', 'NW', 'EE', 'NW'],
+    '4': ['SS', 'SS', 'NE', 'NS', 'PP', 'NN'], '5': ['SE', 'WW', 'NE', 'SW', 'EE', 'NW'],
+    '6': ['SE', 'WW', 'NS', 'SW', 'NE', 'NW'], '7': ['EE', 'SW', 'PP', 'NS', 'PP', 'NN'],
+    '8': ['SE', 'SW', 'NE', 'NW', 'NE', 'NW'], '9': ['SE', 'SW', 'EN', 'NS', 'EE', 'NW']
+  };
+  function displayDigits(minutes, format24 = true) {
+    const value = normalizeMinutes(minutes), hour = Math.floor(value / 60);
+    return String(format24 ? hour : hour % 12 || 12).padStart(2, '0') + String(value % 60).padStart(2, '0');
+  }
+  function digitPose(digits) {
+    const result = new Array(48);
+    for (let digit = 0; digit < 4; digit++) for (let cell = 0; cell < 6; cell++) {
+      const index = (Math.floor(cell / 2) * 8 + digit * 2 + cell % 2) * 2;
+      const [a, b] = GLYPHS[digits[digit]][cell];
+      result[index] = { angle: DIR[a], used: a !== 'P' };
+      result[index + 1] = { angle: DIR[b], used: b !== 'P' && b !== a };
+    }
+    return result;
+  }
+  function geometry(width, height, input) {
+    const config = Settings.normalize(input), radius = config.radius, step = radius * 2 + config.gap;
+    const boardWidth = 1000 + (step - 112) * 7 + (radius - 53.2) * 2;
+    const boardHeight = 445 + (step - 112) * 2 + (radius - 53.2) * 2;
+    const padding = Math.min(config.padding, (width - 1) / 2, (height - 1) / 2);
+    const availableWidth = Math.max(1, width - padding * 2), availableHeight = Math.max(1, height - padding * 2);
+    const factor = Math.min(availableWidth / boardWidth, availableHeight / boardHeight) * config.scale / 100;
+    const displayWidth = boardWidth * factor, displayHeight = boardHeight * factor;
+    const x = (width - displayWidth) / 2 + (availableWidth - displayWidth) / 2 * config.offsetX / 100;
+    const y = (height - displayHeight) / 2 + (availableHeight - displayHeight) / 2 * config.offsetY / 100;
+    const points = [], radiusDelta = radius - 53.2;
+    for (let row = 0; row < 3; row++) for (let col = 0; col < 8; col++) {
+      points.push({ x: 105 + radiusDelta + col * step, y: 110 + radiusDelta + row * step, radius, i: (row * 8 + col) * 2 });
+    }
+    return { x, y, width: displayWidth, height: displayHeight, boardWidth, boardHeight, points, padding, layout: 'landscape' };
+  }
+  function create(initial, options) {
+    return HandAnimation.create({ Settings, digitPose, displayDigits, handCount: 48 }, initial, options);
+  }
+  return { id: 'clockclock24', type: 'landscape', name: 'ClockClock 24', badge: 'CC24', columns: 8, rows: 3, count: 24, description: '紧凑横向布局，保留经典 2 × 3 数字字形。', Settings, create, geometry, displayDigits, digitPose };
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('../../shared/config.js') : root.Timeform.Config,
+    commonJS ? require('../clockclock24/settings.js') : root.Timeform.ClockClock24Settings);
+  if (commonJS) module.exports = api;
+  else (root.Timeform ||= {}).AMTSettings = api;
+})(globalThis, function (Config, Base) {
+  'use strict';
+  // The large arrays share control units, but have their own typography and motion.
+  const fields = {
+    ...Base.fields,
+    radius: { ...Base.fields.radius, value: 43, min: 20, max: 65 },
+    gap: { ...Base.fields.gap, value: 4.3 },
+    longWidth: { ...Base.fields.longWidth, value: 6.2 },
+    shortWidth: { ...Base.fields.shortWidth, value: 6.2 },
+    motion: { ...Base.fields.motion, value: 'wave', options: [['wave', '逐列波浪收束'], ['spin', '同步旋转'], ['quiet', '平滑过渡'], ['none', '立即换时']] },
+    duration: { ...Base.fields.duration, value: 6 },
+    visibility: { ...Base.fields.visibility, value: 'show', help: '参考图保留闲置指针的斜线；也可选择归位后隐藏或微光显示。' }
+  };
+  function normalize(input = {}, base = {}) {
+    const settings = Config.normalize(fields, input, base);
+    settings.shortLength = Math.min(settings.shortLength, settings.longLength);
+    return settings;
+  }
+  return { fields, defaults: normalize(), normalize };
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('../../shared/math.js') : root.Timeform.Math,
+    commonJS ? require('./settings.js') : root.Timeform.AMTSettings,
+    commonJS ? require('../../shared/hand-animation.js') : root.Timeform.HandAnimation);
+  if (commonJS) module.exports = api;
+  else (root.Timeform ||= {}).AMTModels = api;
+})(globalThis, function (Maths, Settings, HandAnimation) {
+  'use strict';
+  const IDLE = Math.PI * .75;
+  const DIR = { E: 0, S: Math.PI / 2, W: Math.PI, N: -Math.PI / 2, P: IDLE };
+  function displayDigits(minutes, format24 = true) {
+    const value = Maths.normalizeMinutes(minutes), hour = Math.floor(value / 60);
+    return String(format24 ? hour : hour % 12 || 12).padStart(2, '0') + String(value % 60).padStart(2, '0');
+  }
+  // Trace orthogonal paths through clock centres. A centre can carry at most two directions.
+  function trace(pose, columns, path, originX, originY) {
+    const directions = new Map();
+    function add(x, y, dx, dy) {
+      const index = ((y + originY) * columns + x + originX) * 2;
+      if (!directions.has(index)) directions.set(index, new Set());
+      directions.get(index).add(Math.atan2(dy, dx));
+    }
+    for (let i = 1; i < path.length; i++) {
+      let [x, y] = path[i - 1];
+      const [endX, endY] = path[i], dx = Math.sign(endX - x), dy = Math.sign(endY - y);
+      while (x !== endX || y !== endY) {
+        add(x, y, dx, dy); x += dx; y += dy; add(x, y, -dx, -dy);
+      }
+    }
+    for (const [index, set] of directions) {
+      const angles = [...set];
+      if (angles.length > 2) throw new Error('数字字形超出两根指针。');
+      pose[index] = { angle: angles[0], used: true };
+      pose[index + 1] = { angle: angles[1] ?? angles[0], used: angles.length === 2 };
+    }
+  }
+  // Outlines of the broad digital strokes, including the inner counters.
+  // A 3-clock-wide counter collapses into a vertical stroke; at width 5 it is a box.
+  function glyphPaths(digit, width) {
+    const right = width - 1, inner = right - 1;
+    const box = (left, top, endX, endY) => [[left, top], [endX, top], [endX, endY], [left, endY], [left, top]];
+    return {
+      '0': [box(0, 0, right, 5), box(1, 1, inner, 4)],
+      '1': [box(inner, 0, right, 5)],
+      '2': [[[0, 0], [right, 0], [right, 3], [1, 3], [1, 4], [right, 4], [right, 5], [0, 5], [0, 2], [inner, 2], [inner, 1], [0, 1], [0, 0]]],
+      '3': [[[0, 0], [right, 0], [right, 5], [0, 5], [0, 4], [inner, 4], [inner, 3], [0, 3], [0, 2], [inner, 2], [inner, 1], [0, 1], [0, 0]]],
+      '4': [[[0, 0], [1, 0], [1, 2], [inner, 2], [inner, 0], [right, 0], [right, 5], [inner, 5], [inner, 3], [0, 3], [0, 0]]],
+      '5': [[[0, 0], [right, 0], [right, 1], [1, 1], [1, 2], [right, 2], [right, 5], [0, 5], [0, 4], [inner, 4], [inner, 3], [0, 3], [0, 0]]],
+      '6': [[[0, 0], [right, 0], [right, 1], [1, 1], [1, 2], [right, 2], [right, 5], [0, 5], [0, 0]], box(1, 3, inner, 4)],
+      '7': [[[0, 0], [right, 0], [right, 5], [inner, 5], [inner, 1], [0, 1], [0, 0]]],
+      '8': [box(0, 0, right, 5), box(1, 1, inner, 2), box(1, 3, inner, 4)],
+      '9': [[[0, 0], [right, 0], [right, 5], [0, 5], [0, 4], [inner, 4], [inner, 3], [0, 3], [0, 0]], box(1, 1, inner, 2)]
+    }[digit];
+  }
+  function glyphPose(digit, width) {
+    if (digit === '4' && width === 3) {
+      // The narrow four has a shared top join: match the two-hand poses in the AMT72 photo.
+      return ['SE', 'SW', 'SW', 'NS', 'NS', 'NS', 'NS', 'NE', 'NS', 'NE', 'SW', 'NS', 'PP', 'NS', 'NS', 'PP', 'NE', 'NW'].flatMap(([a, b]) => [
+        { angle: DIR[a], used: a !== 'P' }, { angle: DIR[b], used: b !== 'P' && b !== a }
+      ]);
+    }
+    const pose = Array.from({ length: width * 6 * 2 }, () => ({ angle: IDLE, used: false }));
+    for (const path of glyphPaths(digit, width)) trace(pose, width, path, 0, 0);
+    return pose;
+  }
+  function define({ count, columns, rows, digitWidth, digitColumns, colon = [], frameAspect, reference, description }) {
+    const id = 'amt' + count, name = 'A million Times ' + count;
+    const glyphs = Object.fromEntries(Array.from({ length: 10 }, (_, digit) => [digit, glyphPose(String(digit), digitWidth)]));
+    const digitHeight = 6, digitRow = (rows - digitHeight) / 2;
+    function digitPose(digits) {
+      const pose = Array.from({ length: count * 2 }, () => ({ angle: IDLE, used: false }));
+      for (let digit = 0; digit < 4; digit++) {
+        const glyph = glyphs[digits[digit]];
+        for (let row = 0; row < digitHeight; row++) for (let col = 0; col < digitWidth; col++) {
+          const target = ((row + digitRow) * columns + digitColumns[digit] + col) * 2, source = (row * digitWidth + col) * 2;
+          pose[target] = { ...glyph[source] }; pose[target + 1] = { ...glyph[source + 1] };
+        }
+      }
+      for (const [x, y] of colon) trace(pose, columns, [[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]], x, y);
+      return pose;
+    }
+    function geometry(width, height, input) {
+      const config = Settings.normalize(input), radius = config.radius, step = radius * 2 + config.gap;
+      const gridWidth = radius * 2 + (columns - 1) * step, gridHeight = radius * 2 + (rows - 1) * step;
+      const edge = radius * 1.15;
+      let boardWidth = gridWidth + edge * 2, boardHeight = gridHeight + edge * 2;
+      // Preserve the reference panel proportions without stretching the circular faces.
+      if (boardWidth / boardHeight > frameAspect) boardHeight = boardWidth / frameAspect;
+      else boardWidth = boardHeight * frameAspect;
+      const originX = (boardWidth - gridWidth) / 2 + radius, originY = (boardHeight - gridHeight) / 2 + radius;
+      const padding = Math.min(config.padding, (width - 1) / 2, (height - 1) / 2);
+      const availableWidth = Math.max(1, width - padding * 2), availableHeight = Math.max(1, height - padding * 2);
+      const factor = Math.min(availableWidth / boardWidth, availableHeight / boardHeight) * config.scale / 100;
+      const displayWidth = boardWidth * factor, displayHeight = boardHeight * factor;
+      const x = (width - displayWidth) / 2 + (availableWidth - displayWidth) / 2 * config.offsetX / 100;
+      const y = (height - displayHeight) / 2 + (availableHeight - displayHeight) / 2 * config.offsetY / 100;
+      const points = Array.from({ length: count }, (_, index) => ({
+        x: originX + index % columns * step, y: originY + Math.floor(index / columns) * step, radius, i: index * 2
+      }));
+      return { x, y, width: displayWidth, height: displayHeight, boardWidth, boardHeight, points, padding, layout: 'landscape' };
+    }
+    function create(initial, options) {
+      return HandAnimation.create({ Settings, displayDigits, digitPose, handCount: count * 2,
+        phase: index => Math.floor(index / 2) % columns / (columns - 1) }, initial, options);
+    }
+    return { id, type: 'landscape', name, badge: 'AMT' + count, count, columns, rows, digitWidth, digitHeight, digitColumns, digitRow, colon, frameAspect, reference, description, Settings, digitPose, displayDigits, geometry, create };
+  }
+  return [
+    define({ count: 72, columns: 12, rows: 6, digitWidth: 3, digitColumns: [0, 3, 6, 9], frameAspect: 173 / 95, reference: 'https://www.humanssince1982.com/en-int/products/a-million-times-72-black-sterling', description: '12 × 6 阵列，四个 3 × 6 轮廓数字铺满表盘，无冒号。' }),
+    define({ count: 120, columns: 15, rows: 8, digitWidth: 3, digitColumns: [1, 4, 8, 11], frameAspect: 212 / 121, reference: 'https://www.humanssince1982.com/en-int/products/a-million-times-120-black', description: '15 × 8 阵列，3 × 6 轮廓数字居中，外围与时分之间留白。' }),
+    define({ count: 144, columns: 18, rows: 8, digitWidth: 3, digitColumns: [2, 5, 10, 13], colon: [[8, 2], [8, 4]], frameAspect: 262.4 / 130.4, reference: 'https://www.humanssince1982.com/en-int/products/a-million-times-144-black', description: '18 × 8 阵列，3 × 6 轮廓数字、双方形冒号与两侧留白。' }),
+    define({ count: 288, columns: 24, rows: 12, digitWidth: 5, digitColumns: [1, 6, 13, 18], colon: [[11, 4], [11, 6]], frameAspect: 345.6 / 187.2, reference: 'https://www.humanssince1982.com/en-int/products/a-million-times-288-black', description: '24 × 12 阵列，5 × 6 宽幅轮廓数字与双方形冒号，上下各留三排表盘。' })
+  ];
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('./clockclock24/model.js') : root.Timeform.ClockClock24,
+    commonJS ? require('./amt/model.js') : root.Timeform.AMTModels,
+    commonJS ? require('../shared/config.js') : root.Timeform.Config);
+  if (commonJS) module.exports = api;
+  else (root.Timeform ||= {}).Landscape = api;
+})(globalThis, function (ClockClock24, AMTModels, Config) {
+  'use strict';
+  const models = [ClockClock24, ...AMTModels];
+  const get = id => models.find(model => model.id === id);
+  function parse(text) {
+    const data = JSON.parse(text);
+    const model = data?.version === 2 ? get(data.model) : ClockClock24;
+    if (!model) throw new Error('此横屏型号暂不支持。');
+    return { model, settings: Config.parse(model, text) };
+  }
+  return { models, get, parse };
+});
+
+(function (root) {
+  'use strict';
+  const { Palette, SingleClock, Time } = root.Timeform;
+  function create(canvas, config, model, readViewport) {
+    const context = canvas.getContext('2d'), surface = document.createElement('canvas'), surfaceContext = surface.getContext('2d');
+    const playback = Time.createPlayback(), source = Time.createSource();
+    playback.setSpeed(config.playbackSpeed);
+    const instance = model.create(config, { reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches });
+    let settings = { ...config }, geometry, frame = 0, frames = 0, dirty = true, surfaceDirty = true, disposed = false;
+    let demoAt = playback.now();
+    function request() { if (!disposed && !document.hidden && !frame) frame = requestAnimationFrame(draw); }
+    function resize() {
+      const viewport = readViewport(); geometry = model.geometry(viewport.width, viewport.height, settings);
+      const factor = Math.min(viewport.displayWidth / viewport.width, viewport.displayHeight / viewport.height);
+      const width = geometry.width * factor, height = geometry.height * factor;
+      Object.assign(canvas.style, { width: width + 'px', height: height + 'px', left: geometry.x * factor + 'px', top: geometry.y * factor + 'px' });
+      const dpr = Math.min(2.5, window.devicePixelRatio || 1, Math.sqrt(8000000 / Math.max(1, width * height)));
+      canvas.width = surface.width = Math.max(1, Math.round(width * dpr)); canvas.height = surface.height = Math.max(1, Math.round(height * dpr));
+      surfaceContext.setTransform(surface.width / geometry.boardWidth, 0, 0, surface.height / geometry.boardHeight, 0, 0);
+      dirty = surfaceDirty = true; request();
+    }
+    function paintSurface() {
+      surfaceContext.clearRect(0, 0, geometry.boardWidth, geometry.boardHeight);
+      Palette.drawBoard(surfaceContext, geometry.boardWidth, geometry.boardHeight, settings);
+      geometry.points.forEach(point => SingleClock.drawFace(surfaceContext, point, settings));
+      surfaceDirty = false;
+    }
+    function draw() {
+      frame = 0; if (disposed) return;
+      const now = playback.now();
+      instance.sample(now); if (surfaceDirty) paintSurface();
+      context.setTransform(canvas.width / geometry.boardWidth, 0, 0, canvas.height / geometry.boardHeight, 0, 0);
+      context.clearRect(0, 0, geometry.boardWidth, geometry.boardHeight);
+      context.drawImage(surface, 0, 0, geometry.boardWidth, geometry.boardHeight);
+      geometry.points.forEach(point => SingleClock.drawHands(context, point, [instance.hands[point.i], instance.hands[point.i + 1]], settings));
+      const digits = instance.state.minuteKey;
+      canvas.setAttribute('aria-label', model.name + '，现在显示 ' + digits.slice(0, 2) + ':' + digits.slice(2));
+      frames++; dirty = false;
+      if (!playback.paused && instance.isAnimating(now)) request();
+    }
+    function update(next) {
+      const previous = settings; settings = model.Settings.normalize(next, settings);
+      playback.setSpeed(settings.playbackSpeed);
+      const now = playback.now(), result = instance.update(settings, now);
+      if (previous.board !== settings.board || previous.radius !== settings.radius || previous.gap !== settings.gap) surfaceDirty = true;
+      if (result.reformat) instance.initialize(source.read(settings), now);
+      else if (['source', 'manualTime', 'timezone'].some(key => previous[key] !== settings[key])) instance.animate(source.read(settings), now);
+      if (['radius', 'gap', 'scale', 'padding', 'offsetX', 'offsetY', 'canvasWidth', 'canvasHeight'].some(key => previous[key] !== settings[key])) resize();
+      if (previous.autoDemo !== settings.autoDemo || previous.source !== settings.source || previous.demoInterval !== settings.demoInterval) demoAt = now;
+      dirty = true; request();
+    }
+    function tick() {
+      if (document.hidden || playback.paused) return;
+      const now = playback.now();
+      if (settings.source === 'manual' && settings.autoDemo && now - demoAt >= settings.demoInterval * 1000) {
+        const count = Math.floor((now - demoAt) / (settings.demoInterval * 1000)); demoAt += count * settings.demoInterval * 1000;
+        settings.manualTime = Time.textFromMinutes(Time.minutesFromText(settings.manualTime) + count);
+        document.dispatchEvent(new CustomEvent('timeform-auto-time', { detail: settings.manualTime }));
+      }
+      if (instance.animate(source.read(settings), now)) request();
+      if (dirty) request();
+    }
+    function setPaused(value) {
+      playback.setPaused(value);
+      if (playback.paused) { cancelAnimationFrame(frame); frame = 0; }
+      else { tick(); request(); }
+      dirty = true; request();
+    }
+    function replay() { const changed = instance.animate(source.read(settings), playback.now(), true); if (changed) request(); return changed; }
+    function step(milliseconds = 100) { playback.step(milliseconds); dirty = true; request(); }
+    function restoreVisibility() {
+      if (document.hidden) { cancelAnimationFrame(frame); frame = 0; }
+      else { if (!playback.paused) tick(); resize(); }
+    }
+    resize(); instance.initialize(source.read(settings), playback.now());
+    const timer = setInterval(tick, 100);
+    document.addEventListener('visibilitychange', restoreVisibility);
+    return {
+      update, resize, replay, step, setPaused,
+      getStats() {
+        const now = playback.now();
+        return { display: instance.state.minuteKey, geometry, frames, timeline: now, paused: playback.paused, animating: instance.isAnimating(now), pixelWidth: canvas.width, pixelHeight: canvas.height };
+      },
+      dispose() { disposed = true; cancelAnimationFrame(frame); clearInterval(timer); document.removeEventListener('visibilitychange', restoreVisibility); }
+    };
+  }
+  root.Timeform.Renderer = { create };
+})(globalThis);
 
 (function (root, factory) {
   const api = factory();
@@ -226,356 +763,301 @@ body[data-editing="true"]{color-scheme:light;background:var(--paper)}body[data-e
   return { create, crc32 };
 });
 
-(function(root){
-'use strict';
-root.TimeformRenderer={create};
-function create(canvas,initial,readViewport){
-const Spec=root.TimeformSettings,ctx=canvas.getContext('2d');
-const PRESETS=[{board:'#111213',long:'#f9faf7',short:'#eef0ec',material:'black'},{board:'#f6f4ef',long:'#50534f',short:'#757873',material:'white'}];
-const state={...Spec.normalize(initial),source:'live',minuteKey:null,material:null};
-const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-let W=1000,H=445,points=[],paintedVersion=-1,paletteVersion=0,renderDirty=true,animationFrame=0,wasMoving=false,disposed=false,geometry=null,timeFormatter=null,frameCount=0;
-const TAU=Math.PI*2;
-  const DIR={E:0,S:Math.PI/2,W:Math.PI,N:-Math.PI/2,P:Math.PI*.75};
-  const GLYPHS={
-    '0':['SE','SW','NS','NS','NE','NW'], '1':['PP','SS','PP','NS','PP','NN'],
-    '2':['EE','SW','SE','NW','NE','WW'], '3':['EE','SW','EE','NW','EE','NW'],
-    '4':['SS','SS','NE','NS','PP','NN'], '5':['SE','WW','NE','SW','EE','NW'],
-    '6':['SE','WW','NS','SW','NE','NW'], '7':['EE','SW','PP','NS','PP','NN'],
-    '8':['SE','SW','NE','NW','NE','NW'], '9':['SE','SW','EN','NS','EE','NW']
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('../models/landscape.js') : root.Timeform.Landscape,
+    commonJS ? require('../shared/config.js') : root.Timeform.Config,
+    commonJS ? require('../shared/palette.js') : root.Timeform.Palette,
+    commonJS ? require('../shared/hand-animation.js') : root.Timeform.HandAnimation);
+  if (commonJS) module.exports = api;
+  else (root.Timeform ||= {}).LivelyConfig = api;
+})(globalThis, function (Landscape, Config, Palette, HandAnimation) {
+  'use strict';
+  const base = Landscape.get('amt144').Settings.fields;
+  const fields = {
+    model: { type: 'select', label: '阵列型号', value: 'amt144', options: Landscape.models.map(model => [model.id, model.name + ' · ' + model.columns + ' × ' + model.rows]), group: 'model' },
+    preset: { type: 'select', label: '配色方案', value: 'custom', options: [['custom', '自定义（使用下方独立颜色）'], ...Palette.presets.map(preset => [preset.id, preset.name])], group: 'palette', help: '想单独修改背景或指针颜色，请选择自定义。' },
+    ...Object.fromEntries(Object.entries(base).filter(([key]) => !['canvasWidth', 'canvasHeight'].includes(key))),
+    motion: { ...base.motion, options: [['wave', '逐列波浪收束'], ['spin', '同步旋转'], ['quiet', '平滑过渡'], ['none', '立即换时']] },
+    paused: { type: 'checkbox', label: '暂停播放（验证用）', value: false, group: 'motion' }
   };
-
-  const pad=n=>String(n).padStart(2,'0');
-  const normalizeMinutes=n=>((n%1440)+1440)%1440;
-  const wrap=x=>((x%TAU)+TAU)%TAU;
-  const smooth=t=>t*t*(3-2*t);
-  const fadeEase=t=>t*t*t*(t*(t*6-15)+10);
-  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
-
-  const surface=document.createElement('canvas');
-  const surfaceCtx=surface.getContext('2d');
-  const hands=Array.from({length:48},(_,i)=>{const a=DIR.P+(i%2?.18:-.18);return {angle:a,from:a,to:a,start:0,duration:1,used:false,opacity:0,revealFrom:0,revealStart:0,revealEnd:0,travelOpacity:0,motionEnd:0,fadeStart:0,fadeEnd:0,fadeFrom:0,fadeTo:0};});
-
-
-
-  function displayDigits(minutes){const h=Math.floor(minutes/60);return pad(state.format24?h:h%12||12)+pad(minutes%60);}
-  function digitPose(digits){
-    const result=new Array(48);
-    for(let d=0;d<4;d++)for(let cell=0;cell<6;cell++){
-      const col=d*2+cell%2,row=Math.floor(cell/2),i=(row*8+col)*2;
-      const [a,b]=GLYPHS[digits[d]][cell];
-      result[i]={angle:DIR[a],used:a!=='P'};
-      result[i+1]={angle:DIR[b],used:b!=='P'&&b!==a};
-    }
+  const metadata = { AppVersion: '2.2.1.0', Title: 'TIMEFORM · 五型号时钟 · 本地测试版', Desc: '24、72、120、144、288 五种横屏阵列；配色、大小、位置、表盘、指针、时间和动画可自定义。离线运行。', Author: 'TIMEFORM', Type: 1, FileName: 'index.html', IsAbsolutePath: false, Thumbnail: 'thumbnail.jpg', Preview: null, Arguments: '--pause-event true', Contact: 'https://github.com/XXXDDD/clockclock24', License: null, Version: 3 };
+  function normalize(input = {}, previous = {}) {
+    const result = Config.normalize(fields, input, previous);
+    result.shortLength = Math.min(result.shortLength, result.longLength);
     return result;
   }
-  function settleOpacity(h){return h.used||state.visibility==='show'?1:state.visibility==='ghost'?.12:0;}
-  function tween(now,start,end,from,to){const t=end<=start?Number(now>=end):clamp((now-start)/(end-start),0,1);return from+(to-from)*fadeEase(t);}
-  function interpolate(now){
-    for(const h of hands){
-      const u=clamp((now-h.start)/h.duration,0,1);
-      h.angle=u===1?wrap(h.to):h.from+(h.to-h.from)*smooth(u);
-      if(now<h.revealEnd)h.opacity=tween(now,h.revealStart,h.revealEnd,h.revealFrom,h.travelOpacity);
-      else if(now<h.fadeStart)h.opacity=h.travelOpacity;
-      else h.opacity=tween(now,h.fadeStart,h.fadeEnd,h.fadeFrom,h.fadeTo);
+  const defaults = normalize();
+  function decodeProperty(key, value) {
+    const field = fields[key];
+    if (!field) return undefined;
+    if (field.type === 'select' && typeof value !== 'boolean' && value !== '' && value !== null && Number.isInteger(Number(value))) {
+      value = field.options[Number(value)]?.[0];
     }
+    return Config.decode(field, value, true);
   }
-
-
-  function animate(minutes,force=false){
-    const digits=displayDigits(minutes);if(!force&&state.minuteKey===digits)return;
-    if(state.motion==='none'){initializeTime(minutes);return;}
-    renderDirty=true;
-    const now=performance.now();interpolate(now);
-    const target=digitPose(digits),dur=reducedMotion?300:state.duration*1000;
-    const rotating=state.motion==='spin'&&!reducedMotion;
-    const reveal=reducedMotion?60:Math.min(rotating?350:160,dur*.15),hide=reducedMotion?80:Math.min(350,dur*.18);
-    const travel=dur-reveal-hide,idleAlpha=state.visibility==='show'?1:state.visibility==='ghost'?.12:0;
-    for(let i=0;i<48;i++){
-      const h=hands[i],current=h.angle;
-      let turn=((target[i].angle-current+Math.PI)%TAU+TAU)%TAU-Math.PI;
-      if(rotating)turn=i%2?-wrap(wrap(current)-target[i].angle)-TAU:wrap(target[i].angle-wrap(current))+TAU;
-      const participating=rotating||h.used||target[i].used||h.opacity>idleAlpha+.001;
-      h.revealFrom=h.opacity;h.travelOpacity=participating?1:idleAlpha;h.used=target[i].used;
-      h.from=current;h.to=current+turn;h.start=now+reveal;h.duration=travel;h.motionEnd=h.start+travel;
-      h.revealStart=now;h.revealEnd=now+reveal;
-      h.fadeStart=h.motionEnd;h.fadeEnd=now+dur;h.fadeFrom=h.travelOpacity;h.fadeTo=settleOpacity(h);
-    }
-    state.minuteKey=digits;
-    canvas.setAttribute('aria-label',`由24个钟表组成的数字时钟，现在显示 ${digits.slice(0,2)}:${digits.slice(2)}`);
-    requestRender();
+  function rendererConfig(input) {
+    const config = normalize(input), preset = Palette.presets.find(entry => entry.id === config.preset);
+    return preset ? { ...config, ...Palette.colors(preset) } : config;
   }
-  function initializeTime(minutes){
-    const digits=displayDigits(minutes),pose=digitPose(digits),now=performance.now();
-    for(let i=0;i<48;i++){
-      const h=hands[i];h.angle=pose[i].angle;h.from=h.angle;h.to=h.angle;h.used=pose[i].used;
-      h.opacity=settleOpacity(h);h.revealFrom=h.opacity;h.travelOpacity=h.opacity;h.fadeFrom=h.opacity;h.fadeTo=h.opacity;
-      h.start=now;h.duration=1;h.motionEnd=now;h.revealStart=now;h.revealEnd=now;h.fadeStart=now;h.fadeEnd=now;
-    }
-    state.minuteKey=digits;canvas.setAttribute('aria-label',`由24个钟表组成的数字时钟，现在显示 ${digits.slice(0,2)}:${digits.slice(2)}`);renderDirty=true;requestRender();
+  function rendererModel(id) {
+    const model = Landscape.get(id);
+    if (!model) throw new Error('请选择支持的阵列型号。');
+    const Settings = { fields, normalize: (input, previous) => rendererConfig(normalize(input, previous)), defaults: rendererConfig({ ...defaults, model: id }) };
+    return { ...model, Settings, create(initial, options) {
+      return HandAnimation.create({ Settings, digitPose: model.digitPose, displayDigits: model.displayDigits, handCount: model.count * 2,
+        phase: index => Math.floor(index / 2) % model.columns / (model.columns - 1) }, initial, options);
+    } };
   }
-  function sync(force=false){animate(currentMinutes(),force);}
-
-
-  function tint(hex,amount){const n=parseInt(hex.slice(1),16),channels=[n>>16,(n>>8)&255,n&255];return '#'+channels.map(v=>Math.round(v+(amount>0?255-v:v)*amount).toString(16).padStart(2,'0')).join('');}
-  function roundRect(c,x,y,w,h,r){
-    c.beginPath();if(typeof c.roundRect==='function'){c.roundRect(x,y,w,h,r);return;}
-    c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);c.lineTo(x+w,y+h-r);c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);c.lineTo(x+r,y+h);c.quadraticCurveTo(x,y+h,x,y+h-r);c.lineTo(x,y+r);c.quadraticCurveTo(x,y,x+r,y);c.closePath();
-  }
-  function drawSurface(){
-    const c=surfaceCtx,b=state.board,white=state.material==='white',black=state.material==='black';
-    c.clearRect(0,0,W,H);c.save();roundRect(c,1,1,W-2,H-2,6);c.clip();
-    const bg=c.createLinearGradient(0,0,W,H);
-    if(white){bg.addColorStop(0,'#e9e7e1');bg.addColorStop(.45,'#f6f4ef');bg.addColorStop(1,'#d8d6d0');}
-    else if(black){bg.addColorStop(0,'#242627');bg.addColorStop(.43,'#111213');bg.addColorStop(1,'#0d0e0f');}
-    else{bg.addColorStop(0,tint(b,.09));bg.addColorStop(.5,b);bg.addColorStop(1,tint(b,-.11));}
-    c.fillStyle=bg;c.fillRect(0,0,W,H);
-    c.fillStyle='#ffffff17';c.fillRect(0,0,W,2);c.fillStyle='#00000020';c.fillRect(0,H-4,W,4);
-    for(const {x,y} of points){c.save();c.translate(x,y);
-      const rim=c.createRadialGradient(-11,-17,3,0,0,55);
-      if(white){rim.addColorStop(0,'#f4f2ed');rim.addColorStop(.82,'#e5e2dc');rim.addColorStop(.97,'#c6c4bd');rim.addColorStop(1,'#dedbd5');}
-      else if(black){rim.addColorStop(0,'#121415');rim.addColorStop(.70,'#0d0f10');rim.addColorStop(.94,'#08090a');rim.addColorStop(1,'#242628');}
-      else{rim.addColorStop(0,tint(b,-.06));rim.addColorStop(.82,tint(b,-.12));rim.addColorStop(.96,tint(b,-.24));rim.addColorStop(1,tint(b,.06));}
-      c.shadowColor=black?'#000000b8':'#0000003b';c.shadowBlur=7;c.shadowOffsetY=2;c.fillStyle=rim;c.beginPath();c.arc(0,0,53.2,0,TAU);c.fill();c.shadowBlur=0;c.shadowOffsetY=0;
-      c.strokeStyle=white?'#0000001a':'#ffffff13';c.lineWidth=1;c.beginPath();c.arc(0,0,52.2,0,TAU);c.stroke();c.strokeStyle=white?'#ffffff7a':'#00000018';c.beginPath();c.arc(0,0,49.5,0,TAU);c.stroke();c.restore();
-    }
-    c.restore();c.strokeStyle=tint(b,-.17);c.lineWidth=2;roundRect(c,1,1,W-2,H-2,6);c.stroke();paintedVersion=paletteVersion;
-  }
-  function drawHand(cx,cy,angle,short,opacity){
-    if(opacity<=.001)return;ctx.save();ctx.globalAlpha=opacity;ctx.translate(cx,cy);ctx.rotate(angle);
-    const color=short?state.short:state.long,len=49.3*(short?Math.min(state.shortLength,state.longLength):state.longLength)/100,wid=short?7.1:7.9;
-    const shade=ctx.createLinearGradient(0,-wid/2,0,wid/2);
-    const original=PRESETS.find(p=>p.material===state.material&&p.material);
-    if(original&&color===(short?original.short:original.long)){
-      const white=state.material==='white';shade.addColorStop(0,white?(short?'#555853':'#303330'):(short?'#c6c8c6':'#e8e9e7'));shade.addColorStop(.55,color);shade.addColorStop(1,white?'#383b38':(short?'#abaeab':'#c2c5c1'));
-    }else{shade.addColorStop(0,tint(color,.10));shade.addColorStop(.5,color);shade.addColorStop(1,tint(color,-.12));}
-    ctx.shadowColor='#00000038';ctx.shadowBlur=2;ctx.shadowOffsetY=1.3;ctx.fillStyle=shade;roundRect(ctx,-1.6,-wid/2,len+1.6,wid,1.5);ctx.fill();ctx.restore();
-  }
-
-
-  function setVisibility(mode,refresh=true){
-    if(mode===state.visibility)return;
-    const now=performance.now();interpolate(now);state.visibility=mode;
-    for(const h of hands){
-      const target=settleOpacity(h);
-      if(now<h.fadeStart){
-        // Finish the current movement before hiding a participating hand.
-        h.fadeTo=target;
-        if(target>h.travelOpacity){h.revealFrom=h.opacity;h.revealStart=now;h.revealEnd=Math.min(now+250,h.fadeStart);h.travelOpacity=target;h.fadeFrom=target;}
-      }else{
-        // Retarget from the sampled alpha, including a toggle during a fade.
-        h.revealStart=now;h.revealEnd=now;h.travelOpacity=h.opacity;h.fadeFrom=h.opacity;h.fadeTo=target;h.fadeStart=now;h.fadeEnd=now+(reducedMotion?150:350);
+  function livelyProperties(input = defaults) {
+    const config = normalize(input), properties = {};
+    const groups = { model: '型号', palette: '配色方案', colors: '独立颜色（自定义配色时生效）', screen: '大小与位置', geometry: '表盘与指针', motion: '动画与播放', time: '时间' };
+    for (const group of Object.keys(groups)) {
+      properties['section' + group] = { type: 'label', value: groups[group] };
+      for (const [key, field] of Object.entries(fields).filter(([, field]) => field.group === group)) {
+        const control = { text: field.label + (field.unit ? '（' + field.unit + '）' : ''), type: field.type, value: config[key] };
+        if (field.type === 'select') { control.type = 'dropdown'; control.items = field.options.map(option => option[1]); control.value = field.options.findIndex(option => option[0] === config[key]); }
+        else if (field.type === 'number') {
+          if (field.step < 1) { control.type = 'textbox'; control.value = String(config[key]); control.help = '有效范围 ' + field.min + '–' + field.max + '，可输入小数。'; }
+          else { control.type = 'slider'; control.min = field.min; control.max = field.max; control.step = field.step; }
+        } else if (['timezone', 'time'].includes(field.type)) control.type = 'textbox';
+        if (field.help) control.help = field.help;
+        if (field.type === 'time') control.help = '指定时间模式使用，格式 HH:MM，例如 09:34。';
+        properties[key] = control;
       }
     }
-    renderDirty=true;requestRender();
+    return properties;
   }
+  function serialize(config) { return JSON.stringify({ version: 3, platform: 'lively', settings: normalize(config) }, null, 2); }
+  function parse(text) {
+    const data = JSON.parse(text);
+    if (data?.version === 2) {
+      const imported = Landscape.parse(text);
+      return normalize({ ...imported.settings, model: imported.model.id });
+    }
+    if (data?.version === 1) return normalize({ ...Landscape.parse(text).settings, model: 'clockclock24' });
+    if (!data || data.version !== 3 || data.platform !== 'lively' || !data.settings || typeof data.settings !== 'object' || Array.isArray(data.settings)) throw new Error('请选择有效的 TIMEFORM 壁纸配置。');
+    for (const [key, field] of Object.entries(fields)) if (Object.hasOwn(data.settings, key) && Config.decode(field, data.settings[key], true) === undefined) throw new Error('「' + field.label + '」无效，请检查格式与范围。');
+    return normalize(data.settings);
+  }
+  return { fields, defaults, metadata, normalize, decodeProperty, rendererConfig, rendererModel, livelyProperties, serialize, parse };
+});
 
-function updateFormatter(){timeFormatter=state.timezone?new Intl.DateTimeFormat('en-GB',{timeZone:state.timezone,hour:'2-digit',minute:'2-digit',hourCycle:'h23'}):null;}
-function nowMinutes(){
- const date=new Date();if(!timeFormatter)return date.getHours()*60+date.getMinutes();
- const parts=timeFormatter.formatToParts(date),hour=Number(parts.find(p=>p.type==='hour').value),minute=Number(parts.find(p=>p.type==='minute').value);
- return (hour%24)*60+minute;
-}
-function currentMinutes(){return nowMinutes();}
-function requestRender(){if(!disposed&&!animationFrame&&!document.hidden)animationFrame=requestAnimationFrame(draw);}
-function draw(now){
- animationFrame=0;if(disposed)return;
- const moving=hands.some(h=>now<h.fadeEnd);
- if(!renderDirty&&!moving&&!wasMoving)return;
- interpolate(now);if(paintedVersion!==paletteVersion)drawSurface();
- ctx.setTransform(canvas.width/W,0,0,canvas.height/H,0,0);ctx.clearRect(0,0,W,H);ctx.drawImage(surface,0,0,W,H);
- for(const {x,y,i} of points){
-  drawHand(x,y,hands[i+1].angle,true,hands[i+1].opacity);drawHand(x,y,hands[i].angle,false,hands[i].opacity);
-  const opacity=Math.max(hands[i].opacity,hands[i+1].opacity);
-  if(opacity>.001){ctx.save();ctx.globalAlpha=opacity;ctx.beginPath();ctx.arc(x,y,3.1,0,TAU);ctx.fillStyle=state.long;ctx.fill();ctx.beginPath();ctx.arc(x-.6,y-.6,1,0,TAU);ctx.fillStyle=tint(state.long,.22);ctx.fill();ctx.restore();}
- }
- frameCount++;renderDirty=false;wasMoving=moving;if(moving)requestRender();
-}
-function resize(){
- const viewport=readViewport();geometry=Spec.geometry(viewport.width,viewport.height,state);
- W=geometry.boardWidth;H=geometry.boardHeight;points=geometry.points;
- const displayScale=Math.min((viewport.displayWidth||viewport.width)/viewport.width,(viewport.displayHeight||viewport.height)/viewport.height);
- const width=geometry.width*displayScale,height=geometry.height*displayScale;
- canvas.style.width=width+'px';canvas.style.height=height+'px';canvas.style.left=geometry.x*displayScale+'px';canvas.style.top=geometry.y*displayScale+'px';
- const dpr=Math.min(2,window.devicePixelRatio||1,Math.sqrt(8000000/Math.max(1,width*height))),w=Math.max(1,Math.floor(width*dpr)),h=Math.max(1,Math.floor(height*dpr));
- if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;surface.width=w;surface.height=h;}
- surfaceCtx.setTransform(w/W,0,0,h/H,0,0);paletteVersion++;renderDirty=true;requestRender();
-}
-function update(config){
- const next=Spec.normalize(config,state),previous={...state},visibility=next.visibility;
- Object.assign(state,next,{visibility:previous.visibility});
- state.material=state.board==='#111213'?'black':state.board==='#f6f4ef'?'white':null;
- if(previous.board!==state.board||previous.long!==state.long||previous.short!==state.short)paletteVersion++;
- if(previous.timezone!==state.timezone){updateFormatter();initializeTime(nowMinutes());}
- else if(previous.format24!==state.format24)initializeTime(nowMinutes());
- if(visibility!==previous.visibility)setVisibility(visibility);
- if(['layout','scale','padding','offsetX','offsetY'].some(k=>previous[k]!==state[k]))resize();
- renderDirty=true;requestRender();
-}
-function resume(){if(document.hidden){cancelAnimationFrame(animationFrame);animationFrame=0;}else{resize();initializeTime(nowMinutes());}}
-function thumbnail(){
- const image=document.createElement('canvas');image.width=960;image.height=540;const c=image.getContext('2d');c.fillStyle=state.background;c.fillRect(0,0,960,540);
- const factor=Math.min(900/canvas.width,480/canvas.height),w=canvas.width*factor,h=canvas.height*factor;c.drawImage(canvas,(960-w)/2,(540-h)/2,w,h);return image.toDataURL('image/jpeg',.88);
-}
-updateFormatter();state.material=state.board==='#111213'?'black':state.board==='#f6f4ef'?'white':null;
-resize();initializeTime(nowMinutes());
-const timer=setInterval(()=>{if(!document.hidden)sync();},1000);
-document.addEventListener('visibilitychange',resume);
-return {update,resize,thumbnail,getStats:()=>({frameCount,geometry,pixelWidth:canvas.width,pixelHeight:canvas.height,display:state.minuteKey,animating:hands.some(h=>performance.now()<h.fadeEnd)}),dispose(){disposed=true;cancelAnimationFrame(animationFrame);clearInterval(timer);document.removeEventListener('visibilitychange',resume);}};
-}
-})(globalThis);
+(function (root, factory) {
+  const api = factory(typeof module === 'object' && module.exports ? require('./config.js') : root.Timeform.LivelyConfig);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).LivelyController = api;
+})(globalThis, function (Spec) {
+  'use strict';
+  function create({ canvas, config: initial, Renderer, readViewport, onChange = () => {} }) {
+    let config = Spec.normalize(initial), hostPaused = false, disposed = false;
+    const start = () => Renderer.create(canvas, Spec.rendererConfig(config), Spec.rendererModel(config.model), readViewport);
+    let renderer = start(); renderer.setPaused(config.paused);
+    function updateConfig(patch) {
+      if (disposed) return { ...config };
+      const previous = config; config = Spec.normalize(patch, config);
+      if (previous.model !== config.model) { renderer.dispose(); renderer = start(); }
+      else renderer.update(Spec.rendererConfig(config));
+      renderer.setPaused(hostPaused || config.paused);
+      onChange({ ...config }); return { ...config };
+    }
+    function property(name, value) {
+      const decoded = Spec.decodeProperty(name, value);
+      if (decoded === undefined) return false;
+      updateConfig({ [name]: decoded }); return true;
+    }
+    function playback(data) {
+      try {
+        const value = typeof data === 'string' ? JSON.parse(data) : data;
+        if (!value || typeof value.IsPaused !== 'boolean' || disposed) return false;
+        hostPaused = value.IsPaused; renderer.setPaused(hostPaused || config.paused); onChange({ ...config }); return true;
+      } catch (_) { return false; }
+    }
+    return { updateConfig, property, playback, getConfig: () => ({ ...config }), get renderer() { return renderer; },
+      dispose() { if (!disposed) { disposed = true; renderer.dispose(); } } };
+  }
+  return { create };
+});
 
 (function (root) {
   'use strict';
-  const Spec = root.TimeformSettings;
-  const embedded = JSON.parse(document.getElementById('timeform-config').textContent);
-  const storageKey = 'timeform-wallpaper-v1';
-  let config = Spec.normalize(embedded);
-  if (document.body.dataset.editor === '1') {
-    try { const saved = localStorage.getItem(storageKey); if (saved) config = Spec.importConfig(saved); } catch (_) { /* Exports work even if storage is unavailable. */ }
-  }
-  config = Spec.normalize(Spec.fromSearch(location.search), config);
-  const viewport = document.getElementById('viewport'), area = document.getElementById('previewArea');
-  const canvas = document.getElementById('clock');
-  let editing = false, previewResolution = [1920, 1080];
+  const { LivelyConfig: Spec, LivelyController, Renderer, Landscape, Time } = root.Timeform;
+  const byId = id => document.getElementById(id), storageKey = 'timeform-lively-local-v3';
+  const embedded = JSON.parse(byId('timeform-config').textContent);
   const openedAsEditor = document.body.dataset.editor === '1' || new URLSearchParams(location.search).get('settings') === '1';
+  let config = Spec.normalize(embedded), editing = false, previewResolution = [1920, 1080], controller;
+  if (openedAsEditor) try { const saved = localStorage.getItem(storageKey); if (saved) config = Spec.parse(saved); } catch (_) {}
+  config = Spec.normalize(Object.fromEntries(new URLSearchParams(location.search)), config);
+  const viewport = byId('viewport'), area = byId('previewArea');
   function dimensions() {
-    const width = viewport.clientWidth || 1, height = viewport.clientHeight || 1;
-    return editing && previewResolution ? { width: previewResolution[0], height: previewResolution[1], displayWidth: width, displayHeight: height } : { width, height };
+    const width = Math.max(1, viewport.clientWidth), height = Math.max(1, viewport.clientHeight);
+    return { width: editing && previewResolution ? previewResolution[0] : width, height: editing && previewResolution ? previewResolution[1] : height, displayWidth: width, displayHeight: height };
   }
   function arrange() {
     if (!editing) { viewport.style.width = '100%'; viewport.style.height = '100%'; return; }
-    const availableWidth = Math.max(1, area.clientWidth - 40), availableHeight = Math.max(1, area.clientHeight - 100);
+    const style = getComputedStyle(area), availableWidth = Math.max(1, area.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight));
+    const availableHeight = Math.max(1, area.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom));
     const ratio = previewResolution ? previewResolution[0] / previewResolution[1] : availableWidth / availableHeight;
     const width = Math.min(availableWidth, availableHeight * ratio);
     viewport.style.width = width + 'px'; viewport.style.height = width / ratio + 'px';
   }
-  function paintBackground() {
-    document.documentElement.style.setProperty('--wallpaper-bg', config.background);
-    document.querySelector('meta[name="theme-color"]').content = config.background;
+  function background() {
+    const effective = Spec.rendererConfig(config);
+    document.documentElement.style.setProperty('--wallpaper-bg', effective.background);
+    viewport.style.background = effective.background; document.querySelector('meta[name="theme-color"]').content = effective.background;
   }
-  paintBackground();
-  const renderer = root.TimeformRenderer.create(canvas, config, dimensions);
-  function refresh() {
-    arrange(); renderer.resize();
-    const stats = renderer.getStats(), d = dimensions();
-    document.getElementById('layoutReadout').textContent = Math.round(d.width) + ' × ' + Math.round(d.height) + ' · ' + (stats.geometry.layout === 'portrait' ? '上下两排' : '横排') + ' · 完整显示';
+  function refreshStats() {
+    const model = Landscape.get(config.model), stats = controller.renderer.getStats(), d = dimensions();
+    byId('modelName').textContent = model.name; byId('modelDescription').textContent = model.description; byId('editorModel').textContent = model.badge;
+    byId('clockCount').textContent = model.count + ' 个表盘 · ' + model.count * 2 + ' 根指针';
+    byId('resolutionLabel').textContent = Math.round(d.width) + ' × ' + Math.round(d.height);
+    byId('displayTime').textContent = stats.display.slice(0, 2) + ':' + stats.display.slice(2);
+    byId('playbackStatus').textContent = (stats.paused ? '已暂停' : stats.animating ? '过渡中' : '已归位') + ' · ' + config.playbackSpeed + '×';
+    byId('boardSize').textContent = Math.round(stats.geometry.boardWidth) + ' × ' + Math.round(stats.geometry.boardHeight);
+    byId('renderSize').textContent = stats.pixelWidth + ' × ' + stats.pixelHeight + ' px';
+    byId('pause').textContent = stats.paused ? '继续' : '暂停'; byId('step').disabled = !stats.paused;
+    byId('configSnapshot').value = Spec.serialize(config);
   }
-  function updateConfig(patch) {
-    config = Spec.normalize(patch, config); paintBackground(); renderer.update(config);
-    if (editing) try { localStorage.setItem(storageKey, Spec.exportConfig(config)); } catch (_) { /* Optional convenience only. */ }
-    document.dispatchEvent(new CustomEvent('timeform-config-change', { detail: { ...config } }));
-    refresh(); return { ...config };
+  function changed(next) {
+    config = next; background();
+    if (editing) try { localStorage.setItem(storageKey, Spec.serialize(config)); } catch (_) {}
+    document.dispatchEvent(new CustomEvent('timeform-lively-config', { detail: { ...config } }));
+    refreshStats();
   }
-  function setEditing(open) {
-    editing = Boolean(open); document.body.dataset.editing = String(editing);
-    for (const id of ['editor', 'editorHeader', 'previewCaption']) document.getElementById(id).hidden = !editing;
-    document.getElementById('returnSettings').hidden = editing || !openedAsEditor;
-    refresh();
+  background(); arrange();
+  controller = LivelyController.create({ canvas: byId('clock'), config, Renderer, readViewport: dimensions, onChange: changed });
+  function resize() { arrange(); controller.renderer.resize(); refreshStats(); }
+  function setEditing(value) {
+    editing = Boolean(value); document.body.dataset.editing = String(editing);
+    byId('editorHeader').hidden = byId('editor').hidden = !editing; byId('returnSettings').hidden = editing || !openedAsEditor;
+    resize();
   }
-  const metadata = Spec.metadata;
   function exportHtml() {
-    const clone = document.documentElement.cloneNode(true);
-    const body = clone.querySelector('body'); body.dataset.editor = '0'; body.dataset.editing = 'false';
-    for (const id of ['editor', 'editorHeader', 'previewCaption', 'returnSettings']) clone.querySelector('#' + id).hidden = true;
-    for (const id of ['presets', 'fields-colors', 'fields-screen', 'fields-motion', 'fields-time']) clone.querySelector('#' + id).replaceChildren();
-    clone.querySelector('#urlFallback').hidden = true;
+    const clone = document.documentElement.cloneNode(true), body = clone.querySelector('body');
+    body.dataset.editor = '0'; body.dataset.editing = 'false';
+    for (const id of ['editorHeader', 'editor', 'returnSettings']) clone.querySelector('#' + id).hidden = true;
+    for (const id of ['modelOptions', 'presets', ...['model', 'palette', 'colors', 'screen', 'geometry', 'motion', 'time'].map(group => 'fields-' + group)]) clone.querySelector('#' + id).replaceChildren();
     clone.querySelector('#timeform-config').textContent = JSON.stringify(config).replace(/</g, '\\u003c');
     clone.querySelector('#viewport').removeAttribute('style'); clone.querySelector('#clock').removeAttribute('style');
     return '<!doctype html>\n' + clone.outerHTML;
   }
-  function url() {
-    const target = new URL(location.href);
-    if (target.pathname.endsWith('/configure.html')) target.pathname = target.pathname.replace(/configure\.html$/, 'index.html');
-    target.search = Spec.toSearch(config, embedded); target.hash = ''; return target.href;
+  function thumbnail() {
+    const image = document.createElement('canvas'), ctx = image.getContext('2d'); image.width = 480; image.height = 270;
+    ctx.fillStyle = Spec.rendererConfig(config).background; ctx.fillRect(0, 0, 480, 270);
+    const canvas = byId('clock'), width = parseFloat(canvas.style.width), height = parseFloat(canvas.style.height);
+    const d = dimensions(), factor = Math.min(480 / d.displayWidth, 270 / d.displayHeight);
+    const x = (480 - d.displayWidth * factor) / 2 + parseFloat(canvas.style.left) * factor;
+    const y = (270 - d.displayHeight * factor) / 2 + parseFloat(canvas.style.top) * factor;
+    ctx.drawImage(canvas, x, y, width * factor, height * factor); return image.toDataURL('image/jpeg', .88);
   }
   function livelyPackage() {
-    const data = atob(renderer.thumbnail().split(',')[1]);
-    return root.TimeformZip.create({ 'index.html': exportHtml(), 'LivelyInfo.json': JSON.stringify(metadata, null, 2), 'LivelyProperties.json': JSON.stringify(Spec.livelyProperties(config), null, 2), 'thumbnail.jpg': Uint8Array.from(data, c => c.charCodeAt(0)) });
+    const bytes = atob(thumbnail().split(',')[1]);
+    return root.TimeformZip.create({ 'index.html': exportHtml(), 'LivelyInfo.json': JSON.stringify(Spec.metadata, null, 2),
+      'LivelyProperties.json': JSON.stringify(Spec.livelyProperties(config), null, 2), 'thumbnail.jpg': Uint8Array.from(bytes, char => char.charCodeAt(0)) });
   }
-  root.TimeformWallpaper = { getConfig: () => ({ ...config }), updateConfig, setEditing, setPreviewResolution(value) { previewResolution = value; refresh(); }, exportHtml, url, livelyPackage, metadata, renderer };
-  root.livelyPropertyListener = (name, value) => { const decoded = Spec.decode(name, value); if (decoded !== undefined) updateConfig({ [name]: decoded }); };
-  window.addEventListener('resize', refresh);
-  window.addEventListener('keydown', event => {
-    if (event.target.closest('input,select,button,a')) return;
-    if (event.key.toLowerCase() === 's') setEditing(!editing);
-    else if (event.key === 'Escape' && editing) setEditing(false);
-  });
+  root.TimeformLively = { getConfig: controller.getConfig, updateConfig: controller.updateConfig, setEditing, exportHtml, livelyPackage, thumbnail,
+    setPreviewResolution(value) { previewResolution = value; resize(); }, get renderer() { return controller.renderer; } };
+  root.livelyPropertyListener = controller.property;
+  root.livelyWallpaperPlaybackChanged = controller.playback;
+  byId('hideSettings').addEventListener('click', () => setEditing(false)); byId('returnSettings').addEventListener('click', () => setEditing(true));
+  byId('pause').addEventListener('click', () => controller.updateConfig({ paused: !controller.renderer.getStats().paused }));
+  byId('step').addEventListener('click', () => { controller.renderer.step(100); refreshStats(); });
+  byId('replay').addEventListener('click', () => { controller.renderer.replay(); refreshStats(); });
+  const source = Time.createSource();
+  function advance(delta) { controller.updateConfig({ source: 'manual', manualTime: Time.textFromMinutes(source.read(config) + delta), autoDemo: false }); }
+  byId('previousMinute').addEventListener('click', () => advance(-1)); byId('nextMinute').addEventListener('click', () => advance(1));
+  document.addEventListener('timeform-auto-time', event => controller.updateConfig({ manualTime: event.detail }));
+  const observer = new ResizeObserver(resize); observer.observe(area); window.addEventListener('resize', resize);
+  window.addEventListener('keydown', event => { if (event.target.closest('input,select,button,a')) return; if (event.key.toLowerCase() === 's') setEditing(!editing); else if (event.key === 'Escape' && editing) setEditing(false); });
+  const timer = setInterval(() => { if (editing) refreshStats(); }, 250);
+  window.addEventListener('pagehide', event => { if (!event.persisted) { controller.dispose(); observer.disconnect(); clearInterval(timer); } });
+  window.addEventListener('pageshow', event => { if (event.persisted) resize(); });
   setEditing(openedAsEditor);
 })(globalThis);
 
 (function (root) {
   'use strict';
-  const Spec = root.TimeformSettings, app = root.TimeformWallpaper;
-  const controls = new Map(), presetButtons = [];
-  const notice = text => { document.getElementById('notice').textContent = text; };
+  const { LivelyConfig: Spec, Config, Landscape, Palette } = root.Timeform, app = root.TimeformLively;
+  const byId = id => document.getElementById(id), controls = new Map(), modelButtons = [], presetButtons = [];
+  function notice(message, error = false) { byId('notice').textContent = message; byId('notice').dataset.error = String(error); }
   function accept(key, value, input) {
-    const decoded = Spec.decode(key, value);
-    if (decoded === undefined) { input.setAttribute('aria-invalid', 'true'); notice('请检查「' + Spec.fields[key].text + '」：' + (key === 'timezone' ? '使用有效时区，例如 Asia/Hong_Kong。' : '颜色需为六位 HEX，例如 #111213。')); return; }
-    input.removeAttribute('aria-invalid'); app.updateConfig({ [key]: decoded }); notice('预览已更新。导出后即可带到其他电脑。');
+    const decoded = Config.decode(Spec.fields[key], value, true);
+    if (decoded === undefined) { input.setAttribute('aria-invalid', 'true'); notice('「' + Spec.fields[key].label + '」无效，请检查格式与范围。', true); return; }
+    input.removeAttribute('aria-invalid'); app.updateConfig({ [key]: decoded }); notice('预览已更新，可导出到 Lively 验证。');
   }
   for (const [key, field] of Object.entries(Spec.fields)) {
-    const wrapper = document.createElement('div'); wrapper.className = field.type === 'color' ? 'color-field' : 'field';
-    const label = document.createElement('label'); label.htmlFor = 'setting-' + key; label.textContent = field.text;
-    const input = document.createElement(field.type === 'dropdown' ? 'select' : 'input'); input.id = 'setting-' + key;
-    const entry = { input, hex: null, output: null };
-    if (field.type === 'color') {
-      input.type = 'color'; const hex = document.createElement('input'); hex.type = 'text'; hex.maxLength = 7; hex.setAttribute('aria-label', field.text + ' HEX'); hex.spellcheck = false;
-      const group = document.createElement('div'); group.className = 'color-inputs'; group.append(input, hex); wrapper.append(label, group); entry.hex = hex;
+    const wrapper = document.createElement('div'); wrapper.className = 'field';
+    const label = document.createElement('label'); label.htmlFor = 'setting-' + key; label.textContent = field.label;
+    const heading = document.createElement('div'); heading.className = 'field-label'; heading.append(label);
+    const input = document.createElement(field.type === 'select' ? 'select' : 'input'); input.id = 'setting-' + key;
+    const entry = { input, range: null, hex: null };
+    if (field.type === 'select') {
+      for (const [value, name] of field.options) { const option = document.createElement('option'); option.value = value; option.textContent = name; input.append(option); }
+      wrapper.append(heading, input); input.addEventListener('change', () => accept(key, input.value, input));
+    } else if (field.type === 'color') {
+      input.type = 'color';
+      const hex = document.createElement('input'); hex.type = 'text'; hex.maxLength = 7; hex.setAttribute('aria-label', field.label + ' HEX'); hex.spellcheck = false;
+      const group = document.createElement('div'); group.className = 'color-inputs'; group.append(input, hex); wrapper.append(heading, group); entry.hex = hex;
       input.addEventListener('input', () => accept(key, input.value, input)); hex.addEventListener('change', () => accept(key, hex.value.trim(), hex));
+      hex.addEventListener('input', () => { if (Config.decode(field, hex.value.trim(), true) !== undefined) accept(key, hex.value.trim(), hex); });
+    } else if (field.type === 'number') {
+      input.type = 'number'; input.min = field.min; input.max = field.max; input.step = field.step;
+      const range = document.createElement('input'); range.type = 'range'; range.min = field.min; range.max = field.max; range.step = field.step; range.setAttribute('aria-label', field.label + '滑块'); entry.range = range;
+      const bounds = document.createElement('span'); bounds.className = 'bounds'; bounds.textContent = field.min + '–' + field.max + ' ' + field.unit; heading.append(bounds);
+      const group = document.createElement('div'); group.className = 'numeric-controls'; group.append(range, input); wrapper.append(heading, group);
+      input.addEventListener('input', () => accept(key, input.value, input)); range.addEventListener('input', () => accept(key, range.value, range));
     } else if (field.type === 'checkbox') {
-      input.type = 'checkbox'; label.className = 'field-check'; label.prepend(input); wrapper.append(label); input.addEventListener('change', () => accept(key, input.checked, input));
+      input.type = 'checkbox'; label.className = 'check-label'; label.prepend(input); wrapper.append(label); input.addEventListener('change', () => accept(key, input.checked, input));
     } else {
-      const heading = document.createElement('div'); heading.className = 'field-heading'; heading.append(label); wrapper.append(heading, input);
-      if (field.type === 'dropdown') {
-        field.values.forEach((value, index) => { const option = document.createElement('option'); option.value = value; option.textContent = field.items[index]; input.append(option); });
-        input.addEventListener('change', () => accept(key, input.value, input));
-      } else if (field.type === 'slider') {
-        input.type = 'range'; input.min = field.min; input.max = field.max; input.step = field.step;
-        const output = document.createElement('output'); output.htmlFor = input.id; heading.append(output); entry.output = output; input.addEventListener('input', () => accept(key, input.value, input));
-      } else { input.type = 'text'; input.placeholder = '跟随电脑时区'; input.addEventListener('change', () => accept(key, input.value, input)); }
-      if (field.help) { const help = document.createElement('p'); help.className = 'help'; help.textContent = field.help; wrapper.append(help); }
+      input.type = field.type === 'time' ? 'time' : 'text'; if (field.type === 'timezone') input.placeholder = '跟随设备';
+      wrapper.append(heading, input); input.addEventListener('change', () => accept(key, input.value, input));
     }
-    controls.set(key, entry); document.getElementById('fields-' + field.group).append(wrapper);
+    if (field.help) { const help = document.createElement('p'); help.className = 'field-help'; help.textContent = field.help; wrapper.append(help); }
+    controls.set(key, entry); byId('fields-' + field.group).append(wrapper);
   }
-  for (const preset of Spec.presets) {
+  for (const model of Landscape.models) {
+    const button = document.createElement('button'); button.type = 'button'; button.className = 'model-option'; button.setAttribute('aria-label', '选择 ' + model.name);
+    const name = document.createElement('strong'); name.textContent = model.badge;
+    const detail = document.createElement('span'); detail.textContent = model.count + ' 个表盘 · ' + model.columns + ' × ' + model.rows;
+    button.append(name, detail); button.addEventListener('click', () => app.updateConfig({ model: model.id })); byId('modelOptions').append(button); modelButtons.push({ button, model });
+  }
+  for (const preset of Palette.presets) {
     const button = document.createElement('button'); button.type = 'button'; button.className = 'preset'; button.setAttribute('aria-label', '应用' + preset.name);
     const swatch = document.createElement('span'); swatch.className = 'preset-swatch'; swatch.style.background = preset.board; swatch.style.setProperty('--hand', preset.long);
     const name = document.createElement('span'); name.textContent = preset.name; button.append(swatch, name);
-    button.addEventListener('click', () => { app.updateConfig(preset); notice('已应用「' + preset.name + '」，各部分颜色仍可独立调节。'); });
-    document.getElementById('presets').append(button); presetButtons.push({ button, preset });
+    button.addEventListener('click', () => app.updateConfig({ preset: 'custom', ...Palette.colors(preset) })); byId('presets').append(button); presetButtons.push({ button, preset });
   }
   function showValues() {
-    const config = app.getConfig();
+    const config = app.getConfig(), effective = Spec.rendererConfig(config);
     for (const [key, entry] of controls) {
-      entry.input.type === 'checkbox' ? entry.input.checked = config[key] : entry.input.value = config[key];
-      if (entry.hex && document.activeElement !== entry.hex) { entry.hex.value = config[key].toUpperCase(); entry.hex.removeAttribute('aria-invalid'); }
-      if (entry.output) entry.output.textContent = config[key] + Spec.fields[key].unit;
+      const value = Spec.fields[key].type === 'color' ? effective[key] : config[key];
+      if (entry.input.type === 'checkbox') entry.input.checked = value; else entry.input.value = value;
+      if (entry.range) entry.range.value = value;
+      if (entry.hex) { entry.hex.value = value.toUpperCase(); entry.hex.disabled = config.preset !== 'custom'; entry.input.disabled = config.preset !== 'custom'; }
     }
-    for (const { button, preset } of presetButtons) button.setAttribute('aria-pressed', String(['background', 'board', 'long', 'short'].every(key => config[key] === preset[key])));
+    controls.get('manualTime').input.disabled = config.source !== 'manual';
+    controls.get('autoDemo').input.disabled = config.source !== 'manual';
+    const disabled = config.source !== 'manual' || !config.autoDemo;
+    controls.get('demoInterval').input.disabled = controls.get('demoInterval').range.disabled = disabled;
+    for (const { button, model } of modelButtons) button.setAttribute('aria-pressed', String(model.id === config.model));
+    for (const { button, preset } of presetButtons) button.setAttribute('aria-pressed', String(Object.keys(Palette.colors(preset)).every(key => effective[key] === preset[key])));
   }
   function download(filename, content, type) {
-    const objectUrl = URL.createObjectURL(new Blob([content], { type }));
-    const anchor = document.createElement('a'); anchor.href = objectUrl; anchor.download = filename; anchor.click(); setTimeout(() => URL.revokeObjectURL(objectUrl), 30000);
+    const url = URL.createObjectURL(new Blob([content], { type })), anchor = document.createElement('a'); anchor.href = url; anchor.download = filename; anchor.click(); setTimeout(() => URL.revokeObjectURL(url), 30000);
   }
-  document.addEventListener('timeform-config-change', showValues); showValues();
-  document.getElementById('previewSize').addEventListener('change', event => app.setPreviewResolution(event.target.value === 'auto' ? null : event.target.value.split('x').map(Number)));
-  document.getElementById('hideSettings').addEventListener('click', () => app.setEditing(false));
-  document.getElementById('returnSettings').addEventListener('click', () => app.setEditing(true));
-  document.getElementById('downloadHtml').addEventListener('click', () => { download('TIMEFORM-wallpaper.html', app.exportHtml(), 'text/html;charset=utf-8'); notice('通用 HTML 已导出。打开即是你刚才设置的配色；按 S 可继续设置。'); });
-  document.getElementById('downloadLively').addEventListener('click', () => { download('TIMEFORM-Lively.zip', app.livelyPackage(), 'application/zip'); notice('Lively 包已导出。把 ZIP 拖进 Lively，即可使用这份配色。'); });
-  document.getElementById('exportConfig').addEventListener('click', () => { download('TIMEFORM-colors.json', Spec.exportConfig(app.getConfig()), 'application/json'); notice('配色配置已导出，导入到其他电脑的壁纸工作台即可恢复。'); });
-  document.getElementById('importConfig').addEventListener('change', async event => {
+  byId('previewSize').addEventListener('change', event => app.setPreviewResolution(event.target.value === 'auto' ? null : event.target.value.split('x').map(Number)));
+  byId('downloadLively').addEventListener('click', () => { download('TIMEFORM-五型号-Lively.zip', app.livelyPackage(), 'application/zip'); notice('已导出，把新 ZIP 拖入 Lively 后使用卡片的「自定义」。'); });
+  byId('downloadHtml').addEventListener('click', () => { download('TIMEFORM-五型号-wallpaper.html', app.exportHtml(), 'text/html;charset=utf-8'); notice('已导出离线壁纸，打开即显示当前方案。'); });
+  byId('exportConfig').addEventListener('click', () => { download('TIMEFORM-Lively-config.json', Spec.serialize(app.getConfig()), 'application/json'); notice('当前型号和全部参数已导出。'); });
+  byId('importConfig').addEventListener('change', async event => {
     const file = event.target.files[0]; if (!file) return;
-    try { if (file.size > 65536) throw new Error('配置文件过大，请选择 TIMEFORM 导出的 JSON 文件。'); app.updateConfig(Spec.importConfig(await file.text())); notice('配色配置已导入。'); }
-    catch (error) { notice(error.message); } finally { event.target.value = ''; }
+    try { if (file.size > 65536) throw new Error('请选择小于 64 KB 的配置。'); app.updateConfig(Spec.parse(await file.text())); notice('配置已导入。'); }
+    catch (error) { notice(error.message, true); } finally { event.target.value = ''; }
   });
-  document.getElementById('resetConfig').addEventListener('click', () => { app.updateConfig(Spec.defaults); notice('已恢复经典黑与自动适配。'); });
-  document.getElementById('copyUrl').addEventListener('click', async () => {
-    const url = app.url();
-    try { await navigator.clipboard.writeText(url); notice(location.protocol === 'file:' ? '本地网址已复制；换电脑请导出 HTML。在线工作台可生成跨电脑网址。' : '壁纸网址已复制，粘贴到 Plash 等网页壁纸工具即可。'); }
-    catch (_) { const fallback = document.getElementById('urlFallback'); fallback.hidden = false; fallback.value = url; fallback.focus(); fallback.select(); notice('请复制下方的壁纸网址。'); }
+  byId('resetConfig').addEventListener('click', () => {
+    const model = app.getConfig().model; app.updateConfig({ ...Spec.defaults, ...Landscape.get(model).Settings.defaults, model, preset: 'custom', paused: false }); notice('已恢复当前型号的推荐参数。');
   });
+  document.addEventListener('timeform-lively-config', showValues); showValues();
 })(globalThis);
 </script>
 </body>
