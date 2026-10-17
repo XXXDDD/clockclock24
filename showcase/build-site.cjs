@@ -1,6 +1,7 @@
 'use strict';
 const fs = require('node:fs');
 const path = require('node:path');
+const { createHash } = require('node:crypto');
 const source = __dirname, project = path.dirname(source);
 const files = ['index.html', 'gallery.css', 'gallery.js', 'presentation.js', 'assets/lively.webp', 'assets/wallpaper-engine.svg', 'assets/SOURCES.txt'];
 function build(destination, check = false) {
@@ -10,6 +11,12 @@ function build(destination, check = false) {
     : fs.readFileSync(path.join(source, file));
   const modules = [...require('../scripts/source-graph.cjs').complete, 'src/hosts/browser-preview.js'];
   outputs['runtime/timeform.js'] = Buffer.from(modules.map(file => fs.readFileSync(path.join(project, file), 'utf8').replace(/\r\n/g, '\n')).join('\n'));
+  let html = outputs['index.html'].toString('utf8');
+  for (const file of ['gallery.css', 'gallery.js', 'presentation.js', 'runtime/timeform.js']) {
+    const version = createHash('sha256').update(outputs[file]).digest('hex').slice(0, 12);
+    html = html.replace('"' + file + '"', '"' + file + '?v=' + version + '"');
+  }
+  outputs['index.html'] = Buffer.from(html);
   for (const [file, bytes] of Object.entries(outputs)) {
     const target = path.join(destination, file);
     if (check) {
