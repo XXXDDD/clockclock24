@@ -18,7 +18,7 @@ function settled(clock, minute, now) {
   const pose = Model.digitPose(Model.displayDigits(minute, clock.state.format24));
   clock.hands.forEach((h, i) => {
     sameAngle(h.angle, pose[i].angle);
-    near(h.opacity, pose[i].used || clock.state.visibility === 'show' ? 1 : clock.state.visibility === 'ghost' ? .12 : 0);
+    near(h.opacity, (pose[i].used || pose[i ^ 1].used) || clock.state.visibility === 'show' ? 1 : clock.state.visibility === 'ghost' ? .12 : 0);
   });
 }
 
@@ -120,7 +120,7 @@ test('CC24 staged transitions reach every minute and complete at short and long 
     for (const p of [.1,.2,.4,.7,.9,.995]) {
       clock.sample(duration * 1000 * p);
       assert.ok(clock.hands.every(h => Number.isFinite(h.angle) && h.opacity >= 0 && h.opacity <= 1));
-      clock.hands.filter(h => duration * 1000 * p < h.motionEnd && duration * 1000 * p > h.revealEnd).forEach(h => near(h.opacity, 1));
+      clock.hands.filter(h => duration * 1000 * p < h.fadeStart && duration * 1000 * p > h.revealEnd).forEach(h => near(h.opacity, 1));
     }
     settled(clock, 575, duration * 1000); assert.equal(clock.isAnimating(duration * 1000), false);
   }

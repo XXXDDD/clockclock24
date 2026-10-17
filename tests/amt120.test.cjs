@@ -16,7 +16,7 @@ function settled(clock, minute, now) {
   const target = Model.digitPose(Model.displayDigits(minute, clock.state.format24));
   clock.hands.forEach((h, i) => {
     sameAngle(h.angle, target[i].angle);
-    near(h.opacity, target[i].used || clock.state.visibility === 'show' ? 1 : clock.state.visibility === 'ghost' ? .12 : 0);
+    near(h.opacity, (target[i].used || target[i ^ 1].used) || clock.state.visibility === 'show' ? 1 : clock.state.visibility === 'ghost' ? .12 : 0);
   });
 }
 function movingState(clock, now) {
@@ -172,7 +172,7 @@ test('AMT120 reaches every minute in both formats at the shortest, reference and
       const now = duration * 1000 * p; clock.sample(now);
       clock.hands.forEach(h => {
         assert.ok(Number.isFinite(h.angle) && h.opacity >= 0 && h.opacity <= 1);
-        if (now > h.revealEnd && now < h.motionEnd) near(h.opacity, 1);
+        if (now > h.revealEnd && now<h.fadeStart) near(h.opacity,1);
       });
     }
     settled(clock, 575, duration * 1000); assert.equal(clock.isAnimating(duration * 1000), false);

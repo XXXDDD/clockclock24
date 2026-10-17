@@ -50,7 +50,8 @@
     return { x, y, width: displayWidth, height: displayHeight, boardWidth, boardHeight, points, padding, layout: 'landscape' };
   }
   function create(initial, options) {
-    return Animation.create({ Settings, digitPose, displayDigits, motionProfile: options?.motionProfile }, initial, options);
+    return Animation.create({ Settings, digitPose, displayDigits, longLane: Drawing.longLane,
+      motionProfile: options?.motionProfile }, initial, options);
   }
   return { id: 'clockclock24', type: 'landscape', name: 'ClockClock 24', badge: 'CC24', columns: 8, rows: 3, count: 24,
     description: '8 × 3 黑色阵列；先整理为平行斜线，再由右向左列波流动，最后逐针成型。',

@@ -13,7 +13,7 @@ function settled(model, instance, minutes) {
   instance.hands.forEach((hand, index) => {
     sameAngle(hand.angle, pose[index].angle);
     assert.equal(hand.used, pose[index].used);
-    assert.equal(hand.opacity, hand.used || instance.state.visibility === 'show' ? 1 : instance.state.visibility === 'ghost' ? .12 : 0);
+    assert.equal(hand.opacity, (hand.used || instance.hands[index ^ 1].used) || instance.state.visibility === 'show' ? 1 : instance.state.visibility === 'ghost' ? .12 : 0);
   });
 }
 

@@ -25,7 +25,7 @@
 | [AMT72v Black Sterling](https://www.humanssince1982.com/en-int/products/a-million-times-72v-black-sterling) | 95 × 173 | 13.652% | 96.036% | 0.46 |
 | [AMT61c Zephyr](https://www.humanssince1982.com/en-int/products/a-million-times-61c-zephyr) | 直径 146 | 8.967%（相对板径） | 93.059% | 1.52 |
 
-[CC9 White](https://www.humanssince1982.com/en-int/products/clockclock-9-white) 官方板径为 46 cm。外围轴心距圆板中心约为板径的 **31.156%**，外围单臂平均长度约为板径的 **9.577%**；双针在菱形接缝处保留约 13% 的相邻轴距。回投影轴心到可见针臂中心线的 RMS 为 0.07 px；这个中心线指标与上表的完整轴心位置指标含义不同。
+[CC9 White](https://www.humanssince1982.com/en-int/products/clockclock-9-white) 官方板径为 46 cm。外围轴心距圆板中心约为板径的 **31.156%**。后续[长短针校准](hand-proportions.md)使用实际阵列轴心分别量取两端：长针约为板径 **10.69%**，短针约 **9.09%**，默认菱形接缝约占相邻轴距的 10%。此前将整条针臂轮廓的一半作为同长单臂的值已被取代。回投影轴心到可见针臂中心线的 RMS 为 0.07 px；这个中心线指标与上表的完整轴心位置指标含义不同。
 
 这些数据取代此前直接在原图上取宽度、圆边缘的估算。AMT72、AMT120 和 AMT288 的间隙据此回调，其他版本按校正结果微调。圆板外缘只补偿描边宽度，取消此前额外的内缩量。
 

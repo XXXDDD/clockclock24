@@ -162,7 +162,10 @@ test('ClockClock L diagonal holds parallel opposed arms while scatter retains di
     const clock=model.create({choreography});clock.initialize(574,0);clock.animate(575,0);clock.sample(8700);
     poses[choreography]=clock.hands.map(h=>h.angle);
   }
-  poses.diagonal.forEach((angle,i)=>assert.ok(error(angle,(i%2 ? 135 : 315)*Math.PI/180)<1e-9));
+  poses.diagonal.forEach((angle,i)=>{
+    const longLane=model.Drawing.longLane({i:i-i%2});
+    assert.ok(error(angle,(i%2 === longLane ? 315 : 135)*Math.PI/180)<1e-9);
+  });
   for (const choreography of ['scatter','tidal']) assert.ok(poses[choreography].filter((a,i)=>error(a,poses.diagonal[i])>.2).length>30);
   assert.ok(poses.scatter.filter((a,i)=>error(a,poses.tidal[i])>.2).length>30);
 });

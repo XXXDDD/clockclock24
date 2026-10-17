@@ -8,9 +8,7 @@
   'use strict';
   const { TAU, wrap, clamp } = Maths;
   const stages = Object.freeze({ align: .18, sweep: .18 + .82 * .22 });
-  // N, NE, E, SE, S, SW, W, NW, center. The two physical arms may occupy
-  // either lane of the same straight line; this is a positional assignment.
-  const reverseLanes = [false, false, true, true, true, true, false, false, false];
+  // Drawing lane 0 is the physical long arm on all nine axes.
   const commonHeading = -Math.PI / 4, sharedSweep = Math.PI / 4;
   function clockwiseDistance(target, from) {
     const delta = wrap(target - from);
@@ -114,7 +112,7 @@
       const speed = sharedSweep / (formStart - alignEnd), alignTime = alignEnd - now;
       sequence = { start: now, alignEnd, formStart, finish: now + duration, motors: [] };
       sequence.motors = target.map((hand, index) => {
-        const lane = (index % 2) ^ Number(reverseLanes[Math.floor(index / 2)]);
+        const lane = index % 2;
         const common = commonHeading + lane * Math.PI;
         let alignTravel = clockwiseDistance(common, current[index].angle);
         // Nonnegative Bezier velocity controls keep catch-up clockwise, including

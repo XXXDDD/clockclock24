@@ -31,7 +31,7 @@ test('CC9 perimeter leaves visible gaps even with legacy zero-gap settings; the 
     const tip = [point.x + Math.cos(hand.angle) * length, point.y + Math.sin(hand.angle) * length];
     const otherTip = [neighbor.x + Math.cos(otherHand.angle) * otherLength, neighbor.y + Math.sin(otherHand.angle) * otherLength];
     const pitch = Math.hypot(neighbor.x - point.x, neighbor.y - point.y), clearance = Math.hypot(tip[0] - otherTip[0], tip[1] - otherTip[1]);
-    assert.ok(clearance / pitch >= .125 && clearance / pitch <= .135, 'projectively calibrated needle tips retain approximately 13% of the axis pitch clear');
+    assert.ok(clearance / pitch >= .025 && clearance / pitch <= .035, 'even a custom equal-long pair retains approximately 3% of the axis pitch clear');
     sameAngle(hand.angle, Math.atan2(neighbor.y - point.y, neighbor.x - point.x));
   }
   const wider = cc9.geometry(1080, 1080, { ...config, gap: 20 });
@@ -96,7 +96,7 @@ test('circular transitions stay continuous, honor idle visibility and settle on 
       const target = model.digitPose('1010');
       clock.hands.forEach((hand, index) => {
         sameAngle(hand.angle, target[index].angle);
-        assert.equal(hand.opacity, target[index].used || visibility === 'show' ? 1 : visibility === 'ghost' ? .12 : 0);
+        assert.equal(hand.opacity, (target[index].used || target[index ^ 1].used) || visibility === 'show' ? 1 : visibility === 'ghost' ? .12 : 0);
       });
       assert.equal(clock.isAnimating(end), false);
     }
@@ -131,9 +131,9 @@ test('Zephyr arranges by position, holds, performs the wind, then forms the time
     clock.sample(8100); assert.equal(clock.getStage(8100), '逐针成型');
     clock.sample(9500); assert.equal(clock.getStage(9500), '读时停留');
     const pose = model.digitPose('1010');
-    clock.hands.forEach((hand, index) => { sameAngle(hand.angle, pose[index].angle); assert.equal(hand.opacity, 1); });
+    clock.hands.forEach((hand, index) => { sameAngle(hand.angle, pose[index].angle); assert.equal(hand.opacity, (pose[index].used || pose[index ^ 1].used) ? 1 : 0); });
     clock.sample(10100); assert.equal(clock.getStage(10100), ''); assert.equal(clock.isAnimating(10100), false);
-    clock.hands.forEach((hand, index) => assert.equal(hand.opacity, pose[index].used ? 1 : 0));
+    clock.hands.forEach((hand, index) => assert.equal(hand.opacity, (pose[index].used || pose[index ^ 1].used) ? 1 : 0));
   }
 });
 
@@ -146,7 +146,7 @@ test('Zephyr wind has repeated openings and changing speed, with a travelling co
   for (let now = start + 5000; now < end - 1000; now += 500) {
     wind.sample(now); const before = wind.hands[40].angle;
     wind.sample(now + 10); speeds.push((wind.hands[40].angle - before) / 10);
-    assert.ok(wind.hands.every(hand => hand.opacity === 1), 'all idle hands participate fully in the wind');
+    assert.ok(wind.hands.every(hand => now < hand.revealEnd || hand.opacity === 1), 'each idle hand fully participates after its local reveal');
   }
   const moving = speeds.filter(speed => speed > 1e-7);
   assert.ok(Math.max(...moving) > Math.min(...moving) * 1.7, 'wind has substantial speed variation rather than uniform rotation');
@@ -321,7 +321,7 @@ test('Zephyr visibility changes during the final fade preserve the current opaci
   clock.update({ visibility: 'ghost' }, now); clock.sample(now);
   clock.hands.forEach((hand, index) => assert.ok(Math.abs(hand.opacity - opacity[index]) < 1e-9));
   clock.sample(19000);
-  clock.hands.forEach(hand => assert.equal(hand.opacity, hand.used ? 1 : .12));
+  clock.hands.forEach((hand, i) => assert.equal(hand.opacity, hand.used || clock.hands[i ^ 1].used ? 1 : .12));
 });
 
 test('CC9 moves clockwise on every frame and all hands finish together', () => {
@@ -386,12 +386,14 @@ test('CC9 meets fixed parallel straight lines, sweeps together, then forms with 
   sameAngle(commonPoses[0][1], commonPoses[1][1]);
 });
 
-test('CC9 retains the observed perimeter arcs and the longer central minute-hand trip', () => {
+test('CC9 forms the perimeter from a consistent long-arm side and retains the longer central minute-hand trip', () => {
   const clock = cc9.create({ duration: 18 }); clock.initialize(609, 0); clock.animate(610, 100);
   clock.sample(100 + 18000 * .18); const common = clock.hands.map(hand => hand.angle);
   clock.sample(18100);
   const arcs = clock.hands.map((hand, index) => (hand.angle - common[index]) / Math.PI);
-  const expected = [1, 1.5, 1.5, 1.5, .5, 1, 1, 1, 1, 1.5, 1.5, 1.5, .5, 1, 1, 1];
+  // Long arms all leave 315°, short arms 135°. The former positional lane
+  // reversals gave different tours on E/SE/S/SW despite identical line axes.
+  const expected = [1, 1.5, 1.5, 1.5, 1.5, 2, 2, 2, 2, .5, .5, .5, .5, 1, 1, 1];
   expected.forEach((turns, index) => assert.ok(Math.abs(arcs[index] - turns) < 1e-8));
   assert.ok(arcs[16] > 2, 'center minute hand keeps its full winding');
   assert.ok(arcs[17] < .5, 'center hour hand may take a much shorter route');
@@ -533,7 +535,7 @@ test('live minute changes update the final time without restarting a long perfor
     assert.equal(clock.isAnimating(120100), false);
     const pose = model.digitPose('1012');
     clock.hands.forEach((hand, index) => {
-      sameAngle(hand.angle, pose[index].angle); assert.equal(hand.opacity, pose[index].used ? 1 : .12);
+      sameAngle(hand.angle, pose[index].angle); assert.equal(hand.opacity, (pose[index].used || pose[index ^ 1].used) ? 1 : .12);
     });
   }
 });

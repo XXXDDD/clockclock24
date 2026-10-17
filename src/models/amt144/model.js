@@ -26,7 +26,7 @@
     const points = Array.from({ length: 144 }, (_, i) => ({ x: originX + i % 18 * step, y: originY + Math.floor(i / 18) * step, radius, i: i * 2 }));
     return { x, y, width: displayWidth, height: displayHeight, boardWidth, boardHeight, points, padding, layout: 'landscape' };
   }
-  function create(initial, options) { return Animation.create({ Settings, digitPose, displayDigits }, initial, options); }
+  function create(initial, options) { return Animation.create({ Settings, digitPose, displayDigits, longLane: Drawing.longLane }, initial, options); }
   return { ...base, Settings, Drawing, create, geometry,
     description: '18 × 8 阵列，双方形冒号；逐列整理斜直线，顺时针列波向右传播，最后双速归位。',
     referenceLabel: 'AMT144 Black · 原作参考',

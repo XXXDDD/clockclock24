@@ -181,3 +181,5 @@ alignDelay(r,c) = base + horizontalDelay * c + verticalDelay * abs(r - 4)
 ## 同大型号的其他经典版本（2026-10-17）
 
 - [Tidal](tidal/design.md)：已检查本款视频并记录动作边界。
+
+双针默认采用实物长短比例，短针约为长针的 86%；量测与误差见[长短针比例校准](../hand-proportions.md)。

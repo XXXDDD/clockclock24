@@ -4,7 +4,8 @@
   if (commonJS) module.exports=api; else (root.Timeform ||= {}).AMT96Drawing=api;
 })(globalThis, function (Drawing) {
   'use strict';
-  const hands=Drawing.wrap({id:'amt96'},{finish:'metal'});
+  const hands=Drawing.wrap({id:'amt96'},{finish:'metal',referenceReach:.962,
+    longLanes:'000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000'});
   function drawSurface(context,geometry,config) {
     const {boardWidth:w,boardHeight:h}=geometry;
     let seed=961982;
@@ -47,5 +48,5 @@
     });
     context.restore();
   }
-  return {drawSurface,drawHands:hands.drawHands};
+  return {drawSurface,drawHands:hands.drawHands,handLength:hands.handLength,referenceReach:hands.referenceReach,longLane:hands.longLane};
 });

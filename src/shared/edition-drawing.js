@@ -38,10 +38,10 @@
     });
     context.restore();
   }
-  function arm(context, pose, secondary, config, variant, family) {
+  function arm(context, pose, secondary, config, variant, family, handLength) {
     if (pose.opacity<=.001) return;
     const width=secondary ? config.shortWidth : config.longWidth;
-    const length=49.3*(secondary ? Math.min(config.shortLength,config.longLength) : config.longLength)/100;
+    const length=handLength(config,secondary);
     const color=secondary ? config.short : config.long;
     const finish=Array.isArray(variant.finish) ? variant.finish[secondary ? 1 : 0] : variant.finish;
     context.save(); context.globalAlpha=pose.opacity; context.rotate(pose.angle);
@@ -64,7 +64,12 @@
     context.restore();
   }
   function wrap(model,variant) {
+    const referenceReach=variant.referenceReach ?? model.Drawing?.referenceReach ?? 49.3/53.2;
+    const handLength=variant.referenceReach === undefined && model.Drawing?.handLength ||
+      ((config,secondary)=>53.2*referenceReach*(secondary ? Math.min(config.shortLength,config.longLength) : config.longLength)/100);
+    const longLane=variant.longLanes ? point=>Number(variant.longLanes[Math.floor(point.i/2)]) : model.Drawing?.longLane || (()=>0);
     return {
+      handLength,referenceReach,longLane,
       drawSurface(context,geometry,config) {
         if (variant.texture==='travertine') return stone(context,geometry,config);
         if (model.Drawing?.drawSurface) return model.Drawing.drawSurface(context,geometry,config);
@@ -74,8 +79,8 @@
       drawHands(context,geometry,instance,config) {
         geometry.points.forEach(point=>{
           context.save(); context.translate(point.x,point.y); context.scale(point.radius/53.2,point.radius/53.2);
-          arm(context,instance.hands[point.i+1],true,config,variant,model.id);
-          arm(context,instance.hands[point.i],false,config,variant,model.id);
+          arm(context,instance.hands[point.i+(longLane(point)^1)],true,config,variant,model.id,handLength);
+          arm(context,instance.hands[point.i+longLane(point)],false,config,variant,model.id,handLength);
           context.restore();
         });
       }

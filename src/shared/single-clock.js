@@ -22,11 +22,11 @@
     context.strokeStyle = white ? '#ffffff7a' : '#00000018'; context.beginPath(); context.arc(0, 0, 49.5, 0, TAU); context.stroke();
     context.restore();
   }
-  function drawHand(context, angle, opacity, secondary, config) {
+  function drawHand(context, angle, opacity, secondary, config, referenceReach) {
     if (opacity <= .001) return;
     context.save(); context.globalAlpha = opacity; context.rotate(angle);
     const color = secondary ? config.short : config.long;
-    const length = 49.3 * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100;
+    const length = 53.2 * referenceReach * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100;
     const width = secondary ? config.shortWidth : config.longWidth;
     const shade = context.createLinearGradient(0, -width / 2, 0, width / 2);
     const kind = Palette.material(config), original = Palette.presets.find(preset => preset.id === 'classic-' + kind);
@@ -37,11 +37,11 @@
     context.shadowColor = '#00000038'; context.shadowBlur = 2; context.shadowOffsetY = 1.3; context.fillStyle = shade;
     Palette.roundRect(context, -1.6, -width / 2, length + 1.6, width, Math.min(1.5, width / 2)); context.fill(); context.restore();
   }
-  function drawHands(context, point, poses, config) {
+  function drawHands(context, point, poses, config, referenceReach = 49.3 / 53.2) {
     local(context, point);
     // Preserve the original stroke order when the two hands overlap.
-    drawHand(context, poses[1].angle, poses[1].opacity, true, config);
-    drawHand(context, poses[0].angle, poses[0].opacity, false, config);
+    drawHand(context, poses[1].angle, poses[1].opacity, true, config, referenceReach);
+    drawHand(context, poses[0].angle, poses[0].opacity, false, config, referenceReach);
     const opacity = Math.max(poses[0].opacity, poses[1].opacity);
     if (opacity > .001) {
       context.globalAlpha = opacity; context.fillStyle = config.long; context.beginPath(); context.arc(0, 0, 3.1, 0, TAU); context.fill();

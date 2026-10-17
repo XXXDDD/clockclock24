@@ -239,7 +239,7 @@
     return Object.fromEntries(Object.entries(fields).map(([key, field]) => [key, decode(field, input[key]) ?? decode(field, base[key]) ?? field.value]));
   }
   function serialize(model, settings) {
-    return JSON.stringify({ version: 2, type: model.type, model: model.id, settings: model.Settings.normalize(settings) }, null, 2);
+    return JSON.stringify({ version: 2, handGeometryVersion: 1, type: model.type, model: model.id, settings: model.Settings.normalize(settings) }, null, 2);
   }
   function parse(model, text) {
     const data = JSON.parse(text);
@@ -256,6 +256,13 @@
     if (data.version !== 2 && ['wave', 'orbit'].includes(input.motion)) input.motion = 'spin';
     for (const [key, field] of Object.entries(model.Settings.fields)) {
       if (Object.hasOwn(input, key) && decode(field, input[key], true) === undefined) throw new Error('「' + field.label + '」无效，请检查单位和范围。');
+    }
+    // Old saves wrote the former equal-length defaults into every snapshot.
+    // Upgrade that exact pair once; preserve other custom lengths and newly
+    // exported equal-length configurations, which carry this revision marker.
+    if (data.handGeometryVersion === undefined && Number(input.longLength) === 100 && Number(input.shortLength) === 100) {
+      input.shortLength = model.Settings.defaults.shortLength;
+      if (model.id === 'clockclock9' && Number(input.centerHourLength) === 82) input.centerHourLength = model.Settings.defaults.centerHourLength;
     }
     return model.Settings.normalize(input);
   }
@@ -332,11 +339,11 @@
     context.strokeStyle = white ? '#ffffff7a' : '#00000018'; context.beginPath(); context.arc(0, 0, 49.5, 0, TAU); context.stroke();
     context.restore();
   }
-  function drawHand(context, angle, opacity, secondary, config) {
+  function drawHand(context, angle, opacity, secondary, config, referenceReach) {
     if (opacity <= .001) return;
     context.save(); context.globalAlpha = opacity; context.rotate(angle);
     const color = secondary ? config.short : config.long;
-    const length = 49.3 * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100;
+    const length = 53.2 * referenceReach * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100;
     const width = secondary ? config.shortWidth : config.longWidth;
     const shade = context.createLinearGradient(0, -width / 2, 0, width / 2);
     const kind = Palette.material(config), original = Palette.presets.find(preset => preset.id === 'classic-' + kind);
@@ -347,11 +354,11 @@
     context.shadowColor = '#00000038'; context.shadowBlur = 2; context.shadowOffsetY = 1.3; context.fillStyle = shade;
     Palette.roundRect(context, -1.6, -width / 2, length + 1.6, width, Math.min(1.5, width / 2)); context.fill(); context.restore();
   }
-  function drawHands(context, point, poses, config) {
+  function drawHands(context, point, poses, config, referenceReach = 49.3 / 53.2) {
     local(context, point);
     // Preserve the original stroke order when the two hands overlap.
-    drawHand(context, poses[1].angle, poses[1].opacity, true, config);
-    drawHand(context, poses[0].angle, poses[0].opacity, false, config);
+    drawHand(context, poses[1].angle, poses[1].opacity, true, config, referenceReach);
+    drawHand(context, poses[0].angle, poses[0].opacity, false, config, referenceReach);
     const opacity = Math.max(poses[0].opacity, poses[1].opacity);
     if (opacity > .001) {
       context.globalAlpha = opacity; context.fillStyle = config.long; context.beginPath(); context.arc(0, 0, 3.1, 0, TAU); context.fill();
@@ -368,9 +375,19 @@
   else (root.Timeform ||= {}).HandAnimation = api;
 })(globalThis, function (Maths) {
   'use strict';
-  const { TAU, clamp, wrap, smooth, tween } = Maths;
+  const { TAU, clamp, wrap, smooth } = Maths;
   const stages = Object.freeze({ align: .22, hold: .30, pattern: .74, settle: .94 });
   const shortest = value => ((value + Math.PI) % TAU + TAU) % TAU - Math.PI;
+  // Both arms of a dial share the visibility phases on the playback clock.
+  function opacityAt(hand, now) {
+    const interpolate = (start, end, from, to) => {
+      const progress = end <= start ? Number(now >= end) : clamp((now - start) / (end - start), 0, 1);
+      return from + (to - from) * smooth(progress);
+    };
+    if (now < hand.revealEnd) return interpolate(hand.revealStart, hand.revealEnd, hand.revealFrom, hand.travelOpacity);
+    if (now < hand.fadeStart) return hand.travelOpacity;
+    return interpolate(hand.fadeStart, hand.fadeEnd, hand.fadeFrom, hand.fadeTo);
+  }
   // The caller supplies one timeline. No DOM, timers, storage or host integration.
   function create({ Settings, digitPose, displayDigits, handCount, phase = () => 0, choreography = null }, initial, { reducedMotion = false } = {}) {
     const state = { ...Settings.normalize(initial), minuteKey: null };
@@ -380,6 +397,37 @@
       return { angle, from: angle, to: angle, start: 0, duration: 1, path: null, used: false, opacity: 0, revealFrom: 0, revealStart: 0, revealEnd: 0, travelOpacity: 0, motionEnd: 0, fadeStart: 0, fadeEnd: 0, fadeFrom: 0, fadeTo: 0 };
     });
     const settleOpacity = hand => hand.used || state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
+    function syncVisibility() {
+      for (let index = 0; index < handCount; index += 2) {
+        const first = hands[index], second = hands[index + 1];
+        if (!second) continue;
+        // A folded arm still belongs to a reading dial. Only a wholly unused
+        // dial may fade; entry starts with its first moving arm and return
+        // waits for both arms to enter forming and for the last arm to stop.
+        const shared = {
+          opacity: Math.max(first.opacity, second.opacity),
+          revealFrom: Math.max(first.revealFrom, second.revealFrom),
+          travelOpacity: Math.max(first.travelOpacity, second.travelOpacity),
+          revealStart: Math.min(first.revealStart, second.revealStart),
+          revealEnd: Math.min(first.revealEnd, second.revealEnd),
+          fadeFrom: Math.max(first.fadeFrom, second.fadeFrom),
+          fadeTo: Math.max(first.fadeTo, second.fadeTo),
+          fadeStart: Math.max(first.fadeStart, second.fadeStart),
+          fadeEnd: Math.max(first.fadeEnd, second.fadeEnd)
+        };
+        Object.assign(first, shared); Object.assign(second, shared);
+      }
+    }
+    function beginVisibility(hand, revealStart, revealEnd, fadeStart, fadeEnd, travelOpacity = 1) {
+      Object.assign(hand, { revealFrom: hand.opacity, travelOpacity, revealStart, revealEnd,
+        fadeFrom: travelOpacity, fadeTo: settleOpacity(hand), fadeStart, fadeEnd });
+    }
+    function retargetVisibility(hand, now, fadeStart, fadeEnd) {
+      if (now >= hand.fadeStart || now >= fadeStart) {
+        Object.assign(hand, { revealFrom: hand.opacity, travelOpacity: hand.opacity, revealStart: now, revealEnd: now,
+          fadeFrom: hand.opacity, fadeStart: now, fadeEnd, fadeTo: settleOpacity(hand) });
+      } else Object.assign(hand, { fadeStart, fadeEnd, fadeTo: settleOpacity(hand) });
+    }
     function pathAngle(path, now) {
       const p = clamp((now - path.start) / path.duration, 0, 1);
       if (path.direct) return p === 1 ? wrap(path.target) : path.from + (path.target - path.from) * smooth(p);
@@ -397,9 +445,7 @@
       for (const hand of hands) {
         const progress = clamp((now - hand.start) / hand.duration, 0, 1);
         hand.angle = hand.path ? pathAngle(hand.path, now) : progress === 1 ? wrap(hand.to) : hand.from + (hand.to - hand.from) * smooth(progress);
-        if (now < hand.revealEnd) hand.opacity = tween(now, hand.revealStart, hand.revealEnd, hand.revealFrom, hand.travelOpacity);
-        else if (now < hand.fadeStart) hand.opacity = hand.travelOpacity;
-        else hand.opacity = tween(now, hand.fadeStart, hand.fadeEnd, hand.fadeFrom, hand.fadeTo);
+        hand.opacity = opacityAt(hand, now);
       }
       return hands;
     }
@@ -411,6 +457,7 @@
         hand.opacity = settleOpacity(hand); hand.revealFrom = hand.opacity; hand.travelOpacity = hand.opacity; hand.fadeFrom = hand.opacity; hand.fadeTo = hand.opacity;
         hand.path = null; hand.start = now; hand.duration = 1; hand.motionEnd = now; hand.revealStart = now; hand.revealEnd = now; hand.fadeStart = now; hand.fadeEnd = now;
       }
+      syncVisibility();
       state.minuteKey = digits;
     }
     function animate(minutes, now, force = false) {
@@ -423,9 +470,7 @@
       const rotating = ['spin', 'wave'].includes(state.motion) && !reducedMotion;
       const staged = rotating && choreography;
       sequence = staged ? { start: now, duration } : null;
-      const reveal = reducedMotion ? 60 : Math.min(rotating ? 350 : 160, duration * .15);
-      const hide = reducedMotion ? 80 : Math.min(350, duration * (staged ? .06 : .18));
-      const travel = duration - reveal - hide, idleAlpha = state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
+      const travel = duration, idleAlpha = state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
       for (let index = 0; index < handCount; index++) {
         const hand = hands[index], current = hand.angle;
         let turn = shortest(target[index].angle - current);
@@ -433,9 +478,14 @@
         const participating = rotating || hand.used || target[index].used || hand.opacity > idleAlpha + .001;
         hand.revealFrom = hand.opacity; hand.travelOpacity = participating ? 1 : idleAlpha; hand.used = target[index].used;
         const delay = state.motion === 'wave' && !reducedMotion ? travel * .3 * clamp(phase(index), 0, 1) : 0;
-        hand.from = current; hand.to = current + turn; hand.start = now + reveal + delay; hand.duration = travel - delay; hand.motionEnd = now + duration - hide;
-        hand.revealStart = now; hand.revealEnd = now + reveal;
-        hand.fadeStart = hand.motionEnd; hand.fadeEnd = now + duration; hand.fadeFrom = hand.travelOpacity; hand.fadeTo = settleOpacity(hand);
+        hand.from = current; hand.to = current + turn; hand.start = now + delay; hand.duration = travel - delay; hand.motionEnd = now + duration;
+        beginVisibility(hand, hand.start, hand.start + hand.duration * stages.align,
+          hand.start + hand.duration * stages.pattern, hand.motionEnd, hand.travelOpacity);
+        if (!rotating) {
+          // Direct/reduced-motion transitions blend visibility throughout travel.
+          hand.travelOpacity = hand.opacity; hand.revealEnd = hand.start;
+          hand.fadeFrom = hand.opacity; hand.fadeStart = hand.start;
+        }
         hand.path = null;
         if (staged) {
           const aligned = current + shortest(choreography.alignment(index) - current);
@@ -443,8 +493,12 @@
           hand.path = { from: current, aligned, patternEnd, target: patternEnd + shortest(target[index].angle - patternEnd),
             start: now, duration, delay: state.motion === 'wave' ? .22 * clamp(phase(index), 0, 1) : 0 };
           hand.start = now; hand.duration = duration; hand.to = hand.path.target;
+          hand.motionEnd = now + duration * stages.settle;
+          beginVisibility(hand, now, now + duration * stages.align,
+            now + duration * stages.pattern, hand.motionEnd);
         }
       }
+      syncVisibility();
       state.minuteKey = digits; return true;
     }
     // A long live performance may cross a minute boundary. Keep its choreography
@@ -456,7 +510,7 @@
       sample(now);
       const target = digitPose(digits), settling = sequence.settling || now >= sequence.start + sequence.duration * stages.pattern;
       const finish = Math.max(sequence.start + sequence.duration, now + 350);
-      const motionEnd = finish - Math.min(200, (finish - now) * .06);
+      const motionEnd = finish;
       if (settling) sequence = { start: now, duration: finish - now, motionEnd, settling: true };
       hands.forEach((hand, index) => {
         hand.used = target[index].used;
@@ -464,20 +518,21 @@
           hand.from = hand.angle; hand.to = hand.angle + shortest(target[index].angle - hand.angle);
           hand.path = { direct: true, from: hand.from, target: hand.to, start: now, duration: motionEnd - now };
           hand.start = now; hand.duration = motionEnd - now; hand.motionEnd = motionEnd;
-          hand.revealFrom = hand.opacity; hand.travelOpacity = 1; hand.revealStart = now; hand.revealEnd = Math.min(motionEnd, now + 80);
-          hand.fadeFrom = 1; hand.fadeStart = motionEnd; hand.fadeEnd = finish;
+          retargetVisibility(hand, now, now, motionEnd);
         } else {
           hand.path.target = hand.path.patternEnd + shortest(target[index].angle - hand.path.patternEnd);
           hand.to = hand.path.target;
         }
         hand.fadeTo = settleOpacity(hand);
       });
+      syncVisibility();
       state.minuteKey = digits; return true;
     }
-    function setVisibility(mode, now) {
+    function updateVisibility(mode, now) {
       if (mode === state.visibility) return;
-      sample(now); state.visibility = mode;
-      for (const hand of hands) {
+      state.visibility = mode;
+      for (let index = 0; index < handCount; index++) {
+        const hand = hands[index], motionEnd = Math.max(hand.motionEnd, hands[index ^ 1]?.motionEnd || hand.motionEnd);
         const target = settleOpacity(hand);
         if (now < hand.fadeStart) {
           hand.fadeTo = target;
@@ -487,9 +542,14 @@
           }
         } else {
           hand.revealStart = now; hand.revealEnd = now; hand.travelOpacity = hand.opacity; hand.fadeFrom = hand.opacity; hand.fadeTo = target;
-          hand.fadeStart = now; hand.fadeEnd = now + (reducedMotion ? 150 : 350);
+          hand.fadeStart = now; hand.fadeEnd = now < motionEnd ? motionEnd : now + (reducedMotion ? 150 : 350);
         }
       }
+      syncVisibility();
+    }
+    function setVisibility(mode, now) {
+      if (mode === state.visibility) return;
+      sample(now); updateVisibility(mode, now);
     }
     function update(config, now) {
       const next = Settings.normalize(config, state), visibility = next.visibility;
@@ -503,9 +563,11 @@
       const p = (now - sequence.start) / sequence.duration;
       return p < stages.align ? '整队对齐' : p < stages.hold ? '统一停留' : p < stages.pattern ? '图案运动' : p < stages.settle ? '时间归位' : '读时停留';
     }
-    return { state, hands, sample, initialize, animate, retarget, setVisibility, update, getStage, isAnimating: now => hands.some(hand => now < hand.fadeEnd) };
+    return { state, hands, sample, initialize, animate, retarget, setVisibility, update, getStage,
+      beginVisibility, retargetVisibility, updateVisibility, syncVisibility,
+      isAnimating: now => Boolean(sequence && now < sequence.start + sequence.duration) || hands.some(hand => now < hand.fadeEnd) };
   }
-  return { create, stages };
+  return { create, stages, opacityAt };
 });
 
 (function (root, factory) {
@@ -528,12 +590,12 @@
     radius: number('表盘半径', 53.2, 20, 80, .1, '设计单位', 'geometry'),
     gap: number('表盘间隙', 7.6, 0, 40, .1, '设计单位', 'geometry'),
     longLength: number('长针长度', 100, 70, 100, 1, '%', 'geometry'),
-    shortLength: number('短针长度', 100, 55, 100, 1, '%', 'geometry'),
+    shortLength: { ...number('短针长度', 87, 55, 100, 1, '%', 'geometry'), help: '相对本型号原作长针基准；默认 87%，依据正视参考图量测。' },
     longWidth: number('长针粗细', 9.3, 2, 14, .1, '设计单位', 'geometry'),
     shortWidth: number('短针粗细', 9.3, 2, 14, .1, '设计单位', 'geometry'),
     motion: { type: 'select', label: '换时动画', value: 'wave', options: [['wave', '斜线列波 · 参考编排'], ['spin', '经典旋转'], ['quiet', '平滑过渡'], ['none', '立即换时']], group: 'motion' },
     duration: { ...number('完整编排时长', 40.1, 1, 120, .1, 's', 'motion'), help: '原片约 40.08 秒；整条时间线同比缩放，可用参考节奏按钮恢复 40.1 秒。' },
-    visibility: { type: 'select', label: '闲置指针', value: 'show', options: [['hide', '归位后隐藏'], ['ghost', '微光显示'], ['show', '全部显示']], group: 'motion' },
+    visibility: { type: 'select', label: '闲置指针', value: 'show', options: [['hide', '随归位隐藏'], ['ghost', '微光显示'], ['show', '全部显示']], group: 'motion', help: '仅闲置表盘的双针一起随动作显隐；参与数字的双针完整保留，包括折叠的指针。' },
     playbackSpeed: number('调试播放速度', 1, .1, 3, .1, '倍', 'motion'),
     format24: { type: 'checkbox', label: '24 小时制', value: true, group: 'time' },
     timezone: { type: 'timezone', label: '时区', value: '', group: 'time', help: '留空跟随设备，例如 Asia/Hong_Kong。' },
@@ -565,10 +627,11 @@
     gap: { ...Base.fields.gap, value: 4.3 },
     longWidth: { ...Base.fields.longWidth, value: 6.2 },
     shortWidth: { ...Base.fields.shortWidth, value: 6.2 },
+    shortLength: { ...Base.fields.shortLength, value: 85, help: '相对本型号原作长针基准；默认 85%，保留实物的长短针差异。' },
     motion: { ...Base.fields.motion, value: 'wave', options: [['wave', '逐列波浪收束'], ['spin', '同步旋转'], ['quiet', '平滑过渡'], ['none', '立即换时']] },
     duration: { ...Base.fields.duration, label: '动画时长', value: 6, max: 10, help: '' },
     manualTime: { ...Base.fields.manualTime, value: '12:38' },
-    visibility: { ...Base.fields.visibility, value: 'show', help: '参考图保留闲置指针的斜线；也可选择归位后隐藏或微光显示。' }
+    visibility: { ...Base.fields.visibility, value: 'show', help: '仅闲置表盘的双针一起随动作显隐；参与数字或冒号的双针完整保留，包括折叠的指针。' }
   };
   function normalize(input = {}, base = {}) {
     const settings = Config.normalize(fields, input, base);
@@ -865,7 +928,6 @@
     const { state, hands } = fallback;
     let sequence = null;
     const active = now => sequence && now < sequence.finish;
-    const opacityFor = hand => hand.used || state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
     function motorAt(motor, now) {
       if (motor.direct) return trackAt(motor.forming, now);
       if (now < motor.alignStart) return { angle: motor.from, velocity: 0 };
@@ -881,10 +943,7 @@
       if (!sequence) return fallback.sample(now);
       sequence.motors.forEach((motor, i) => {
         const hand = hands[i]; hand.angle = motorAt(motor, now).angle;
-        hand.opacity = now < hand.revealEnd
-          ? hand.revealFrom + (1 - hand.revealFrom) * smooth(clamp((now - hand.revealStart) / Math.max(1, hand.revealEnd - hand.revealStart), 0, 1))
-          : now < hand.fadeStart ? 1 : hand.fadeFrom + (hand.fadeTo - hand.fadeFrom)
-            * smooth(clamp((now - hand.fadeStart) / Math.max(1, hand.fadeEnd - hand.fadeStart), 0, 1));
+        hand.opacity = HandAnimation.opacityAt(hand, now);
       });
       return hands;
     }
@@ -906,8 +965,8 @@
     function publish(target, minutes) {
       sequence.motors.forEach((motor, i) => {
         const hand = hands[i]; hand.used = target[i].used;
-        Object.assign(hand, { to: motor.forming.to, motionEnd: motor.forming.end,
-          fadeStart: motor.forming.end, fadeEnd: sequence.finish, fadeFrom: 1, fadeTo: opacityFor(hand) });
+        hand.to = motor.forming.to; hand.motionEnd = motor.forming.end;
+        hand.fadeTo = hand.used || state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
       });
       state.minuteKey = spec.displayDigits(minutes, state.format24);
     }
@@ -931,19 +990,25 @@
         const cell = Math.floor(i / 2), col = cell % 6;
         const [departure, slowLane, tours, slowPower, fastPower] = lanes[cell];
         const slow = i % 2 === slowLane;
-        const heading = phaseAt(0).angle + columnOffsets[col] + (slow ? 0 : Math.PI);
+        const short = i % 2 !== spec.longLane({ i: cell * 2 });
+        const heading = phaseAt(0).angle + columnOffsets[col] + (short ? 0 : Math.PI);
         const aligned = reference ? heading : current[i].angle + shortest(heading - current[i].angle);
         const waveStart = now + entry * unit;
         const motor = { from: reference ? heading : current[i].angle, aligned, waveStart,
           alignStart: reference || Math.abs(current[i].velocity) > 1e-10 ? now : now + col * .1 * unit,
           entryVelocity: current[i].velocity, slow, departure, tours, power: slow ? slowPower : fastPower };
         makeReturn(motor, target[i].angle, now, entry, unit);
+        const entryMoves = Math.abs(motor.aligned - motor.from) > 1e-8 || Math.abs(motor.entryVelocity) > 1e-10;
+        const revealStart = entryMoves ? motor.alignStart : motor.waveStart;
+        const revealEnd = entryMoves ? motor.waveStart : motor.waveStart + (motor.formStart - motor.waveStart) * HandAnimation.stages.align;
         Object.assign(hand, { from: motor.from, start: now, duration, path: null,
           opacity: reference ? 1 : current[i].opacity, revealFrom: reference ? 1 : current[i].opacity,
-          revealStart: now, revealEnd: now + (reference ? 0 : Math.min(250, duration * .02)) });
+          revealStart, revealEnd });
+        hand.travelOpacity = 1; hand.fadeFrom = 1;
+        hand.fadeStart = motor.forming.start; hand.fadeEnd = motor.forming.end;
         return motor;
       });
-      publish(target, minutes); sample(now);
+      publish(target, minutes); fallback.syncVisibility(); sample(now);
     }
     function animate(minutes, now, force = false) {
       const digits = spec.displayDigits(minutes, state.format24);
@@ -962,7 +1027,7 @@
       const digits = spec.displayDigits(minutes, state.format24);
       if (digits === state.minuteKey) return false;
       sample(now);
-      const target = spec.digitPose(digits), opacities = hands.map(hand => hand.opacity);
+      const target = spec.digitPose(digits);
       sequence.motors.forEach((motor, i) => {
         if (motor.direct || now >= motor.formStart) {
           const current = motorAt(motor, now), end = Math.max(motor.forming.end, now + 350);
@@ -972,18 +1037,13 @@
         } else makeReturn(motor, target[i].angle, sequence.start, sequence.entry, sequence.unit);
       });
       publish(target, minutes);
-      hands.forEach((hand, i) => Object.assign(hand, { revealFrom: opacities[i], revealStart: now,
-        revealEnd: Math.min(hand.motionEnd, now + 80) }));
+      hands.forEach((hand, i) => fallback.retargetVisibility(hand, now, sequence.motors[i].forming.start, sequence.motors[i].forming.end));
+      fallback.syncVisibility();
       return true;
     }
     function setVisibility(mode, now) {
-      if (!sequence) return fallback.setVisibility(mode, now);
       if (mode === state.visibility) return;
-      sample(now); state.visibility = mode;
-      hands.forEach(hand => {
-        if (now < hand.fadeStart) hand.fadeTo = opacityFor(hand);
-        else Object.assign(hand, { fadeFrom: hand.opacity, fadeTo: opacityFor(hand), fadeStart: now, fadeEnd: now + 350 });
-      });
+      sample(now); fallback.updateVisibility(mode, now);
     }
     function update(config, now) {
       const next = spec.Settings.normalize(config, state), visibility = next.visibility;
@@ -1010,6 +1070,11 @@
 })(globalThis, function (Palette) {
   'use strict';
   const TAU = Math.PI * 2;
+  // Axis-to-tip proportions measured in the rectified official reference.
+  const referenceReach = 0.975;
+  const longLanes = '111111100001000001110000101111101001000100110000010000110000110001100000';
+  const longLane = point => Number(longLanes[Math.floor(point.i / 2)]);
+  const handLength = (config, secondary) => 53.2 * referenceReach * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100;
   function drawSurface(ctx, geometry, config) {
     const { boardWidth: w, boardHeight: h } = geometry;
     const kind = Palette.material(config), black = kind === 'black', white = kind === 'white';
@@ -1036,7 +1101,7 @@
   function hand(ctx, pose, secondary, config) {
     if (pose.opacity <= .001) return;
     const width = secondary ? config.shortWidth : config.longWidth;
-    const length = 49.3 * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100;
+    const length = handLength(config, secondary);
     const color = secondary ? config.short : config.long;
     ctx.save(); ctx.rotate(pose.angle); ctx.globalAlpha = pose.opacity;
     const metal = ctx.createLinearGradient(0, -width / 2, 0, width / 2);
@@ -1052,10 +1117,10 @@
   function drawHands(ctx, geometry, instance, config) {
     geometry.points.forEach(point => {
       ctx.save(); ctx.translate(point.x, point.y); ctx.scale(point.radius / 53.2, point.radius / 53.2);
-      hand(ctx, instance.hands[point.i + 1], true, config); hand(ctx, instance.hands[point.i], false, config); ctx.restore();
+      hand(ctx, instance.hands[point.i + (longLane(point) ^ 1)], true, config); hand(ctx, instance.hands[point.i + longLane(point)], false, config); ctx.restore();
     });
   }
-  return { drawSurface, drawHands };
+  return { drawSurface, drawHands, handLength, referenceReach, longLane };
 });
 
 (function (root, factory) {
@@ -1105,7 +1170,7 @@
     return { x, y, width: displayWidth, height: displayHeight, boardWidth, boardHeight, points, padding, safeTop, safeBottom, layout: 'portrait' };
   }
   function create(initial, options) {
-    return Animation.create({ Settings, displayDigits, digitPose }, initial, options);
+    return Animation.create({ Settings, displayDigits, digitPose, longLane: Drawing.longLane }, initial, options);
   }
   return { id: 'amt72v', type: 'portrait', name: 'A million Times 72v', badge: 'AMT72v',
     count, columns, rows, digitWidth, digitHeight, digitOrigins, frameAspect,
@@ -1185,12 +1250,12 @@
     const { state, hands } = fallback;
     let sequence = null;
     const active = now => sequence && now < sequence.finish;
-    const alpha = hand => hand.used || state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
     const geometry = model.geometry(1920, 1920, Settings.defaults);
     const positions = geometry.points.map(point => {
       const step = geometry.points[1].x-geometry.points[0].x;
       return { x: (point.x-geometry.boardWidth/2)/step,
-        y: (point.y-geometry.boardHeight/2)/step };
+        y: (point.y-geometry.boardHeight/2)/step,
+        longLane: model.Drawing.longLane?.(point) || 0 };
     });
     const maxX = Math.max(...positions.map(p => p.x));
     const minX = Math.min(...positions.map(p => p.x));
@@ -1214,8 +1279,7 @@
       if (!sequence) return fallback.sample(now);
       sequence.motors.forEach((motor, i) => {
         const hand = hands[i]; hand.angle = motorAt(motor, now).angle;
-        const reveal = smooth(clamp((now-sequence.start)/Math.max(1,sequence.reveal),0,1));
-        hand.opacity = now < motor.returning.end ? hand.revealFrom+(1-hand.revealFrom)*reveal : alpha(hand);
+        hand.opacity = HandAnimation.opacityAt(hand, now);
       });
       return hands;
     }
@@ -1234,7 +1298,7 @@
         const current = motor.direct ? { angle: motor.returning.from, velocity: motor.returning.velocity } : wave(motor,motor.formStart);
         motor.returning = returning(current.angle,current.velocity,pose[i].angle,motor.direction,
           motor.formStart,motor.end);
-        Object.assign(hands[i],{ used:pose[i].used, to:motor.returning.to, motionEnd:motor.end, fadeEnd:sequence.finish });
+        Object.assign(hands[i],{ used:pose[i].used, to:motor.returning.to, motionEnd:motor.end });
       });
       state.minuteKey = model.displayDigits(minutes,state.format24);
     }
@@ -1244,7 +1308,7 @@
         velocity:sequence ? motorAt(sequence.motors[i],now).velocity : 0 }));
       profile=options.profileFor?.(minutes,state) || profile;
       const unit = state.duration*1000/profile.duration;
-      sequence = { start:now, finish:now+state.duration*1000, unit, reveal:Math.min(200,state.duration*20), motors:[] };
+      sequence = { start:now, finish:now+state.duration*1000, unit, motors:[] };
       sequence.motors = hands.map((hand,i) => {
         const p = positions[Math.floor(i/2)], lane = i%2;
         const col = profile.order === -1 ? maxX-p.x : p.x-minX;
@@ -1258,7 +1322,10 @@
         if (profile.splay) heading += direction*profile.splay*Math.PI/180;
         if (profile.layout === 'arc') heading = radius < .1 ? -Math.PI/2
           : Math.atan2(-p.y,-p.x)-direction*Math.atan2(radius,profile.curvature || .3);
-        if (profile.opposed && lane) heading += Math.PI;
+        // A rigid straight pair has a physical long/short side. Opening and
+        // counter-rotating patterns keep their independently measured lanes.
+        const opposedLane = profile.counter ? lane : lane ^ p.longLane;
+        if (profile.opposed && opposedLane) heading += Math.PI;
         if (track) heading=track[lane]*Math.PI/180;
         let aligned = previous[i].angle+shortest(heading-previous[i].angle);
         const entryDelay=delay+col*(profile.alignColumnDelay || 0);
@@ -1273,13 +1340,21 @@
         }
         const formStart = now+(profile.formStart+delay)*unit;
         const end = now+Math.min(profile.duration-.12,profile.formEnd+delay*.35+(i%7)*.015)*unit;
-        Object.assign(hand,{ revealFrom:previous[i].opacity });
+        hand.opacity=previous[i].opacity;
         return { from:previous[i].angle, aligned, direction,
           alignStart:Math.abs(previous[i].velocity)>1e-10 ? now : alignStart,
           alignEnd:track ? waveStart : Math.min(alignEnd,waveStart), waveStart, formStart, end, rate,
           entryVelocity:previous[i].velocity, direct:false };
       });
-      publish(minutes); sample(now);
+      publish(minutes);
+      sequence.motors.forEach((motor,i) => {
+        const entryMoves=Math.abs(motor.aligned-motor.from)>1e-8 || Math.abs(motor.entryVelocity)>1e-10;
+        const revealStart=entryMoves ? motor.alignStart : motor.waveStart;
+        const revealEnd=entryMoves ? motor.alignEnd : motor.waveStart+(motor.formStart-motor.waveStart)*HandAnimation.stages.align;
+        fallback.beginVisibility(hands[i],revealStart,revealEnd,motor.formStart,motor.end);
+      });
+      fallback.syncVisibility();
+      sample(now);
     }
     function initialize(minutes,now) { sequence=null; fallback.initialize(minutes,now); }
     function animate(minutes,now,force=false) {
@@ -1310,14 +1385,16 @@
           const current=wave(motor,motor.formStart);
           motor.returning=returning(current.angle,current.velocity,pose[i].angle,motor.direction,motor.formStart,motor.end);
         }
-        hands[i].to=motor.returning.to; hands[i].motionEnd=motor.end; hands[i].fadeEnd=sequence.finish;
+        hands[i].to=motor.returning.to; hands[i].motionEnd=motor.end;
+        fallback.retargetVisibility(hands[i],now,motor.returning.start,motor.end);
       });
+      fallback.syncVisibility();
       state.minuteKey=model.displayDigits(minutes,state.format24); return true;
     }
     function update(config,now) {
       const next=Settings.normalize(config,state), reformat=next.format24!==state.format24;
       sample(now); Object.assign(state,next,{visibility:state.visibility});
-      fallback.setVisibility(next.visibility,now); return { reformat };
+      fallback.updateVisibility(next.visibility,now); return { reformat };
     }
     function getStage(now) {
       if (!active(now)) return '';
@@ -1328,8 +1405,8 @@
       return '逐位拆字归队';
     }
     return { state,hands,sample,initialize,animate,retarget,update,getStage,
-      setVisibility(mode,now) { sample(now); state.visibility=mode; },
-      isAnimating:now => Boolean(active(now)) || (!sequence && fallback.isAnimating(now)) };
+      setVisibility(mode,now) { if (mode !== state.visibility) { sample(now); fallback.updateVisibility(mode,now); } },
+      isAnimating:now => Boolean(active(now)) || hands.some(hand => now < hand.fadeEnd) };
   }
   return { create,phaseAt };
 });
@@ -1374,10 +1451,10 @@
     });
     context.restore();
   }
-  function arm(context, pose, secondary, config, variant, family) {
+  function arm(context, pose, secondary, config, variant, family, handLength) {
     if (pose.opacity<=.001) return;
     const width=secondary ? config.shortWidth : config.longWidth;
-    const length=49.3*(secondary ? Math.min(config.shortLength,config.longLength) : config.longLength)/100;
+    const length=handLength(config,secondary);
     const color=secondary ? config.short : config.long;
     const finish=Array.isArray(variant.finish) ? variant.finish[secondary ? 1 : 0] : variant.finish;
     context.save(); context.globalAlpha=pose.opacity; context.rotate(pose.angle);
@@ -1400,7 +1477,12 @@
     context.restore();
   }
   function wrap(model,variant) {
+    const referenceReach=variant.referenceReach ?? model.Drawing?.referenceReach ?? 49.3/53.2;
+    const handLength=variant.referenceReach === undefined && model.Drawing?.handLength ||
+      ((config,secondary)=>53.2*referenceReach*(secondary ? Math.min(config.shortLength,config.longLength) : config.longLength)/100);
+    const longLane=variant.longLanes ? point=>Number(variant.longLanes[Math.floor(point.i/2)]) : model.Drawing?.longLane || (()=>0);
     return {
+      handLength,referenceReach,longLane,
       drawSurface(context,geometry,config) {
         if (variant.texture==='travertine') return stone(context,geometry,config);
         if (model.Drawing?.drawSurface) return model.Drawing.drawSurface(context,geometry,config);
@@ -1410,8 +1492,8 @@
       drawHands(context,geometry,instance,config) {
         geometry.points.forEach(point=>{
           context.save(); context.translate(point.x,point.y); context.scale(point.radius/53.2,point.radius/53.2);
-          arm(context,instance.hands[point.i+1],true,config,variant,model.id);
-          arm(context,instance.hands[point.i],false,config,variant,model.id);
+          arm(context,instance.hands[point.i+(longLane(point)^1)],true,config,variant,model.id,handLength);
+          arm(context,instance.hands[point.i+longLane(point)],false,config,variant,model.id,handLength);
           context.restore();
         });
       }

@@ -41,7 +41,8 @@ test('classic geometry matches independently rectified references and reprojects
       assert.ok(Math.max(...errors) < 3, model.id + ' maximum reprojection error');
       if (model.id === 'clockclock9') {
         near((geometry.boardHeight / 2 - first.y) * pixelScale, source.outerAxisRadiusPx, .2, 'CC9 outer axis');
-        near(model.Drawing.handLength(first, model.Settings.defaults, false) * pixelScale, source.armLengthPx, .2, 'CC9 arm');
+        const measured = require('./fixtures/hand-proportions.json').clockclock9;
+        near(model.Drawing.handLength(first, model.Settings.defaults, false) * pixelScale / w, measured.longToBoardMedian, .003, 'CC9 long arm');
         continue;
       }
       near((geometry.points[1].x - first.x) * pixelScale, source.pitchPx, .15, model.id + ' pitch');
@@ -93,7 +94,7 @@ test('imports and URL-style overrides preserve complete customizations while off
     instance.hands.forEach((hand, index) => {
       assert.ok(Math.abs(Math.sin(hand.angle) - Math.sin(pose[index].angle)) < 1e-8);
       assert.ok(Math.abs(Math.cos(hand.angle) - Math.cos(pose[index].angle)) < 1e-8);
-      assert.equal(hand.opacity, normalized.visibility === 'hide' && !pose[index].used ? 0 : 1);
+      assert.equal(hand.opacity, normalized.visibility === 'hide' && !pose[index].used && !pose[index ^ 1].used ? 0 : 1);
     });
   }
   const legacy = catalogs[1].parse(JSON.stringify({ version: 1, settings: { board: '#a95441', motion: 'orbit', scale: 67 } }));

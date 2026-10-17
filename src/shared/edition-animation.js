@@ -47,12 +47,12 @@
     const { state, hands } = fallback;
     let sequence = null;
     const active = now => sequence && now < sequence.finish;
-    const alpha = hand => hand.used || state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
     const geometry = model.geometry(1920, 1920, Settings.defaults);
     const positions = geometry.points.map(point => {
       const step = geometry.points[1].x-geometry.points[0].x;
       return { x: (point.x-geometry.boardWidth/2)/step,
-        y: (point.y-geometry.boardHeight/2)/step };
+        y: (point.y-geometry.boardHeight/2)/step,
+        longLane: model.Drawing.longLane?.(point) || 0 };
     });
     const maxX = Math.max(...positions.map(p => p.x));
     const minX = Math.min(...positions.map(p => p.x));
@@ -76,8 +76,7 @@
       if (!sequence) return fallback.sample(now);
       sequence.motors.forEach((motor, i) => {
         const hand = hands[i]; hand.angle = motorAt(motor, now).angle;
-        const reveal = smooth(clamp((now-sequence.start)/Math.max(1,sequence.reveal),0,1));
-        hand.opacity = now < motor.returning.end ? hand.revealFrom+(1-hand.revealFrom)*reveal : alpha(hand);
+        hand.opacity = HandAnimation.opacityAt(hand, now);
       });
       return hands;
     }
@@ -96,7 +95,7 @@
         const current = motor.direct ? { angle: motor.returning.from, velocity: motor.returning.velocity } : wave(motor,motor.formStart);
         motor.returning = returning(current.angle,current.velocity,pose[i].angle,motor.direction,
           motor.formStart,motor.end);
-        Object.assign(hands[i],{ used:pose[i].used, to:motor.returning.to, motionEnd:motor.end, fadeEnd:sequence.finish });
+        Object.assign(hands[i],{ used:pose[i].used, to:motor.returning.to, motionEnd:motor.end });
       });
       state.minuteKey = model.displayDigits(minutes,state.format24);
     }
@@ -106,7 +105,7 @@
         velocity:sequence ? motorAt(sequence.motors[i],now).velocity : 0 }));
       profile=options.profileFor?.(minutes,state) || profile;
       const unit = state.duration*1000/profile.duration;
-      sequence = { start:now, finish:now+state.duration*1000, unit, reveal:Math.min(200,state.duration*20), motors:[] };
+      sequence = { start:now, finish:now+state.duration*1000, unit, motors:[] };
       sequence.motors = hands.map((hand,i) => {
         const p = positions[Math.floor(i/2)], lane = i%2;
         const col = profile.order === -1 ? maxX-p.x : p.x-minX;
@@ -120,7 +119,10 @@
         if (profile.splay) heading += direction*profile.splay*Math.PI/180;
         if (profile.layout === 'arc') heading = radius < .1 ? -Math.PI/2
           : Math.atan2(-p.y,-p.x)-direction*Math.atan2(radius,profile.curvature || .3);
-        if (profile.opposed && lane) heading += Math.PI;
+        // A rigid straight pair has a physical long/short side. Opening and
+        // counter-rotating patterns keep their independently measured lanes.
+        const opposedLane = profile.counter ? lane : lane ^ p.longLane;
+        if (profile.opposed && opposedLane) heading += Math.PI;
         if (track) heading=track[lane]*Math.PI/180;
         let aligned = previous[i].angle+shortest(heading-previous[i].angle);
         const entryDelay=delay+col*(profile.alignColumnDelay || 0);
@@ -135,13 +137,21 @@
         }
         const formStart = now+(profile.formStart+delay)*unit;
         const end = now+Math.min(profile.duration-.12,profile.formEnd+delay*.35+(i%7)*.015)*unit;
-        Object.assign(hand,{ revealFrom:previous[i].opacity });
+        hand.opacity=previous[i].opacity;
         return { from:previous[i].angle, aligned, direction,
           alignStart:Math.abs(previous[i].velocity)>1e-10 ? now : alignStart,
           alignEnd:track ? waveStart : Math.min(alignEnd,waveStart), waveStart, formStart, end, rate,
           entryVelocity:previous[i].velocity, direct:false };
       });
-      publish(minutes); sample(now);
+      publish(minutes);
+      sequence.motors.forEach((motor,i) => {
+        const entryMoves=Math.abs(motor.aligned-motor.from)>1e-8 || Math.abs(motor.entryVelocity)>1e-10;
+        const revealStart=entryMoves ? motor.alignStart : motor.waveStart;
+        const revealEnd=entryMoves ? motor.alignEnd : motor.waveStart+(motor.formStart-motor.waveStart)*HandAnimation.stages.align;
+        fallback.beginVisibility(hands[i],revealStart,revealEnd,motor.formStart,motor.end);
+      });
+      fallback.syncVisibility();
+      sample(now);
     }
     function initialize(minutes,now) { sequence=null; fallback.initialize(minutes,now); }
     function animate(minutes,now,force=false) {
@@ -172,14 +182,16 @@
           const current=wave(motor,motor.formStart);
           motor.returning=returning(current.angle,current.velocity,pose[i].angle,motor.direction,motor.formStart,motor.end);
         }
-        hands[i].to=motor.returning.to; hands[i].motionEnd=motor.end; hands[i].fadeEnd=sequence.finish;
+        hands[i].to=motor.returning.to; hands[i].motionEnd=motor.end;
+        fallback.retargetVisibility(hands[i],now,motor.returning.start,motor.end);
       });
+      fallback.syncVisibility();
       state.minuteKey=model.displayDigits(minutes,state.format24); return true;
     }
     function update(config,now) {
       const next=Settings.normalize(config,state), reformat=next.format24!==state.format24;
       sample(now); Object.assign(state,next,{visibility:state.visibility});
-      fallback.setVisibility(next.visibility,now); return { reformat };
+      fallback.updateVisibility(next.visibility,now); return { reformat };
     }
     function getStage(now) {
       if (!active(now)) return '';
@@ -190,8 +202,8 @@
       return '逐位拆字归队';
     }
     return { state,hands,sample,initialize,animate,retarget,update,getStage,
-      setVisibility(mode,now) { sample(now); state.visibility=mode; },
-      isAnimating:now => Boolean(active(now)) || (!sequence && fallback.isAnimating(now)) };
+      setVisibility(mode,now) { if (mode !== state.visibility) { sample(now); fallback.updateVisibility(mode,now); } },
+      isAnimating:now => Boolean(active(now)) || hands.some(hand => now < hand.fadeEnd) };
   }
   return { create,phaseAt };
 });

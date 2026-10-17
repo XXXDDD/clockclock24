@@ -42,7 +42,16 @@
   function create(initial, options) {
     return Animation.create({ Settings, displayDigits, digitPose, cells }, initial, options);
   }
-  const Drawing = { drawSurface(context, geometry, config) {
+  const referenceReach = 1.016;
+  const longLanes = '0000000000000000011100000000000000000000000000000000000000000';
+  const longLane = point => Number(longLanes[Math.floor(point.i / 2)]);
+  const Drawing = { referenceReach, longLane,
+    handLength: (config, secondary) => 53.2 * referenceReach * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100,
+    drawHands(context, geometry, instance, config) {
+      geometry.points.forEach(point => SingleClock.drawHands(context, point,
+        [instance.hands[point.i + longLane(point)], instance.hands[point.i + (longLane(point) ^ 1)]], config, referenceReach));
+    },
+    drawSurface(context, geometry, config) {
     Layout.drawBoard(context, geometry, config);
     geometry.points.forEach(point => SingleClock.drawFace(context, point, config));
   } };

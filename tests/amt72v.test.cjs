@@ -21,7 +21,7 @@ function finish(clock, minute, now) {
   const pose = Model.digitPose(Model.displayDigits(minute, clock.state.format24));
   clock.hands.forEach((hand, i) => {
     angle(hand.angle, pose[i].angle);
-    near(hand.opacity, pose[i].used || clock.state.visibility === 'show' ? 1 : clock.state.visibility === 'ghost' ? .12 : 0);
+    near(hand.opacity, (pose[i].used || pose[i ^ 1].used) || clock.state.visibility === 'show' ? 1 : clock.state.visibility === 'ghost' ? .12 : 0);
   });
   assert.equal(clock.isAnimating(now), false);
 }

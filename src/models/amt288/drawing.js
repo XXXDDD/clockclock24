@@ -6,6 +6,11 @@
 })(globalThis, function (Palette) {
   'use strict';
   const TAU = Math.PI * 2;
+  // Axis-to-tip proportions measured in the rectified official reference.
+  const referenceReach = 0.983;
+  const longLanes = '000000000000000000000000000000000000000000000000000000000000000000000000010000011110001111010110000000110110011101110010000000111111010001100010000000011100101110011100000000111101011110000000000010111110011111000010000000000000000000000000000000000000000000000000000000000000000000000000';
+  const longLane = point => Number(longLanes[Math.floor(point.i / 2)]);
+  const handLength = (config, secondary) => 53.2 * referenceReach * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100;
   function drawSurface(context, geometry, config) {
     const { boardWidth: width, boardHeight: height } = geometry;
     const material = Palette.material(config), black = material === 'black', white = material === 'white';
@@ -34,7 +39,7 @@
   function hand(context, pose, secondary, config) {
     if (pose.opacity <= .001) return;
     const width = secondary ? config.shortWidth : config.longWidth;
-    const length = 49.3 * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100;
+    const length = handLength(config, secondary);
     context.save(); context.rotate(pose.angle); context.globalAlpha = pose.opacity;
     context.fillStyle = secondary ? config.short : config.long;
     context.shadowColor = '#00000032'; context.shadowBlur = 1.1; context.shadowOffsetY = 1.1;
@@ -45,9 +50,9 @@
   function drawHands(context, geometry, instance, config) {
     geometry.points.forEach(point => {
       context.save(); context.translate(point.x, point.y); context.scale(point.radius / 53.2, point.radius / 53.2);
-      hand(context, instance.hands[point.i + 1], true, config); hand(context, instance.hands[point.i], false, config);
+      hand(context, instance.hands[point.i + (longLane(point) ^ 1)], true, config); hand(context, instance.hands[point.i + longLane(point)], false, config);
       context.restore();
     });
   }
-  return { drawSurface, drawHands };
+  return { drawSurface, drawHands, handLength, referenceReach, longLane };
 });

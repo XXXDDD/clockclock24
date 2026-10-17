@@ -6,7 +6,7 @@
   else (root.Timeform ||= {}).AMT61cAnimation = api;
 })(globalThis, function (Maths, HandAnimation) {
   'use strict';
-  const { TAU, clamp, wrap, smooth, tween } = Maths;
+  const { TAU, clamp, wrap, smooth } = Maths;
   const stages = Object.freeze({ align: .20, hold: .28, wind: .80, settle: .94 });
   // Keep the approved wind curve and propagation. Entry and return use separate
   // motor tracks, following the positional observations in this model's design.
@@ -29,7 +29,6 @@
     const fallback = HandAnimation.create({ Settings, displayDigits, digitPose, handCount: cells.length * 2 }, initial, options);
     const { state, hands } = fallback;
     let sequence = null;
-    const alpha = hand => hand.used || state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
     const poseAt = minutes => digitPose(displayDigits(minutes, state.format24));
     function windState(motor, now) {
       const value = wind((now - sequence.windStart) * sequence.windScale - motor.delay);
@@ -45,12 +44,9 @@
     }
     function sample(now) {
       if (!sequence) return fallback.sample(now);
-      sequence.motors.forEach((motor, index) => { hands[index].angle = motorState(motor, now).angle; });
-      sequence.opacityTracks.forEach((motor, index) => {
-        const hand = hands[index];
-        hand.opacity = now < motor.fadeStart
-          ? tween(now, sequence.start, sequence.revealEnd, motor.revealFrom, 1)
-          : tween(now, motor.fadeStart, motor.fadeEnd, motor.fadeFrom, alpha(hand));
+      sequence.motors.forEach((motor, index) => {
+        const hand = hands[index]; hand.angle = motorState(motor, now).angle;
+        hand.opacity = HandAnimation.opacityAt(hand, now);
       });
       return hands;
     }
@@ -89,9 +85,9 @@
       fallback.initialize(minutes, now);
       sequence = { start: now, alignEnd: now + duration * stages.align, windStart: now + duration * stages.hold,
         returnStart: direct ? now : now + duration * stages.wind, returnEnd, finish, direct,
-        revealEnd: now + Math.min(direct ? 80 : 300, duration * .12), windScale: 26 / (duration * (stages.wind - stages.hold)),
+        windScale: 26 / (duration * (stages.wind - stages.hold)),
         positions: cells.map(cell => ({ ...cell, centerDistance: Math.abs(cell.row - 4), mirrorRow: Math.min(cell.row, 8 - cell.row) })),
-        motors: [], opacityTracks: [] };
+        motors: [] };
       sequence.motors = hands.map((hand, index) => {
         const position = sequence.positions[Math.floor(index / 2)];
         const alignStart = now + duration * (.2 + .4 * position.col + .7 * position.centerDistance) / 53.12;
@@ -103,11 +99,17 @@
         return motor;
       });
       setTargets(minutes);
-      sequence.opacityTracks = hands.map((hand, index) => {
+      hands.forEach((hand, index) => {
+        const motor = sequence.motors[index];
+        const entryMoves = Math.abs(motor.aligned - motor.from) > 1e-8;
+        const revealStart = direct ? now : entryMoves ? motor.alignStart : sequence.windStart + motor.delay / sequence.windScale;
+        const revealEnd = direct ? now : entryMoves ? motor.alignEnd : revealStart + (sequence.returnStart - revealStart) * HandAnimation.stages.align;
         Object.assign(hand, { angle: current[index].angle, opacity: current[index].opacity, from: current[index].angle,
-          start: now, duration, fadeStart: returnEnd, fadeEnd: finish });
-        return { revealFrom: current[index].opacity, fadeFrom: 1, fadeStart: returnEnd, fadeEnd: finish };
+          start: now, duration });
+        fallback.beginVisibility(hand, revealStart, revealEnd,
+          sequence.returnStart, motor.end, direct ? hand.opacity : 1);
       });
+      fallback.syncVisibility();
     }
     function freezeFallback(now) {
       sample(now); sequence = null;
@@ -128,19 +130,17 @@
     function retarget(minutes, now) {
       if (!sequence || now >= sequence.finish) return animate(minutes, now);
       if (displayDigits(minutes, state.format24) === state.minuteKey) return false;
-      if (!sequence.direct && now < sequence.returnStart) { setTargets(minutes); return true; }
+      if (!sequence.direct && now < sequence.returnStart) {
+        sample(now); setTargets(minutes);
+        hands.forEach((hand, i) => fallback.retargetVisibility(hand, now, sequence.returnStart, sequence.motors[i].end));
+        fallback.syncVisibility();
+        return true;
+      }
       install(minutes, now, Math.max(350, sequence.finish - now), true); return true;
     }
     function setVisibility(mode, now) {
-      if (!sequence) return fallback.setVisibility(mode, now);
       if (mode === state.visibility) return;
-      sample(now); state.visibility = mode;
-      const end = Math.max(sequence.finish, now + (options.reducedMotion ? 150 : 350));
-      sequence.opacityTracks.forEach((motor, index) => {
-        motor.fadeFrom = now < sequence.returnEnd ? 1 : hands[index].opacity;
-        motor.fadeStart = Math.max(now, sequence.returnEnd); motor.fadeEnd = end;
-      });
-      sequence.finish = end;
+      sample(now); fallback.updateVisibility(mode, now);
     }
     function update(config, now) {
       const next = Settings.normalize(config, state), reformat = next.format24 !== state.format24, visibility = next.visibility;
@@ -154,7 +154,7 @@
       return now < sequence.motionEnd ? '逐针成型' : '读时停留';
     }
     return { state, hands, sample, initialize, animate, retarget, update, setVisibility, getStage,
-      isAnimating: now => sequence ? now < sequence.finish : fallback.isAnimating(now) };
+      isAnimating: now => Boolean(sequence && now < sequence.finish) || hands.some(hand => now < hand.fadeEnd) };
   }
   return { create, stages };
 });

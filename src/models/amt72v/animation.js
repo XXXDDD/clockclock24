@@ -76,7 +76,6 @@
     const { state, hands } = fallback;
     let sequence = null;
     const active = now => sequence && now < sequence.finish;
-    const opacityFor = hand => hand.used || state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
     function motorAt(motor, now) {
       if (motor.direct) return trackAt(motor.forming, now);
       if (now < motor.alignStart) return { angle: motor.from, velocity: 0 };
@@ -92,10 +91,7 @@
       if (!sequence) return fallback.sample(now);
       sequence.motors.forEach((motor, i) => {
         const hand = hands[i]; hand.angle = motorAt(motor, now).angle;
-        hand.opacity = now < hand.revealEnd
-          ? hand.revealFrom + (1 - hand.revealFrom) * smooth(clamp((now - hand.revealStart) / Math.max(1, hand.revealEnd - hand.revealStart), 0, 1))
-          : now < hand.fadeStart ? 1 : hand.fadeFrom + (hand.fadeTo - hand.fadeFrom)
-            * smooth(clamp((now - hand.fadeStart) / Math.max(1, hand.fadeEnd - hand.fadeStart), 0, 1));
+        hand.opacity = HandAnimation.opacityAt(hand, now);
       });
       return hands;
     }
@@ -117,8 +113,8 @@
     function publish(target, minutes) {
       sequence.motors.forEach((motor, i) => {
         const hand = hands[i]; hand.used = target[i].used;
-        Object.assign(hand, { to: motor.forming.to, motionEnd: motor.forming.end,
-          fadeStart: motor.forming.end, fadeEnd: sequence.finish, fadeFrom: 1, fadeTo: opacityFor(hand) });
+        hand.to = motor.forming.to; hand.motionEnd = motor.forming.end;
+        hand.fadeTo = hand.used || state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
       });
       state.minuteKey = spec.displayDigits(minutes, state.format24);
     }
@@ -142,19 +138,25 @@
         const cell = Math.floor(i / 2), col = cell % 6;
         const [departure, slowLane, tours, slowPower, fastPower] = lanes[cell];
         const slow = i % 2 === slowLane;
-        const heading = phaseAt(0).angle + columnOffsets[col] + (slow ? 0 : Math.PI);
+        const short = i % 2 !== spec.longLane({ i: cell * 2 });
+        const heading = phaseAt(0).angle + columnOffsets[col] + (short ? 0 : Math.PI);
         const aligned = reference ? heading : current[i].angle + shortest(heading - current[i].angle);
         const waveStart = now + entry * unit;
         const motor = { from: reference ? heading : current[i].angle, aligned, waveStart,
           alignStart: reference || Math.abs(current[i].velocity) > 1e-10 ? now : now + col * .1 * unit,
           entryVelocity: current[i].velocity, slow, departure, tours, power: slow ? slowPower : fastPower };
         makeReturn(motor, target[i].angle, now, entry, unit);
+        const entryMoves = Math.abs(motor.aligned - motor.from) > 1e-8 || Math.abs(motor.entryVelocity) > 1e-10;
+        const revealStart = entryMoves ? motor.alignStart : motor.waveStart;
+        const revealEnd = entryMoves ? motor.waveStart : motor.waveStart + (motor.formStart - motor.waveStart) * HandAnimation.stages.align;
         Object.assign(hand, { from: motor.from, start: now, duration, path: null,
           opacity: reference ? 1 : current[i].opacity, revealFrom: reference ? 1 : current[i].opacity,
-          revealStart: now, revealEnd: now + (reference ? 0 : Math.min(250, duration * .02)) });
+          revealStart, revealEnd });
+        hand.travelOpacity = 1; hand.fadeFrom = 1;
+        hand.fadeStart = motor.forming.start; hand.fadeEnd = motor.forming.end;
         return motor;
       });
-      publish(target, minutes); sample(now);
+      publish(target, minutes); fallback.syncVisibility(); sample(now);
     }
     function animate(minutes, now, force = false) {
       const digits = spec.displayDigits(minutes, state.format24);
@@ -173,7 +175,7 @@
       const digits = spec.displayDigits(minutes, state.format24);
       if (digits === state.minuteKey) return false;
       sample(now);
-      const target = spec.digitPose(digits), opacities = hands.map(hand => hand.opacity);
+      const target = spec.digitPose(digits);
       sequence.motors.forEach((motor, i) => {
         if (motor.direct || now >= motor.formStart) {
           const current = motorAt(motor, now), end = Math.max(motor.forming.end, now + 350);
@@ -183,18 +185,13 @@
         } else makeReturn(motor, target[i].angle, sequence.start, sequence.entry, sequence.unit);
       });
       publish(target, minutes);
-      hands.forEach((hand, i) => Object.assign(hand, { revealFrom: opacities[i], revealStart: now,
-        revealEnd: Math.min(hand.motionEnd, now + 80) }));
+      hands.forEach((hand, i) => fallback.retargetVisibility(hand, now, sequence.motors[i].forming.start, sequence.motors[i].forming.end));
+      fallback.syncVisibility();
       return true;
     }
     function setVisibility(mode, now) {
-      if (!sequence) return fallback.setVisibility(mode, now);
       if (mode === state.visibility) return;
-      sample(now); state.visibility = mode;
-      hands.forEach(hand => {
-        if (now < hand.fadeStart) hand.fadeTo = opacityFor(hand);
-        else Object.assign(hand, { fadeFrom: hand.opacity, fadeTo: opacityFor(hand), fadeStart: now, fadeEnd: now + 350 });
-      });
+      sample(now); fallback.updateVisibility(mode, now);
     }
     function update(config, now) {
       const next = spec.Settings.normalize(config, state), visibility = next.visibility;

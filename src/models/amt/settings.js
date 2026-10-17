@@ -13,10 +13,11 @@
     gap: { ...Base.fields.gap, value: 4.3 },
     longWidth: { ...Base.fields.longWidth, value: 6.2 },
     shortWidth: { ...Base.fields.shortWidth, value: 6.2 },
+    shortLength: { ...Base.fields.shortLength, value: 85, help: '相对本型号原作长针基准；默认 85%，保留实物的长短针差异。' },
     motion: { ...Base.fields.motion, value: 'wave', options: [['wave', '逐列波浪收束'], ['spin', '同步旋转'], ['quiet', '平滑过渡'], ['none', '立即换时']] },
     duration: { ...Base.fields.duration, label: '动画时长', value: 6, max: 10, help: '' },
     manualTime: { ...Base.fields.manualTime, value: '12:38' },
-    visibility: { ...Base.fields.visibility, value: 'show', help: '参考图保留闲置指针的斜线；也可选择归位后隐藏或微光显示。' }
+    visibility: { ...Base.fields.visibility, value: 'show', help: '仅闲置表盘的双针一起随动作显隐；参与数字或冒号的双针完整保留，包括折叠的指针。' }
   };
   function normalize(input = {}, base = {}) {
     const settings = Config.normalize(fields, input, base);

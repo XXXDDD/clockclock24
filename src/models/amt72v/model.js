@@ -45,7 +45,7 @@
     return { x, y, width: displayWidth, height: displayHeight, boardWidth, boardHeight, points, padding, safeTop, safeBottom, layout: 'portrait' };
   }
   function create(initial, options) {
-    return Animation.create({ Settings, displayDigits, digitPose }, initial, options);
+    return Animation.create({ Settings, displayDigits, digitPose, longLane: Drawing.longLane }, initial, options);
   }
   return { id: 'amt72v', type: 'portrait', name: 'A million Times 72v', badge: 'AMT72v',
     count, columns, rows, digitWidth, digitHeight, digitOrigins, frameAspect,

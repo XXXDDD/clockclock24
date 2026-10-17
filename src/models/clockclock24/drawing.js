@@ -6,6 +6,11 @@
 })(globalThis, function (Palette) {
   'use strict';
   const TAU = Math.PI * 2;
+  // Axis-to-tip proportions measured in the rectified official reference.
+  const referenceReach = 0.976;
+  const longLanes = '111000000000000000000000';
+  const longLane = point => Number(longLanes[Math.floor(point.i / 2)]);
+  const handLength = (config, secondary) => 53.2 * referenceReach * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100;
   function drawSurface(context, geometry, config) {
     const { boardWidth: width, boardHeight: height } = geometry;
     const material = Palette.material(config), black = material === 'black', white = material === 'white';
@@ -31,7 +36,7 @@
   function drawHand(context, hand, secondary, config) {
     if (hand.opacity <= .001) return;
     const width = secondary ? config.shortWidth : config.longWidth;
-    const length = 49.3 * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100;
+    const length = handLength(config, secondary);
     context.save(); context.rotate(hand.angle); context.globalAlpha = hand.opacity;
     context.fillStyle = secondary ? config.short : config.long;
     context.shadowColor = '#00000035'; context.shadowBlur = 1.2; context.shadowOffsetY = 1.2;
@@ -42,10 +47,10 @@
   function drawHands(context, geometry, instance, config) {
     geometry.points.forEach(point => {
       context.save(); context.translate(point.x, point.y); context.scale(point.radius / 53.2, point.radius / 53.2);
-      drawHand(context, instance.hands[point.i + 1], true, config);
-      drawHand(context, instance.hands[point.i], false, config);
+      drawHand(context, instance.hands[point.i + (longLane(point) ^ 1)], true, config);
+      drawHand(context, instance.hands[point.i + longLane(point)], false, config);
       context.restore();
     });
   }
-  return { drawSurface, drawHands };
+  return { drawSurface, drawHands, handLength, referenceReach, longLane };
 });

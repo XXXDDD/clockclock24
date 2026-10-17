@@ -54,7 +54,6 @@
     const fallback = HandAnimation.create({ ...spec, handCount: 48 }, initial, options);
     const { state, hands } = fallback;
     let sequence = null;
-    const idleOpacity = hand => hand.used || state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
     const active = now => sequence && now < sequence.finish;
     function motorAt(motor, now) {
       if (motor.direct) return trackAt(motor.forming, now);
@@ -71,10 +70,7 @@
       if (!sequence) return fallback.sample(now);
       sequence.motors.forEach((motor, index) => {
         const hand = hands[index]; hand.angle = motorAt(motor, now).angle;
-        hand.opacity = now < hand.revealEnd
-          ? hand.revealFrom + (1 - hand.revealFrom) * smooth(clamp((now - hand.revealStart) / (hand.revealEnd - hand.revealStart), 0, 1))
-          : now < hand.fadeStart ? 1
-            : hand.fadeFrom + (hand.fadeTo - hand.fadeFrom) * smooth(clamp((now - hand.fadeStart) / Math.max(1, hand.fadeEnd - hand.fadeStart), 0, 1));
+        hand.opacity = HandAnimation.opacityAt(hand, now);
       });
       return hands;
     }
@@ -89,8 +85,7 @@
       sequence.motors.forEach((motor, index) => {
         const hand = hands[index]; hand.used = target[index].used;
         hand.to = motor.forming.to; hand.motionEnd = motor.forming.end;
-        hand.fadeStart = motor.forming.end; hand.fadeEnd = sequence.finish;
-        hand.fadeFrom = 1; hand.fadeTo = idleOpacity(hand);
+        hand.fadeTo = hand.used || state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
       });
       state.minuteKey = spec.displayDigits(minutes, state.format24);
     }
@@ -104,9 +99,8 @@
       sequence = { start: now, finish: now + duration, unit, motors: [] };
       sequence.motors = hands.map((hand, index) => {
         const cell = Math.floor(index / 2), col = cell % 8, row = Math.floor(cell / 8), lane = index % 2;
-        // Lane identity is a reconstruction; the clip only identifies the pair.
-        const reverse = (col === 5 || row === 1) ? 1 : 0;
-        const common = radians((lane ^ reverse) ? 135 : 315);
+        const short = lane !== spec.longLane({ i: cell * 2 });
+        const common = radians(short ? 135 : 315);
         const aligned = current[index].angle + shortest(common - current[index].angle);
         const delay = (7 - col) * .34 + row * .06;
         const alignStart = start + (.45 + delay) * unit;
@@ -119,11 +113,16 @@
           entryVelocity: current[index].velocity, forming: returnTrack(aligned + wave.angle, wave.velocity / unit, target[index].angle, formStart, finish) };
         // An interrupted performance must carry its current velocity immediately.
         if (Math.abs(current[index].velocity) > 1e-10) { motor.alignStart = now; motor.alignEnd = now + 7.8 * unit; }
+        const entryMoves = Math.abs(motor.aligned - motor.from) > 1e-8 || Math.abs(motor.entryVelocity) > 1e-10;
+        const revealStart = entryMoves ? motor.alignStart : motor.waveStart;
+        const revealEnd = entryMoves ? motor.alignEnd : motor.waveStart + (motor.formStart - motor.waveStart) * HandAnimation.stages.align;
         Object.assign(hand, { from: current[index].angle, start: now, duration, path: null,
-          revealFrom: current[index].opacity, revealStart: now, revealEnd: now + Math.min(250, duration * .02), opacity: current[index].opacity });
+          revealFrom: current[index].opacity, revealStart, revealEnd, travelOpacity: 1,
+          fadeFrom: 1, fadeStart: motor.forming.start, fadeEnd: motor.forming.end });
         return motor;
       });
       publish(target, minutes);
+      fallback.syncVisibility();
     }
     function animate(minutes, now, force = false) {
       const digits = spec.displayDigits(minutes, state.format24);
@@ -139,7 +138,7 @@
       if (digits === state.minuteKey) return false;
       sample(now);
       const target = spec.digitPose(digits);
-      const opacity = hands.map(hand => hand.opacity);
+
       // Never restart a wave at a real minute boundary. If forming has begun,
       // only replan the remaining positive arc from this exact sampled state.
       const minimum = 350;
@@ -155,21 +154,13 @@
         }
       });
       publish(target, minutes);
-      hands.forEach((hand, index) => Object.assign(hand, { revealFrom: opacity[index], revealStart: now,
-        revealEnd: Math.min(hand.motionEnd, now + 80) }));
+      hands.forEach((hand, i) => fallback.retargetVisibility(hand, now, sequence.motors[i].forming.start, sequence.motors[i].forming.end));
+      fallback.syncVisibility();
       return true;
     }
     function setVisibility(mode, now) {
-      if (!sequence) return fallback.setVisibility(mode, now);
       if (mode === state.visibility) return;
-      sample(now); state.visibility = mode;
-      hands.forEach(hand => {
-        if (now < hand.fadeStart) hand.fadeTo = idleOpacity(hand);
-        else {
-          hand.fadeFrom = hand.opacity; hand.fadeTo = idleOpacity(hand);
-          hand.fadeStart = now; hand.fadeEnd = now + (options.reducedMotion ? 150 : 350);
-        }
-      });
+      sample(now); fallback.updateVisibility(mode, now);
     }
     function update(config, now) {
       const next = spec.Settings.normalize(config, state), visibility = next.visibility;

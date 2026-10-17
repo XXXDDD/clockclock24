@@ -35,7 +35,7 @@
     return Object.fromEntries(Object.entries(fields).map(([key, field]) => [key, decode(field, input[key]) ?? decode(field, base[key]) ?? field.value]));
   }
   function serialize(model, settings) {
-    return JSON.stringify({ version: 2, type: model.type, model: model.id, settings: model.Settings.normalize(settings) }, null, 2);
+    return JSON.stringify({ version: 2, handGeometryVersion: 1, type: model.type, model: model.id, settings: model.Settings.normalize(settings) }, null, 2);
   }
   function parse(model, text) {
     const data = JSON.parse(text);
@@ -52,6 +52,13 @@
     if (data.version !== 2 && ['wave', 'orbit'].includes(input.motion)) input.motion = 'spin';
     for (const [key, field] of Object.entries(model.Settings.fields)) {
       if (Object.hasOwn(input, key) && decode(field, input[key], true) === undefined) throw new Error('「' + field.label + '」无效，请检查单位和范围。');
+    }
+    // Old saves wrote the former equal-length defaults into every snapshot.
+    // Upgrade that exact pair once; preserve other custom lengths and newly
+    // exported equal-length configurations, which carry this revision marker.
+    if (data.handGeometryVersion === undefined && Number(input.longLength) === 100 && Number(input.shortLength) === 100) {
+      input.shortLength = model.Settings.defaults.shortLength;
+      if (model.id === 'clockclock9' && Number(input.centerHourLength) === 82) input.centerHourLength = model.Settings.defaults.centerHourLength;
     }
     return model.Settings.normalize(input);
   }

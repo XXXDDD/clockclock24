@@ -6,6 +6,11 @@
 })(globalThis, function (Palette) {
   'use strict';
   const TAU = Math.PI * 2;
+  // Axis-to-tip proportions measured in the rectified official reference.
+  const referenceReach = 0.975;
+  const longLanes = '111111100001000001110000101111101001000100110000010000110000110001100000';
+  const longLane = point => Number(longLanes[Math.floor(point.i / 2)]);
+  const handLength = (config, secondary) => 53.2 * referenceReach * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100;
   function drawSurface(ctx, geometry, config) {
     const { boardWidth: w, boardHeight: h } = geometry;
     const kind = Palette.material(config), black = kind === 'black', white = kind === 'white';
@@ -32,7 +37,7 @@
   function hand(ctx, pose, secondary, config) {
     if (pose.opacity <= .001) return;
     const width = secondary ? config.shortWidth : config.longWidth;
-    const length = 49.3 * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100;
+    const length = handLength(config, secondary);
     const color = secondary ? config.short : config.long;
     ctx.save(); ctx.rotate(pose.angle); ctx.globalAlpha = pose.opacity;
     const metal = ctx.createLinearGradient(0, -width / 2, 0, width / 2);
@@ -48,8 +53,8 @@
   function drawHands(ctx, geometry, instance, config) {
     geometry.points.forEach(point => {
       ctx.save(); ctx.translate(point.x, point.y); ctx.scale(point.radius / 53.2, point.radius / 53.2);
-      hand(ctx, instance.hands[point.i + 1], true, config); hand(ctx, instance.hands[point.i], false, config); ctx.restore();
+      hand(ctx, instance.hands[point.i + (longLane(point) ^ 1)], true, config); hand(ctx, instance.hands[point.i + longLane(point)], false, config); ctx.restore();
     });
   }
-  return { drawSurface, drawHands };
+  return { drawSurface, drawHands, handLength, referenceReach, longLane };
 });

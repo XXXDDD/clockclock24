@@ -87,8 +87,9 @@ test('72v choreography stays continuous on interruption and settles on time', ()
     clock.hands.forEach((hand, index) => {
       sameAngle(hand.angle, pose[index].angle);
       assert.equal(hand.used, pose[index].used);
-      assert.equal(hand.opacity, hand.used || visibility === 'show' ? 1 : visibility === 'ghost' ? .12 : 0);
-      assert.equal(hand.fadeEnd, end);
+      assert.equal(hand.opacity, (hand.used || clock.hands[index ^ 1].used) || visibility === 'show' ? 1 : visibility === 'ghost' ? .12 : 0);
+      assert.equal(hand.fadeEnd, Math.max(hand.motionEnd, clock.hands[index ^ 1].motionEnd));
+      assert.ok(hand.fadeEnd <= end);
     });
     assert.equal(clock.isAnimating(end), false);
   }

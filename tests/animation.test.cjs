@@ -51,7 +51,7 @@ function assertSettled(clock, minutes) {
   const pose = clock.digitPose(clock.displayDigits(minutes));
   clock.hands.forEach((h, i) => {
     sameAngle(h.angle, pose[i].angle);
-    near(h.opacity, pose[i].used || clock.state.visibility === 'show' ? 1 : clock.state.visibility === 'ghost' ? .12 : 0, 'final alpha');
+    near(h.opacity, (pose[i].used || pose[i ^ 1].used) || clock.state.visibility === 'show' ? 1 : clock.state.visibility === 'ghost' ? .12 : 0, 'final alpha');
   });
 }
 
@@ -60,7 +60,7 @@ test('classic black is the default; opening displays the time immediately', () =
   assert.equal(c.state.board, '#111213');
   assert.equal(Palette.material(c.state), 'black');
   assert.equal(c.state.longLength, 100);
-  assert.equal(c.state.shortLength, 100);
+  assert.equal(c.state.shortLength, 87);
   assert.equal(c.PRESETS.length, 8);
   assert.ok(c.PRESETS.some(p => p.id === 'classic-white'));
   assert.ok(c.hands.every(h => h.fadeEnd <= c.now()));
@@ -80,7 +80,7 @@ test('all 1440 minute poses settle correctly in both formats', () => {
   }
 });
 
-test('rotation holds opacity until arrival and finishes within the selected duration', () => {
+test('visibility blends during travel and completes with arrival within the selected duration', () => {
   const c = loadClock();
   const times = [0, 65, 454, 808, 1239, 1439];
   for (const mode of ['spin', 'quiet']) for (const visibility of ['hide', 'ghost', 'show']) for (const duration of [1, 4, 10]) for (const minutes of times) {
@@ -92,14 +92,17 @@ test('rotation holds opacity until arrival and finishes within the selected dura
     c.animate(minutes);
     continuous(c, before);
     const end = start + duration * 1000;
-    for (const h of c.hands) { near(h.fadeEnd, end, 'total duration'); assert.ok(h.fadeStart >= h.motionEnd); }
+    for (const h of c.hands) { near(h.fadeEnd, end, 'total duration'); near(h.fadeEnd, h.motionEnd, 'fade ends with movement'); assert.ok(h.fadeStart < h.motionEnd); }
     for (const fraction of [.04, .15, .5, .9, .99, 1]) {
       c.interpolate(start + duration * 1000 * fraction);
       assert.ok(c.hands.every(h => Number.isFinite(h.angle) && h.opacity >= -1e-10 && h.opacity <= 1 + 1e-10));
     }
     const arrival = c.hands[0].motionEnd;
-    c.interpolate(arrival - .001);
-    if (mode === 'spin') for (const h of c.hands) near(h.opacity, 1, 'no fade while rotating');
+    c.interpolate((c.hands[0].fadeStart + arrival) / 2);
+    if (mode === 'spin' && visibility !== 'show') {
+      const fading = c.hands.filter((h, i) => !h.used && !c.hands[i ^ 1].used);
+      fading.forEach(h => assert.ok(h.opacity > h.fadeTo && h.opacity < 1, 'fade runs during return'));
+    }
     c.interpolate(arrival);
     const atArrival = snapshot(c);
     c.interpolate(end);
@@ -108,14 +111,14 @@ test('rotation holds opacity until arrival and finishes within the selected dura
   }
 });
 
-test('quiet transitions keep unchanged idle hands hidden or at 12%', () => {
+test('quiet transitions keep unchanged idle dial pairs hidden or at 12%', () => {
   for (const visibility of ['hide', 'ghost']) {
     const c = loadClock();
     Object.assign(c.state, { motion: 'quiet', visibility, duration: 4 });
-    c.initializeTime(1);
+    c.initializeTime(671);
     const prior = c.hands.map(h => h.used);
-    c.animate(2);
-    const idle = c.hands.filter((h, i) => !prior[i] && !h.used);
+    c.animate(672);
+    const idle = c.hands.filter((h, i) => !prior[i] && !prior[i ^ 1] && !h.used && !c.hands[i ^ 1].used);
     assert.ok(idle.length > 0);
     for (const elapsed of [0, 50, 160, 1500, 3650, 4000]) {
       c.interpolate(c.now() + elapsed);

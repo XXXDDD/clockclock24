@@ -75,7 +75,6 @@
     const alignDirections = spec.alignmentDirections || alignmentDirections;
     let sequence = null;
     const active = now => sequence && now < sequence.finish;
-    const settledOpacity = hand => hand.used || state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
     function motorAt(motor, now) {
       if (motor.direct) return trackAt(motor.forming, now);
       if (now < motor.alignStart) return { angle: motor.from, velocity: 0 };
@@ -91,10 +90,7 @@
       if (!sequence) return fallback.sample(now);
       sequence.motors.forEach((motor, i) => {
         const hand = hands[i]; hand.angle = motorAt(motor, now).angle;
-        hand.opacity = now < hand.revealEnd
-          ? hand.revealFrom + (1 - hand.revealFrom) * smooth(clamp((now - hand.revealStart) / Math.max(1, hand.revealEnd - hand.revealStart), 0, 1))
-          : now < hand.fadeStart ? 1
-            : hand.fadeFrom + (hand.fadeTo - hand.fadeFrom) * smooth(clamp((now - hand.fadeStart) / Math.max(1, hand.fadeEnd - hand.fadeStart), 0, 1));
+        hand.opacity = HandAnimation.opacityAt(hand, now);
       });
       return hands;
     }
@@ -116,9 +112,8 @@
     function publish(target, minutes) {
       sequence.motors.forEach((motor, i) => {
         const hand = hands[i]; hand.used = target[i].used;
-        Object.assign(hand, { to: motor.forming.from + motor.direction * motor.forming.travel,
-          motionEnd: motor.forming.end, fadeStart: motor.forming.end, fadeEnd: sequence.finish,
-          fadeFrom: 1, fadeTo: settledOpacity(hand) });
+        hand.to = motor.forming.from + motor.direction * motor.forming.travel; hand.motionEnd = motor.forming.end;
+        hand.fadeTo = hand.used || state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
       });
       state.minuteKey = spec.displayDigits(minutes, state.format24);
     }
@@ -146,11 +141,16 @@
           entryVelocity: current[i].velocity,
           forming: returnTrack(arc + direction * pulse.angle, direction * pulse.velocity / unit,
             target[i].angle, direction, formStart, deadline) };
+        const entryMoves = Math.abs(motor.arc - motor.from) > 1e-8 || Math.abs(motor.entryVelocity) > 1e-10;
+        const revealStart = entryMoves ? motor.alignStart : motor.pulseStart;
+        const revealEnd = entryMoves ? motor.alignEnd : motor.pulseStart + (motor.formStart - motor.pulseStart) * HandAnimation.stages.align;
         Object.assign(hand, { from: current[i].angle, start: now, duration, path: null, opacity: current[i].opacity,
-          revealFrom: current[i].opacity, revealStart: now, revealEnd: now + Math.min(250, duration * .02) });
+          revealFrom: current[i].opacity, revealStart, revealEnd, travelOpacity: 1,
+          fadeFrom: 1, fadeStart: motor.forming.start, fadeEnd: motor.forming.end });
         return motor;
       });
       publish(target, minutes);
+      fallback.syncVisibility();
     }
     function animate(minutes, now, force = false) {
       const digits = spec.displayDigits(minutes, state.format24);
@@ -165,7 +165,7 @@
       const digits = spec.displayDigits(minutes, state.format24);
       if (digits === state.minuteKey) return false;
       sample(now);
-      const target = spec.digitPose(digits), opacity = hands.map(hand => hand.opacity);
+      const target = spec.digitPose(digits);
       sequence.motors.forEach((motor, i) => {
         if (motor.direct || now >= motor.formStart) {
           const current = motorAt(motor, now), deadline = Math.max(motor.forming.end, now + 350);
@@ -178,17 +178,13 @@
         }
       });
       publish(target, minutes);
-      hands.forEach((hand, i) => Object.assign(hand, { revealFrom: opacity[i], revealStart: now, revealEnd: Math.min(hand.motionEnd, now + 80) }));
+      hands.forEach((hand, i) => fallback.retargetVisibility(hand, now, sequence.motors[i].forming.start, sequence.motors[i].forming.end));
+      fallback.syncVisibility();
       return true;
     }
     function setVisibility(mode, now) {
-      if (!sequence) return fallback.setVisibility(mode, now);
       if (mode === state.visibility) return;
-      sample(now); state.visibility = mode;
-      hands.forEach(hand => {
-        if (now < hand.fadeStart) hand.fadeTo = settledOpacity(hand);
-        else Object.assign(hand, { fadeFrom: hand.opacity, fadeTo: settledOpacity(hand), fadeStart: now, fadeEnd: now + 350 });
-      });
+      sample(now); fallback.updateVisibility(mode, now);
     }
     function update(config, now) {
       const next = spec.Settings.normalize(config, state), visibility = next.visibility;

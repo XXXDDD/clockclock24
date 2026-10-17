@@ -8,7 +8,7 @@
   // CC9 uses exposed, square-ended bars. It deliberately does not depend on SingleClock.
   // The arm reach is shorter than half the axis pitch, leaving visible tip clearance
   // even in previously saved configurations with gap: 0 and both lengths at 100%.
-  const referenceReach = .869;
+  const referenceReach = .97;
   function handLength(point, config, secondary) {
     return point.radius * referenceReach * (secondary ? config.shortLength : config.longLength) / 100
       * (secondary && point.center ? config.centerHourLength / 100 : 1);

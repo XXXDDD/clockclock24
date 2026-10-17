@@ -16,7 +16,7 @@ function settled(clock, minute, now) {
   const target = Model.digitPose(Model.displayDigits(minute, clock.state.format24));
   clock.hands.forEach((h, i) => {
     sameAngle(h.angle, target[i].angle);
-    near(h.opacity, target[i].used || clock.state.visibility === 'show' ? 1 : clock.state.visibility === 'ghost' ? .12 : 0);
+    near(h.opacity, (target[i].used || target[i ^ 1].used) || clock.state.visibility === 'show' ? 1 : clock.state.visibility === 'ghost' ? .12 : 0);
   });
 }
 function movingState(clock, now) {
