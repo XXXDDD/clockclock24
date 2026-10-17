@@ -24,7 +24,7 @@ test('both new families use their own inspected product video and documented evi
   assert.equal(models[1].referenceDuration,52.2);
   assert.equal(models[1].referenceTime,'11:34');
   assert.equal(require('../src/models/landscape.js').models.length,5,'existing platform registry stays compatible');
-  const landscape=fs.readFileSync('index.html','utf8');
+  const landscape=fs.readFileSync('clockclock24.html','utf8');
   for (const model of models) assert.match(landscape,new RegExp('data-model="'+model.id+'"'));
   for (const page of ['circular.html','portrait.html']) assert.doesNotMatch(fs.readFileSync(page,'utf8'),/ClockClockLAnimation=|AMT96Animation=/);
 });

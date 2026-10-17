@@ -7,7 +7,7 @@ const Catalog = require('../src/web/classic-catalog.js');
 const Sources = require('./source-graph.cjs');
 const pages = [
   // Each category only embeds its own model implementations.
-  { category: 'landscape', title: '横屏调试', names: ['index.html', 'clockclock24.html'] },
+  { category: 'landscape', title: '横屏调试', names: ['clockclock24.html'] },
   { category: 'circular', title: '圆形调试', names: ['circular.html'] },
   { category: 'portrait', title: '竖排调试', names: ['portrait.html'] }
 ];
@@ -29,4 +29,5 @@ for (const page of pages) {
     } else { fs.mkdirSync(path.dirname(target), { recursive: true }); fs.writeFileSync(target, html); }
   }
 }
-console.log(check ? 'Generated pages match their sources.' : 'Built landscape, portrait and circular workbenches.');
+for (const directory of ['', 'dist']) require('../showcase/build-site.cjs').build(path.join(root, directory), check);
+console.log(check ? 'Generated showcase and workbenches match their sources.' : 'Built showcase homepage and landscape, portrait and circular workbenches.');

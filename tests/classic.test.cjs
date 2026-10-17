@@ -147,7 +147,7 @@ test('all 24 presets share three reference choices, preserve interrupted poses a
 });
 
 test('generated workbenches put model selection, time, playback, customization and configuration in order', () => {
-  for (const page of ['index.html', 'circular.html', 'portrait.html']) {
+  for (const page of ['clockclock24.html', 'circular.html', 'portrait.html']) {
     const html = fs.readFileSync(require.resolve('../' + page), 'utf8');
     assert.match(html, /id="modelOptions"/);
     for (const id of ['modelEdition', 'classicEdition', 'classicColors', 'classicMotion', 'modelReference', 'motionReference']) {
@@ -208,7 +208,7 @@ test('product progress and generated model lists stay in sync with the complete 
   const product = fs.readFileSync(require.resolve('../product.md'), 'utf8');
   const recorded = product.split('<!-- BEGIN:CLASSIC-CATALOG -->')[1]?.split('<!-- END:CLASSIC-CATALOG -->')[0].trim();
   assert.equal(recorded?.replace(/\r\n/g, '\n'), Collection.markdown());
-  for (const [category, page] of [['circular', 'circular.html'], ['landscape', 'index.html'], ['portrait', 'portrait.html']]) {
+  for (const [category, page] of [['circular', 'circular.html'], ['landscape', 'clockclock24.html'], ['portrait', 'portrait.html']]) {
     const html = fs.readFileSync(require.resolve('../' + page), 'utf8');
     const slugs = [...html.matchAll(/data-edition="([^"]+)"/g)].map(match => match[1]);
     assert.deepEqual(slugs.sort(), Collection.inCategory(category).map(entry => entry.slug).sort());

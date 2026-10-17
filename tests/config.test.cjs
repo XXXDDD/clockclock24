@@ -75,7 +75,7 @@ test('time input supports live timezone and manual midnight', () => {
 
 test('working browser entries are offline pages generated from their sources', () => {
   const root = path.resolve(__dirname, '..');
-  assert.equal(fs.readFileSync(path.join(root, 'clockclock24.html'), 'utf8'), fs.readFileSync(path.join(root, 'dist/index.html'), 'utf8'));
+  assert.equal(fs.readFileSync(path.join(root, 'clockclock24.html'), 'utf8'), fs.readFileSync(path.join(root, 'dist/clockclock24.html'), 'utf8'));
   for (const kind of ['circular']) {
     const html = fs.readFileSync(path.join(root, 'dist', kind + '.html'), 'utf8');
     assert.match(html, /<canvas/); assert.doesNotMatch(html, /型号暂未接入|<script[^>]+src=/);
