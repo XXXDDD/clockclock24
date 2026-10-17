@@ -65,7 +65,7 @@
 
   <main class="gallery" aria-label="时钟展厅" aria-busy="true">
     <div class="stage" id="stage">
-      <div class="artboard" id="artboard"><canvas id="clock" role="img" aria-label="动态时钟"></canvas></div>
+      <div class="artboard" id="artboard" role="group" aria-label="表盘预览" tabindex="-1"><canvas id="clock" role="img" aria-label="动态时钟"></canvas></div>
       <div class="swatches" id="swatches" role="group" aria-label="时钟版本"></div>
     </div>
     <nav class="model-navigation" aria-label="切换时钟尺寸">
@@ -90,7 +90,7 @@
     </nav>
     <div class="view-controls">
       <button class="icon-button quiet theme-toggle" id="theme-toggle" type="button" aria-label="切换明暗背景" aria-pressed="false"><svg><use href="#i-sun"/></svg></button>
-      <button class="icon-button quiet" id="fullscreen-toggle" type="button" aria-label="全屏预览" aria-pressed="false" hidden><svg aria-hidden="true"><use href="#i-fullscreen"/></svg></button>
+      <button class="icon-button quiet" id="fullscreen-toggle" type="button" aria-label="表盘全屏预览" aria-controls="artboard" aria-pressed="false" hidden><svg aria-hidden="true"><use href="#i-fullscreen"/></svg></button>
     </div>
   </footer>
 

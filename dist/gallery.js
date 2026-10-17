@@ -23,25 +23,6 @@
   };
   systemTheme.addEventListener('change', () => { if (!themePreference) applyTheme(); });
   applyTheme();
-  const fullscreenButton = $('#fullscreen-toggle');
-  function syncFullscreen() {
-    const active = Boolean(document.fullscreenElement);
-    fullscreenButton.setAttribute('aria-label', active ? '退出全屏预览' : '全屏预览');
-    fullscreenButton.setAttribute('aria-pressed', String(active));
-    fullscreenButton.querySelector('use').setAttribute('href', active ? '#i-fullscreen-exit' : '#i-fullscreen');
-  }
-  fullscreenButton.hidden = !document.fullscreenEnabled || !document.documentElement.requestFullscreen;
-  fullscreenButton.onclick = async () => {
-    try {
-      if (document.fullscreenElement) await document.exitFullscreen();
-      else await document.documentElement.requestFullscreen();
-    } catch (error) {
-      console.warn('Fullscreen preview:', error.name, error.message);
-      fullscreenButton.setAttribute('aria-label', '暂时无法全屏预览，请重试');
-    }
-  };
-  document.addEventListener('fullscreenchange', syncFullscreen);
-  syncFullscreen();
   const downloadPopover = $('#downloads-popover');
   downloadPopover.addEventListener('toggle', event => {
     $('#open-downloads').setAttribute('aria-expanded', String(event.newState === 'open'));
@@ -81,6 +62,36 @@
   const artboard = $('#artboard');
   const stage = $('#stage');
   const dialog = $('#collection');
+  const fullscreenButton = $('#fullscreen-toggle');
+  let artworkFullscreen = false;
+  function syncFullscreen() {
+    const wasActive = artworkFullscreen;
+    artworkFullscreen = document.fullscreenElement === artboard;
+    document.body.classList.toggle('clock-fullscreen', artworkFullscreen);
+    fullscreenButton.setAttribute('aria-label', artworkFullscreen ? '退出表盘全屏预览' : '表盘全屏预览');
+    fullscreenButton.setAttribute('aria-pressed', String(artworkFullscreen));
+    fullscreenButton.querySelector('use').setAttribute('href', artworkFullscreen ? '#i-fullscreen-exit' : '#i-fullscreen');
+    artboard.setAttribute('aria-label', artworkFullscreen ? '表盘全屏预览，点击或按 Esc 退出' : '表盘预览');
+    sizeArtwork();
+    preview?.resize();
+    if (artworkFullscreen) artboard.focus({ preventScroll: true });
+    else if (wasActive) fullscreenButton.focus({ preventScroll: true });
+  }
+  fullscreenButton.hidden = !document.fullscreenEnabled || !artboard.requestFullscreen;
+  fullscreenButton.onclick = async () => {
+    try {
+      if (document.fullscreenElement === artboard) await document.exitFullscreen();
+      else await artboard.requestFullscreen();
+    } catch (error) {
+      console.warn('Clock fullscreen preview:', error.name, error.message);
+      fullscreenButton.setAttribute('aria-label', '暂时无法全屏预览，请重试');
+    }
+  };
+  artboard.addEventListener('click', () => {
+    if (document.fullscreenElement === artboard) document.exitFullscreen().catch(syncFullscreen);
+  });
+  document.addEventListener('fullscreenchange', syncFullscreen);
+  syncFullscreen();
 
   function viewport(element) {
     const displayWidth = element.clientWidth, displayHeight = element.clientHeight;
@@ -89,6 +100,7 @@
     return { width, height, displayWidth, displayHeight };
   }
   function sizeArtwork(model = edition) {
+    if (document.fullscreenElement === artboard) return;
     const { width, height } = presentation.displaySize(model, stage.clientWidth, stage.clientHeight, matchMedia('(max-width: 700px)').matches);
     artboard.style.width = width + 'px';
     artboard.style.height = height + 'px';
@@ -211,7 +223,7 @@
   });
   document.addEventListener('keydown', event => {
     if (dialog.open || downloadPopover.matches(':popover-open') || event.altKey || event.ctrlKey || event.metaKey) return;
-    if (event.key === 'Escape' && document.fullscreenElement) {
+    if (event.key === 'Escape' && document.fullscreenElement === artboard) {
       event.preventDefault();
       document.exitFullscreen().catch(syncFullscreen);
       return;
@@ -226,6 +238,7 @@
     thumbnails.forEach(item => item.resize());
   });
   observer.observe(stage);
+  observer.observe(artboard);
   window.addEventListener('pagehide', () => { clearTimeout(transition); observer.disconnect(); preview?.dispose(); thumbnails.forEach(item => item.dispose()); });
   show(edition, true);
 })();

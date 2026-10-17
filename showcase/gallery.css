@@ -73,6 +73,10 @@ svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width:
 .artboard { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 1; transition: opacity 180ms ease, margin-top 300ms ease; }
 .artboard.switching { opacity: 0; margin-top: 5px; }
 .artboard canvas { position: absolute; filter: var(--artwork-shadow); }
+.artboard:fullscreen { position: fixed; inset: 0; width: 100% !important; height: 100% !important; max-width: none; max-height: none; margin: 0; padding: 0; transform: none; opacity: 1; background: var(--page); transition: none; cursor: zoom-out; }
+.artboard:fullscreen::backdrop { background: var(--page); }
+.artboard:fullscreen canvas { filter: none; }
+.clock-fullscreen .topbar, .clock-fullscreen .bottom-bar, .clock-fullscreen .model-navigation, .clock-fullscreen .swatches { visibility: hidden; pointer-events: none; }
 .swatches { position: absolute; top: calc(50% + var(--artwork-height, 0px) / 2 + 36px); left: 50%; display: flex; justify-content: center; align-items: center; gap: 1px; transform: translateX(-50%); width: max-content; max-width: min(440px, calc(100vw - 40px)); flex-wrap: wrap; }
 .swatch { display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 34px; height: 38px; border: 0; border-radius: 50%; background: none; padding: 0; }
 .swatch span { display: block; width: 14px; height: 14px; border-radius: 50%; background: var(--swatch); box-shadow: inset 0 0 0 1px var(--swatch-border); position: relative; transition: transform 180ms ease; }
@@ -85,7 +89,6 @@ svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width:
 .quiet:hover { color: var(--ink); }
 .quiet svg { width: 18px; height: 18px; }
 .view-controls { justify-self: end; display: flex; gap: 4px; }
-:root:fullscreen::backdrop { background: var(--page); }
 .shape-switch { display: flex; align-items: center; gap: 4px; padding: 5px; border-radius: 40px; border: 1px solid var(--line); background: var(--glass); box-shadow: 0 3px 8px rgb(30 30 20 / 1%); }
 .shape-button { display: inline-flex; align-items: center; justify-content: center; width: 58px; height: 40px; padding: 0; background: transparent; color: var(--muted); border: 0; border-radius: 30px; transition: background 220ms ease, color 220ms ease, box-shadow 220ms ease; }
 .shape-button svg { width: 23px; height: 23px; }
