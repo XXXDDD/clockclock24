@@ -1,14 +1,15 @@
 (function (root, factory) {
   const cjs = typeof module === 'object' && module.exports;
   const api = factory(cjs ? require('../core/presentation-config.js') : root.Timeform.PresentationConfig,
-    cjs ? require('../shared/config.js') : root.Timeform.Config);
+    cjs ? require('../shared/config.js') : root.Timeform.Config,
+    cjs ? require('../hosts/localization.js') : root.Timeform.Localization);
   if (cjs) module.exports = api;
   else root.Timeform.ClassicLivelyConfig = api;
-})(globalThis, function (Presentation, Config) {
+})(globalThis, function (Presentation, Config, I18n) {
   'use strict';
   const { models, get, label, categories, fields, groups, geometryKeys, defaults, normalize, resolve } = Presentation;
-  const metadata = { AppVersion: '2.2.1.0', Title: 'TIMEFORM · 30 款时钟 · 本地测试版',
-    Desc: '圆形、横屏、竖排共 30 款时钟，统一下拉选择。包含最新的长短针比例、闲置显隐及动作修正，离线运行。',
+  const metadata = { AppVersion: '2.2.1.0', Title: 'TIMEFORM · 30 Clock Designs',
+    Desc: '30 circular, landscape and portrait clock designs. Works offline, with English and Simplified Chinese settings.',
     Author: 'TIMEFORM', Type: 1, FileName: 'index.html', IsAbsolutePath: false, Thumbnail: 'thumbnail.jpg', Preview: null,
     Arguments: '--pause-event true', Contact: 'https://github.com/XXXDDD/clockclock24', License: null, Version: 6 };
   function decodeProperty(key, value) {
@@ -17,12 +18,13 @@
     if (field.type === 'select' && typeof value !== 'boolean' && value !== '' && value !== null && Number.isInteger(Number(value))) value = field.options[Number(value)]?.[0];
     return Config.decode(field, value, true);
   }
-  function livelyProperties(input = defaults) {
+  function livelyProperties(input = defaults, language = 'en') {
     const config = normalize(input), properties = {};
     for (const [group, title] of Object.entries(groups)) {
-      properties['section' + group] = { type: 'label', value: title };
-      for (const [key, field] of Object.entries(fields).filter(([, field]) => field.group === group && !field.hidden)) {
-        const control = { text: field.label + (field.unit ? '（' + field.unit + '）' : ''), type: field.type, value: config[key] };
+      properties['section' + group] = { type: 'label', value: I18n.group(group, title, language) };
+      for (const [key, original] of Object.entries(fields).filter(([, field]) => field.group === group && !field.hidden)) {
+        const field = I18n.field(key, original, language);
+        const control = { text: field.label + (field.unit ? ' (' + field.unit + ')' : ''), type: field.type, value: config[key] };
         if (field.type === 'select') { control.type = 'dropdown'; control.items = field.options.map(option => option[1]); control.value = field.options.findIndex(option => option[0] === config[key]); }
         else if (field.type === 'number') {
           if (field.step < 1) { control.type = 'textbox'; control.value = String(config[key]); }
@@ -32,9 +34,17 @@
         properties[key] = control;
       }
     }
-    properties.replay = { type: 'button', text: '重播当前动作', value: 'replay' };
-    properties.settle = { type: 'button', text: '立即显示当前时间', value: 'settle' };
+    properties.replay = { type: 'button', text: I18n.t('replay', language), value: 'replay' };
+    properties.settle = { type: 'button', text: I18n.t('settle', language), value: 'settle' };
     return properties;
+  }
+  function livelyLocalization(input = defaults) {
+    const translated = livelyProperties(input, 'zh-CN');
+    return { Languages: { 'zh-CN': Object.fromEntries(Object.entries(translated).map(([key, property]) => [key,
+      property.type === 'label' ? { value: property.value } : Object.fromEntries(['text', 'help', 'items'].filter(name => property[name] !== undefined).map(name => [name, property[name]]))])) } };
+  }
+  function metadataLocalization() {
+    return { Languages: { 'zh-CN': { Title: 'TIMEFORM · 30 款时钟', Desc: '圆形、横屏、竖排共 30 款时钟。离线运行，支持简体中文与英文设置。' } } };
   }
   function serialize(input) { return JSON.stringify({ version: 6, handGeometryVersion: 1, platform: 'lively-classic', settings: normalize(input) }, null, 2); }
   function parse(text) {
@@ -50,5 +60,5 @@
     }
     return imported;
   }
-  return { models, get, label, categories, fields, groups, geometryKeys, defaults, metadata, normalize, decodeProperty, resolve, livelyProperties, serialize, parse };
+  return { models, get, label, categories, fields, groups, geometryKeys, defaults, metadata, normalize, decodeProperty, resolve, livelyProperties, livelyLocalization, metadataLocalization, serialize, parse };
 });

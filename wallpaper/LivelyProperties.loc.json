@@ -1,0 +1,198 @@
+{
+  "Languages": {
+    "zh-CN": {
+      "sectionedition": {
+        "value": "时钟款式"
+      },
+      "edition": {
+        "text": "时钟款式（全部 30 款）",
+        "items": [
+          "横屏 · ClockClock 24 · Black",
+          "横屏 · ClockClock 24 · White",
+          "横屏 · ClockClock 24 · White Sterling",
+          "横屏 · ClockClock 24 · White Gold",
+          "横屏 · ClockClock 24 · Black Sterling",
+          "横屏 · ClockClock 24 · Black Gold",
+          "横屏 · ClockClock 24 · Pinakin Neela",
+          "横屏 · ClockClock 24 · Pinakin Hara",
+          "横屏 · ClockClock 24 · Bjarke Ingels · Sunset Dune",
+          "横屏 · ClockClock 24 · Dada Blue",
+          "横屏 · AMT 72 · Black",
+          "横屏 · AMT 72 · White Sterling",
+          "横屏 · AMT 72 · White",
+          "横屏 · AMT 72 · Black Sterling",
+          "横屏 · AMT 120 · Black",
+          "横屏 · AMT 120 · Tidal",
+          "横屏 · AMT 120 · White",
+          "横屏 · AMT 144 · Black",
+          "横屏 · AMT 144 · White",
+          "横屏 · AMT 288 · White",
+          "横屏 · AMT 288 · Black",
+          "横屏 · ClockClock L · Tidal",
+          "横屏 · AMT 96 · Bjarke Ingels",
+          "圆形 · ClockClock 9 · White",
+          "圆形 · AMT 61c · Zephyr",
+          "圆形 · AMT 61c · Tidal",
+          "竖排 · AMT 72v · Black Sterling",
+          "竖排 · AMT 72v · White",
+          "竖排 · AMT 72v · Black",
+          "竖排 · AMT 72v · Tidal"
+        ]
+      },
+      "sectionscreen": {
+        "value": "大小与位置"
+      },
+      "scale": {
+        "text": "整体缩放 (%)"
+      },
+      "padding": {
+        "text": "画布安全边距 (px)"
+      },
+      "offsetX": {
+        "text": "水平位置 (%)"
+      },
+      "offsetY": {
+        "text": "垂直位置 (%)"
+      },
+      "sectioncolors": {
+        "value": "配色"
+      },
+      "customColors": {
+        "text": "启用自定义配色",
+        "help": "关闭时使用所选款式的原作配色；开启后使用下方四项颜色。"
+      },
+      "background": {
+        "text": "画布背景"
+      },
+      "board": {
+        "text": "背景板"
+      },
+      "long": {
+        "text": "长针"
+      },
+      "short": {
+        "text": "短针"
+      },
+      "sectionmotion": {
+        "value": "动作与播放"
+      },
+      "action": {
+        "text": "动作",
+        "help": "默认沿用各款校准动作；附加动作只适用于名称标注的型号，其他型号自动使用原动作。",
+        "items": [
+          "当前预设原动作",
+          "24 系列 · 交错旋转",
+          "24 系列 · 斜线波浪",
+          "24 系列 · 潮汐波浪",
+          "AMT 72 · 向心涟漪",
+          "AMT 72 · 横向风势",
+          "AMT 72 · 斜线波浪",
+          "AMT 61c · 风势流动 · Zephyr",
+          "AMT 61c · 环弧波浪 · Tidal",
+          "AMT 72v · 错相旋转 · 双速归位",
+          "AMT 72v · 斜线波浪"
+        ]
+      },
+      "customDuration": {
+        "text": "启用自定义动作时长",
+        "help": "关闭时沿用当前款式或当前动作的参考时长。"
+      },
+      "duration": {
+        "text": "完整编排时长 (s)",
+        "help": "启用自定义动作时长后生效。"
+      },
+      "visibility": {
+        "text": "闲置指针",
+        "help": "仅闲置表盘的双针一起随动作显隐；参与数字或冒号的双针完整保留，包括折叠的指针。",
+        "items": [
+          "当前预设默认",
+          "随归位隐藏",
+          "微光显示",
+          "全部显示"
+        ]
+      },
+      "playbackSpeed": {
+        "text": "播放速度 (倍)"
+      },
+      "paused": {
+        "text": "暂停播放"
+      },
+      "sectiontime": {
+        "value": "时间"
+      },
+      "format24": {
+        "text": "24 小时制"
+      },
+      "timezone": {
+        "text": "时区",
+        "help": "留空跟随设备，例如 Asia/Hong_Kong。"
+      },
+      "source": {
+        "text": "时间来源",
+        "items": [
+          "设备时间",
+          "指定时间"
+        ]
+      },
+      "manualTime": {
+        "text": "指定时间"
+      },
+      "autoDemo": {
+        "text": "自动逐分钟演示"
+      },
+      "demoInterval": {
+        "text": "自动切换间隔 (s)",
+        "help": "参考编排至少等本轮完成并读时停留 2 秒，再演示下一分钟。"
+      },
+      "sectiongeometry": {
+        "value": "完整自定义：尺寸与指针"
+      },
+      "customGeometry": {
+        "text": "启用自定义尺寸与指针",
+        "help": "关闭时每款自动使用自身尺寸与指针参数；开启后使用下方数值。"
+      },
+      "radius": {
+        "text": "表盘半径 (设计单位)",
+        "help": "启用自定义尺寸后生效；数值会限制在当前型号的有效范围。"
+      },
+      "gap": {
+        "text": "表盘间隙 (设计单位)",
+        "help": "启用自定义尺寸后生效；数值会限制在当前型号的有效范围。"
+      },
+      "longLength": {
+        "text": "长针长度 (%)",
+        "help": "启用自定义尺寸后生效；数值会限制在当前型号的有效范围。"
+      },
+      "shortLength": {
+        "text": "短针长度 (%)",
+        "help": "启用自定义尺寸后生效；数值会限制在当前型号的有效范围。"
+      },
+      "longWidth": {
+        "text": "长针粗细 (设计单位)",
+        "help": "启用自定义尺寸后生效；数值会限制在当前型号的有效范围。"
+      },
+      "shortWidth": {
+        "text": "短针粗细 (设计单位)",
+        "help": "启用自定义尺寸后生效；数值会限制在当前型号的有效范围。"
+      },
+      "centerHourLength": {
+        "text": "中央时针额外比例 (%)",
+        "help": "启用自定义尺寸后生效；数值会限制在当前型号的有效范围。"
+      },
+      "safeTop": {
+        "text": "顶部留白 (px)",
+        "help": "启用自定义尺寸后生效；数值会限制在当前型号的有效范围。"
+      },
+      "safeBottom": {
+        "text": "底部留白 (px)",
+        "help": "启用自定义尺寸后生效；数值会限制在当前型号的有效范围。"
+      },
+      "replay": {
+        "text": "重播动作"
+      },
+      "settle": {
+        "text": "立即归位"
+      }
+    }
+  }
+}

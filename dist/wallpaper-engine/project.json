@@ -1,142 +1,142 @@
 {
-  "title": "TIMEFORM · 30 款时钟",
+  "title": "TIMEFORM · 30 Clock Designs",
   "type": "web",
   "file": "index.html",
   "preview": "preview.jpg",
-  "description": "TIMEFORM 共享时钟运行时，本地测试包。",
+  "description": "30 offline clock designs. English and Simplified Chinese settings.",
   "general": {
     "properties": {
       "edition": {
         "order": 0,
-        "text": "时钟款式（全部 30 款）",
+        "text": "ui_edition",
         "value": "amt144",
         "type": "combo",
         "options": [
           {
             "value": "clockclock24",
-            "label": "横屏 · ClockClock 24 · Black"
+            "label": "ui_edition_option_0"
           },
           {
             "value": "clockclock24-white",
-            "label": "横屏 · ClockClock 24 · White"
+            "label": "ui_edition_option_1"
           },
           {
             "value": "clockclock24-white-sterling",
-            "label": "横屏 · ClockClock 24 · White Sterling"
+            "label": "ui_edition_option_2"
           },
           {
             "value": "clockclock24-white-gold",
-            "label": "横屏 · ClockClock 24 · White Gold"
+            "label": "ui_edition_option_3"
           },
           {
             "value": "clockclock24-black-sterling",
-            "label": "横屏 · ClockClock 24 · Black Sterling"
+            "label": "ui_edition_option_4"
           },
           {
             "value": "clockclock24-black-gold",
-            "label": "横屏 · ClockClock 24 · Black Gold"
+            "label": "ui_edition_option_5"
           },
           {
             "value": "clockclock24-pinakin-neela",
-            "label": "横屏 · ClockClock 24 · Pinakin Neela"
+            "label": "ui_edition_option_6"
           },
           {
             "value": "clockclock24-pinakin-hara",
-            "label": "横屏 · ClockClock 24 · Pinakin Hara"
+            "label": "ui_edition_option_7"
           },
           {
             "value": "clockclock24-bjarke-ingels",
-            "label": "横屏 · ClockClock 24 · Bjarke Ingels · Sunset Dune"
+            "label": "ui_edition_option_8"
           },
           {
             "value": "clockclock24-dada-blue",
-            "label": "横屏 · ClockClock 24 · Dada Blue"
+            "label": "ui_edition_option_9"
           },
           {
             "value": "amt72",
-            "label": "横屏 · AMT 72 · Black"
+            "label": "ui_edition_option_10"
           },
           {
             "value": "amt72-white-sterling",
-            "label": "横屏 · AMT 72 · White Sterling"
+            "label": "ui_edition_option_11"
           },
           {
             "value": "amt72-white",
-            "label": "横屏 · AMT 72 · White"
+            "label": "ui_edition_option_12"
           },
           {
             "value": "amt72-black-sterling",
-            "label": "横屏 · AMT 72 · Black Sterling"
+            "label": "ui_edition_option_13"
           },
           {
             "value": "amt120",
-            "label": "横屏 · AMT 120 · Black"
+            "label": "ui_edition_option_14"
           },
           {
             "value": "amt120-tidal",
-            "label": "横屏 · AMT 120 · Tidal"
+            "label": "ui_edition_option_15"
           },
           {
             "value": "amt120-white",
-            "label": "横屏 · AMT 120 · White"
+            "label": "ui_edition_option_16"
           },
           {
             "value": "amt144",
-            "label": "横屏 · AMT 144 · Black"
+            "label": "ui_edition_option_17"
           },
           {
             "value": "amt144-white",
-            "label": "横屏 · AMT 144 · White"
+            "label": "ui_edition_option_18"
           },
           {
             "value": "amt288",
-            "label": "横屏 · AMT 288 · White"
+            "label": "ui_edition_option_19"
           },
           {
             "value": "amt288-black",
-            "label": "横屏 · AMT 288 · Black"
+            "label": "ui_edition_option_20"
           },
           {
             "value": "clockclockl",
-            "label": "横屏 · ClockClock L · Tidal"
+            "label": "ui_edition_option_21"
           },
           {
             "value": "amt96",
-            "label": "横屏 · AMT 96 · Bjarke Ingels"
+            "label": "ui_edition_option_22"
           },
           {
             "value": "clockclock9",
-            "label": "圆形 · ClockClock 9 · White"
+            "label": "ui_edition_option_23"
           },
           {
             "value": "amt61c",
-            "label": "圆形 · AMT 61c · Zephyr"
+            "label": "ui_edition_option_24"
           },
           {
             "value": "amt61c-tidal",
-            "label": "圆形 · AMT 61c · Tidal"
+            "label": "ui_edition_option_25"
           },
           {
             "value": "amt72v",
-            "label": "竖排 · AMT 72v · Black Sterling"
+            "label": "ui_edition_option_26"
           },
           {
             "value": "amt72v-white",
-            "label": "竖排 · AMT 72v · White"
+            "label": "ui_edition_option_27"
           },
           {
             "value": "amt72v-black",
-            "label": "竖排 · AMT 72v · Black"
+            "label": "ui_edition_option_28"
           },
           {
             "value": "amt72v-tidal",
-            "label": "竖排 · AMT 72v · Tidal"
+            "label": "ui_edition_option_29"
           }
         ]
       },
       "scale": {
         "order": 1,
-        "text": "整体缩放",
+        "text": "ui_scale",
         "value": 90,
         "type": "slider",
         "min": 20,
@@ -146,7 +146,7 @@
       },
       "padding": {
         "order": 2,
-        "text": "画布安全边距",
+        "text": "ui_padding",
         "value": 0,
         "type": "slider",
         "min": 0,
@@ -156,7 +156,7 @@
       },
       "offsetX": {
         "order": 3,
-        "text": "水平位置",
+        "text": "ui_offsetX",
         "value": 0,
         "type": "slider",
         "min": -100,
@@ -166,7 +166,7 @@
       },
       "offsetY": {
         "order": 4,
-        "text": "垂直位置",
+        "text": "ui_offsetY",
         "value": 0,
         "type": "slider",
         "min": -100,
@@ -176,95 +176,95 @@
       },
       "customColors": {
         "order": 5,
-        "text": "启用自定义配色",
+        "text": "ui_customColors",
         "value": false,
         "type": "bool"
       },
       "background": {
         "order": 6,
-        "text": "画布背景",
+        "text": "ui_background",
         "value": "0 0 0",
         "type": "color"
       },
       "board": {
         "order": 7,
-        "text": "背景板",
+        "text": "ui_board",
         "value": "0.06666666666666667 0.07058823529411765 0.07450980392156863",
         "type": "color"
       },
       "long": {
         "order": 8,
-        "text": "长针",
+        "text": "ui_long",
         "value": "0.9764705882352941 0.9803921568627451 0.9686274509803922",
         "type": "color"
       },
       "short": {
         "order": 9,
-        "text": "短针",
+        "text": "ui_short",
         "value": "0.9333333333333333 0.9411764705882353 0.9254901960784314",
         "type": "color"
       },
       "action": {
         "order": 10,
-        "text": "动作",
+        "text": "ui_action",
         "value": "default",
         "type": "combo",
         "options": [
           {
             "value": "default",
-            "label": "当前预设原动作"
+            "label": "ui_action_option_0"
           },
           {
             "value": "clockclock24:scatter",
-            "label": "24 系列 · 交错旋转"
+            "label": "ui_action_option_1"
           },
           {
             "value": "clockclock24:diagonal",
-            "label": "24 系列 · 斜线波浪"
+            "label": "ui_action_option_2"
           },
           {
             "value": "clockclock24:tidal",
-            "label": "24 系列 · 潮汐波浪"
+            "label": "ui_action_option_3"
           },
           {
             "value": "amt72:radial",
-            "label": "AMT 72 · 向心涟漪"
+            "label": "ui_action_option_4"
           },
           {
             "value": "amt72:wind",
-            "label": "AMT 72 · 横向风势"
+            "label": "ui_action_option_5"
           },
           {
             "value": "amt72:diagonal",
-            "label": "AMT 72 · 斜线波浪"
+            "label": "ui_action_option_6"
           },
           {
             "value": "amt61c:zephyr",
-            "label": "AMT 61c · 风势流动 · Zephyr"
+            "label": "ui_action_option_7"
           },
           {
             "value": "amt61c:tidal",
-            "label": "AMT 61c · 环弧波浪 · Tidal"
+            "label": "ui_action_option_8"
           },
           {
             "value": "amt72v:phased",
-            "label": "AMT 72v · 错相旋转 · 双速归位"
+            "label": "ui_action_option_9"
           },
           {
             "value": "amt72v:diagonal",
-            "label": "AMT 72v · 斜线波浪"
+            "label": "ui_action_option_10"
           }
         ]
       },
       "customDuration": {
         "order": 11,
-        "text": "启用自定义动作时长",
+        "text": "ui_customDuration",
         "value": false,
         "type": "bool"
       },
       "duration": {
         "order": 12,
-        "text": "完整编排时长",
+        "text": "ui_duration",
         "value": 54.4,
         "type": "slider",
         "min": 1,
@@ -274,31 +274,31 @@
       },
       "visibility": {
         "order": 13,
-        "text": "闲置指针",
+        "text": "ui_visibility",
         "value": "default",
         "type": "combo",
         "options": [
           {
             "value": "default",
-            "label": "当前预设默认"
+            "label": "ui_visibility_option_0"
           },
           {
             "value": "hide",
-            "label": "随归位隐藏"
+            "label": "ui_visibility_option_1"
           },
           {
             "value": "ghost",
-            "label": "微光显示"
+            "label": "ui_visibility_option_2"
           },
           {
             "value": "show",
-            "label": "全部显示"
+            "label": "ui_visibility_option_3"
           }
         ]
       },
       "playbackSpeed": {
         "order": 14,
-        "text": "播放速度",
+        "text": "ui_playbackSpeed",
         "value": 1,
         "type": "slider",
         "min": 0.1,
@@ -308,53 +308,53 @@
       },
       "paused": {
         "order": 15,
-        "text": "暂停播放",
+        "text": "ui_paused",
         "value": false,
         "type": "bool"
       },
       "format24": {
         "order": 16,
-        "text": "24 小时制",
+        "text": "ui_format24",
         "value": true,
         "type": "bool"
       },
       "timezone": {
         "order": 17,
-        "text": "时区",
+        "text": "ui_timezone",
         "value": "",
         "type": "textinput"
       },
       "source": {
         "order": 18,
-        "text": "时间来源",
+        "text": "ui_source",
         "value": "live",
         "type": "combo",
         "options": [
           {
             "value": "live",
-            "label": "设备时间"
+            "label": "ui_source_option_0"
           },
           {
             "value": "manual",
-            "label": "指定时间"
+            "label": "ui_source_option_1"
           }
         ]
       },
       "manualTime": {
         "order": 19,
-        "text": "指定时间",
+        "text": "ui_manualTime",
         "value": "09:34",
         "type": "textinput"
       },
       "autoDemo": {
         "order": 20,
-        "text": "自动逐分钟演示",
+        "text": "ui_autoDemo",
         "value": false,
         "type": "bool"
       },
       "demoInterval": {
         "order": 21,
-        "text": "自动切换间隔",
+        "text": "ui_demoInterval",
         "value": 5,
         "type": "slider",
         "min": 1,
@@ -364,13 +364,13 @@
       },
       "customGeometry": {
         "order": 22,
-        "text": "启用自定义尺寸与指针",
+        "text": "ui_customGeometry",
         "value": false,
         "type": "bool"
       },
       "radius": {
         "order": 23,
-        "text": "表盘半径",
+        "text": "ui_radius",
         "value": 43,
         "type": "slider",
         "min": 20,
@@ -380,7 +380,7 @@
       },
       "gap": {
         "order": 24,
-        "text": "表盘间隙",
+        "text": "ui_gap",
         "value": 5.3,
         "type": "slider",
         "min": 0,
@@ -390,7 +390,7 @@
       },
       "longLength": {
         "order": 25,
-        "text": "长针长度",
+        "text": "ui_longLength",
         "value": 100,
         "type": "slider",
         "min": 70,
@@ -400,7 +400,7 @@
       },
       "shortLength": {
         "order": 26,
-        "text": "短针长度",
+        "text": "ui_shortLength",
         "value": 85,
         "type": "slider",
         "min": 55,
@@ -410,7 +410,7 @@
       },
       "longWidth": {
         "order": 27,
-        "text": "长针粗细",
+        "text": "ui_longWidth",
         "value": 8.2,
         "type": "slider",
         "min": 2,
@@ -420,7 +420,7 @@
       },
       "shortWidth": {
         "order": 28,
-        "text": "短针粗细",
+        "text": "ui_shortWidth",
         "value": 8.2,
         "type": "slider",
         "min": 2,
@@ -430,7 +430,7 @@
       },
       "centerHourLength": {
         "order": 29,
-        "text": "中央时针额外比例",
+        "text": "ui_centerHourLength",
         "value": 98,
         "type": "slider",
         "min": 50,
@@ -440,7 +440,7 @@
       },
       "safeTop": {
         "order": 30,
-        "text": "顶部留白",
+        "text": "ui_safeTop",
         "value": 100,
         "type": "slider",
         "min": 0,
@@ -450,13 +450,177 @@
       },
       "safeBottom": {
         "order": 31,
-        "text": "底部留白",
+        "text": "ui_safeBottom",
         "value": 100,
         "type": "slider",
         "min": 0,
         "max": 1200,
         "fraction": false,
         "precision": 0
+      }
+    },
+    "localization": {
+      "en-us": {
+        "ui_edition": "Clock design (all 30 editions)",
+        "ui_edition_option_0": "Landscape · ClockClock 24 · Black",
+        "ui_edition_option_1": "Landscape · ClockClock 24 · White",
+        "ui_edition_option_2": "Landscape · ClockClock 24 · White Sterling",
+        "ui_edition_option_3": "Landscape · ClockClock 24 · White Gold",
+        "ui_edition_option_4": "Landscape · ClockClock 24 · Black Sterling",
+        "ui_edition_option_5": "Landscape · ClockClock 24 · Black Gold",
+        "ui_edition_option_6": "Landscape · ClockClock 24 · Pinakin Neela",
+        "ui_edition_option_7": "Landscape · ClockClock 24 · Pinakin Hara",
+        "ui_edition_option_8": "Landscape · ClockClock 24 · Bjarke Ingels · Sunset Dune",
+        "ui_edition_option_9": "Landscape · ClockClock 24 · Dada Blue",
+        "ui_edition_option_10": "Landscape · AMT 72 · Black",
+        "ui_edition_option_11": "Landscape · AMT 72 · White Sterling",
+        "ui_edition_option_12": "Landscape · AMT 72 · White",
+        "ui_edition_option_13": "Landscape · AMT 72 · Black Sterling",
+        "ui_edition_option_14": "Landscape · AMT 120 · Black",
+        "ui_edition_option_15": "Landscape · AMT 120 · Tidal",
+        "ui_edition_option_16": "Landscape · AMT 120 · White",
+        "ui_edition_option_17": "Landscape · AMT 144 · Black",
+        "ui_edition_option_18": "Landscape · AMT 144 · White",
+        "ui_edition_option_19": "Landscape · AMT 288 · White",
+        "ui_edition_option_20": "Landscape · AMT 288 · Black",
+        "ui_edition_option_21": "Landscape · ClockClock L · Tidal",
+        "ui_edition_option_22": "Landscape · AMT 96 · Bjarke Ingels",
+        "ui_edition_option_23": "Circular · ClockClock 9 · White",
+        "ui_edition_option_24": "Circular · AMT 61c · Zephyr",
+        "ui_edition_option_25": "Circular · AMT 61c · Tidal",
+        "ui_edition_option_26": "Portrait · AMT 72v · Black Sterling",
+        "ui_edition_option_27": "Portrait · AMT 72v · White",
+        "ui_edition_option_28": "Portrait · AMT 72v · Black",
+        "ui_edition_option_29": "Portrait · AMT 72v · Tidal",
+        "ui_scale": "Size",
+        "ui_padding": "Safe margin",
+        "ui_offsetX": "Horizontal position",
+        "ui_offsetY": "Vertical position",
+        "ui_customColors": "Use custom colors",
+        "ui_background": "Background",
+        "ui_board": "Clock face",
+        "ui_long": "Long hand",
+        "ui_short": "Short hand",
+        "ui_action": "Motion",
+        "ui_action_option_0": "Original motion",
+        "ui_action_option_1": "24 series · Staggered rotation",
+        "ui_action_option_2": "24 series · Diagonal wave",
+        "ui_action_option_3": "24 series · Tidal wave",
+        "ui_action_option_4": "AMT 72 · Radial ripples",
+        "ui_action_option_5": "AMT 72 · Horizontal wind",
+        "ui_action_option_6": "AMT 72 · Diagonal wave",
+        "ui_action_option_7": "AMT 61c · Flowing wind · Zephyr",
+        "ui_action_option_8": "AMT 61c · Circular waves · Tidal",
+        "ui_action_option_9": "AMT 72v · Phased rotation · Two-speed settling",
+        "ui_action_option_10": "AMT 72v · Diagonal wave",
+        "ui_customDuration": "Use custom motion duration",
+        "ui_duration": "Motion duration",
+        "ui_visibility": "Idle hands",
+        "ui_visibility_option_0": "Original setting",
+        "ui_visibility_option_1": "Hide after settling",
+        "ui_visibility_option_2": "Dim idle hands",
+        "ui_visibility_option_3": "Show all hands",
+        "ui_playbackSpeed": "Playback speed",
+        "ui_paused": "Pause",
+        "ui_format24": "24-hour time",
+        "ui_timezone": "Time zone",
+        "ui_source": "Time source",
+        "ui_source_option_0": "Device time",
+        "ui_source_option_1": "Set time",
+        "ui_manualTime": "Set time",
+        "ui_autoDemo": "Advance one minute automatically",
+        "ui_demoInterval": "Demo interval",
+        "ui_customGeometry": "Customize dimensions and hands",
+        "ui_radius": "Dial radius",
+        "ui_gap": "Dial spacing",
+        "ui_longLength": "Long hand length",
+        "ui_shortLength": "Short hand length",
+        "ui_longWidth": "Long hand width",
+        "ui_shortWidth": "Short hand width",
+        "ui_centerHourLength": "Center hour hand ratio",
+        "ui_safeTop": "Top safe area",
+        "ui_safeBottom": "Bottom safe area"
+      },
+      "zh-chs": {
+        "ui_edition": "时钟款式（全部 30 款）",
+        "ui_edition_option_0": "横屏 · ClockClock 24 · Black",
+        "ui_edition_option_1": "横屏 · ClockClock 24 · White",
+        "ui_edition_option_2": "横屏 · ClockClock 24 · White Sterling",
+        "ui_edition_option_3": "横屏 · ClockClock 24 · White Gold",
+        "ui_edition_option_4": "横屏 · ClockClock 24 · Black Sterling",
+        "ui_edition_option_5": "横屏 · ClockClock 24 · Black Gold",
+        "ui_edition_option_6": "横屏 · ClockClock 24 · Pinakin Neela",
+        "ui_edition_option_7": "横屏 · ClockClock 24 · Pinakin Hara",
+        "ui_edition_option_8": "横屏 · ClockClock 24 · Bjarke Ingels · Sunset Dune",
+        "ui_edition_option_9": "横屏 · ClockClock 24 · Dada Blue",
+        "ui_edition_option_10": "横屏 · AMT 72 · Black",
+        "ui_edition_option_11": "横屏 · AMT 72 · White Sterling",
+        "ui_edition_option_12": "横屏 · AMT 72 · White",
+        "ui_edition_option_13": "横屏 · AMT 72 · Black Sterling",
+        "ui_edition_option_14": "横屏 · AMT 120 · Black",
+        "ui_edition_option_15": "横屏 · AMT 120 · Tidal",
+        "ui_edition_option_16": "横屏 · AMT 120 · White",
+        "ui_edition_option_17": "横屏 · AMT 144 · Black",
+        "ui_edition_option_18": "横屏 · AMT 144 · White",
+        "ui_edition_option_19": "横屏 · AMT 288 · White",
+        "ui_edition_option_20": "横屏 · AMT 288 · Black",
+        "ui_edition_option_21": "横屏 · ClockClock L · Tidal",
+        "ui_edition_option_22": "横屏 · AMT 96 · Bjarke Ingels",
+        "ui_edition_option_23": "圆形 · ClockClock 9 · White",
+        "ui_edition_option_24": "圆形 · AMT 61c · Zephyr",
+        "ui_edition_option_25": "圆形 · AMT 61c · Tidal",
+        "ui_edition_option_26": "竖排 · AMT 72v · Black Sterling",
+        "ui_edition_option_27": "竖排 · AMT 72v · White",
+        "ui_edition_option_28": "竖排 · AMT 72v · Black",
+        "ui_edition_option_29": "竖排 · AMT 72v · Tidal",
+        "ui_scale": "整体缩放",
+        "ui_padding": "画布安全边距",
+        "ui_offsetX": "水平位置",
+        "ui_offsetY": "垂直位置",
+        "ui_customColors": "启用自定义配色",
+        "ui_background": "画布背景",
+        "ui_board": "背景板",
+        "ui_long": "长针",
+        "ui_short": "短针",
+        "ui_action": "动作",
+        "ui_action_option_0": "当前预设原动作",
+        "ui_action_option_1": "24 系列 · 交错旋转",
+        "ui_action_option_2": "24 系列 · 斜线波浪",
+        "ui_action_option_3": "24 系列 · 潮汐波浪",
+        "ui_action_option_4": "AMT 72 · 向心涟漪",
+        "ui_action_option_5": "AMT 72 · 横向风势",
+        "ui_action_option_6": "AMT 72 · 斜线波浪",
+        "ui_action_option_7": "AMT 61c · 风势流动 · Zephyr",
+        "ui_action_option_8": "AMT 61c · 环弧波浪 · Tidal",
+        "ui_action_option_9": "AMT 72v · 错相旋转 · 双速归位",
+        "ui_action_option_10": "AMT 72v · 斜线波浪",
+        "ui_customDuration": "启用自定义动作时长",
+        "ui_duration": "完整编排时长",
+        "ui_visibility": "闲置指针",
+        "ui_visibility_option_0": "当前预设默认",
+        "ui_visibility_option_1": "随归位隐藏",
+        "ui_visibility_option_2": "微光显示",
+        "ui_visibility_option_3": "全部显示",
+        "ui_playbackSpeed": "播放速度",
+        "ui_paused": "暂停播放",
+        "ui_format24": "24 小时制",
+        "ui_timezone": "时区",
+        "ui_source": "时间来源",
+        "ui_source_option_0": "设备时间",
+        "ui_source_option_1": "指定时间",
+        "ui_manualTime": "指定时间",
+        "ui_autoDemo": "自动逐分钟演示",
+        "ui_demoInterval": "自动切换间隔",
+        "ui_customGeometry": "启用自定义尺寸与指针",
+        "ui_radius": "表盘半径",
+        "ui_gap": "表盘间隙",
+        "ui_longLength": "长针长度",
+        "ui_shortLength": "短针长度",
+        "ui_longWidth": "长针粗细",
+        "ui_shortWidth": "短针粗细",
+        "ui_centerHourLength": "中央时针额外比例",
+        "ui_safeTop": "顶部留白",
+        "ui_safeBottom": "底部留白"
       }
     }
   }

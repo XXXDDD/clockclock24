@@ -1,36 +1,36 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#000000"><title>TIMEFORM · 30 款 Lively 壁纸</title>
+  <meta name="theme-color" content="#000000"><title>TIMEFORM · Wallpaper settings</title>
   <style>/* BUILD:STYLES */</style>
 </head>
 <body data-editor="BUILD:EDITOR" data-editing="false">
-  <header class="topbar editor-ui"><div class="brand"><span class="brand-mark"></span>TIMEFORM <span class="badge">LIVELY / 本地测试版</span></div><button id="hideSettings" type="button">纯壁纸预览 ↗</button></header>
+  <header class="topbar editor-ui"><div class="brand"><span class="brand-mark"></span>TIMEFORM <span class="badge" data-i18n="badge">LIVELY / OFFLINE</span></div><div class="editor-top-actions"><select id="interfaceLanguage" aria-label="Language"><option value="en">English</option><option value="zh-CN">简体中文</option></select><button id="hideSettings" type="button" data-i18n="preview">Wallpaper preview ↗</button></div></header>
   <main class="workspace">
     <section class="preview">
-      <div class="preview-heading editor-ui"><div><p class="eyebrow">THE COMPLETE COLLECTION / 30 EDITIONS</p><h1 id="modelName">A million Times 144</h1><p id="editionName">Black</p></div><span class="count" id="clockCount">144 个表盘</span></div>
-      <div class="preview-toolbar editor-ui"><span id="resolutionLabel">1920 × 1080</span><select id="previewSize" aria-label="预览屏幕尺寸"><option value="1920x1080">横屏 · 1920 × 1080</option><option value="2560x1440">2K · 2560 × 1440</option><option value="3840x2160">4K · 3840 × 2160</option><option value="3440x1440">超宽屏 · 3440 × 1440</option><option value="1080x1920">竖屏 · 1080 × 1920</option><option value="1080x1080">方屏 · 1080 × 1080</option><option value="auto">当前窗口</option></select></div>
-      <div id="previewArea"><div id="viewport"><canvas id="clock" role="img" aria-label="时钟壁纸"></canvas></div></div>
-      <div class="transport editor-ui"><div><button id="pause" type="button">暂停</button><button id="replay" type="button">重播动作</button><button id="settle" type="button">立即归位</button><button id="step" type="button">单步</button></div><strong id="displayTime">--:--</strong></div>
-      <div class="preview-foot editor-ui"><span id="playbackStatus">已归位</span><span>圆形 3 款 · 横屏 23 款 · 竖排 4 款</span></div>
-      <p class="preview-note editor-ui">调好后点击「导出 Lively 壁纸包」，把 ZIP 拖进 Lively，再从壁纸卡片的「自定义」调整。全部时钟可离线运行。</p>
+      <div class="preview-heading editor-ui"><div><p class="eyebrow" data-i18n="collectionEyebrow">THE COMPLETE COLLECTION / 30 EDITIONS</p><h1 id="modelName">A million Times 144</h1><p id="editionName">Black</p></div><span class="count" id="clockCount">144 dials</span></div>
+      <div class="preview-toolbar editor-ui"><span id="resolutionLabel">1920 × 1080</span><select id="previewSize" aria-label="Preview screen size"><option value="1920x1080" data-size-label="landscape">Landscape · 1920 × 1080</option><option value="2560x1440">2K · 2560 × 1440</option><option value="3840x2160">4K · 3840 × 2160</option><option value="3440x1440" data-size-label="ultrawide">Ultrawide · 3440 × 1440</option><option value="1080x1920" data-size-label="portrait">Portrait · 1080 × 1920</option><option value="1080x1080" data-size-label="square">Square · 1080 × 1080</option><option value="auto" data-i18n="window">Current window</option></select></div>
+      <div id="previewArea"><div id="viewport"><canvas id="clock" role="img" aria-label="Clock wallpaper"></canvas></div></div>
+      <div class="transport editor-ui"><div><button id="pause" type="button">Pause</button><button id="replay" type="button" data-i18n="replay">Replay motion</button><button id="settle" type="button" data-i18n="settle">Show current time</button><button id="step" type="button" data-i18n="step">Step</button></div><strong id="displayTime">--:--</strong></div>
+      <div class="preview-foot editor-ui"><span id="playbackStatus">Ready</span><span data-i18n="counts">3 circular · 23 landscape · 4 portrait</span></div>
+      <p class="preview-note editor-ui" data-i18n="instructions">Export the wallpaper ZIP, drag it into Lively, then open Customize on its card. All clocks work offline.</p>
     </section>
-    <aside id="editor" class="editor-ui" aria-label="壁纸设置">
-      <div class="editor-heading"><div><p class="eyebrow">WALLPAPER SETTINGS</p><h2>壁纸设置</h2></div><span class="badge">30 款全集</span></div>
+    <aside id="editor" class="editor-ui" aria-label="Wallpaper settings">
+      <div class="editor-heading"><div><p class="eyebrow" data-i18n="settingsEyebrow">WALLPAPER SETTINGS</p><h2 data-i18n="settings">Wallpaper settings</h2></div><span class="badge" data-i18n="collection">30 editions</span></div>
       <div class="settings-scroll">
         <section class="edition-section"><div class="fields" id="fields-edition"></div><p id="actionHint" class="hint"></p></section>
-        <details open><summary>大小与位置</summary><div class="fields" id="fields-screen"></div></details>
-        <details><summary>配色</summary><div class="fields" id="fields-colors"></div></details>
-        <details><summary>动作与播放</summary><div class="fields" id="fields-motion"></div></details>
-        <details><summary>时间</summary><div class="fields" id="fields-time"></div></details>
-        <details><summary>完整自定义：尺寸与指针</summary><div class="fields" id="fields-geometry"></div></details>
-        <section class="config-actions"><button id="resetConfig" type="button">恢复当前款式默认设置</button><div class="button-row"><button id="exportConfig" type="button">导出配置</button><label class="file-button">导入配置<input id="importConfig" type="file" accept=".json,application/json" hidden></label></div><p class="hint">支持本壁纸配置，以及网页版导出的单款 JSON。</p></section>
+        <details open><summary data-i18n="screen">Size and position</summary><div class="fields" id="fields-screen"></div></details>
+        <details><summary data-i18n="colors">Colors</summary><div class="fields" id="fields-colors"></div></details>
+        <details><summary data-i18n="motion">Motion and playback</summary><div class="fields" id="fields-motion"></div></details>
+        <details><summary data-i18n="time">Time</summary><div class="fields" id="fields-time"></div></details>
+        <details><summary data-i18n="geometry">Dimensions and hands</summary><div class="fields" id="fields-geometry"></div></details>
+        <section class="config-actions"><button id="resetConfig" type="button" data-i18n="reset">Restore this design</button><div class="button-row"><button id="exportConfig" type="button" data-i18n="export">Export settings</button><label class="file-button"><span data-i18n="import">Import settings</span><input id="importConfig" type="file" accept=".json,application/json" hidden></label></div><p class="hint" data-i18n="importHint">Import wallpaper settings or a single-design JSON from the workbench.</p></section>
       </div>
-      <div class="export-area"><button id="downloadLively" class="primary" type="button">导出 Lively 壁纸包 ↓</button><p id="notice" role="status">配置保存在本地浏览器，导出新包后可在 Lively 使用。</p></div>
+      <div class="export-area"><button id="downloadLively" class="primary" type="button" data-i18n="download">Export Lively wallpaper ZIP ↓</button><p id="notice" role="status" data-i18n="saved">Settings are saved in this browser. Export a new ZIP to use them in Lively.</p></div>
     </aside>
   </main>
-  <button id="returnSettings" type="button" hidden>返回壁纸设置</button>
+  <button id="returnSettings" type="button" data-i18n="return" hidden>Return to settings</button>
   <script type="application/json" id="timeform-config">/* BUILD:CONFIG */</script>
   <script>/* BUILD:SCRIPTS */</script>
 </body>

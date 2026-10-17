@@ -1,51 +1,51 @@
 {
   "sectionedition": {
     "type": "label",
-    "value": "时钟款式"
+    "value": "Clock design"
   },
   "edition": {
-    "text": "时钟款式（全部 30 款）",
+    "text": "Clock design (all 30 editions)",
     "type": "dropdown",
     "value": 17,
     "items": [
-      "横屏 · ClockClock 24 · Black",
-      "横屏 · ClockClock 24 · White",
-      "横屏 · ClockClock 24 · White Sterling",
-      "横屏 · ClockClock 24 · White Gold",
-      "横屏 · ClockClock 24 · Black Sterling",
-      "横屏 · ClockClock 24 · Black Gold",
-      "横屏 · ClockClock 24 · Pinakin Neela",
-      "横屏 · ClockClock 24 · Pinakin Hara",
-      "横屏 · ClockClock 24 · Bjarke Ingels · Sunset Dune",
-      "横屏 · ClockClock 24 · Dada Blue",
-      "横屏 · AMT 72 · Black",
-      "横屏 · AMT 72 · White Sterling",
-      "横屏 · AMT 72 · White",
-      "横屏 · AMT 72 · Black Sterling",
-      "横屏 · AMT 120 · Black",
-      "横屏 · AMT 120 · Tidal",
-      "横屏 · AMT 120 · White",
-      "横屏 · AMT 144 · Black",
-      "横屏 · AMT 144 · White",
-      "横屏 · AMT 288 · White",
-      "横屏 · AMT 288 · Black",
-      "横屏 · ClockClock L · Tidal",
-      "横屏 · AMT 96 · Bjarke Ingels",
-      "圆形 · ClockClock 9 · White",
-      "圆形 · AMT 61c · Zephyr",
-      "圆形 · AMT 61c · Tidal",
-      "竖排 · AMT 72v · Black Sterling",
-      "竖排 · AMT 72v · White",
-      "竖排 · AMT 72v · Black",
-      "竖排 · AMT 72v · Tidal"
+      "Landscape · ClockClock 24 · Black",
+      "Landscape · ClockClock 24 · White",
+      "Landscape · ClockClock 24 · White Sterling",
+      "Landscape · ClockClock 24 · White Gold",
+      "Landscape · ClockClock 24 · Black Sterling",
+      "Landscape · ClockClock 24 · Black Gold",
+      "Landscape · ClockClock 24 · Pinakin Neela",
+      "Landscape · ClockClock 24 · Pinakin Hara",
+      "Landscape · ClockClock 24 · Bjarke Ingels · Sunset Dune",
+      "Landscape · ClockClock 24 · Dada Blue",
+      "Landscape · AMT 72 · Black",
+      "Landscape · AMT 72 · White Sterling",
+      "Landscape · AMT 72 · White",
+      "Landscape · AMT 72 · Black Sterling",
+      "Landscape · AMT 120 · Black",
+      "Landscape · AMT 120 · Tidal",
+      "Landscape · AMT 120 · White",
+      "Landscape · AMT 144 · Black",
+      "Landscape · AMT 144 · White",
+      "Landscape · AMT 288 · White",
+      "Landscape · AMT 288 · Black",
+      "Landscape · ClockClock L · Tidal",
+      "Landscape · AMT 96 · Bjarke Ingels",
+      "Circular · ClockClock 9 · White",
+      "Circular · AMT 61c · Zephyr",
+      "Circular · AMT 61c · Tidal",
+      "Portrait · AMT 72v · Black Sterling",
+      "Portrait · AMT 72v · White",
+      "Portrait · AMT 72v · Black",
+      "Portrait · AMT 72v · Tidal"
     ]
   },
   "sectionscreen": {
     "type": "label",
-    "value": "大小与位置"
+    "value": "Size and position"
   },
   "scale": {
-    "text": "整体缩放（%）",
+    "text": "Size (%)",
     "type": "slider",
     "value": 90,
     "min": 20,
@@ -53,7 +53,7 @@
     "step": 1
   },
   "padding": {
-    "text": "画布安全边距（px）",
+    "text": "Safe margin (px)",
     "type": "slider",
     "value": 0,
     "min": 0,
@@ -61,7 +61,7 @@
     "step": 1
   },
   "offsetX": {
-    "text": "水平位置（%）",
+    "text": "Horizontal position (%)",
     "type": "slider",
     "value": 0,
     "min": -100,
@@ -69,7 +69,7 @@
     "step": 1
   },
   "offsetY": {
-    "text": "垂直位置（%）",
+    "text": "Vertical position (%)",
     "type": "slider",
     "value": 0,
     "min": -100,
@@ -78,218 +78,218 @@
   },
   "sectioncolors": {
     "type": "label",
-    "value": "配色"
+    "value": "Colors"
   },
   "customColors": {
-    "text": "启用自定义配色",
+    "text": "Use custom colors",
     "type": "checkbox",
     "value": false,
-    "help": "关闭时使用所选款式的原作配色；开启后使用下方四项颜色。"
+    "help": "Off uses the selected design's original colors. Turn on to use the four colors below."
   },
   "background": {
-    "text": "画布背景",
+    "text": "Background",
     "type": "color",
     "value": "#000000"
   },
   "board": {
-    "text": "背景板",
+    "text": "Clock face",
     "type": "color",
     "value": "#111213"
   },
   "long": {
-    "text": "长针",
+    "text": "Long hand",
     "type": "color",
     "value": "#f9faf7"
   },
   "short": {
-    "text": "短针",
+    "text": "Short hand",
     "type": "color",
     "value": "#eef0ec"
   },
   "sectionmotion": {
     "type": "label",
-    "value": "动作与播放"
+    "value": "Motion and playback"
   },
   "action": {
-    "text": "动作",
+    "text": "Motion",
     "type": "dropdown",
     "value": 0,
     "items": [
-      "当前预设原动作",
-      "24 系列 · 交错旋转",
-      "24 系列 · 斜线波浪",
-      "24 系列 · 潮汐波浪",
-      "AMT 72 · 向心涟漪",
-      "AMT 72 · 横向风势",
-      "AMT 72 · 斜线波浪",
-      "AMT 61c · 风势流动 · Zephyr",
-      "AMT 61c · 环弧波浪 · Tidal",
-      "AMT 72v · 错相旋转 · 双速归位",
-      "AMT 72v · 斜线波浪"
+      "Original motion",
+      "24 series · Staggered rotation",
+      "24 series · Diagonal wave",
+      "24 series · Tidal wave",
+      "AMT 72 · Radial ripples",
+      "AMT 72 · Horizontal wind",
+      "AMT 72 · Diagonal wave",
+      "AMT 61c · Flowing wind · Zephyr",
+      "AMT 61c · Circular waves · Tidal",
+      "AMT 72v · Phased rotation · Two-speed settling",
+      "AMT 72v · Diagonal wave"
     ],
-    "help": "默认沿用各款校准动作；附加动作只适用于名称标注的型号，其他型号自动使用原动作。"
+    "help": "Uses the original motion by default. Extra motions apply only to the model named in the option."
   },
   "customDuration": {
-    "text": "启用自定义动作时长",
+    "text": "Use custom motion duration",
     "type": "checkbox",
     "value": false,
-    "help": "关闭时沿用当前款式或当前动作的参考时长。"
+    "help": "Off uses the reference duration for the selected design or motion."
   },
   "duration": {
-    "text": "完整编排时长（s）",
+    "text": "Motion duration (s)",
     "type": "textbox",
     "value": "54.4",
-    "help": "启用自定义动作时长后生效。"
+    "help": "Applies when custom motion duration is enabled."
   },
   "visibility": {
-    "text": "闲置指针",
+    "text": "Idle hands",
     "type": "dropdown",
     "value": 0,
     "items": [
-      "当前预设默认",
-      "随归位隐藏",
-      "微光显示",
-      "全部显示"
+      "Original setting",
+      "Hide after settling",
+      "Dim idle hands",
+      "Show all hands"
     ],
-    "help": "仅闲置表盘的双针一起随动作显隐；参与数字或冒号的双针完整保留，包括折叠的指针。"
+    "help": "Both hands on idle dials fade together. Hands that form the time remain visible, including overlapping hands."
   },
   "playbackSpeed": {
-    "text": "播放速度（倍）",
+    "text": "Playback speed (×)",
     "type": "textbox",
     "value": "1"
   },
   "paused": {
-    "text": "暂停播放",
+    "text": "Pause",
     "type": "checkbox",
     "value": false
   },
   "sectiontime": {
     "type": "label",
-    "value": "时间"
+    "value": "Time"
   },
   "format24": {
-    "text": "24 小时制",
+    "text": "24-hour time",
     "type": "checkbox",
     "value": true
   },
   "timezone": {
-    "text": "时区",
+    "text": "Time zone",
     "type": "textbox",
     "value": "",
-    "help": "留空跟随设备，例如 Asia/Hong_Kong。"
+    "help": "Leave blank to follow your device, for example Asia/Hong_Kong."
   },
   "source": {
-    "text": "时间来源",
+    "text": "Time source",
     "type": "dropdown",
     "value": 0,
     "items": [
-      "设备时间",
-      "指定时间"
+      "Device time",
+      "Set time"
     ]
   },
   "manualTime": {
-    "text": "指定时间",
+    "text": "Set time",
     "type": "textbox",
     "value": "09:34"
   },
   "autoDemo": {
-    "text": "自动逐分钟演示",
+    "text": "Advance one minute automatically",
     "type": "checkbox",
     "value": false
   },
   "demoInterval": {
-    "text": "自动切换间隔（s）",
+    "text": "Demo interval (s)",
     "type": "textbox",
     "value": "5",
-    "help": "参考编排至少等本轮完成并读时停留 2 秒，再演示下一分钟。"
+    "help": "The complete motion finishes and holds the time for at least 2 seconds before advancing another minute."
   },
   "sectiongeometry": {
     "type": "label",
-    "value": "完整自定义：尺寸与指针"
+    "value": "Dimensions and hands"
   },
   "customGeometry": {
-    "text": "启用自定义尺寸与指针",
+    "text": "Customize dimensions and hands",
     "type": "checkbox",
     "value": false,
-    "help": "关闭时每款自动使用自身尺寸与指针参数；开启后使用下方数值。"
+    "help": "Off uses each design's original dimensions and hand proportions. Turn on to use the values below."
   },
   "radius": {
-    "text": "表盘半径（设计单位）",
+    "text": "Dial radius (design units)",
     "type": "textbox",
     "value": "43",
-    "help": "启用自定义尺寸后生效；数值会限制在当前型号的有效范围。"
+    "help": "Applies when custom dimensions are enabled. Values are limited to the selected model's supported range."
   },
   "gap": {
-    "text": "表盘间隙（设计单位）",
+    "text": "Dial spacing (design units)",
     "type": "textbox",
     "value": "5.3",
-    "help": "启用自定义尺寸后生效；数值会限制在当前型号的有效范围。"
+    "help": "Applies when custom dimensions are enabled. Values are limited to the selected model's supported range."
   },
   "longLength": {
-    "text": "长针长度（%）",
+    "text": "Long hand length (%)",
     "type": "slider",
     "value": 100,
     "min": 70,
     "max": 100,
     "step": 1,
-    "help": "启用自定义尺寸后生效；数值会限制在当前型号的有效范围。"
+    "help": "Applies when custom dimensions are enabled. Values are limited to the selected model's supported range."
   },
   "shortLength": {
-    "text": "短针长度（%）",
+    "text": "Short hand length (%)",
     "type": "slider",
     "value": 85,
     "min": 55,
     "max": 100,
     "step": 1,
-    "help": "启用自定义尺寸后生效；数值会限制在当前型号的有效范围。"
+    "help": "Applies when custom dimensions are enabled. Values are limited to the selected model's supported range."
   },
   "longWidth": {
-    "text": "长针粗细（设计单位）",
+    "text": "Long hand width (design units)",
     "type": "textbox",
     "value": "8.2",
-    "help": "启用自定义尺寸后生效；数值会限制在当前型号的有效范围。"
+    "help": "Applies when custom dimensions are enabled. Values are limited to the selected model's supported range."
   },
   "shortWidth": {
-    "text": "短针粗细（设计单位）",
+    "text": "Short hand width (design units)",
     "type": "textbox",
     "value": "8.2",
-    "help": "启用自定义尺寸后生效；数值会限制在当前型号的有效范围。"
+    "help": "Applies when custom dimensions are enabled. Values are limited to the selected model's supported range."
   },
   "centerHourLength": {
-    "text": "中央时针额外比例（%）",
+    "text": "Center hour hand ratio (%)",
     "type": "slider",
     "value": 98,
     "min": 50,
     "max": 100,
     "step": 1,
-    "help": "启用自定义尺寸后生效；数值会限制在当前型号的有效范围。"
+    "help": "Applies when custom dimensions are enabled. Values are limited to the selected model's supported range."
   },
   "safeTop": {
-    "text": "顶部留白（px）",
+    "text": "Top safe area (px)",
     "type": "slider",
     "value": 100,
     "min": 0,
     "max": 1200,
     "step": 1,
-    "help": "启用自定义尺寸后生效；数值会限制在当前型号的有效范围。"
+    "help": "Applies when custom dimensions are enabled. Values are limited to the selected model's supported range."
   },
   "safeBottom": {
-    "text": "底部留白（px）",
+    "text": "Bottom safe area (px)",
     "type": "slider",
     "value": 100,
     "min": 0,
     "max": 1200,
     "step": 1,
-    "help": "启用自定义尺寸后生效；数值会限制在当前型号的有效范围。"
+    "help": "Applies when custom dimensions are enabled. Values are limited to the selected model's supported range."
   },
   "replay": {
     "type": "button",
-    "text": "重播当前动作",
+    "text": "Replay motion",
     "value": "replay"
   },
   "settle": {
     "type": "button",
-    "text": "立即显示当前时间",
+    "text": "Show current time",
     "value": "settle"
   }
 }

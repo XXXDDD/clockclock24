@@ -1,25 +1,17 @@
-TIMEFORM · 30 款时钟 · Lively 本地测试版
+TIMEFORM - 30 Clock Designs for Lively Wallpaper
 
-导入：将 TIMEFORM-30款全集-Lively.zip 直接拖进 Lively 的壁纸库，作为一张新壁纸导入。
-设置：右键新壁纸卡片 → 自定义 → 时钟款式（全部 30 款）。
-所有款式恢复为一个统一下拉框，直接选择完整型号和预设。
+Import: drag TIMEFORM-Lively.zip into the Lively wallpaper library as a new wallpaper.
+Settings: right-click its wallpaper card and choose Customize. Select any of the 30 designs from the Clock design dropdown.
 
-包含横屏 23 款、圆形 3 款、竖排 4 款，共 30 个原作预设。
-默认款式为 AMT144 Black，设备时间，90% 大小。全部时钟代码离线运行。
-与当前网页版共用每款的几何、绘制及参考动作，包含最新的长短针比例、闲置显隐和物理长短针方向修正。
-没有本款原片的款式仍沿用网页注明的默认参考动作。
+Includes 23 landscape, 3 circular and 4 portrait editions. The default is AMT144 Black, device time and 90% size. All clocks work offline.
+Each design retains its own colors, geometry, hand proportions and reference motion. Size, position and time settings are preserved when changing designs.
+Custom colors, duration and dimensions are optional overrides. Turn an override off to restore the selected design's original values.
+Extra motions apply only to the model named in the option. Other models use their original motion.
 
-切换款式默认载入原作配色、尺寸与动作，整体大小和位置、时间设置保持不变。
-启用自定义配色、自定义时长或自定义尺寸与指针后，分别使用对应的下方数值；关闭即可恢复该款默认。
-附加动作按适用型号标注；选择其他型号的动作时，自动使用当前款式原动作。
-竖排款在横屏中按比例居中显示，建议在竖屏使用。
+Open configure.html in a browser for the offline settings page. It supports previewing, importing a single-design JSON from the workbench, exporting settings, and exporting a customized wallpaper ZIP.
+Browser settings and Lively's native settings are saved separately. To use browser changes in Lively, export a new ZIP and import it as a new wallpaper.
+Existing configurations retain their settings and hand-proportion migration. Lively's native pause and resume events remain supported.
 
-离线配置页：打开 configure.html，使用统一款式下拉框，可导入网页版单款 JSON、上一版壁纸配置、调整参数及导出新 ZIP。
-保留最新指针与动作修正；旧默认等长指针会按当前型号迁移。
-配置页的浏览器保存与 Lively 的设置分别保存；配置页的修改需要导出新包再导入。
-Lively 自定义设置会随该壁纸保存，支持宿主暂停与恢复。
-Lively 使用导入时的文件副本；这个全集包需要作为新壁纸导入，原来的五型号卡片不会自动更新。
+Language: on Lively 2.2 or newer, native settings and the wallpaper description follow the app language. The offline settings page initially follows the browser language and offers English and Simplified Chinese. It remembers this choice independently of clock settings. Unsupported languages fall back to English.
 
-本地验收建议：切换三种版式；调整颜色和位置；关闭自定义后检查恢复；重启壁纸检查设置保留；检查全屏应用时暂停及恢复。
-
-官方接口说明：https://github.com/lively-community/lively/wiki/Web-Guide-IV-:-Interaction
+Interface reference: https://github.com/lively-community/lively/wiki/Web-Guide-IV-:-Interaction

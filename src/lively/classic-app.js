@@ -1,12 +1,31 @@
 (function (root) {
   'use strict';
-  const { ClassicLivelyConfig: Spec, ClassicLivelyController: Controller, Config, Renderer, BrowserEnvironment, Time } = root.Timeform;
+  const { ClassicLivelyConfig: Spec, ClassicLivelyController: Controller, Config, Renderer, BrowserEnvironment, Time, Localization: I18n } = root.Timeform;
   const byId = id => document.getElementById(id), storageKey = 'timeform-lively-complete-v4';
   const openedAsEditor = document.body.dataset.editor === '1' || new URLSearchParams(location.search).get('settings') === '1';
   let config = Spec.normalize(JSON.parse(byId('timeform-config').textContent)), editing = false, resolution = [1920, 1080], controller;
   if (openedAsEditor) try { const saved = localStorage.getItem(storageKey); if (saved) config = Spec.parse(saved); } catch (_) {}
   config = Spec.normalize(Object.fromEntries(new URLSearchParams(location.search)), config);
   const viewport = byId('viewport'), area = byId('previewArea'), controls = new Map();
+  const languageKey = 'timeform-interface-language';
+  let locale = I18n.language(root.navigator?.language);
+  try { const saved = localStorage.getItem(languageKey); if (saved) locale = I18n.language(saved); } catch (_) {}
+  const t = (key, values) => I18n.t(key, locale, values);
+  function setLanguage(value, save = false) {
+    locale = I18n.language(value); document.documentElement.lang = locale; document.title = t('title');
+    byId('interfaceLanguage').value = locale;
+    byId('interfaceLanguage').setAttribute('aria-label', t('language'));
+    byId('previewSize').setAttribute('aria-label', t('resolution'));
+    byId('editor').setAttribute('aria-label', t('settings'));
+    for (const element of document.querySelectorAll('[data-i18n]')) element.textContent = t(element.dataset.i18n);
+    for (const element of document.querySelectorAll('[data-size-label]')) element.textContent = t(element.dataset.sizeLabel) + ' · ' + element.value.replace('x', ' × ');
+    if (save) try { localStorage.setItem(languageKey, locale); } catch (_) {}
+    if (editing) {
+      controls.clear(); document.querySelectorAll('.fields').forEach(element => element.replaceChildren());
+      buildControls(); showValues(); refreshStats();
+    }
+    notice(t('saved'));
+  }
   function dimensions() {
     const width = Math.max(1, viewport.clientWidth), height = Math.max(1, viewport.clientHeight);
     return { width: editing && resolution ? resolution[0] : width, height: editing && resolution ? resolution[1] : height, displayWidth: width, displayHeight: height };
@@ -31,12 +50,13 @@
     if (!editing) return;
     const stats = controller.renderer.getStats(), { model, settings } = Spec.resolve(config), d = dimensions();
     byId('modelName').textContent = model.name;
-    byId('editionName').textContent = Spec.categories[model.type] + ' / ' + model.edition;
-    byId('clockCount').textContent = model.countLabel || model.count + ' 个表盘';
+    byId('editionName').textContent = I18n.text(Spec.categories[model.type], locale) + ' / ' + model.edition;
+    byId('clockCount').textContent = t(model.id === 'clockclock9' ? 'pairs' : 'count', { count: model.count });
     byId('resolutionLabel').textContent = Math.round(d.width) + ' × ' + Math.round(d.height);
     byId('displayTime').textContent = stats.display.slice(0, 2) + ':' + stats.display.slice(2);
-    byId('playbackStatus').textContent = (stats.paused ? '已暂停' : stats.stage || (stats.animating ? '过渡中' : '已归位')) + ' · ' + settings.playbackSpeed + '×';
-    byId('pause').textContent = config.paused ? '继续' : '暂停';
+    byId('clock').setAttribute('aria-label', t('clockDescription', { name: model.name, time: byId('displayTime').textContent }));
+    byId('playbackStatus').textContent = (stats.paused ? t('paused') : locale === 'zh-CN' && stats.stage || (stats.animating ? t('inMotion') : t('ready'))) + ' · ' + settings.playbackSpeed + '×';
+    byId('pause').textContent = config.paused ? t('resume') : t('pause');
     byId('step').disabled = !stats.paused;
   }
   function showValues() {
@@ -46,7 +66,7 @@
       select.replaceChildren(...values.map(([value, name]) => { const option = document.createElement('option'); option.value = value; option.textContent = name; return option; }));
       select.value = selected;
     }
-    const actionOptions = Spec.fields.action.options.filter(([value]) => value === 'default' || value.startsWith(model.group + ':'));
+    const actionOptions = I18n.field('action', Spec.fields.action, locale).options.filter(([value]) => value === 'default' || value.startsWith(model.group + ':'));
     options('setting-action', actionOptions, actionOptions.some(([value]) => value === config.action) ? config.action : 'default');
     for (const [key, entry] of controls) {
       const field = Spec.fields[key];
@@ -65,7 +85,8 @@
       if (entry.range) entry.range.disabled = Boolean(disabled);
       if (entry.hex) entry.hex.disabled = Boolean(disabled);
     }
-    byId('actionHint').textContent = '当前动作：' + (model.Settings.fields.choreography?.options.find(option => option[0] === settings.choreography)?.[1] || model.motion) + ' · ' + settings.duration + ' 秒';
+    const actionName = model.Settings.fields.choreography?.options.find(option => option[0] === settings.choreography)?.[1];
+    byId('actionHint').textContent = t('action', { name: actionName ? I18n.text(actionName, locale) : t('originalMotion'), duration: settings.duration });
   }
   function changed(next) {
     config = next; background();
@@ -83,7 +104,7 @@
   }
   function accept(key, value, input) {
     const field = Spec.fields[key], decoded = Config.decode(field, value, true);
-    if (decoded === undefined) { input.setAttribute('aria-invalid', 'true'); notice('「' + field.label + '」格式或范围无效。', true); return; }
+    if (decoded === undefined) { input.setAttribute('aria-invalid', 'true'); notice(t('invalid', { field: I18n.field(key, field, locale).label }), true); return; }
     input.removeAttribute('aria-invalid');
     const patch = { [key]: decoded }, effective = Spec.resolve(config).settings;
     // Copy the visible inherited values before enabling an override in the editor.
@@ -91,12 +112,13 @@
       const keys = key === 'customColors' ? ['background', 'board', 'long', 'short'] : key === 'customGeometry' ? Spec.geometryKeys : key === 'customDuration' ? ['duration'] : [];
       for (const name of keys) if (effective[name] !== undefined) patch[name] = effective[name];
     }
-    controller.updateConfig(patch); notice('配置已保存到本地；导出新包后可在 Lively 使用。');
+    controller.updateConfig(patch); notice(t('saved'));
   }
   function buildControls() {
-    for (const [key, field] of Object.entries(Spec.fields)) {
+    for (const [key, original] of Object.entries(Spec.fields)) {
+      const field = I18n.field(key, original, locale);
       const wrapper = document.createElement('div'); wrapper.className = 'field';
-      const label = document.createElement('label'); label.htmlFor = 'setting-' + key; label.textContent = field.label + (field.unit ? '（' + field.unit + '）' : '');
+      const label = document.createElement('label'); label.htmlFor = 'setting-' + key; label.textContent = field.label + (field.unit ? ' (' + field.unit + ')' : '');
       const input = document.createElement(field.type === 'select' ? 'select' : 'input'); input.id = 'setting-' + key;
       const entry = { input }; wrapper.append(label);
       if (field.type === 'select') {
@@ -107,7 +129,7 @@
         input.addEventListener('change', () => accept(key, input.checked, input));
       } else if (field.type === 'number') {
         input.type = 'number'; input.min = field.min; input.max = field.max; input.step = field.step;
-        const range = document.createElement('input'); range.type = 'range'; range.min = field.min; range.max = field.max; range.step = field.step; range.setAttribute('aria-label', field.label + '滑块');
+        const range = document.createElement('input'); range.type = 'range'; range.min = field.min; range.max = field.max; range.step = field.step; range.setAttribute('aria-label', t('slider', { field: field.label }));
         const group = document.createElement('div'); group.className = 'numeric-controls'; group.append(range, input); wrapper.append(group); entry.range = range;
         input.addEventListener('input', () => accept(key, input.value, input)); range.addEventListener('input', () => accept(key, range.value, range));
       } else if (field.type === 'color') {
@@ -115,7 +137,7 @@
         const group = document.createElement('div'); group.className = 'color-controls'; group.append(input, hex); wrapper.append(group); entry.hex = hex;
         input.addEventListener('input', () => accept(key, input.value, input)); hex.addEventListener('change', () => accept(key, hex.value.trim(), hex));
       } else {
-        input.type = field.type === 'time' ? 'time' : 'text'; if (key === 'timezone') input.placeholder = '跟随设备，例如 Asia/Hong_Kong';
+        input.type = field.type === 'time' ? 'time' : 'text'; if (key === 'timezone') input.placeholder = t('timezonePlaceholder');
         wrapper.append(input); input.addEventListener('change', () => accept(key, input.value, input));
       }
       if (field.help) { const help = document.createElement('p'); help.className = 'field-help'; help.textContent = field.help; wrapper.append(help); }
@@ -144,8 +166,11 @@
     const bytes = atob(thumbnail().split(',')[1]);
     return root.TimeformZip.create({ 'index.html': exportHtml(), 'configure.html': exportHtml(true),
       'LivelyInfo.json': JSON.stringify(Spec.metadata, null, 2), 'LivelyProperties.json': JSON.stringify(Spec.livelyProperties(config), null, 2),
+      'LivelyInfo.loc.json': JSON.stringify(Spec.metadataLocalization(), null, 2), 'LivelyProperties.loc.json': JSON.stringify(Spec.livelyLocalization(config), null, 2),
       'default-config.json': Spec.serialize(config), 'thumbnail.jpg': Uint8Array.from(bytes, char => char.charCodeAt(0)),
-      'README.txt': 'TIMEFORM 30 款全集：把 ZIP 拖入 Lively，右键壁纸卡片选择自定义。configure.html 可离线预览及重新导出。' });
+      'README.txt': I18n.t('instructions', 'en') + '\n' + I18n.t('saved', 'en'),
+      'README.en.txt': I18n.t('instructions', 'en') + '\n' + I18n.t('saved', 'en'),
+      'README.zh-CN.txt': I18n.t('instructions', 'zh-CN') + '\n' + I18n.t('saved', 'zh-CN') });
   }
   function download(name, content, type) {
     const url = URL.createObjectURL(new Blob([content], { type })), anchor = document.createElement('a');
@@ -162,18 +187,19 @@
   byId('replay').addEventListener('click', () => { controller.renderer.replay(); refreshStats(); });
   byId('settle').addEventListener('click', () => { controller.renderer.showCurrentTime(); refreshStats(); });
   byId('step').addEventListener('click', () => { controller.renderer.step(100); refreshStats(); });
-  byId('downloadLively').addEventListener('click', () => { download('TIMEFORM-30款全集-Lively.zip', livelyPackage(), 'application/zip'); notice('已导出，请将新 ZIP 拖入 Lively，导入为一张新壁纸。'); });
-  byId('exportConfig').addEventListener('click', () => download('TIMEFORM-30款-Lively配置.json', Spec.serialize(config), 'application/json'));
+  byId('downloadLively').addEventListener('click', () => { download('TIMEFORM-Lively.zip', livelyPackage(), 'application/zip'); notice(t('exported')); });
+  byId('exportConfig').addEventListener('click', () => download('TIMEFORM-settings.json', Spec.serialize(config), 'application/json'));
   byId('importConfig').addEventListener('change', async event => {
     const file = event.target.files[0]; if (!file) return;
-    try { if (file.size > 65536) throw new Error('请选择小于 64 KB 的配置。'); controller.updateConfig(Spec.parse(await file.text())); notice('配置已导入，可以导出壁纸包。'); }
-    catch (error) { notice(error.message, true); } finally { event.target.value = ''; }
+    try { if (file.size > 65536) throw new Error(t('tooLarge')); controller.updateConfig(Spec.parse(await file.text())); notice(t('imported')); }
+    catch (error) { notice(locale === 'zh-CN' ? error.message : /[\u3400-\u9fff]/.test(error.message) ? I18n.error(error.message, locale, Spec.fields) : error.message, true); } finally { event.target.value = ''; }
   });
-  byId('resetConfig').addEventListener('click', () => { controller.updateConfig({ ...Spec.defaults, edition: config.edition }); notice('已恢复当前款式默认设置。'); });
+  byId('resetConfig').addEventListener('click', () => { controller.updateConfig({ ...Spec.defaults, edition: config.edition }); notice(t('resetDone')); });
+  byId('interfaceLanguage').addEventListener('change', event => setLanguage(event.target.value, true));
   const observer = new ResizeObserver(resize); observer.observe(area); window.addEventListener('resize', resize);
   window.addEventListener('keydown', event => { if (event.target.closest('input,select,button,a')) return; if (event.key.toLowerCase() === 's') setEditing(!editing); else if (event.key === 'Escape' && editing) setEditing(false); });
   const timer = setInterval(() => { if (editing) refreshStats(); }, 250);
   window.addEventListener('pagehide', event => { if (!event.persisted) { controller.dispose(); observer.disconnect(); clearInterval(timer); } });
   window.addEventListener('pageshow', event => { if (event.persisted) resize(); });
-  setEditing(openedAsEditor);
+  setLanguage(locale); setEditing(openedAsEditor);
 })(globalThis);

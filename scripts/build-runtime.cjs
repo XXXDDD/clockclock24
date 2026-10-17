@@ -13,13 +13,15 @@ const runtime = bundle([...Sources.complete, 'src/hosts/browser-preview.js']);
 const html = read('src/hosts/wallpaper-engine/template.html')
   .replace('/* BUILD:CONFIG */', () => JSON.stringify(Spec.defaults).replace(/</g, '\\u003c'))
   .replace('/* BUILD:SCRIPTS */', () => (runtime + '\n' + bundle([
-    'src/hosts/wallpaper-engine/adapter.js', 'src/hosts/wallpaper-engine/app.js'])).replace(/<\/script/gi, '<\\/script'));
+    'src/hosts/localization.js', 'src/hosts/wallpaper-engine/adapter.js', 'src/hosts/wallpaper-engine/app.js'])).replace(/<\/script/gi, '<\\/script'));
 const engineFiles = {
   'index.html': html,
   'project.json': JSON.stringify(Engine.project(), null, 2) + '\n',
   'default-config.json': Spec.serialize(Spec.defaults) + '\n',
   'preview.jpg': fs.readFileSync(path.join(root, 'src/lively/classic-thumbnail.jpg')),
-  'README.txt': 'TIMEFORM Wallpaper Engine 本地测试包。解压后用编辑器打开 index.html；project.json 包含全部 30 款和属性定义。尚需 Wallpaper Engine 真机验收。\n'
+  'README.txt': read('src/hosts/wallpaper-engine/README.en.txt'),
+  'README.en.txt': read('src/hosts/wallpaper-engine/README.en.txt'),
+  'README.zh-CN.txt': read('src/hosts/wallpaper-engine/README.zh-CN.txt')
 };
 const manifest = { schema: 'timeform.catalog', version: 1, editions: Collection.entries.map(entry => {
   const model = Spec.get(entry.implementation);
