@@ -27,6 +27,15 @@
         : [Palette.tint(config.board, -.20), Palette.tint(config.board, -.07), Palette.tint(config.board, -.12)];
       shades.forEach((color, i) => face.addColorStop(i / 2, color));
       ctx.beginPath(); ctx.arc(0, 0, 53.2, 0, TAU); ctx.fillStyle = face; ctx.fill();
+      if (white) {
+        // A single concentric rim avoids seams between shadow and highlight.
+        const rim = ctx.createLinearGradient(-20, -53.2, 20, 53.2);
+        [[0, '#b3b0a8'], [.4, '#d7d4cd'], [.65, '#f4f2ec'], [1, '#ffffff']]
+          .forEach(([stop, color]) => rim.addColorStop(stop, color));
+        ctx.strokeStyle = rim; ctx.lineWidth = 1.2;
+        ctx.beginPath(); ctx.arc(0, 0, 52.6, 0, TAU); ctx.stroke();
+        ctx.restore(); return;
+      }
       ctx.strokeStyle = black ? '#050506' : '#00000030'; ctx.lineWidth = 1.3;
       ctx.beginPath(); ctx.arc(0, .3, 52.6, Math.PI, TAU); ctx.stroke();
       ctx.strokeStyle = black ? '#ffffff0d' : '#ffffff50'; ctx.lineWidth = .8;
@@ -56,5 +65,6 @@
       hand(ctx, instance.hands[point.i + (longLane(point) ^ 1)], true, config); hand(ctx, instance.hands[point.i + longLane(point)], false, config); ctx.restore();
     });
   }
-  return { drawSurface, drawHands, handLength, referenceReach, longLane };
+  return { drawSurface, drawHands, handLength, referenceReach, longLane,
+    appearance: { handShape: 'rect', tail: .15, finish: 'metal' } };
 });

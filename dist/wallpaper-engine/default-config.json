@@ -4,6 +4,8 @@
   "handGeometryVersion": 1,
   "settings": {
     "edition": "amt144",
+    "appearance": "auto",
+    "handAppearance": "auto",
     "scale": 90,
     "padding": 0,
     "offsetX": 0,

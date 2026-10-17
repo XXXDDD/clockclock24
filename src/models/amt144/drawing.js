@@ -1,9 +1,10 @@
 (function (root, factory) {
   const commonJS = typeof module === 'object' && module.exports;
-  const api = factory(commonJS ? require('../../shared/palette.js') : root.Timeform.Palette);
+  const api = factory(commonJS ? require('../../shared/palette.js') : root.Timeform.Palette,
+    commonJS ? require('../../shared/single-clock.js') : root.Timeform.SingleClock);
   if (commonJS) module.exports = api;
   else (root.Timeform ||= {}).AMT144Drawing = api;
-})(globalThis, function (Palette) {
+})(globalThis, function (Palette, SingleClock) {
   'use strict';
   const TAU = Math.PI * 2;
   // Axis-to-tip proportions measured in the rectified official reference.
@@ -21,8 +22,9 @@
     context.save(); context.fillStyle = gradient; context.fillRect(0, 0, width, height);
     geometry.points.forEach(point => {
       context.save(); context.translate(point.x, point.y); context.scale(point.radius / 53.2, point.radius / 53.2);
+      if (white) { SingleClock.drawWhiteRecess(context); context.restore(); return; }
       const face = context.createRadialGradient(-16, -19, 2, 6, 8, 69);
-      const shades = black ? ['#252626', '#1b1c1c', '#0d0e0e'] : white ? ['#f6f4ef', '#eeece7', '#d6d4ce']
+      const shades = black ? ['#252626', '#1b1c1c', '#0d0e0e']
         : [Palette.tint(config.board, -.02), Palette.tint(config.board, -.09), Palette.tint(config.board, -.28)];
       shades.forEach((color, i) => face.addColorStop([0, .66, 1][i], color));
       context.fillStyle = face; context.beginPath(); context.arc(0, 0, 53.2, 0, TAU); context.fill();
@@ -49,5 +51,6 @@
       context.restore();
     });
   }
-  return { drawSurface, drawHands, handLength, referenceReach, longLane };
+  return { drawSurface, drawHands, handLength, referenceReach, longLane,
+    appearance: { handShape: 'roundBase', finish: 'matte' } };
 });

@@ -7,10 +7,11 @@
     commonJS ? require('../models/classic-landscape.js') : root.Timeform.ClassicLandscape || [],
     commonJS ? require('./reference-motion.js') : root.Timeform.ReferenceMotion,
     commonJS ? require('../models/clockclockl/animation.js') : root.Timeform.ClockClockLAnimation,
-    commonJS ? require('./shared-actions.js') : root.Timeform.SharedActions);
+    commonJS ? require('./shared-actions.js') : root.Timeform.SharedActions,
+    commonJS ? require('../rendering/modes.js') : root.Timeform.RenderModes);
   if (typeof module === 'object' && module.exports) module.exports = api;
   else (root.Timeform ||= {}).Classic = api;
-})(globalThis, function (Config, Variants, EditionAnimation, EditionDrawing, AdditionalLandscape, ReferenceMotion, ClockClockLAnimation, SharedActions) {
+})(globalThis, function (Config, Variants, EditionAnimation, EditionDrawing, AdditionalLandscape, ReferenceMotion, ClockClockLAnimation, SharedActions, RenderModes) {
   'use strict';
   // Official editions are editable starting points for the web workbench.
   const editions = {
@@ -47,6 +48,7 @@
     if (Object.hasOwn(preset, 'visibility')) preset.visibility = 'show';
     if (edition.duration) preset.duration = edition.duration;
     const fields = Object.fromEntries(Object.entries(original.fields).map(([key, field]) => [key, { ...field, value: preset[key] }]));
+    Object.assign(fields, RenderModes.fields);
     fields.motion = { ...fields.motion, label: '参考动作', options: [['wave', edition.motion.replace(/ · 本款原片节奏| · 预设动作/g, '')]], hidden: is24 };
     if (is24) fields.choreography = { type: 'select', label: '动作类型', value: referenceChoice, group: 'motion',
       options: ReferenceMotion.choices, help: '交错旋转与潮汐波浪来自 CCL 参考；各预设保留自己的默认动作节奏。' };
@@ -54,7 +56,8 @@
     fields.autoDemo.label = '自动逐分钟演示';
     const normalize = (input = {}, base = {}) => {
       const config = Config.normalize(fields, input, base);
-      return { ...original.normalize(config), motion: 'wave', ...(is24 ? { choreography: config.choreography } : {}) };
+      return { ...original.normalize(config), appearance: config.appearance, handAppearance: config.handAppearance,
+        motion: 'wave', ...(is24 ? { choreography: config.choreography } : {}) };
     };
     const Settings = { fields, normalize, defaults: normalize() };
     function geometry(width, height, input) {

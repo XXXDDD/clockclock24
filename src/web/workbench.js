@@ -144,16 +144,16 @@
   }
   function buildControls() {
     controls.clear();
-    for (const group of ['screen', 'motion', 'time', 'colors', 'geometry', 'playback']) byId('fields-' + group).replaceChildren();
+    for (const group of ['screen', 'motion', 'time', 'colors', 'geometry', 'playback', 'appearance']) byId('fields-' + group).replaceChildren();
     const timeOrder = ['source', 'manualTime', 'format24', 'autoDemo', 'timezone', 'demoInterval'];
     const motionOrder = ['motion', 'choreography', 'duration', 'visibility', 'playbackSpeed'];
-    const groupOrder = ['colors', 'screen', 'geometry', 'motion', 'time'];
+    const groupOrder = ['appearance', 'colors', 'screen', 'geometry', 'motion', 'time'];
     const rank = key => groupOrder.indexOf(fields[key].group) * 100 + Math.max(0, (fields[key].group === 'time' ? timeOrder : motionOrder).indexOf(key));
     const ordered = Object.entries(fields).sort(([a], [b]) => rank(a) - rank(b));
     for (const [key, field] of ordered) {
       if (field.hidden) continue;
       const wrapper = document.createElement('div'); wrapper.className = 'field';
-      if (field.group === 'motion') wrapper.classList.add('field-wide');
+      if (['motion', 'appearance'].includes(field.group)) wrapper.classList.add('field-wide');
       const label = document.createElement('label'); label.htmlFor = 'setting-' + key; label.textContent = field.label;
       const heading = document.createElement('div'); heading.className = 'field-label'; heading.append(label);
       const input = document.createElement(field.type === 'select' ? 'select' : 'input'); input.id = 'setting-' + key;
@@ -300,7 +300,8 @@
     const patch = Object.fromEntries(Object.entries(fields).filter(([key, field]) => groups.includes(field.group) && key !== 'playbackSpeed').map(([key]) => [key, model.Settings.defaults[key]]));
     update(patch, message);
   }
-  byId('restorePreset').addEventListener('click', () => resetGroups(['screen', 'motion', 'colors', 'geometry'], '已恢复此预设的动作、配色和尺寸参数。'));
+  byId('restorePreset').addEventListener('click', () => resetGroups(['screen', 'motion', 'colors', 'geometry', 'appearance'], '已恢复此预设的效果、动作、配色和尺寸参数。'));
+  byId('resetAppearance').addEventListener('click', () => resetGroups(['appearance'], '已恢复按盘面和指针材质选择效果。'));
   byId('resetMotion').addEventListener('click', () => resetGroups(['motion'], '已恢复此预设的动作。'));
   byId('resetColors').addEventListener('click', () => resetGroups(['colors'], '已恢复此预设的配色。'));
   byId('resetGeometry').addEventListener('click', () => resetGroups(['screen', 'geometry'], '已恢复此预设的尺寸、位置与指针参数。'));

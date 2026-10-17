@@ -31,6 +31,10 @@
   const checkbox = (label, group, help) => ({ type: 'checkbox', label, value: false, group, help });
   const fields = {
     edition: { type: 'select', label: '时钟款式（全部 30 款）', value: 'amt144', group: 'edition', options: models.map(model => [model.id, label(model)]) },
+    // The workbench exposes appearance experiments; portable settings retain
+    // the selection without adding experimental controls to native host menus.
+    appearance: { ...base.appearance, group: 'motion', hidden: true },
+    handAppearance: { ...base.handAppearance, group: 'motion', hidden: true },
     ...Object.fromEntries(['scale', 'padding', 'offsetX', 'offsetY'].map(key => [key, base[key]])),
     customColors: checkbox('启用自定义配色', 'colors', '关闭时使用所选款式的原作配色；开启后使用下方四项颜色。'),
     ...Object.fromEntries(['background', 'board', 'long', 'short'].map(key => [key, base[key]])),
@@ -50,7 +54,7 @@
   const defaults = normalize();
   function resolve(input) {
     const config = normalize(input), model = get(config.edition), patch = {};
-    for (const key of ['scale', 'padding', 'offsetX', 'offsetY', 'playbackSpeed', 'format24', 'timezone', 'source', 'manualTime', 'autoDemo', 'demoInterval']) patch[key] = config[key];
+    for (const key of ['appearance', 'handAppearance', 'scale', 'padding', 'offsetX', 'offsetY', 'playbackSpeed', 'format24', 'timezone', 'source', 'manualTime', 'autoDemo', 'demoInterval']) patch[key] = config[key];
     if (config.customColors) for (const key of ['background', 'board', 'long', 'short']) patch[key] = config[key];
     if (config.customGeometry) for (const key of geometryKeys) if (model.Settings.fields[key]) patch[key] = config[key];
     if (config.visibility !== 'default' && model.Settings.fields.visibility) patch.visibility = config.visibility;

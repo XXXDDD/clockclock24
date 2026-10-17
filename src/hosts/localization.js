@@ -6,6 +6,7 @@
   'use strict';
   const language = value => /^zh(?:-|$)/i.test(String(value || '')) ? 'zh-CN' : 'en';
   const labels = {
+    appearance: 'Dial lighting', handAppearance: 'Hand appearance',
     edition: 'Clock design (all 30 editions)', scale: 'Size', padding: 'Safe margin', offsetX: 'Horizontal position', offsetY: 'Vertical position',
     customColors: 'Use custom colors', background: 'Background', board: 'Clock face', long: 'Long hand', short: 'Short hand',
     action: 'Motion', customDuration: 'Use custom motion duration', duration: 'Motion duration', visibility: 'Idle hands',
@@ -16,6 +17,8 @@
     centerHourLength: 'Center hour hand ratio', safeTop: 'Top safe area', safeBottom: 'Bottom safe area'
   };
   const help = {
+    appearance: 'By default, black and white use original lighting and colored dials use sculpted lighting. Manual overrides are available.',
+    handAppearance: 'By default, metal hands use reflections and ordinary hands retain their original appearance. Highlights vary with position and direction under one light.',
     customColors: 'Off uses the selected design\'s original colors. Turn on to use the four colors below.',
     action: 'Uses the original motion by default. Extra motions apply only to the model named in the option.',
     customDuration: 'Off uses the reference duration for the selected design or motion.',
@@ -28,6 +31,9 @@
   const geometryHelp = 'Applies when custom dimensions are enabled. Values are limited to the selected model\'s supported range.';
   const groups = { edition: 'Clock design', screen: 'Size and position', colors: 'Colors', motion: 'Motion and playback', time: 'Time', geometry: 'Dimensions and hands' };
   const words = {
+    '原有效果': 'Original appearance', '立体光影': 'Sculpted lighting',
+    '随光影模式': 'Follow lighting mode', '原有指针': 'Original hands', '材质与反光': 'Material and reflections',
+    '按材质（默认）': 'By material (default)', '按指针材质（默认）': 'By hand material (default)',
     '横屏': 'Landscape', '圆形': 'Circular', '竖排': 'Portrait', '当前预设原动作': 'Original motion', '当前预设默认': 'Original setting',
     '随归位隐藏': 'Hide after settling', '微光显示': 'Dim idle hands', '全部显示': 'Show all hands', '设备时间': 'Device time', '指定时间': 'Set time',
     '交错旋转': 'Staggered rotation', '斜线波浪': 'Diagonal wave', '潮汐波浪': 'Tidal wave', '向心涟漪': 'Radial ripples',

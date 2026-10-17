@@ -70,6 +70,9 @@
     const longLane=variant.longLanes ? point=>Number(variant.longLanes[Math.floor(point.i/2)]) : model.Drawing?.longLane || (()=>0);
     return {
       handLength,referenceReach,longLane,
+      appearance: { ...model.Drawing?.appearance, handShape: model.id.startsWith('amt') || variant.rounded ? 'rounded' : 'rect',
+        tail: model.id.startsWith('amt') || variant.rounded ? .12 : .3, finish: variant.finish || 'matte',
+        tailLength: undefined, cornerRadius: undefined, texture: variant.texture, hub: false },
       drawSurface(context,geometry,config) {
         if (variant.texture==='travertine') return stone(context,geometry,config);
         if (model.Drawing?.drawSurface) return model.Drawing.drawSurface(context,geometry,config);

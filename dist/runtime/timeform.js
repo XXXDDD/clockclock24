@@ -195,18 +195,39 @@
   function local(context, point) {
     context.save(); context.translate(point.x, point.y); context.scale(point.radius / 53.2, point.radius / 53.2);
   }
+  // Draw in the caller's canonical dial coordinates; lighting stays inside the
+  // opening, with a quiet floor and a continuous, directionally lit inner wall.
+  function drawWhiteRecess(context) {
+    context.save();
+    context.beginPath(); context.arc(0, 0, 53.2, 0, TAU); context.clip();
+    const floor = context.createLinearGradient(0, -53.2, 0, 53.2);
+    [[0, '#e8e5df'], [.22, '#edeae4'], [.82, '#f0ede7'], [1, '#f1eee8']]
+      .forEach(([stop, color]) => floor.addColorStop(stop, color));
+    context.fillStyle = floor; context.fillRect(-53.2, -53.2, 106.4, 106.4);
+    const shadow = context.createRadialGradient(2.8, 4, 46, 0, 0, 53.2);
+    [[0, '#00000000'], [.65, '#00000002'], [.9, '#00000012'], [1, '#00000032']]
+      .forEach(([stop, color]) => shadow.addColorStop(stop, color));
+    context.fillStyle = shadow; context.beginPath(); context.arc(0, 0, 53.2, 0, TAU); context.fill();
+    const rim = context.createLinearGradient(-20, -53.2, 20, 53.2);
+    [[0, '#b3b0a8'], [.4, '#d7d4cd'], [.65, '#f4f2ec'], [1, '#ffffff']]
+      .forEach(([stop, color]) => rim.addColorStop(stop, color));
+    context.strokeStyle = rim; context.lineWidth = 1.2;
+    context.beginPath(); context.arc(0, 0, 52.6, 0, TAU); context.stroke();
+    context.restore();
+  }
   // Geometry and hand poses are inputs; this component has no time or model state.
   function drawFace(context, point, config) {
     local(context, point);
     const kind = Palette.material(config), white = kind === 'white', black = kind === 'black';
+    if (white) { drawWhiteRecess(context); context.restore(); return; }
     const rim = context.createRadialGradient(-11, -17, 3, 0, 0, 55);
-    const stops = white ? [[0, '#f4f2ed'], [.82, '#e5e2dc'], [.97, '#c6c4bd'], [1, '#dedbd5']] : black ? [[0, '#121415'], [.70, '#0d0f10'], [.94, '#08090a'], [1, '#242628']] : [[0, Palette.tint(config.board, -.06)], [.82, Palette.tint(config.board, -.12)], [.96, Palette.tint(config.board, -.24)], [1, Palette.tint(config.board, .06)]];
+    const stops = black ? [[0, '#121415'], [.70, '#0d0f10'], [.94, '#08090a'], [1, '#242628']] : [[0, Palette.tint(config.board, -.06)], [.82, Palette.tint(config.board, -.12)], [.96, Palette.tint(config.board, -.24)], [1, Palette.tint(config.board, .06)]];
     stops.forEach(([offset, color]) => rim.addColorStop(offset, color));
     context.shadowColor = black ? '#000000b8' : '#0000003b'; context.shadowBlur = 7; context.shadowOffsetY = 2;
     context.fillStyle = rim; context.beginPath(); context.arc(0, 0, 53.2, 0, TAU); context.fill();
     context.shadowBlur = 0; context.shadowOffsetY = 0; context.lineWidth = 1;
-    context.strokeStyle = white ? '#0000001a' : '#ffffff13'; context.beginPath(); context.arc(0, 0, 52.2, 0, TAU); context.stroke();
-    context.strokeStyle = white ? '#ffffff7a' : '#00000018'; context.beginPath(); context.arc(0, 0, 49.5, 0, TAU); context.stroke();
+    context.strokeStyle = '#ffffff13'; context.beginPath(); context.arc(0, 0, 52.2, 0, TAU); context.stroke();
+    context.strokeStyle = '#00000018'; context.beginPath(); context.arc(0, 0, 49.5, 0, TAU); context.stroke();
     context.restore();
   }
   function drawHand(context, angle, opacity, secondary, config, referenceReach) {
@@ -236,7 +257,7 @@
     }
     context.restore();
   }
-  return { drawFace, drawHands };
+  return { drawFace, drawHands, drawWhiteRecess };
 });
 
 (function (root, factory) {
@@ -665,10 +686,11 @@
 
 (function (root, factory) {
   const commonJS = typeof module === 'object' && module.exports;
-  const api = factory(commonJS ? require('../../shared/palette.js') : root.Timeform.Palette);
+  const api = factory(commonJS ? require('../../shared/palette.js') : root.Timeform.Palette,
+    commonJS ? require('../../shared/single-clock.js') : root.Timeform.SingleClock);
   if (commonJS) module.exports = api;
   else (root.Timeform ||= {}).ClockClock24Drawing = api;
-})(globalThis, function (Palette) {
+})(globalThis, function (Palette, SingleClock) {
   'use strict';
   const TAU = Math.PI * 2;
   // Axis-to-tip proportions measured in the rectified official reference.
@@ -687,8 +709,9 @@
     context.fillStyle = board; context.fillRect(0, 0, width, height);
     geometry.points.forEach(point => {
       context.save(); context.translate(point.x, point.y); context.scale(point.radius / 53.2, point.radius / 53.2);
+      if (white) { SingleClock.drawWhiteRecess(context); context.restore(); return; }
       const face = context.createRadialGradient(-13, -16, 3, 5, 7, 66);
-      const colors = black ? ['#232424', '#1a1b1b', '#101111'] : white ? ['#f6f4ef', '#eeece6', '#d8d6d0']
+      const colors = black ? ['#232424', '#1a1b1b', '#101111']
         : [Palette.tint(config.board, -.04), Palette.tint(config.board, -.10), Palette.tint(config.board, -.25)];
       colors.forEach((color, i) => face.addColorStop([0, .65, 1][i], color));
       context.fillStyle = face; context.beginPath(); context.arc(0, 0, 53.2, 0, TAU); context.fill();
@@ -717,7 +740,8 @@
       context.restore();
     });
   }
-  return { drawSurface, drawHands, handLength, referenceReach, longLane };
+  return { drawSurface, drawHands, handLength, referenceReach, longLane,
+    appearance: { handShape: 'rect', tail: .42, finish: 'matte' } };
 });
 
 (function (root, factory) {
@@ -1144,10 +1168,11 @@
 
 (function (root, factory) {
   const commonJS = typeof module==='object' && module.exports;
-  const api = factory(commonJS ? require('../../shared/palette.js') : root.Timeform.Palette);
+  const api = factory(commonJS ? require('../../shared/palette.js') : root.Timeform.Palette,
+    commonJS ? require('../../shared/single-clock.js') : root.Timeform.SingleClock);
   if (commonJS) module.exports = api;
   else (root.Timeform ||= {}).AMT72Drawing = api;
-})(globalThis, function (Palette) {
+})(globalThis, function (Palette, SingleClock) {
   'use strict';
   const TAU = Math.PI*2;
   // Axis-to-tip proportions measured in the rectified official reference.
@@ -1165,8 +1190,9 @@
     context.save(); context.fillStyle=gradient; context.fillRect(0,0,width,height);
     geometry.points.forEach(point=>{
       context.save(); context.translate(point.x,point.y); context.scale(point.radius/53.2,point.radius/53.2);
+      if (white) { SingleClock.drawWhiteRecess(context); context.restore(); return; }
       const face = context.createRadialGradient(-16,-19,2,6,8,69);
-      const shades = black ? ['#262727','#1d1e1e','#0f1010'] : white ? ['#f6f4ef','#eeece7','#d6d4ce']
+      const shades = black ? ['#262727','#1d1e1e','#0f1010']
         : [Palette.tint(config.board,-.02),Palette.tint(config.board,-.09),Palette.tint(config.board,-.28)];
       shades.forEach((color,i)=>face.addColorStop([0,.66,1][i],color));
       context.fillStyle=face; context.beginPath(); context.arc(0,0,53.2,0,TAU); context.fill();
@@ -1193,7 +1219,8 @@
       context.restore();
     });
   }
-  return { drawSurface, drawHands, handLength, referenceReach, longLane };
+  return { drawSurface, drawHands, handLength, referenceReach, longLane,
+    appearance: { handShape: 'roundBase', finish: 'matte' } };
 });
 
 (function (root, factory) {
@@ -1461,10 +1488,11 @@
 
 (function (root, factory) {
   const commonJS = typeof module === 'object' && module.exports;
-  const api = factory(commonJS ? require('../../shared/palette.js') : root.Timeform.Palette);
+  const api = factory(commonJS ? require('../../shared/palette.js') : root.Timeform.Palette,
+    commonJS ? require('../../shared/single-clock.js') : root.Timeform.SingleClock);
   if (commonJS) module.exports = api;
   else (root.Timeform ||= {}).AMT120Drawing = api;
-})(globalThis, function (Palette) {
+})(globalThis, function (Palette, SingleClock) {
   'use strict';
   const TAU = Math.PI * 2;
   // Axis-to-tip proportions measured in the rectified official reference.
@@ -1482,8 +1510,9 @@
     context.save(); context.fillStyle = gradient; context.fillRect(0, 0, width, height);
     geometry.points.forEach(point => {
       context.save(); context.translate(point.x, point.y); context.scale(point.radius / 53.2, point.radius / 53.2);
+      if (white) { SingleClock.drawWhiteRecess(context); context.restore(); return; }
       const face = context.createRadialGradient(-16, -19, 2, 6, 8, 69);
-      const shades = black ? ['#252626', '#1b1c1c', '#0d0e0e'] : white ? ['#f6f4ef', '#eeece7', '#d6d4ce']
+      const shades = black ? ['#252626', '#1b1c1c', '#0d0e0e']
         : [Palette.tint(config.board, -.02), Palette.tint(config.board, -.09), Palette.tint(config.board, -.28)];
       shades.forEach((color, i) => face.addColorStop([0, .66, 1][i], color));
       context.fillStyle = face; context.beginPath(); context.arc(0, 0, 53.2, 0, TAU); context.fill();
@@ -1510,7 +1539,8 @@
       context.restore();
     });
   }
-  return { drawSurface, drawHands, handLength, referenceReach, longLane };
+  return { drawSurface, drawHands, handLength, referenceReach, longLane,
+    appearance: { handShape: 'roundBase', finish: 'matte' } };
 });
 
 (function (root, factory) {
@@ -1792,10 +1822,11 @@
 
 (function (root, factory) {
   const commonJS = typeof module === 'object' && module.exports;
-  const api = factory(commonJS ? require('../../shared/palette.js') : root.Timeform.Palette);
+  const api = factory(commonJS ? require('../../shared/palette.js') : root.Timeform.Palette,
+    commonJS ? require('../../shared/single-clock.js') : root.Timeform.SingleClock);
   if (commonJS) module.exports = api;
   else (root.Timeform ||= {}).AMT144Drawing = api;
-})(globalThis, function (Palette) {
+})(globalThis, function (Palette, SingleClock) {
   'use strict';
   const TAU = Math.PI * 2;
   // Axis-to-tip proportions measured in the rectified official reference.
@@ -1813,8 +1844,9 @@
     context.save(); context.fillStyle = gradient; context.fillRect(0, 0, width, height);
     geometry.points.forEach(point => {
       context.save(); context.translate(point.x, point.y); context.scale(point.radius / 53.2, point.radius / 53.2);
+      if (white) { SingleClock.drawWhiteRecess(context); context.restore(); return; }
       const face = context.createRadialGradient(-16, -19, 2, 6, 8, 69);
-      const shades = black ? ['#252626', '#1b1c1c', '#0d0e0e'] : white ? ['#f6f4ef', '#eeece7', '#d6d4ce']
+      const shades = black ? ['#252626', '#1b1c1c', '#0d0e0e']
         : [Palette.tint(config.board, -.02), Palette.tint(config.board, -.09), Palette.tint(config.board, -.28)];
       shades.forEach((color, i) => face.addColorStop([0, .66, 1][i], color));
       context.fillStyle = face; context.beginPath(); context.arc(0, 0, 53.2, 0, TAU); context.fill();
@@ -1841,7 +1873,8 @@
       context.restore();
     });
   }
-  return { drawSurface, drawHands, handLength, referenceReach, longLane };
+  return { drawSurface, drawHands, handLength, referenceReach, longLane,
+    appearance: { handShape: 'roundBase', finish: 'matte' } };
 });
 
 (function (root, factory) {
@@ -2130,6 +2163,26 @@
   const longLanes = '000000000000000000000000000000000000000000000000000000000000000000000000010000011110001111010110000000110110011101110010000000111111010001100010000000011100101110011100000000111101011110000000000010111110011111000010000000000000000000000000000000000000000000000000000000000000000000000000';
   const longLane = point => Number(longLanes[Math.floor(point.i / 2)]);
   const handLength = (config, secondary) => 53.2 * referenceReach * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100;
+  function whiteRecess(context) {
+    context.save();
+    context.beginPath(); context.arc(0, 0, 53.2, 0, TAU); context.clip();
+    // Keep the floor quiet; depth comes from the upper inner wall, not a bright
+    // dome center or an illuminated outer bevel.
+    const floor = context.createLinearGradient(0, -53.2, 0, 53.2);
+    [[0, '#e7e8e4'], [.22, '#ebece8'], [.82, '#eeefeb'], [1, '#eff0ed']]
+      .forEach(([stop, color]) => floor.addColorStop(stop, color));
+    context.fillStyle = floor; context.fillRect(-53.2, -53.2, 106.4, 106.4);
+    const shadow = context.createRadialGradient(2.8, 4, 46, 0, 0, 53.2);
+    [[0, '#00000000'], [.65, '#00000002'], [.9, '#00000012'], [1, '#00000032']]
+      .forEach(([stop, color]) => shadow.addColorStop(stop, color));
+    context.fillStyle = shadow; context.beginPath(); context.arc(0, 0, 53.2, 0, TAU); context.fill();
+    const wall = context.createLinearGradient(-38, -42, 38, 42);
+    [[0, '#92978d'], [.4, '#b0b5ab'], [.65, '#e5e8e1'], [1, '#ffffff']]
+      .forEach(([stop, color]) => wall.addColorStop(stop, color));
+    context.strokeStyle = wall; context.lineWidth = 1.25;
+    context.beginPath(); context.arc(0, 0, 52.55, 0, TAU); context.stroke();
+    context.restore();
+  }
   function drawSurface(context, geometry, config) {
     const { boardWidth: width, boardHeight: height } = geometry;
     const material = Palette.material(config), black = material === 'black', white = material === 'white';
@@ -2140,17 +2193,13 @@
     context.save(); context.fillStyle = gradient; context.fillRect(0, 0, width, height);
     geometry.points.forEach(point => {
       context.save(); context.translate(point.x, point.y); context.scale(point.radius / 53.2, point.radius / 53.2);
+      if (white) { whiteRecess(context); context.restore(); return; }
       const face = context.createRadialGradient(-16, -19, 2, 6, 8, 69);
-      const shades = black ? ['#252626', '#1b1c1c', '#0d0e0e'] : white ? ['#eeefec', '#e8e9e6', '#d5d7d1']
+      const shades = black ? ['#252626', '#1b1c1c', '#0d0e0e']
         : [Palette.tint(config.board, -.02), Palette.tint(config.board, -.09), Palette.tint(config.board, -.28)];
       shades.forEach((color, i) => face.addColorStop([0, .66, 1][i], color));
       context.fillStyle = face; context.beginPath(); context.arc(0, 0, 53.2, 0, TAU); context.fill();
-      if (white) {
-        const rim = context.createLinearGradient(-42, -23, 42, 23);
-        rim.addColorStop(0, '#ffffff'); rim.addColorStop(.4, '#ffffffdc');
-        rim.addColorStop(.7, '#c1c4bc'); rim.addColorStop(1, '#aeb1a8');
-        context.strokeStyle = rim; context.lineWidth = 2;
-      } else { context.strokeStyle = black ? '#090a0a88' : '#00000024'; context.lineWidth = 1.15; }
+      context.strokeStyle = black ? '#090a0a88' : '#00000024'; context.lineWidth = 1.15;
       context.beginPath(); context.arc(0, 0, 52.7, 0, TAU); context.stroke(); context.restore();
     });
     context.restore();
@@ -2173,7 +2222,8 @@
       context.restore();
     });
   }
-  return { drawSurface, drawHands, handLength, referenceReach, longLane };
+  return { drawSurface, drawHands, handLength, referenceReach, longLane,
+    appearance: { handShape: 'roundBase', finish: 'matte' } };
 });
 
 (function (root, factory) {
@@ -2253,6 +2303,267 @@
 });
 
 (function (root, factory) {
+  const api = factory(typeof module === 'object' && module.exports ? require('../shared/palette.js') : root.Timeform.Palette);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).AppearanceSurfaces = api;
+})(globalThis, function (Palette) {
+  'use strict';
+  const TAU = Math.PI * 2, UNIT = 53.2;
+  function circle(ctx, x, y, radius) {
+    ctx.beginPath(); ctx.arc(x, y, radius, 0, TAU);
+  }
+  function outline(ctx, geometry, profile) {
+    if (profile.boardShape === 'circle') circle(ctx, geometry.boardWidth / 2, geometry.boardHeight / 2, geometry.boardWidth / 2 - .5);
+    else { ctx.beginPath(); ctx.rect(0, 0, geometry.boardWidth, geometry.boardHeight); }
+  }
+  function recess(ctx, point, config, stone) {
+    ctx.save(); ctx.translate(point.x, point.y); ctx.scale(point.radius / UNIT, point.radius / UNIT);
+    circle(ctx, 0, 0, UNIT); ctx.clip();
+    if (!stone) {
+      // A nearly flat floor; most of the depth belongs to the narrow inner wall.
+      const floor = ctx.createLinearGradient(-35, -40, 35, 40);
+      floor.addColorStop(0, Palette.tint(config.board, -.07));
+      floor.addColorStop(1, Palette.tint(config.board, .015));
+      ctx.fillStyle = floor; ctx.fillRect(-UNIT, -UNIT, UNIT * 2, UNIT * 2);
+    }
+    const shadow = ctx.createRadialGradient(2.4, 3, 43, 0, 0, UNIT);
+    shadow.addColorStop(0, '#00000000'); shadow.addColorStop(.65, '#00000005'); shadow.addColorStop(1, '#00000070');
+    ctx.fillStyle = shadow; circle(ctx, 0, 0, UNIT); ctx.fill();
+    const wall = ctx.createLinearGradient(-36, -40, 36, 40);
+    wall.addColorStop(0, '#00000085'); wall.addColorStop(.5, '#00000020'); wall.addColorStop(1, '#ffffff30');
+    ctx.strokeStyle = wall; ctx.lineWidth = 2.1; circle(ctx, 0, 0, UNIT - 1.1); ctx.stroke();
+    const lip = ctx.createLinearGradient(-38, -40, 38, 40);
+    lip.addColorStop(0, '#ffffff32'); lip.addColorStop(.5, '#ffffff08'); lip.addColorStop(1, '#00000038');
+    ctx.strokeStyle = lip; ctx.lineWidth = .65; circle(ctx, 0, 0, UNIT - .35); ctx.stroke();
+    ctx.restore();
+  }
+  function usesOriginalSurface(config, profile = {}) {
+    if (profile.texture) return false;
+    const channels = [1, 3, 5].map(offset => parseInt(config.board.slice(offset, offset + 2), 16));
+    // Include warm whites and custom neutral grays, not just preset IDs.
+    return Math.max(...channels) - Math.min(...channels) <= 12;
+  }
+  function drawSurface(ctx, geometry, config, model) {
+    const profile = model.Drawing?.appearance || {};
+    if (usesOriginalSurface(config, profile) && model.Drawing?.drawSurface) {
+      // The original black/white dials already have calibrated depth and light.
+      model.Drawing.drawSurface(ctx, geometry, config);
+      return;
+    }
+    const stone = profile.texture === 'travertine';
+    ctx.save(); outline(ctx, geometry, profile); ctx.clip();
+    if (stone) {
+      // Keep each edition's own continuous stone pattern and measured contours.
+      model.Drawing.drawSurface(ctx, geometry, config);
+    } else {
+      const light = ctx.createLinearGradient(0, 0, geometry.boardWidth * .7, geometry.boardHeight);
+      light.addColorStop(0, Palette.tint(config.board, .045)); light.addColorStop(.55, config.board);
+      light.addColorStop(1, Palette.tint(config.board, -.025));
+      ctx.fillStyle = light; ctx.fillRect(0, 0, geometry.boardWidth, geometry.boardHeight);
+      let seed = 1982;
+      const random = () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
+      ctx.globalAlpha = .022;
+      for (let i = 0; i < 6500; i++) {
+        ctx.fillStyle = i % 2 ? '#ffffff' : '#000000';
+        ctx.fillRect(random() * geometry.boardWidth, random() * geometry.boardHeight, .6, .6);
+      }
+      ctx.globalAlpha = 1;
+    }
+    if (profile.dials !== false) geometry.points.forEach(point => recess(ctx, point, config, stone));
+    ctx.restore();
+    ctx.save(); outline(ctx, geometry, profile);
+    const edge = ctx.createLinearGradient(0, 0, geometry.boardWidth, geometry.boardHeight);
+    edge.addColorStop(0, '#ffffff24'); edge.addColorStop(1, '#00000042');
+    ctx.strokeStyle = edge; ctx.lineWidth = .8; ctx.stroke(); ctx.restore();
+  }
+  return { drawSurface, usesOriginalSurface };
+});
+
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).MetalLight = api;
+})(globalThis, function () {
+  'use strict';
+  const normalize = (x, y, z) => {
+    const length = Math.hypot(x, y, z);
+    return [x / length, y / length, z / length];
+  };
+  function sample(geometry, point, angle, physicalIndex) {
+    const width = geometry.boardWidth || point.radius * 2, height = geometry.boardHeight || point.radius * 2;
+    const span = Math.max(width, height), x = (point.x - width / 2) / span, y = (point.y - height / 2) / span;
+    // One finite softbox and one centered viewer, shared by the whole board.
+    // Different positions see different half-vectors, even for parallel hands.
+    const light = normalize(-.55 - x, -.7 - y, 1.05);
+    const view = normalize(-x, -y, 1.8);
+    const half = normalize(light[0] + view[0], light[1] + view[1], light[2] + view[2]);
+    const along = Math.cos(angle) * half[0] + Math.sin(angle) * half[1];
+    const across = -Math.sin(angle) * half[0] + Math.cos(angle) * half[1];
+    // Tiny fixed finish tolerances, tied to a motor rather than a frame or time.
+    const hash = (Math.imul(physicalIndex + 1, 1664525) + 1013904223) >>> 0;
+    const grain = ((hash ^ (hash >>> 13)) & 1023) / 1023;
+    const center = Math.max(.12, Math.min(.88, .5 + across * .72 + (grain - .5) * .012));
+    const spread = .095 + Math.abs(along) * .055 + grain * .008;
+    const distance = (-.55 - x) ** 2 + (-.7 - y) ** 2 + 1.05 ** 2;
+    const strength = Math.min(1, 1.4 / distance) * (.4 + .6 * Math.exp(-((along / .34) ** 2)));
+    return { center, spread, strength, slant: Math.max(-.05, Math.min(.05, along * .15)) };
+  }
+  function tintAt(position, reflection) {
+    const edge = Math.abs(position * 2 - 1);
+    const highlight = Math.exp(-(((position - reflection.center) / reflection.spread) ** 2) / 2);
+    return .025 - .25 * edge ** 3 + (.13 + .27 * reflection.strength) * highlight;
+  }
+  return { sample, tintAt };
+});
+
+(function (root, factory) {
+  const cjs = typeof module === 'object' && module.exports;
+  const api = factory(cjs ? require('../shared/palette.js') : root.Timeform.Palette,
+    cjs ? require('./metal-light.js') : root.Timeform.MetalLight);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).AppearanceHands = api;
+})(globalThis, function (Palette, MetalLight) {
+  'use strict';
+  const TAU = Math.PI * 2, UNIT = 53.2;
+  function circle(ctx, x, y, radius) {
+    ctx.beginPath(); ctx.arc(x, y, radius, 0, TAU);
+  }
+  function armPath(ctx, length, width, profile) {
+    const tail = profile.tailLength ?? width * (profile.tail ?? .12);
+    if (profile.handShape === 'roundBase') {
+      ctx.beginPath(); ctx.moveTo(0, -width / 2); ctx.lineTo(length, -width / 2);
+      ctx.lineTo(length, width / 2); ctx.lineTo(0, width / 2);
+      ctx.arc(0, 0, width / 2, Math.PI / 2, Math.PI * 1.5); ctx.closePath();
+    } else if (profile.handShape === 'rounded') Palette.roundRect(ctx, -tail, -width / 2, length + tail, width,
+      profile.cornerRadius ? profile.cornerRadius(width) : width * .35);
+    else { ctx.beginPath(); ctx.rect(-tail, -width / 2, length + tail, width); }
+  }
+  const isMetal = finish => finish === 'metal' || finish === 'outlined';
+  const finishFor = (profile, secondary) => Array.isArray(profile.finish) ? profile.finish[secondary ? 1 : 0] : profile.finish;
+  function drawArm(ctx, pose, length, width, color, profile, secondary, reflection) {
+    if (pose.opacity <= .001) return;
+    const finish = finishFor(profile, secondary), metal = isMetal(finish);
+    ctx.save(); ctx.globalAlpha = pose.opacity; ctx.rotate(pose.angle);
+    // Material shading must fit inside the model's exact original silhouette.
+    // No translated side, extra cast shadow, outside outline or pixel-width floor.
+    armPath(ctx, length, width, profile); ctx.clip();
+    // Material response is independent of the board's color and lighting mode.
+    const facing = Math.sin(pose.angle) * .6 - Math.cos(pose.angle) * .8;
+    const slant = metal ? reflection.slant : 0;
+    const top = ctx.createLinearGradient(length / 2 - width * slant / 2, -width / 2, length / 2 + width * slant / 2, width / 2);
+    const bands = metal
+      ? [...new Set([0, .12, .25, .38, .5, .62, .75, .88, 1, reflection.center,
+          Math.max(0, reflection.center - reflection.spread), Math.min(1, reflection.center + reflection.spread)])]
+          .sort((a, b) => a - b).map(position => [position, MetalLight.tintAt(position, reflection)])
+      : [[0, .025 * facing], [.32, .01], [.65, 0], [1, -.045 * facing]];
+    bands.forEach(([position, tint]) => top.addColorStop(position, Palette.tint(color, tint)));
+    ctx.fillStyle = top; ctx.fill();
+    ctx.fillStyle = Palette.tint(color, .6); ctx.globalAlpha = pose.opacity * (metal ? .08 + .10 * reflection.strength : .07) * Math.abs(facing);
+    ctx.fillRect(-width, facing > 0 ? -width / 2 : width / 2 - .45, length + width * 2, .45);
+    if (finish === 'outlined') {
+      ctx.globalAlpha = pose.opacity;
+      ctx.strokeStyle = '#d1d2cd'; ctx.lineWidth = Math.max(.7, width * .12); ctx.stroke();
+    }
+    ctx.restore();
+  }
+  function drawHands(ctx, geometry, instance, config, model) {
+    const drawing = model.Drawing || {}, profile = drawing.appearance || {};
+    for (const point of geometry.points) {
+      ctx.save(); ctx.translate(point.x, point.y); ctx.scale(point.radius / UNIT, point.radius / UNIT);
+      const lane = drawing.longLane?.(point) || 0;
+      for (const secondary of [true, false]) {
+        const pose = instance.hands[point.i + (secondary ? lane ^ 1 : lane)];
+        const length = profile.handLength ? profile.handLength(point, config, secondary)
+          : drawing.handLength ? drawing.handLength(config, secondary)
+          : UNIT * (drawing.referenceReach || 49.3 / UNIT) * (secondary ? config.shortLength : config.longLength) / 100;
+        drawArm(ctx, pose, length, secondary ? config.shortWidth : config.longWidth,
+          secondary ? config.short : config.long, profile, secondary,
+          pose.opacity > .001 && isMetal(finishFor(profile, secondary))
+            ? MetalLight.sample(geometry, point, pose.angle, point.i + (secondary ? lane ^ 1 : lane)) : undefined);
+      }
+      if (profile.hub) {
+        ctx.globalAlpha = Math.max(instance.hands[point.i].opacity, instance.hands[point.i + 1].opacity);
+        ctx.fillStyle = config.long; circle(ctx, 0, 0, 3.1); ctx.fill();
+      }
+      ctx.restore();
+    }
+  }
+  function drawByMaterial(ctx, geometry, instance, config, model) {
+    const profile = model.Drawing.appearance || {};
+    const hidden = instance.hands.map(hand => ({ angle: hand.angle, opacity: 0 }));
+    const mask = [...hidden];
+    // Mixed finishes (e.g. Pinakin) keep each motor's finish and the original
+    // short-below-long stacking. Never paint a whole extra layer over both arms.
+    for (const point of geometry.points) {
+      const lane = model.Drawing.longLane?.(point) || 0;
+      for (const secondary of [true, false]) {
+        const index = point.i + (secondary ? lane ^ 1 : lane);
+        mask[index] = instance.hands[index];
+        const single = { ...geometry, points: [point] };
+        if (isMetal(finishFor(profile, secondary))) drawHands(ctx, single, { hands: mask }, config, model);
+        else model.Drawing.drawHands(ctx, single, { hands: mask }, config);
+        mask[index] = hidden[index];
+      }
+    }
+  }
+  return { drawHands, drawByMaterial, isMetal, finishFor };
+});
+
+(function (root, factory) {
+  const cjs = typeof module === 'object' && module.exports;
+  const api = factory(cjs ? require('./surfaces.js') : root.Timeform.AppearanceSurfaces,
+    cjs ? require('./hands.js') : root.Timeform.AppearanceHands);
+  if (cjs) module.exports = api;
+  else (root.Timeform ||= {}).SculptedDrawing = api;
+})(globalThis, function (Surfaces, Hands) {
+  'use strict';
+  // The mode composes independent surface and hand renderers. Neither layer
+  // owns animation state; hand materials never inspect the board's color.
+  return { drawSurface: Surfaces.drawSurface, drawHands: Hands.drawHands };
+});
+
+(function (root, factory) {
+  const cjs = typeof module === 'object' && module.exports;
+  const api = factory(cjs ? require('./sculpted.js') : root.Timeform.SculptedDrawing,
+    cjs ? require('./surfaces.js') : root.Timeform.AppearanceSurfaces,
+    cjs ? require('./hands.js') : root.Timeform.AppearanceHands);
+  if (cjs) module.exports = api;
+  else (root.Timeform ||= {}).RenderModes = api;
+})(globalThis, function (Sculpted, Surfaces, Hands) {
+  'use strict';
+  // Appearance adapters consume the model's geometry and sampled hands. They
+  // never own time, choreography, physical hand identities or configuration IO.
+  const modes = [
+    { id: 'original', label: '原有效果', drawing: null },
+    { id: 'sculpted', label: '立体光影', drawing: Sculpted }
+  ];
+  const fields = {
+    appearance: { type: 'select', label: '盘面光影', value: 'auto', group: 'appearance',
+      options: [['auto', '按材质（默认）'], ...modes.map(mode => [mode.id, mode.label])],
+      help: '默认黑白使用原版盘面，彩色使用立体光影；也可手动选择。' },
+    handAppearance: { type: 'select', label: '指针效果', value: 'auto', group: 'appearance',
+      options: [['auto', '按指针材质（默认）'], ['original', '原有指针'], ['sculpted', '材质与反光'], ['follow', '随光影模式']],
+      help: '默认金属针使用反光效果，普通针沿用原版；同一光源下，高光随位置和朝向变化。' }
+  };
+  function resolve(model, config) {
+    const profile = model.Drawing?.appearance || {};
+    const surfaceMode = config.appearance === 'auto' ? Surfaces.usesOriginalSurface(config, profile) ? 'original' : 'sculpted' : config.appearance;
+    const surface = modes.find(mode => mode.id === surfaceMode)?.drawing;
+    const material = [false, true].map(secondary => Hands.isMetal(Hands.finishFor(profile, secondary)));
+    const handMode = config.handAppearance === 'auto' ? material.every(Boolean) ? 'sculpted' : material.some(Boolean) ? 'mixed' : 'original'
+      : !config.handAppearance || config.handAppearance === 'follow' ? surfaceMode : config.handAppearance;
+    const hands = modes.find(mode => mode.id === handMode)?.drawing;
+    if (!surface && !hands && handMode !== 'mixed') return model.Drawing;
+    return {
+      drawSurface: surface ? (ctx, geometry, settings) => surface.drawSurface(ctx, geometry, settings, model) : model.Drawing?.drawSurface,
+      drawHands: handMode === 'mixed' ? (ctx, geometry, instance, settings) => Hands.drawByMaterial(ctx, geometry, instance, settings, model)
+        : hands ? (ctx, geometry, instance, settings) => hands.drawHands(ctx, geometry, instance, settings, model) : model.Drawing?.drawHands
+    };
+  }
+  return { modes, fields, resolve };
+});
+
+(function (root, factory) {
   const api = factory(root);
   if (typeof module === 'object' && module.exports) module.exports = api;
   else (root.Timeform ||= {}).BrowserEnvironment = api;
@@ -2282,12 +2593,12 @@
 (function (root, factory) {
   const cjs = typeof module === 'object' && module.exports;
   const api = factory(cjs ? { Palette: require('../shared/palette.js'), SingleClock: require('../shared/single-clock.js'),
-    Time: require('../shared/time.js'), BrowserEnvironment: require('./browser-environment.js') } : root.Timeform);
+    Time: require('../shared/time.js'), RenderModes: require('../rendering/modes.js'), BrowserEnvironment: require('./browser-environment.js') } : root.Timeform);
   if (cjs) module.exports = api;
   else (root.Timeform ||= {}).Renderer = api;
 })(globalThis, function (dependencies) {
   'use strict';
-  const { Palette, SingleClock, Time, BrowserEnvironment } = dependencies;
+  const { Palette, SingleClock, Time, RenderModes, BrowserEnvironment } = dependencies;
   function create(canvas, config, model, readViewport, environment = BrowserEnvironment.create()) {
     const env = environment;
     const context = canvas.getContext('2d'), surface = env.createSurface(), surfaceContext = surface.getContext('2d');
@@ -2295,6 +2606,7 @@
     playback.setSpeed(config.playbackSpeed);
     const instance = model.create(config, { reducedMotion: env.reducedMotion() });
     let settings = { ...config }, geometry, frame = 0, frames = 0, dirty = true, surfaceDirty = true, disposed = false;
+    let drawing = RenderModes ? RenderModes.resolve(model, settings) : model.Drawing;
     let demoAt = playback.now();
     function request() { if (!disposed && !env.isHidden() && !frame) frame = env.requestFrame(draw); }
     function refresh() {
@@ -2316,7 +2628,7 @@
     }
     function paintSurface() {
       surfaceContext.clearRect(0, 0, geometry.boardWidth, geometry.boardHeight);
-      if (model.Drawing?.drawSurface) model.Drawing.drawSurface(surfaceContext, geometry, settings);
+      if (drawing?.drawSurface) drawing.drawSurface(surfaceContext, geometry, settings);
       else {
         Palette.drawBoard(surfaceContext, geometry.boardWidth, geometry.boardHeight, settings);
         geometry.points.forEach(point => SingleClock.drawFace(surfaceContext, point, settings));
@@ -2330,7 +2642,7 @@
       context.setTransform(canvas.width / geometry.boardWidth, 0, 0, canvas.height / geometry.boardHeight, 0, 0);
       context.clearRect(0, 0, geometry.boardWidth, geometry.boardHeight);
       context.drawImage(surface, 0, 0, geometry.boardWidth, geometry.boardHeight);
-      if (model.Drawing?.drawHands) model.Drawing.drawHands(context, geometry, instance, settings);
+      if (drawing?.drawHands) drawing.drawHands(context, geometry, instance, settings);
       else geometry.points.forEach(point => SingleClock.drawHands(context, point, [instance.hands[point.i], instance.hands[point.i + 1]], settings));
       const digits = instance.state.minuteKey;
       canvas.setAttribute('aria-label', model.name + '，现在显示 ' + digits.slice(0, 2) + ':' + digits.slice(2));
@@ -2340,6 +2652,10 @@
     function update(next) {
       if (disposed) return;
       const previous = settings; settings = model.Settings.normalize(next, settings);
+      if (previous.appearance !== settings.appearance || previous.handAppearance !== settings.handAppearance || previous.board !== settings.board) {
+        drawing = RenderModes ? RenderModes.resolve(model, settings) : model.Drawing;
+        if (previous.appearance !== settings.appearance) surfaceDirty = true;
+      }
       playback.setSpeed(settings.playbackSpeed);
       const now = playback.now(), result = instance.update(settings, now);
       if (previous.board !== settings.board || previous.radius !== settings.radius || previous.gap !== settings.gap) surfaceDirty = true;
@@ -2392,7 +2708,7 @@
       update, resize, replay, playReference, showCurrentTime, step, setPaused,
       getStats() {
         const now = playback.now();
-        return { display: instance.state.minuteKey, geometry, frames, timeline: now, paused: playback.paused, animating: instance.isAnimating(now), stage: instance.getStage?.(now) || '', pixelWidth: canvas.width, pixelHeight: canvas.height };
+        return { display: instance.state.minuteKey, geometry, frames, timeline: now, paused: playback.paused, animating: instance.isAnimating(now), stage: instance.getStage?.(now) || '', appearance: settings.appearance || 'original', pixelWidth: canvas.width, pixelHeight: canvas.height };
       },
       dispose() { if (!disposed) { disposed = true; env.cancelFrame(frame); env.clearTimer(timer); unsubscribe(); } }
     };
@@ -2510,7 +2826,9 @@
       context.restore();
     }
   }
-  return { drawSurface, drawHands, handLength, referenceReach };
+  return { drawSurface, drawHands, handLength, referenceReach,
+    appearance: { boardShape: 'circle', dials: false, handShape: 'rect', tail: .35, finish: 'matte',
+      handLength: (point, config, secondary) => handLength(point, config, secondary) * 53.2 / point.radius } };
 });
 
 (function (root, factory) {
@@ -2988,6 +3306,8 @@
   const longLanes = '0000000000000000011100000000000000000000000000000000000000000';
   const longLane = point => Number(longLanes[Math.floor(point.i / 2)]);
   const Drawing = { referenceReach, longLane,
+    appearance: { boardShape: 'circle', handShape: 'rounded', tailLength: 1.6,
+      cornerRadius: width => Math.min(1.5, width / 2), finish: 'metal', hub: true },
     handLength: (config, secondary) => 53.2 * referenceReach * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100,
     drawHands(context, geometry, instance, config) {
       geometry.points.forEach(point => SingleClock.drawHands(context, point,
@@ -3300,6 +3620,15 @@
         : [Palette.tint(config.board, -.20), Palette.tint(config.board, -.07), Palette.tint(config.board, -.12)];
       shades.forEach((color, i) => face.addColorStop(i / 2, color));
       ctx.beginPath(); ctx.arc(0, 0, 53.2, 0, TAU); ctx.fillStyle = face; ctx.fill();
+      if (white) {
+        // A single concentric rim avoids seams between shadow and highlight.
+        const rim = ctx.createLinearGradient(-20, -53.2, 20, 53.2);
+        [[0, '#b3b0a8'], [.4, '#d7d4cd'], [.65, '#f4f2ec'], [1, '#ffffff']]
+          .forEach(([stop, color]) => rim.addColorStop(stop, color));
+        ctx.strokeStyle = rim; ctx.lineWidth = 1.2;
+        ctx.beginPath(); ctx.arc(0, 0, 52.6, 0, TAU); ctx.stroke();
+        ctx.restore(); return;
+      }
       ctx.strokeStyle = black ? '#050506' : '#00000030'; ctx.lineWidth = 1.3;
       ctx.beginPath(); ctx.arc(0, .3, 52.6, Math.PI, TAU); ctx.stroke();
       ctx.strokeStyle = black ? '#ffffff0d' : '#ffffff50'; ctx.lineWidth = .8;
@@ -3329,7 +3658,8 @@
       hand(ctx, instance.hands[point.i + (longLane(point) ^ 1)], true, config); hand(ctx, instance.hands[point.i + longLane(point)], false, config); ctx.restore();
     });
   }
-  return { drawSurface, drawHands, handLength, referenceReach, longLane };
+  return { drawSurface, drawHands, handLength, referenceReach, longLane,
+    appearance: { handShape: 'rect', tail: .15, finish: 'metal' } };
 });
 
 (function (root, factory) {
@@ -3692,6 +4022,9 @@
     const longLane=variant.longLanes ? point=>Number(variant.longLanes[Math.floor(point.i/2)]) : model.Drawing?.longLane || (()=>0);
     return {
       handLength,referenceReach,longLane,
+      appearance: { ...model.Drawing?.appearance, handShape: model.id.startsWith('amt') || variant.rounded ? 'rounded' : 'rect',
+        tail: model.id.startsWith('amt') || variant.rounded ? .12 : .3, finish: variant.finish || 'matte',
+        tailLength: undefined, cornerRadius: undefined, texture: variant.texture, hub: false },
       drawSurface(context,geometry,config) {
         if (variant.texture==='travertine') return stone(context,geometry,config);
         if (model.Drawing?.drawSurface) return model.Drawing.drawSurface(context,geometry,config);
@@ -3919,7 +4252,8 @@
     });
     context.restore();
   }
-  return {drawSurface,drawHands:hands.drawHands,handLength:hands.handLength,referenceReach:hands.referenceReach,longLane:hands.longLane};
+  return {drawSurface,drawHands:hands.drawHands,handLength:hands.handLength,referenceReach:hands.referenceReach,longLane:hands.longLane,
+    appearance: {...hands.appearance, texture:'travertine'}};
 });
 
 (function (root, factory) {
@@ -4783,10 +5117,11 @@
     commonJS ? require('../models/classic-landscape.js') : root.Timeform.ClassicLandscape || [],
     commonJS ? require('./reference-motion.js') : root.Timeform.ReferenceMotion,
     commonJS ? require('../models/clockclockl/animation.js') : root.Timeform.ClockClockLAnimation,
-    commonJS ? require('./shared-actions.js') : root.Timeform.SharedActions);
+    commonJS ? require('./shared-actions.js') : root.Timeform.SharedActions,
+    commonJS ? require('../rendering/modes.js') : root.Timeform.RenderModes);
   if (typeof module === 'object' && module.exports) module.exports = api;
   else (root.Timeform ||= {}).Classic = api;
-})(globalThis, function (Config, Variants, EditionAnimation, EditionDrawing, AdditionalLandscape, ReferenceMotion, ClockClockLAnimation, SharedActions) {
+})(globalThis, function (Config, Variants, EditionAnimation, EditionDrawing, AdditionalLandscape, ReferenceMotion, ClockClockLAnimation, SharedActions, RenderModes) {
   'use strict';
   // Official editions are editable starting points for the web workbench.
   const editions = {
@@ -4823,6 +5158,7 @@
     if (Object.hasOwn(preset, 'visibility')) preset.visibility = 'show';
     if (edition.duration) preset.duration = edition.duration;
     const fields = Object.fromEntries(Object.entries(original.fields).map(([key, field]) => [key, { ...field, value: preset[key] }]));
+    Object.assign(fields, RenderModes.fields);
     fields.motion = { ...fields.motion, label: '参考动作', options: [['wave', edition.motion.replace(/ · 本款原片节奏| · 预设动作/g, '')]], hidden: is24 };
     if (is24) fields.choreography = { type: 'select', label: '动作类型', value: referenceChoice, group: 'motion',
       options: ReferenceMotion.choices, help: '交错旋转与潮汐波浪来自 CCL 参考；各预设保留自己的默认动作节奏。' };
@@ -4830,7 +5166,8 @@
     fields.autoDemo.label = '自动逐分钟演示';
     const normalize = (input = {}, base = {}) => {
       const config = Config.normalize(fields, input, base);
-      return { ...original.normalize(config), motion: 'wave', ...(is24 ? { choreography: config.choreography } : {}) };
+      return { ...original.normalize(config), appearance: config.appearance, handAppearance: config.handAppearance,
+        motion: 'wave', ...(is24 ? { choreography: config.choreography } : {}) };
     };
     const Settings = { fields, normalize, defaults: normalize() };
     function geometry(width, height, input) {
@@ -4944,6 +5281,10 @@
   const checkbox = (label, group, help) => ({ type: 'checkbox', label, value: false, group, help });
   const fields = {
     edition: { type: 'select', label: '时钟款式（全部 30 款）', value: 'amt144', group: 'edition', options: models.map(model => [model.id, label(model)]) },
+    // The workbench exposes appearance experiments; portable settings retain
+    // the selection without adding experimental controls to native host menus.
+    appearance: { ...base.appearance, group: 'motion', hidden: true },
+    handAppearance: { ...base.handAppearance, group: 'motion', hidden: true },
     ...Object.fromEntries(['scale', 'padding', 'offsetX', 'offsetY'].map(key => [key, base[key]])),
     customColors: checkbox('启用自定义配色', 'colors', '关闭时使用所选款式的原作配色；开启后使用下方四项颜色。'),
     ...Object.fromEntries(['background', 'board', 'long', 'short'].map(key => [key, base[key]])),
@@ -4963,7 +5304,7 @@
   const defaults = normalize();
   function resolve(input) {
     const config = normalize(input), model = get(config.edition), patch = {};
-    for (const key of ['scale', 'padding', 'offsetX', 'offsetY', 'playbackSpeed', 'format24', 'timezone', 'source', 'manualTime', 'autoDemo', 'demoInterval']) patch[key] = config[key];
+    for (const key of ['appearance', 'handAppearance', 'scale', 'padding', 'offsetX', 'offsetY', 'playbackSpeed', 'format24', 'timezone', 'source', 'manualTime', 'autoDemo', 'demoInterval']) patch[key] = config[key];
     if (config.customColors) for (const key of ['background', 'board', 'long', 'short']) patch[key] = config[key];
     if (config.customGeometry) for (const key of geometryKeys) if (model.Settings.fields[key]) patch[key] = config[key];
     if (config.visibility !== 'default' && model.Settings.fields.visibility) patch.visibility = config.visibility;

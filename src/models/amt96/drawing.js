@@ -48,5 +48,6 @@
     });
     context.restore();
   }
-  return {drawSurface,drawHands:hands.drawHands,handLength:hands.handLength,referenceReach:hands.referenceReach,longLane:hands.longLane};
+  return {drawSurface,drawHands:hands.drawHands,handLength:hands.handLength,referenceReach:hands.referenceReach,longLane:hands.longLane,
+    appearance: {...hands.appearance, texture:'travertine'}};
 });

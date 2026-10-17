@@ -42,5 +42,7 @@
       context.restore();
     }
   }
-  return { drawSurface, drawHands, handLength, referenceReach };
+  return { drawSurface, drawHands, handLength, referenceReach,
+    appearance: { boardShape: 'circle', dials: false, handShape: 'rect', tail: .35, finish: 'matte',
+      handLength: (point, config, secondary) => handLength(point, config, secondary) * 53.2 / point.radius } };
 });

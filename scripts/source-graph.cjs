@@ -8,7 +8,7 @@ const circularModules = [
   'src/shared/math.js', 'src/shared/palette.js', 'src/shared/config.js', 'src/shared/time.js', 'src/shared/single-clock.js',
   'src/shared/hand-animation.js', 'src/models/clockclock24/settings.js', 'src/models/amt/settings.js',
   'src/models/circular-layout.js', 'src/models/clockclock9/settings.js', 'src/models/clockclock9/drawing.js', 'src/models/clockclock9/animation.js', 'src/models/clockclock9/model.js',
-  'src/models/amt61c/settings.js', 'src/models/amt61c/animation.js', 'src/models/amt61c/model.js', 'src/models/circular.js', 'src/runtime/browser-environment.js', 'src/runtime/renderer.js'
+  'src/models/amt61c/settings.js', 'src/models/amt61c/animation.js', 'src/models/amt61c/model.js', 'src/models/circular.js', 'src/rendering/surfaces.js', 'src/rendering/metal-light.js', 'src/rendering/hands.js', 'src/rendering/sculpted.js', 'src/rendering/modes.js', 'src/runtime/browser-environment.js', 'src/runtime/renderer.js'
 ];
 const additionalLandscapeModules=[
   'src/shared/grid-layout.js',

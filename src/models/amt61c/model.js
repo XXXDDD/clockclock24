@@ -46,6 +46,8 @@
   const longLanes = '0000000000000000011100000000000000000000000000000000000000000';
   const longLane = point => Number(longLanes[Math.floor(point.i / 2)]);
   const Drawing = { referenceReach, longLane,
+    appearance: { boardShape: 'circle', handShape: 'rounded', tailLength: 1.6,
+      cornerRadius: width => Math.min(1.5, width / 2), finish: 'metal', hub: true },
     handLength: (config, secondary) => 53.2 * referenceReach * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100,
     drawHands(context, geometry, instance, config) {
       geometry.points.forEach(point => SingleClock.drawHands(context, point,

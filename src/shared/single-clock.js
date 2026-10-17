@@ -8,18 +8,39 @@
   function local(context, point) {
     context.save(); context.translate(point.x, point.y); context.scale(point.radius / 53.2, point.radius / 53.2);
   }
+  // Draw in the caller's canonical dial coordinates; lighting stays inside the
+  // opening, with a quiet floor and a continuous, directionally lit inner wall.
+  function drawWhiteRecess(context) {
+    context.save();
+    context.beginPath(); context.arc(0, 0, 53.2, 0, TAU); context.clip();
+    const floor = context.createLinearGradient(0, -53.2, 0, 53.2);
+    [[0, '#e8e5df'], [.22, '#edeae4'], [.82, '#f0ede7'], [1, '#f1eee8']]
+      .forEach(([stop, color]) => floor.addColorStop(stop, color));
+    context.fillStyle = floor; context.fillRect(-53.2, -53.2, 106.4, 106.4);
+    const shadow = context.createRadialGradient(2.8, 4, 46, 0, 0, 53.2);
+    [[0, '#00000000'], [.65, '#00000002'], [.9, '#00000012'], [1, '#00000032']]
+      .forEach(([stop, color]) => shadow.addColorStop(stop, color));
+    context.fillStyle = shadow; context.beginPath(); context.arc(0, 0, 53.2, 0, TAU); context.fill();
+    const rim = context.createLinearGradient(-20, -53.2, 20, 53.2);
+    [[0, '#b3b0a8'], [.4, '#d7d4cd'], [.65, '#f4f2ec'], [1, '#ffffff']]
+      .forEach(([stop, color]) => rim.addColorStop(stop, color));
+    context.strokeStyle = rim; context.lineWidth = 1.2;
+    context.beginPath(); context.arc(0, 0, 52.6, 0, TAU); context.stroke();
+    context.restore();
+  }
   // Geometry and hand poses are inputs; this component has no time or model state.
   function drawFace(context, point, config) {
     local(context, point);
     const kind = Palette.material(config), white = kind === 'white', black = kind === 'black';
+    if (white) { drawWhiteRecess(context); context.restore(); return; }
     const rim = context.createRadialGradient(-11, -17, 3, 0, 0, 55);
-    const stops = white ? [[0, '#f4f2ed'], [.82, '#e5e2dc'], [.97, '#c6c4bd'], [1, '#dedbd5']] : black ? [[0, '#121415'], [.70, '#0d0f10'], [.94, '#08090a'], [1, '#242628']] : [[0, Palette.tint(config.board, -.06)], [.82, Palette.tint(config.board, -.12)], [.96, Palette.tint(config.board, -.24)], [1, Palette.tint(config.board, .06)]];
+    const stops = black ? [[0, '#121415'], [.70, '#0d0f10'], [.94, '#08090a'], [1, '#242628']] : [[0, Palette.tint(config.board, -.06)], [.82, Palette.tint(config.board, -.12)], [.96, Palette.tint(config.board, -.24)], [1, Palette.tint(config.board, .06)]];
     stops.forEach(([offset, color]) => rim.addColorStop(offset, color));
     context.shadowColor = black ? '#000000b8' : '#0000003b'; context.shadowBlur = 7; context.shadowOffsetY = 2;
     context.fillStyle = rim; context.beginPath(); context.arc(0, 0, 53.2, 0, TAU); context.fill();
     context.shadowBlur = 0; context.shadowOffsetY = 0; context.lineWidth = 1;
-    context.strokeStyle = white ? '#0000001a' : '#ffffff13'; context.beginPath(); context.arc(0, 0, 52.2, 0, TAU); context.stroke();
-    context.strokeStyle = white ? '#ffffff7a' : '#00000018'; context.beginPath(); context.arc(0, 0, 49.5, 0, TAU); context.stroke();
+    context.strokeStyle = '#ffffff13'; context.beginPath(); context.arc(0, 0, 52.2, 0, TAU); context.stroke();
+    context.strokeStyle = '#00000018'; context.beginPath(); context.arc(0, 0, 49.5, 0, TAU); context.stroke();
     context.restore();
   }
   function drawHand(context, angle, opacity, secondary, config, referenceReach) {
@@ -49,5 +70,5 @@
     }
     context.restore();
   }
-  return { drawFace, drawHands };
+  return { drawFace, drawHands, drawWhiteRecess };
 });

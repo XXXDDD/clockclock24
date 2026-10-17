@@ -1,12 +1,12 @@
 (function (root, factory) {
   const cjs = typeof module === 'object' && module.exports;
   const api = factory(cjs ? { Palette: require('../shared/palette.js'), SingleClock: require('../shared/single-clock.js'),
-    Time: require('../shared/time.js'), BrowserEnvironment: require('./browser-environment.js') } : root.Timeform);
+    Time: require('../shared/time.js'), RenderModes: require('../rendering/modes.js'), BrowserEnvironment: require('./browser-environment.js') } : root.Timeform);
   if (cjs) module.exports = api;
   else (root.Timeform ||= {}).Renderer = api;
 })(globalThis, function (dependencies) {
   'use strict';
-  const { Palette, SingleClock, Time, BrowserEnvironment } = dependencies;
+  const { Palette, SingleClock, Time, RenderModes, BrowserEnvironment } = dependencies;
   function create(canvas, config, model, readViewport, environment = BrowserEnvironment.create()) {
     const env = environment;
     const context = canvas.getContext('2d'), surface = env.createSurface(), surfaceContext = surface.getContext('2d');
@@ -14,6 +14,7 @@
     playback.setSpeed(config.playbackSpeed);
     const instance = model.create(config, { reducedMotion: env.reducedMotion() });
     let settings = { ...config }, geometry, frame = 0, frames = 0, dirty = true, surfaceDirty = true, disposed = false;
+    let drawing = RenderModes ? RenderModes.resolve(model, settings) : model.Drawing;
     let demoAt = playback.now();
     function request() { if (!disposed && !env.isHidden() && !frame) frame = env.requestFrame(draw); }
     function refresh() {
@@ -35,7 +36,7 @@
     }
     function paintSurface() {
       surfaceContext.clearRect(0, 0, geometry.boardWidth, geometry.boardHeight);
-      if (model.Drawing?.drawSurface) model.Drawing.drawSurface(surfaceContext, geometry, settings);
+      if (drawing?.drawSurface) drawing.drawSurface(surfaceContext, geometry, settings);
       else {
         Palette.drawBoard(surfaceContext, geometry.boardWidth, geometry.boardHeight, settings);
         geometry.points.forEach(point => SingleClock.drawFace(surfaceContext, point, settings));
@@ -49,7 +50,7 @@
       context.setTransform(canvas.width / geometry.boardWidth, 0, 0, canvas.height / geometry.boardHeight, 0, 0);
       context.clearRect(0, 0, geometry.boardWidth, geometry.boardHeight);
       context.drawImage(surface, 0, 0, geometry.boardWidth, geometry.boardHeight);
-      if (model.Drawing?.drawHands) model.Drawing.drawHands(context, geometry, instance, settings);
+      if (drawing?.drawHands) drawing.drawHands(context, geometry, instance, settings);
       else geometry.points.forEach(point => SingleClock.drawHands(context, point, [instance.hands[point.i], instance.hands[point.i + 1]], settings));
       const digits = instance.state.minuteKey;
       canvas.setAttribute('aria-label', model.name + '，现在显示 ' + digits.slice(0, 2) + ':' + digits.slice(2));
@@ -59,6 +60,10 @@
     function update(next) {
       if (disposed) return;
       const previous = settings; settings = model.Settings.normalize(next, settings);
+      if (previous.appearance !== settings.appearance || previous.handAppearance !== settings.handAppearance || previous.board !== settings.board) {
+        drawing = RenderModes ? RenderModes.resolve(model, settings) : model.Drawing;
+        if (previous.appearance !== settings.appearance) surfaceDirty = true;
+      }
       playback.setSpeed(settings.playbackSpeed);
       const now = playback.now(), result = instance.update(settings, now);
       if (previous.board !== settings.board || previous.radius !== settings.radius || previous.gap !== settings.gap) surfaceDirty = true;
@@ -111,7 +116,7 @@
       update, resize, replay, playReference, showCurrentTime, step, setPaused,
       getStats() {
         const now = playback.now();
-        return { display: instance.state.minuteKey, geometry, frames, timeline: now, paused: playback.paused, animating: instance.isAnimating(now), stage: instance.getStage?.(now) || '', pixelWidth: canvas.width, pixelHeight: canvas.height };
+        return { display: instance.state.minuteKey, geometry, frames, timeline: now, paused: playback.paused, animating: instance.isAnimating(now), stage: instance.getStage?.(now) || '', appearance: settings.appearance || 'original', pixelWidth: canvas.width, pixelHeight: canvas.height };
       },
       dispose() { if (!disposed) { disposed = true; env.cancelFrame(frame); env.clearTimer(timer); unsubscribe(); } }
     };
