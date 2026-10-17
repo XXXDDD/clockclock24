@@ -23,6 +23,25 @@
   };
   systemTheme.addEventListener('change', () => { if (!themePreference) applyTheme(); });
   applyTheme();
+  const fullscreenButton = $('#fullscreen-toggle');
+  function syncFullscreen() {
+    const active = Boolean(document.fullscreenElement);
+    fullscreenButton.setAttribute('aria-label', active ? '退出全屏预览' : '全屏预览');
+    fullscreenButton.setAttribute('aria-pressed', String(active));
+    fullscreenButton.querySelector('use').setAttribute('href', active ? '#i-fullscreen-exit' : '#i-fullscreen');
+  }
+  fullscreenButton.hidden = !document.fullscreenEnabled || !document.documentElement.requestFullscreen;
+  fullscreenButton.onclick = async () => {
+    try {
+      if (document.fullscreenElement) await document.exitFullscreen();
+      else await document.documentElement.requestFullscreen();
+    } catch (error) {
+      console.warn('Fullscreen preview:', error.name, error.message);
+      fullscreenButton.setAttribute('aria-label', '暂时无法全屏预览，请重试');
+    }
+  };
+  document.addEventListener('fullscreenchange', syncFullscreen);
+  syncFullscreen();
   const downloadPopover = $('#downloads-popover');
   downloadPopover.addEventListener('toggle', event => {
     $('#open-downloads').setAttribute('aria-expanded', String(event.newState === 'open'));
@@ -192,6 +211,11 @@
   });
   document.addEventListener('keydown', event => {
     if (dialog.open || downloadPopover.matches(':popover-open') || event.altKey || event.ctrlKey || event.metaKey) return;
+    if (event.key === 'Escape' && document.fullscreenElement) {
+      event.preventDefault();
+      document.exitFullscreen().catch(syncFullscreen);
+      return;
+    }
     if (['BUTTON', 'A'].includes(event.target.tagName) && event.key === ' ') return;
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); navigate(event.key === 'ArrowLeft' ? -1 : 1); }
     if (event.key === ' ') { event.preventDefault(); $('#playback').click(); }

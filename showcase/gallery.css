@@ -84,7 +84,8 @@ svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width:
 .quiet { color: var(--muted); }
 .quiet:hover { color: var(--ink); }
 .quiet svg { width: 18px; height: 18px; }
-.theme-toggle { justify-self: end; }
+.view-controls { justify-self: end; display: flex; gap: 4px; }
+:root:fullscreen::backdrop { background: var(--page); }
 .shape-switch { display: flex; align-items: center; gap: 4px; padding: 5px; border-radius: 40px; border: 1px solid var(--line); background: var(--glass); box-shadow: 0 3px 8px rgb(30 30 20 / 1%); }
 .shape-button { display: inline-flex; align-items: center; justify-content: center; width: 58px; height: 40px; padding: 0; background: transparent; color: var(--muted); border: 0; border-radius: 30px; transition: background 220ms ease, color 220ms ease, box-shadow 220ms ease; }
 .shape-button svg { width: 23px; height: 23px; }
@@ -116,9 +117,9 @@ svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width:
   .swatches { top: calc(50% + var(--artwork-height, 0px) / 2 + 28px); max-width: calc(100vw - 32px); }
   .swatch { width: 29px; height: 40px; }
   .swatch span { width: 12px; height: 12px; }
-  .bottom-bar { bottom: max(26px, env(safe-area-inset-bottom)); left: 16px; right: 16px; gap: 6px; }
-  .playback { gap: 0; }
-  .playback .icon-button { width: 36px; height: 44px; }
+  .bottom-bar { bottom: max(26px, env(safe-area-inset-bottom)); left: 16px; right: 16px; gap: 4px; }
+  .playback, .view-controls { gap: 0; }
+  .playback .icon-button, .view-controls .icon-button { width: 36px; height: 44px; }
   .shape-switch { padding: 4px; gap: 0; }
   .shape-button { width: 42px; height: 38px; }
   .shape-button svg { width: 21px; height: 21px; }

@@ -12,7 +12,7 @@ const server = http.createServer((request, response) => {
   if (!file.startsWith(root + path.sep)) { response.writeHead(403); response.end('Forbidden'); return; }
   fs.readFile(file, (error, content) => {
     if (error) { response.writeHead(404); response.end('Not found'); return; }
-    const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8', '.jpg': 'image/jpeg' };
+    const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8', '.jpg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.zip': 'application/zip' };
     response.writeHead(200, { 'Content-Type': types[path.extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
     response.end(content);
   });
