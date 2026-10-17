@@ -1,0 +1,19 @@
+{
+  "version": "3.3.0",
+  "tag": "v3.3.0",
+  "repository": "XXXDDD/clockclock24",
+  "assets": [
+    {
+      "name": "TIMEFORM-Lively.zip",
+      "file": "downloads/TIMEFORM-Lively.zip",
+      "size": 776328,
+      "sha256": "9fcc9fd6532d9ddaf49ec09ccfa8a2f2a4fbc99b23a18984688f8b8d7ec3e1fe"
+    },
+    {
+      "name": "TIMEFORM-WallpaperEngine.zip",
+      "file": "downloads/TIMEFORM-WallpaperEngine.zip",
+      "size": 381091,
+      "sha256": "2d0c99dc76e4889d4b23700fa5007878e01719b9d14183ac4b753421609ec163"
+    }
+  ]
+}

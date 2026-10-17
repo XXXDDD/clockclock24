@@ -113,6 +113,8 @@ npm test
 npm run check:all
 ```
 
-`build` 仍只构建分类调试台；`build:lively` 保留五型号包；`build:lively:complete` 构建全集；`build:runtime` 构建独立库、目录与 Wallpaper Engine 测试包。`--check` 逐字节核对生成文件，不覆盖源码，不执行发布。
+`build` 构建演示页与分类调试台；`build:lively` 保留五型号包；`build:lively:complete` 构建全集；`build:runtime` 构建独立库、目录与 Wallpaper Engine 测试包。`--check` 逐字节核对生成文件，不覆盖源码，不执行发布。
+
+正式发布统一执行 `npm run release:prepare`，复用上述构建与测试入口，同时刷新公开下载产物，校验通过后生成版本、文件摘要与发布说明。版本只从 `package.json` 读取，说明只从[发布速记](rundown.md)对应小节提取；演示页下载链接固定使用 GitHub Latest，资源缓存标识由内容生成。更新型号代码后只需重新构建部署，不手工修改演示页面或维护第二套表盘代码。此命令仅准备文件，不上传或改动 GitHub Release。
 
 回归测试覆盖 30 款默认值、网页配置导入、原有迁移、两种原生属性转换一致性、批次更新、多个暂停来源、销毁清理、多预览隔离，以及独立浏览器包与 Node 实现的同帧针位一致性。新增型号时只改型号、共享目录和源码清单；宿主适配器不维护型号条件分支。
