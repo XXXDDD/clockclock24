@@ -1,0 +1,463 @@
+{
+  "title": "TIMEFORM · 30 款时钟",
+  "type": "web",
+  "file": "index.html",
+  "preview": "preview.jpg",
+  "description": "TIMEFORM 共享时钟运行时，本地测试包。",
+  "general": {
+    "properties": {
+      "edition": {
+        "order": 0,
+        "text": "时钟款式（全部 30 款）",
+        "value": "amt144",
+        "type": "combo",
+        "options": [
+          {
+            "value": "clockclock24",
+            "label": "横屏 · ClockClock 24 · Black"
+          },
+          {
+            "value": "clockclock24-white",
+            "label": "横屏 · ClockClock 24 · White"
+          },
+          {
+            "value": "clockclock24-white-sterling",
+            "label": "横屏 · ClockClock 24 · White Sterling"
+          },
+          {
+            "value": "clockclock24-white-gold",
+            "label": "横屏 · ClockClock 24 · White Gold"
+          },
+          {
+            "value": "clockclock24-black-sterling",
+            "label": "横屏 · ClockClock 24 · Black Sterling"
+          },
+          {
+            "value": "clockclock24-black-gold",
+            "label": "横屏 · ClockClock 24 · Black Gold"
+          },
+          {
+            "value": "clockclock24-pinakin-neela",
+            "label": "横屏 · ClockClock 24 · Pinakin Neela"
+          },
+          {
+            "value": "clockclock24-pinakin-hara",
+            "label": "横屏 · ClockClock 24 · Pinakin Hara"
+          },
+          {
+            "value": "clockclock24-bjarke-ingels",
+            "label": "横屏 · ClockClock 24 · Bjarke Ingels · Sunset Dune"
+          },
+          {
+            "value": "clockclock24-dada-blue",
+            "label": "横屏 · ClockClock 24 · Dada Blue"
+          },
+          {
+            "value": "amt72",
+            "label": "横屏 · AMT 72 · Black"
+          },
+          {
+            "value": "amt72-white-sterling",
+            "label": "横屏 · AMT 72 · White Sterling"
+          },
+          {
+            "value": "amt72-white",
+            "label": "横屏 · AMT 72 · White"
+          },
+          {
+            "value": "amt72-black-sterling",
+            "label": "横屏 · AMT 72 · Black Sterling"
+          },
+          {
+            "value": "amt120",
+            "label": "横屏 · AMT 120 · Black"
+          },
+          {
+            "value": "amt120-tidal",
+            "label": "横屏 · AMT 120 · Tidal"
+          },
+          {
+            "value": "amt120-white",
+            "label": "横屏 · AMT 120 · White"
+          },
+          {
+            "value": "amt144",
+            "label": "横屏 · AMT 144 · Black"
+          },
+          {
+            "value": "amt144-white",
+            "label": "横屏 · AMT 144 · White"
+          },
+          {
+            "value": "amt288",
+            "label": "横屏 · AMT 288 · White"
+          },
+          {
+            "value": "amt288-black",
+            "label": "横屏 · AMT 288 · Black"
+          },
+          {
+            "value": "clockclockl",
+            "label": "横屏 · ClockClock L · Tidal"
+          },
+          {
+            "value": "amt96",
+            "label": "横屏 · AMT 96 · Bjarke Ingels"
+          },
+          {
+            "value": "clockclock9",
+            "label": "圆形 · ClockClock 9 · White"
+          },
+          {
+            "value": "amt61c",
+            "label": "圆形 · AMT 61c · Zephyr"
+          },
+          {
+            "value": "amt61c-tidal",
+            "label": "圆形 · AMT 61c · Tidal"
+          },
+          {
+            "value": "amt72v",
+            "label": "竖排 · AMT 72v · Black Sterling"
+          },
+          {
+            "value": "amt72v-white",
+            "label": "竖排 · AMT 72v · White"
+          },
+          {
+            "value": "amt72v-black",
+            "label": "竖排 · AMT 72v · Black"
+          },
+          {
+            "value": "amt72v-tidal",
+            "label": "竖排 · AMT 72v · Tidal"
+          }
+        ]
+      },
+      "scale": {
+        "order": 1,
+        "text": "整体缩放",
+        "value": 90,
+        "type": "slider",
+        "min": 20,
+        "max": 100,
+        "fraction": false,
+        "precision": 0
+      },
+      "padding": {
+        "order": 2,
+        "text": "画布安全边距",
+        "value": 0,
+        "type": "slider",
+        "min": 0,
+        "max": 160,
+        "fraction": false,
+        "precision": 0
+      },
+      "offsetX": {
+        "order": 3,
+        "text": "水平位置",
+        "value": 0,
+        "type": "slider",
+        "min": -100,
+        "max": 100,
+        "fraction": false,
+        "precision": 0
+      },
+      "offsetY": {
+        "order": 4,
+        "text": "垂直位置",
+        "value": 0,
+        "type": "slider",
+        "min": -100,
+        "max": 100,
+        "fraction": false,
+        "precision": 0
+      },
+      "customColors": {
+        "order": 5,
+        "text": "启用自定义配色",
+        "value": false,
+        "type": "bool"
+      },
+      "background": {
+        "order": 6,
+        "text": "画布背景",
+        "value": "0 0 0",
+        "type": "color"
+      },
+      "board": {
+        "order": 7,
+        "text": "背景板",
+        "value": "0.06666666666666667 0.07058823529411765 0.07450980392156863",
+        "type": "color"
+      },
+      "long": {
+        "order": 8,
+        "text": "长针",
+        "value": "0.9764705882352941 0.9803921568627451 0.9686274509803922",
+        "type": "color"
+      },
+      "short": {
+        "order": 9,
+        "text": "短针",
+        "value": "0.9333333333333333 0.9411764705882353 0.9254901960784314",
+        "type": "color"
+      },
+      "action": {
+        "order": 10,
+        "text": "动作",
+        "value": "default",
+        "type": "combo",
+        "options": [
+          {
+            "value": "default",
+            "label": "当前预设原动作"
+          },
+          {
+            "value": "clockclock24:scatter",
+            "label": "24 系列 · 交错旋转"
+          },
+          {
+            "value": "clockclock24:diagonal",
+            "label": "24 系列 · 斜线波浪"
+          },
+          {
+            "value": "clockclock24:tidal",
+            "label": "24 系列 · 潮汐波浪"
+          },
+          {
+            "value": "amt72:radial",
+            "label": "AMT 72 · 向心涟漪"
+          },
+          {
+            "value": "amt72:wind",
+            "label": "AMT 72 · 横向风势"
+          },
+          {
+            "value": "amt72:diagonal",
+            "label": "AMT 72 · 斜线波浪"
+          },
+          {
+            "value": "amt61c:zephyr",
+            "label": "AMT 61c · 风势流动 · Zephyr"
+          },
+          {
+            "value": "amt61c:tidal",
+            "label": "AMT 61c · 环弧波浪 · Tidal"
+          },
+          {
+            "value": "amt72v:phased",
+            "label": "AMT 72v · 错相旋转 · 双速归位"
+          },
+          {
+            "value": "amt72v:diagonal",
+            "label": "AMT 72v · 斜线波浪"
+          }
+        ]
+      },
+      "customDuration": {
+        "order": 11,
+        "text": "启用自定义动作时长",
+        "value": false,
+        "type": "bool"
+      },
+      "duration": {
+        "order": 12,
+        "text": "完整编排时长",
+        "value": 54.4,
+        "type": "slider",
+        "min": 1,
+        "max": 120,
+        "fraction": true,
+        "precision": 1
+      },
+      "visibility": {
+        "order": 13,
+        "text": "闲置指针",
+        "value": "default",
+        "type": "combo",
+        "options": [
+          {
+            "value": "default",
+            "label": "当前预设默认"
+          },
+          {
+            "value": "hide",
+            "label": "随归位隐藏"
+          },
+          {
+            "value": "ghost",
+            "label": "微光显示"
+          },
+          {
+            "value": "show",
+            "label": "全部显示"
+          }
+        ]
+      },
+      "playbackSpeed": {
+        "order": 14,
+        "text": "播放速度",
+        "value": 1,
+        "type": "slider",
+        "min": 0.1,
+        "max": 3,
+        "fraction": true,
+        "precision": 1
+      },
+      "paused": {
+        "order": 15,
+        "text": "暂停播放",
+        "value": false,
+        "type": "bool"
+      },
+      "format24": {
+        "order": 16,
+        "text": "24 小时制",
+        "value": true,
+        "type": "bool"
+      },
+      "timezone": {
+        "order": 17,
+        "text": "时区",
+        "value": "",
+        "type": "textinput"
+      },
+      "source": {
+        "order": 18,
+        "text": "时间来源",
+        "value": "live",
+        "type": "combo",
+        "options": [
+          {
+            "value": "live",
+            "label": "设备时间"
+          },
+          {
+            "value": "manual",
+            "label": "指定时间"
+          }
+        ]
+      },
+      "manualTime": {
+        "order": 19,
+        "text": "指定时间",
+        "value": "09:34",
+        "type": "textinput"
+      },
+      "autoDemo": {
+        "order": 20,
+        "text": "自动逐分钟演示",
+        "value": false,
+        "type": "bool"
+      },
+      "demoInterval": {
+        "order": 21,
+        "text": "自动切换间隔",
+        "value": 5,
+        "type": "slider",
+        "min": 1,
+        "max": 20,
+        "fraction": true,
+        "precision": 1
+      },
+      "customGeometry": {
+        "order": 22,
+        "text": "启用自定义尺寸与指针",
+        "value": false,
+        "type": "bool"
+      },
+      "radius": {
+        "order": 23,
+        "text": "表盘半径",
+        "value": 43,
+        "type": "slider",
+        "min": 20,
+        "max": 80,
+        "fraction": true,
+        "precision": 1
+      },
+      "gap": {
+        "order": 24,
+        "text": "表盘间隙",
+        "value": 5.3,
+        "type": "slider",
+        "min": 0,
+        "max": 40,
+        "fraction": true,
+        "precision": 1
+      },
+      "longLength": {
+        "order": 25,
+        "text": "长针长度",
+        "value": 100,
+        "type": "slider",
+        "min": 70,
+        "max": 100,
+        "fraction": false,
+        "precision": 0
+      },
+      "shortLength": {
+        "order": 26,
+        "text": "短针长度",
+        "value": 85,
+        "type": "slider",
+        "min": 55,
+        "max": 100,
+        "fraction": false,
+        "precision": 0
+      },
+      "longWidth": {
+        "order": 27,
+        "text": "长针粗细",
+        "value": 8.2,
+        "type": "slider",
+        "min": 2,
+        "max": 14,
+        "fraction": true,
+        "precision": 1
+      },
+      "shortWidth": {
+        "order": 28,
+        "text": "短针粗细",
+        "value": 8.2,
+        "type": "slider",
+        "min": 2,
+        "max": 14,
+        "fraction": true,
+        "precision": 1
+      },
+      "centerHourLength": {
+        "order": 29,
+        "text": "中央时针额外比例",
+        "value": 98,
+        "type": "slider",
+        "min": 50,
+        "max": 100,
+        "fraction": false,
+        "precision": 0
+      },
+      "safeTop": {
+        "order": 30,
+        "text": "顶部留白",
+        "value": 100,
+        "type": "slider",
+        "min": 0,
+        "max": 1200,
+        "fraction": false,
+        "precision": 0
+      },
+      "safeBottom": {
+        "order": 31,
+        "text": "底部留白",
+        "value": 100,
+        "type": "slider",
+        "min": 0,
+        "max": 1200,
+        "fraction": false,
+        "precision": 0
+      }
+    }
+  }
+}

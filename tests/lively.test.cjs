@@ -106,7 +106,7 @@ test('generated offline wallpaper exposes native callbacks and embeds all shared
   assert.match(html, /root\.livelyWallpaperPlaybackChanged = controller\.playback/);
   assert.doesNotMatch(html, /<script[^>]+src=|<link[^>]+href=["']https?:/i);
   const bundled = html.match(/<script>([\s\S]*)<\/script>/)[1];
-  const beforeApp = bundled.split("  const { LivelyConfig: Spec, LivelyController, Renderer, Landscape, Time }")[0];
+  const beforeApp = bundled.split("  const { LivelyConfig: Spec, LivelyController, Renderer, BrowserEnvironment, Landscape, Time }")[0];
   const context = vm.createContext({ Intl, TextEncoder, Uint8Array });
   vm.runInContext(beforeApp.slice(0, beforeApp.lastIndexOf('(function (root) {')), context);
   assert.deepEqual(Array.from(context.Timeform.Landscape.models, model => model.id), Landscape.models.map(model => model.id));

@@ -12,7 +12,8 @@ test('paused ClockClock L applies a selected choreography immediately and preser
   const sandbox=vm.createContext({Timeform:{Time:{...Time,createPlayback:()=>Time.createPlayback(()=>0)}},
     document:{hidden:true,createElement:()=>({getContext:()=>context}),addEventListener(){},removeEventListener(){}},
     window:{matchMedia:()=>({matches:false}),devicePixelRatio:1},setInterval:()=>1,clearInterval(){},cancelAnimationFrame(){}});
-  vm.runInContext(fs.readFileSync(require.resolve('../src/web/renderer.js'),'utf8'),sandbox);
+  vm.runInContext(fs.readFileSync(require.resolve('../src/runtime/browser-environment.js'), 'utf8'), sandbox);
+  vm.runInContext(fs.readFileSync(require.resolve('../src/runtime/renderer.js'),'utf8'),sandbox);
   const renderer=sandbox.Timeform.Renderer.create({style:{},getContext:()=>context,setAttribute(){}},
     model.Settings.normalize({source:'manual',manualTime:'09:35'}),rendered,
     ()=>({width:1920,height:1080,displayWidth:720,displayHeight:405}));
@@ -40,7 +41,8 @@ test('initial and resized canvases paint while the preview tab is hidden', () =>
     setInterval: () => 1, clearInterval() {}, cancelAnimationFrame() {},
     requestAnimationFrame() { throw new Error('Hidden tabs cannot supply a visible animation frame.'); }
   });
-  vm.runInContext(fs.readFileSync(require.resolve('../src/web/renderer.js'), 'utf8'), sandbox);
+  vm.runInContext(fs.readFileSync(require.resolve('../src/runtime/browser-environment.js'), 'utf8'), sandbox);
+  vm.runInContext(fs.readFileSync(require.resolve('../src/runtime/renderer.js'), 'utf8'), sandbox);
   for (const model of [require('../src/models/amt72v/model.js'), require('../src/models/landscape.js').get('amt72'), ...require('../src/models/circular.js').models]) {
     paints = 0;
     const settings = model.Settings.normalize({ source: 'manual', manualTime: '12:36' });
@@ -71,7 +73,8 @@ test('CC9 renders through its own drawing adapter without invoking SingleClock',
     window: { matchMedia: () => ({ matches: false }), devicePixelRatio: 1 },
     setInterval: () => 1, clearInterval() {}, cancelAnimationFrame() {}
   });
-  vm.runInContext(fs.readFileSync(require.resolve('../src/web/renderer.js'), 'utf8'), sandbox);
+  vm.runInContext(fs.readFileSync(require.resolve('../src/runtime/browser-environment.js'), 'utf8'), sandbox);
+  vm.runInContext(fs.readFileSync(require.resolve('../src/runtime/renderer.js'), 'utf8'), sandbox);
   const model = require('../src/models/circular.js').get('clockclock9');
   const renderer = sandbox.Timeform.Renderer.create(canvas, model.Settings.defaults, model,
     () => ({ width: 1080, height: 1080, displayWidth: 400, displayHeight: 400 }));
@@ -93,7 +96,8 @@ test('paused and hidden 72v actions paint the reference pose and single steps wi
     document, window: { matchMedia: () => ({ matches: false }), devicePixelRatio: 1 },
     setInterval: () => 1, clearInterval() {}, cancelAnimationFrame() {}, requestAnimationFrame: () => 1
   });
-  vm.runInContext(fs.readFileSync(require.resolve('../src/web/renderer.js'), 'utf8'), sandbox);
+  vm.runInContext(fs.readFileSync(require.resolve('../src/runtime/browser-environment.js'), 'utf8'), sandbox);
+  vm.runInContext(fs.readFileSync(require.resolve('../src/runtime/renderer.js'), 'utf8'), sandbox);
   const model = { ...Model, Drawing: { ...Model.Drawing, drawHands(ctx, geometry, clock) {
     paints++; lastPose = clock.hands.map(h => h.angle);
   } } };
@@ -128,7 +132,8 @@ test('classic 72v plays the 32-second source clip and restores the 38-second ful
     window: { matchMedia: () => ({ matches: false }), devicePixelRatio: 1 },
     setInterval: () => 1, clearInterval() {}, cancelAnimationFrame() {}
   });
-  vm.runInContext(fs.readFileSync(require.resolve('../src/web/renderer.js'), 'utf8'), sandbox);
+  vm.runInContext(fs.readFileSync(require.resolve('../src/runtime/browser-environment.js'), 'utf8'), sandbox);
+  vm.runInContext(fs.readFileSync(require.resolve('../src/runtime/renderer.js'), 'utf8'), sandbox);
   const renderer = sandbox.Timeform.Renderer.create({ style: {}, getContext: () => context, setAttribute() {} },
     model.Settings.normalize({ source: 'manual', manualTime: '09:34' }), model,
     () => ({ width: 1080, height: 1920, displayWidth: 320, displayHeight: 568 }));
@@ -161,7 +166,8 @@ test('circular demo waits for the choreography and reading hold; live time retar
       setInterval: callback => { tick = callback; return 1; }, clearInterval() {}, cancelAnimationFrame() {}, requestAnimationFrame: () => 1,
       CustomEvent: class { constructor(type, options) { this.type = type; this.detail = options.detail; } }
     });
-    vm.runInContext(fs.readFileSync(require.resolve('../src/web/renderer.js'), 'utf8'), sandbox);
+    vm.runInContext(fs.readFileSync(require.resolve('../src/runtime/browser-environment.js'), 'utf8'), sandbox);
+  vm.runInContext(fs.readFileSync(require.resolve('../src/runtime/renderer.js'), 'utf8'), sandbox);
     const model = require('../src/models/circular.js').get('amt61c');
     const settings = model.Settings.normalize({ source, manualTime: '10:10', autoDemo: true, demoInterval: 1, duration: source === 'manual' ? 6 : 120 });
     const canvas = { style: {}, getContext: () => context, setAttribute() {} };
@@ -200,7 +206,8 @@ test('remastered AMT arrays finish across live minute boundaries and wait for a 
       setInterval:callback=>{ tick=callback; return 1; },clearInterval() {},cancelAnimationFrame() {},requestAnimationFrame:()=>1,
       CustomEvent:class { constructor(type,options) { this.type=type; this.detail=options.detail; } }
     });
-    vm.runInContext(fs.readFileSync(require.resolve('../src/web/renderer.js'),'utf8'),sandbox);
+    vm.runInContext(fs.readFileSync(require.resolve('../src/runtime/browser-environment.js'), 'utf8'), sandbox);
+  vm.runInContext(fs.readFileSync(require.resolve('../src/runtime/renderer.js'),'utf8'),sandbox);
     const settings=model.Settings.normalize({ source,manualTime:'09:34',autoDemo:true,demoInterval:1,duration:120 });
     const renderer=sandbox.Timeform.Renderer.create({ style:{},getContext:()=>context,setAttribute() {} },settings,model,
       ()=>({ width:1920,height:1080,displayWidth:800,displayHeight:450 }));

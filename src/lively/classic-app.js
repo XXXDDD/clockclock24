@@ -1,6 +1,6 @@
 (function (root) {
   'use strict';
-  const { ClassicLivelyConfig: Spec, ClassicLivelyController: Controller, Config, Renderer, Time } = root.Timeform;
+  const { ClassicLivelyConfig: Spec, ClassicLivelyController: Controller, Config, Renderer, BrowserEnvironment, Time } = root.Timeform;
   const byId = id => document.getElementById(id), storageKey = 'timeform-lively-complete-v4';
   const openedAsEditor = document.body.dataset.editor === '1' || new URLSearchParams(location.search).get('settings') === '1';
   let config = Spec.normalize(JSON.parse(byId('timeform-config').textContent)), editing = false, resolution = [1920, 1080], controller;
@@ -73,7 +73,7 @@
     if (editing) { showValues(); refreshStats(); }
   }
   background(); arrange();
-  controller = Controller.create({ canvas: byId('clock'), config, Renderer, readViewport: dimensions, onChange: changed });
+  controller = Controller.create({ canvas: byId('clock'), config, Renderer, readViewport: dimensions, environment: BrowserEnvironment.create({ onAutoTime: value => controller.updateConfig({ manualTime: value }) }), onChange: changed });
   function resize() { arrange(); controller.renderer.resize(); refreshStats(); }
   function setEditing(value) {
     editing = Boolean(value); document.body.dataset.editing = String(editing);
@@ -170,7 +170,6 @@
     catch (error) { notice(error.message, true); } finally { event.target.value = ''; }
   });
   byId('resetConfig').addEventListener('click', () => { controller.updateConfig({ ...Spec.defaults, edition: config.edition }); notice('已恢复当前款式默认设置。'); });
-  document.addEventListener('timeform-auto-time', event => controller.updateConfig({ manualTime: event.detail }));
   const observer = new ResizeObserver(resize); observer.observe(area); window.addEventListener('resize', resize);
   window.addEventListener('keydown', event => { if (event.target.closest('input,select,button,a')) return; if (event.key.toLowerCase() === 's') setEditing(!editing); else if (event.key === 'Escape' && editing) setEditing(false); });
   const timer = setInterval(() => { if (editing) refreshStats(); }, 250);

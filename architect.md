@@ -1,14 +1,20 @@
 # TIMEFORM 核心架构
 
+## 跨平台公共入口
+
+当前结构和接入示例见 [跨平台架构与接入](docs/platform-architecture.md)。`src/catalog/` 拥有原作预设与参考动作，`src/core/` 拥有宿主无关的配置解析与播放会话，`src/runtime/` 拥有共享 Canvas 渲染及可替换的浏览器环境。网页调试台、网站嵌入、Lively 和 Wallpaper Engine 通过这些公共层复用同一型号实现。平台只拥有界面、存储、事件转换和打包。
+
+未来展示／下载网站可直接加载 `dist/runtime/timeform.js`，读取 `catalog.json` 并挂载独立预览；本轮只提供嵌入入口和目录，不建设或发布网站。Wallpaper Engine 已提供属性／暂停适配器和本地测试包，原生宿主验收仍待完成。旧五型号 Lively 保持既有配置契约，经典全集使用公共播放会话。
+
 ## 架构方向
 
 以网页版作为开发与调试入口。圆形、横屏和竖排是分类与导航，具体型号是设计和实现的单位。
 
 每个型号独立定义布局、字形、外观、动画及参数，不预设型号之间可以复用设计。通用层只承担稳定的基础能力，不能反过来限制型号表现。
 
-网页版产品范围以 `product.md` 的原作预设目录为准。`src/web/classic.js` 在型号注册与工作台之间建立每个预设的默认配色、几何与参考动作，同时开放原始型号的完整参数。所有恢复、URL 参数、导入、保存及渲染输入经过同一校验规则，自定义修改保留，原作默认值不被覆盖。Lively 平台继续使用自身原有配置契约。
+网页版产品范围以 `product.md` 的原作预设目录为准。`src/catalog/classic.js` 在型号注册与工作台之间建立每个预设的默认配色、几何与参考动作，同时开放原始型号的完整参数。所有恢复、URL 参数、导入、保存及渲染输入经过同一校验规则，自定义修改保留，原作默认值不被覆盖。Lively 平台继续使用自身原有配置契约。
 
-`src/web/classic-catalog.js` 独立记录完整产品目录：30 个官方产品链接对应 30 个具体版本，均已绑定实现和设计文件。构建器按类别生成型号和预设两个选择器，前后箭头仅切换当前型号的预设。原设计链接与证据说明放在预览下方折叠区。`product.md` 的清单与状态通过同一目录数据核对。
+`src/catalog/collection.js` 独立记录完整产品目录，工作台选择器 HTML 由 `src/web/classic-catalog.js` 生成：30 个官方产品链接对应 30 个具体版本，均已绑定实现和设计文件。构建器按类别生成型号和预设两个选择器，前后箭头仅切换当前型号的预设。原设计链接与证据说明放在预览下方折叠区。`product.md` 的清单与状态通过同一目录数据核对。
 
 目录和工作台选择器均按 `group` 展示，ClockClock L 归入 ClockClock 24，并以「CCL · Tidal」作为预设。`family` 保留实现归属，CCL 的实现 ID、独立几何、保存键和旧链接仍为 `clockclockl`。界面共 9 个型号分组，底层仍有 10 套型号实现及校准基准。
 
@@ -26,7 +32,7 @@
 
 桌面页面以固定窗口作为布局边界，右侧 `editor` 使用独立滚动，页面根部与主体使用 `overflow: clip`，防止焦点进入右侧深处时触发整页偏移。左侧预览位置和尺寸不随右侧滚动改变，窄屏仍使用普通的纵向布局。
 
-`src/web/classic-editions.js` 逐款登记新增 20 个版本的 ID、配色、官方视频与证据边界。`Classic.catalog` 组合大型号已校准的几何和逐款动作，配置仍按具体版本独立保存；原有模型注册表与 Lively 契约保持兼容。`edition-animation.js` 根据本款阶段/传播/速度参数生成连续运动，`edition-drawing.js` 处理材质与合作版本。无本款视频的两个版本只复用大型号默认实现并更换配色；有视频的版本先观察、量测或核对相同主体动作，再选择复用曲线或独立参数。剪辑片段不开放完整原片时长对照。每个新增版本在 `src/models/<family>/<edition>/design.md` 记录依据；Sunset Dune 的 92×42 cm 板面独立扩展外围留白。
+`src/catalog/classic-editions.js` 逐款登记新增 20 个版本的 ID、配色、官方视频与证据边界。`Classic.catalog` 组合大型号已校准的几何和逐款动作，配置仍按具体版本独立保存；原有模型注册表与 Lively 契约保持兼容。`edition-animation.js` 根据本款阶段/传播/速度参数生成连续运动，`edition-drawing.js` 处理材质与合作版本。无本款视频的两个版本只复用大型号默认实现并更换配色；有视频的版本先观察、量测或核对相同主体动作，再选择复用曲线或独立参数。剪辑片段不开放完整原片时长对照。每个新增版本在 `src/models/<family>/<edition>/design.md` 记录依据；Sunset Dune 的 92×42 cm 板面独立扩展外围留白。
 
 ## 文档边界
 
@@ -69,6 +75,9 @@
 | --- | --- |
 | `src/shared/` | 绘制、时间、配置与数学等基础工具。 |
 | `src/models/` | 型号注册、各型号设计与实现。 |
+| `src/catalog/` | 全宿主共享的原作预设、分组与动作包装。 |
+| `src/core/` | 宿主无关的配置解析、会话与播放控制。 |
+| `src/runtime/` | Canvas 渲染与可替换运行环境。 |
 | `src/web/` | 版式／型号／预设导航、原作默认值、时间与播放调试、完整自定义和配置管理。 |
 | `scripts/build.cjs` | 将源码嵌入可离线打开的网页。 |
 | 平台适配层 | 转换宿主设置与运行状态，不重复实现型号逻辑。 |
@@ -79,7 +88,7 @@
 
 ## 构建与适配
 
-30 款全集 Lively 本地测试版使用 `src/lively/classic-config.js` 组合三类 `Classic.catalog`，直接复用网页版每款的 `Settings`、`create`、`Drawing` 与 `geometry`。`classic-controller.js` 将宿主属性与暂停事件转换为共享 Renderer 输入；`classic-app.js` 提供纯壁纸及离线配置页。原有五型号平台契约继续独立保留。
+30 款全集 Lively 本地测试版使用 `src/core/presentation-config.js` 组合三类 `Classic.catalog`，直接复用公共目录每款的 `Settings`、`create`、`Drawing` 与 `geometry`。`src/lively/classic-config.js` 保留原生属性格式与旧配置迁移；`classic-controller.js` 将宿主属性与暂停事件转换为公共 Session 输入，由 Session 连接共享 Renderer；`classic-app.js` 提供纯壁纸及离线配置页。原有五型号平台契约继续独立保留。
 
 Lively 原生菜单与离线配置页均使用一个包含全部 30 款的统一下拉框，`edition` 是规范选择 ID。已撤回分级选择；网页版调试台原有分类导航保持自身实现。配置格式 v6 继续兼容 v4、v5，以其中保存的 `edition` 恢复选择，忽略旧分组字段。
 

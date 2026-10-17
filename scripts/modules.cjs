@@ -7,5 +7,5 @@ module.exports = [
   'src/models/amt120/settings.js', 'src/models/amt120/animation.js', 'src/models/amt120/drawing.js', 'src/models/amt120/model.js',
   'src/models/amt144/settings.js', 'src/models/amt144/animation.js', 'src/models/amt144/drawing.js', 'src/models/amt144/model.js',
   'src/models/amt288/settings.js', 'src/models/amt288/animation.js', 'src/models/amt288/drawing.js', 'src/models/amt288/model.js',
-  'src/models/landscape.js', 'src/web/renderer.js'
+  'src/models/landscape.js', 'src/runtime/browser-environment.js', 'src/runtime/renderer.js'
 ];

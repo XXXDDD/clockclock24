@@ -2307,31 +2307,66 @@ body[data-editing="false"]{min-width:0;background:var(--wallpaper-bg,#000);overf
   return { models, get, parse };
 });
 
-(function (root) {
+(function (root, factory) {
+  const api = factory(root);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).BrowserEnvironment = api;
+})(globalThis, function (root) {
   'use strict';
-  const { Palette, SingleClock, Time } = root.Timeform;
-  function create(canvas, config, model, readViewport) {
-    const context = canvas.getContext('2d'), surface = document.createElement('canvas'), surfaceContext = surface.getContext('2d');
-    const playback = Time.createPlayback(), source = Time.createSource();
+  // Only this boundary accesses browser services. Tests can supply another environment.
+  function create({ onAutoTime = () => {} } = {}) {
+    return {
+      createSurface: () => root.document.createElement('canvas'),
+      reducedMotion: () => root.window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+      pixelRatio: () => root.window.devicePixelRatio || 1,
+      isHidden: () => root.document.hidden,
+      requestFrame: callback => root.requestAnimationFrame(callback),
+      cancelFrame: id => root.cancelAnimationFrame(id),
+      setTimer: (callback, interval) => root.setInterval(callback, interval),
+      clearTimer: id => root.clearInterval(id),
+      onVisibilityChange(callback) {
+        root.document.addEventListener('visibilitychange', callback);
+        return () => root.document.removeEventListener('visibilitychange', callback);
+      },
+      onAutoTime
+    };
+  }
+  return { create };
+});
+
+(function (root, factory) {
+  const cjs = typeof module === 'object' && module.exports;
+  const api = factory(cjs ? { Palette: require('../shared/palette.js'), SingleClock: require('../shared/single-clock.js'),
+    Time: require('../shared/time.js'), BrowserEnvironment: require('./browser-environment.js') } : root.Timeform);
+  if (cjs) module.exports = api;
+  else (root.Timeform ||= {}).Renderer = api;
+})(globalThis, function (dependencies) {
+  'use strict';
+  const { Palette, SingleClock, Time, BrowserEnvironment } = dependencies;
+  function create(canvas, config, model, readViewport, environment = BrowserEnvironment.create()) {
+    const env = environment;
+    const context = canvas.getContext('2d'), surface = env.createSurface(), surfaceContext = surface.getContext('2d');
+    const playback = Time.createPlayback(env.readNow), source = Time.createSource(env.readDate);
     playback.setSpeed(config.playbackSpeed);
-    const instance = model.create(config, { reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches });
+    const instance = model.create(config, { reducedMotion: env.reducedMotion() });
     let settings = { ...config }, geometry, frame = 0, frames = 0, dirty = true, surfaceDirty = true, disposed = false;
     let demoAt = playback.now();
-    function request() { if (!disposed && !document.hidden && !frame) frame = requestAnimationFrame(draw); }
+    function request() { if (!disposed && !env.isHidden() && !frame) frame = env.requestFrame(draw); }
     function refresh() {
       dirty = true;
-      if (playback.paused || document.hidden) { cancelAnimationFrame(frame); frame = 0; draw(); }
+      if (playback.paused || env.isHidden()) { env.cancelFrame(frame); frame = 0; draw(); }
       else request();
     }
     function resize() {
+      if (disposed) return;
       const viewport = readViewport(); geometry = model.geometry(viewport.width, viewport.height, settings);
       const factor = Math.min(viewport.displayWidth / viewport.width, viewport.displayHeight / viewport.height);
       const width = geometry.width * factor, height = geometry.height * factor;
       Object.assign(canvas.style, { width: width + 'px', height: height + 'px', left: geometry.x * factor + 'px', top: geometry.y * factor + 'px' });
-      const dpr = Math.min(2.5, window.devicePixelRatio || 1, Math.sqrt(8000000 / Math.max(1, width * height)));
+      const dpr = Math.min(2.5, env.pixelRatio(), Math.sqrt(8000000 / Math.max(1, width * height)));
       canvas.width = surface.width = Math.max(1, Math.round(width * dpr)); canvas.height = surface.height = Math.max(1, Math.round(height * dpr));
       surfaceContext.setTransform(surface.width / geometry.boardWidth, 0, 0, surface.height / geometry.boardHeight, 0, 0);
-      cancelAnimationFrame(frame); frame = 0;
+      env.cancelFrame(frame); frame = 0;
       dirty = surfaceDirty = true; draw();
     }
     function paintSurface() {
@@ -2358,6 +2393,7 @@ body[data-editing="false"]{min-width:0;background:var(--wallpaper-bg,#000);overf
       if (!playback.paused && instance.isAnimating(now)) request();
     }
     function update(next) {
+      if (disposed) return;
       const previous = settings; settings = model.Settings.normalize(next, settings);
       playback.setSpeed(settings.playbackSpeed);
       const now = playback.now(), result = instance.update(settings, now);
@@ -2370,13 +2406,13 @@ body[data-editing="false"]{min-width:0;background:var(--wallpaper-bg,#000);overf
       refresh();
     }
     function tick() {
-      if (document.hidden || playback.paused) return;
+      if (disposed || env.isHidden() || playback.paused) return;
       const now = playback.now();
       const demoPeriod = Math.max(settings.demoInterval, model.choreographed && ['wave', 'spin'].includes(settings.motion) ? settings.duration + 2 : 0) * 1000;
       if (settings.source === 'manual' && settings.autoDemo && now - demoAt >= demoPeriod) {
         const count = Math.floor((now - demoAt) / demoPeriod); demoAt += count * demoPeriod;
         settings.manualTime = Time.textFromMinutes(Time.minutesFromText(settings.manualTime) + count);
-        document.dispatchEvent(new CustomEvent('timeform-auto-time', { detail: settings.manualTime }));
+        env.onAutoTime(settings.manualTime);
       }
       const changed = settings.source === 'live' && instance.getStage?.(now) && instance.retarget
         ? instance.retarget(source.read(settings), now) : instance.animate(source.read(settings), now);
@@ -2384,38 +2420,40 @@ body[data-editing="false"]{min-width:0;background:var(--wallpaper-bg,#000);overf
       if (dirty) request();
     }
     function setPaused(value) {
+      if (disposed) return;
       playback.setPaused(value);
-      if (playback.paused) { cancelAnimationFrame(frame); frame = 0; }
+      if (playback.paused) { env.cancelFrame(frame); frame = 0; }
       else { tick(); request(); }
       refresh();
     }
-    function replay() { const changed = instance.animate(source.read(settings), playback.now(), true); if (changed) refresh(); return changed; }
+    function replay() { if (disposed) return false; const changed = instance.animate(source.read(settings), playback.now(), true); if (changed) refresh(); return changed; }
     function playReference() {
+      if (disposed) return false;
       if (!instance.playReference) return false;
       const changed = instance.playReference(source.read(settings), playback.now());
       if (changed) refresh();
       return changed;
     }
-    function showCurrentTime() { instance.initialize(source.read(settings), playback.now()); refresh(); }
-    function step(milliseconds = 100) { playback.step(milliseconds); refresh(); }
+    function showCurrentTime() { if (!disposed) { instance.initialize(source.read(settings), playback.now()); refresh(); } }
+    function step(milliseconds = 100) { if (!disposed) { playback.step(milliseconds); refresh(); } }
     function restoreVisibility() {
-      if (document.hidden) { cancelAnimationFrame(frame); frame = 0; }
+      if (env.isHidden()) { env.cancelFrame(frame); frame = 0; }
       else { if (!playback.paused) tick(); resize(); }
     }
     instance.initialize(source.read(settings), playback.now()); resize();
-    const timer = setInterval(tick, 100);
-    document.addEventListener('visibilitychange', restoreVisibility);
+    const timer = env.setTimer(tick, 100);
+    const unsubscribe = env.onVisibilityChange(restoreVisibility);
     return {
       update, resize, replay, playReference, showCurrentTime, step, setPaused,
       getStats() {
         const now = playback.now();
         return { display: instance.state.minuteKey, geometry, frames, timeline: now, paused: playback.paused, animating: instance.isAnimating(now), stage: instance.getStage?.(now) || '', pixelWidth: canvas.width, pixelHeight: canvas.height };
       },
-      dispose() { disposed = true; cancelAnimationFrame(frame); clearInterval(timer); document.removeEventListener('visibilitychange', restoreVisibility); }
+      dispose() { if (!disposed) { disposed = true; env.cancelFrame(frame); env.clearTimer(timer); unsubscribe(); } }
     };
   }
-  root.Timeform.Renderer = { create };
-})(globalThis);
+  return { create };
+});
 
 (function (root, factory) {
   const api = factory();
@@ -2545,9 +2583,9 @@ body[data-editing="false"]{min-width:0;background:var(--wallpaper-bg,#000);overf
   else (root.Timeform ||= {}).LivelyController = api;
 })(globalThis, function (Spec) {
   'use strict';
-  function create({ canvas, config: initial, Renderer, readViewport, onChange = () => {} }) {
+  function create({ canvas, config: initial, Renderer, readViewport, environment, onChange = () => {} }) {
     let config = Spec.normalize(initial), hostPaused = false, disposed = false;
-    const start = () => Renderer.create(canvas, Spec.rendererConfig(config), Spec.rendererModel(config.model), readViewport);
+    const start = () => Renderer.create(canvas, Spec.rendererConfig(config), Spec.rendererModel(config.model), readViewport, environment);
     let renderer = start(); renderer.setPaused(config.paused);
     function updateConfig(patch) {
       if (disposed) return { ...config };
@@ -2577,7 +2615,7 @@ body[data-editing="false"]{min-width:0;background:var(--wallpaper-bg,#000);overf
 
 (function (root) {
   'use strict';
-  const { LivelyConfig: Spec, LivelyController, Renderer, Landscape, Time } = root.Timeform;
+  const { LivelyConfig: Spec, LivelyController, Renderer, BrowserEnvironment, Landscape, Time } = root.Timeform;
   const byId = id => document.getElementById(id), storageKey = 'timeform-lively-local-v3';
   const embedded = JSON.parse(byId('timeform-config').textContent);
   const openedAsEditor = document.body.dataset.editor === '1' || new URLSearchParams(location.search).get('settings') === '1';
@@ -2621,7 +2659,7 @@ body[data-editing="false"]{min-width:0;background:var(--wallpaper-bg,#000);overf
     refreshStats();
   }
   background(); arrange();
-  controller = LivelyController.create({ canvas: byId('clock'), config, Renderer, readViewport: dimensions, onChange: changed });
+  controller = LivelyController.create({ canvas: byId('clock'), config, Renderer, readViewport: dimensions, environment: BrowserEnvironment.create({ onAutoTime: value => controller.updateConfig({ manualTime: value }) }), onChange: changed });
   function resize() { arrange(); controller.renderer.resize(); refreshStats(); }
   function setEditing(value) {
     editing = Boolean(value); document.body.dataset.editing = String(editing);
@@ -2662,7 +2700,6 @@ body[data-editing="false"]{min-width:0;background:var(--wallpaper-bg,#000);overf
   const source = Time.createSource();
   function advance(delta) { controller.updateConfig({ source: 'manual', manualTime: Time.textFromMinutes(source.read(config) + delta), autoDemo: false }); }
   byId('previousMinute').addEventListener('click', () => advance(-1)); byId('nextMinute').addEventListener('click', () => advance(1));
-  document.addEventListener('timeform-auto-time', event => controller.updateConfig({ manualTime: event.detail }));
   const observer = new ResizeObserver(resize); observer.observe(area); window.addEventListener('resize', resize);
   window.addEventListener('keydown', event => { if (event.target.closest('input,select,button,a')) return; if (event.key.toLowerCase() === 's') setEditing(!editing); else if (event.key === 'Escape' && editing) setEditing(false); });
   const timer = setInterval(() => { if (editing) refreshStats(); }, 250);

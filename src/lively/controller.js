@@ -4,9 +4,9 @@
   else (root.Timeform ||= {}).LivelyController = api;
 })(globalThis, function (Spec) {
   'use strict';
-  function create({ canvas, config: initial, Renderer, readViewport, onChange = () => {} }) {
+  function create({ canvas, config: initial, Renderer, readViewport, environment, onChange = () => {} }) {
     let config = Spec.normalize(initial), hostPaused = false, disposed = false;
-    const start = () => Renderer.create(canvas, Spec.rendererConfig(config), Spec.rendererModel(config.model), readViewport);
+    const start = () => Renderer.create(canvas, Spec.rendererConfig(config), Spec.rendererModel(config.model), readViewport, environment);
     let renderer = start(); renderer.setPaused(config.paused);
     function updateConfig(patch) {
       if (disposed) return { ...config };

@@ -3,7 +3,7 @@
   const category = document.body.dataset.category;
   document.querySelectorAll('.navigation a').forEach(link => { if (link.dataset.kind === category) link.setAttribute('aria-current', 'page'); });
   if (!['landscape', 'portrait', 'circular'].includes(category)) return;
-  const { Config, Classic, Time, Renderer, Palette, PaletteOptions } = root.Timeform;
+  const { Config, Classic, Time, Renderer, BrowserEnvironment, Palette, PaletteOptions } = root.Timeform;
   const catalog = Classic.catalog(category === 'circular' ? root.Timeform.Circular : category === 'portrait' ? root.Timeform.Portrait : root.Timeform.Landscape);
   const byId = id => document.getElementById(id);
   const selectedKey = 'timeform-dev-' + category + '-model-v2';
@@ -52,7 +52,7 @@
   function createRenderer() {
     return Renderer.create(byId('clock'), settings, model, () => ({
       width: settings.canvasWidth, height: settings.canvasHeight, displayWidth: viewport.clientWidth, displayHeight: viewport.clientHeight
-    }));
+    }), BrowserEnvironment.create({ onAutoTime(value) { settings.manualTime = value; refreshValues(); persist(); refreshStats(); } }));
   }
   renderer = createRenderer();
   function persist() {
@@ -312,7 +312,6 @@
   function resize() { arrange(); renderer.resize(); refreshStats(); }
   const observer = new ResizeObserver(resize); observer.observe(stage);
   window.addEventListener('resize', resize); document.addEventListener('fullscreenchange', resize);
-  document.addEventListener('timeform-auto-time', event => { settings.manualTime = event.detail; refreshValues(); persist(); refreshStats(); });
   const statsTimer = setInterval(refreshStats, 250);
   window.addEventListener('pagehide', event => {
     if (event.persisted) return;

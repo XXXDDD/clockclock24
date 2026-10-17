@@ -1,6 +1,6 @@
 (function (root) {
   'use strict';
-  const { LivelyConfig: Spec, LivelyController, Renderer, Landscape, Time } = root.Timeform;
+  const { LivelyConfig: Spec, LivelyController, Renderer, BrowserEnvironment, Landscape, Time } = root.Timeform;
   const byId = id => document.getElementById(id), storageKey = 'timeform-lively-local-v3';
   const embedded = JSON.parse(byId('timeform-config').textContent);
   const openedAsEditor = document.body.dataset.editor === '1' || new URLSearchParams(location.search).get('settings') === '1';
@@ -44,7 +44,7 @@
     refreshStats();
   }
   background(); arrange();
-  controller = LivelyController.create({ canvas: byId('clock'), config, Renderer, readViewport: dimensions, onChange: changed });
+  controller = LivelyController.create({ canvas: byId('clock'), config, Renderer, readViewport: dimensions, environment: BrowserEnvironment.create({ onAutoTime: value => controller.updateConfig({ manualTime: value }) }), onChange: changed });
   function resize() { arrange(); controller.renderer.resize(); refreshStats(); }
   function setEditing(value) {
     editing = Boolean(value); document.body.dataset.editing = String(editing);
@@ -85,7 +85,6 @@
   const source = Time.createSource();
   function advance(delta) { controller.updateConfig({ source: 'manual', manualTime: Time.textFromMinutes(source.read(config) + delta), autoDemo: false }); }
   byId('previousMinute').addEventListener('click', () => advance(-1)); byId('nextMinute').addEventListener('click', () => advance(1));
-  document.addEventListener('timeform-auto-time', event => controller.updateConfig({ manualTime: event.detail }));
   const observer = new ResizeObserver(resize); observer.observe(area); window.addEventListener('resize', resize);
   window.addEventListener('keydown', event => { if (event.target.closest('input,select,button,a')) return; if (event.key.toLowerCase() === 's') setEditing(!editing); else if (event.key === 'Escape' && editing) setEditing(false); });
   const timer = setInterval(() => { if (editing) refreshStats(); }, 250);

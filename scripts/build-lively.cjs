@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const Spec = require('../src/lively/config.js');
 const Zip = require('../src/shared/zip.js');
-const root = path.resolve(__dirname, '..'), read = file => fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n/g, '\n');
+const root = path.resolve(__dirname, '..'), read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const modules = [...require('./modules.cjs'), 'src/shared/zip.js', 'src/lively/config.js', 'src/lively/controller.js', 'src/lively/app.js', 'src/lively/editor.js'];
 const template = read('src/lively/template.html')
   .replace('/* BUILD:STYLES */', () => read('src/lively/workbench.css') + '\n' + read('src/lively/styles.css'))
