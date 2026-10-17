@@ -54,6 +54,13 @@
     const minute = (date.getHours() * 60 + date.getMinutes() + 1439) % 1440;
     return String(Math.floor(minute / 60)).padStart(2, '0') + ':' + String(minute % 60).padStart(2, '0');
   }
+  function fullscreenGeometry(geometry, width, height) {
+    const scale = geometry.width / geometry.boardWidth;
+    const boardWidth = width / scale, boardHeight = height / scale;
+    const x = (boardWidth - geometry.boardWidth) / 2, y = (boardHeight - geometry.boardHeight) / 2;
+    return { ...geometry, x: 0, y: 0, width, height, boardWidth, boardHeight,
+      points: geometry.points.map(point => ({ ...point, x: point.x + x, y: point.y + y })) };
+  }
   function config(model, patch = {}) {
     return {
       ...model.Settings.defaults,
@@ -72,5 +79,5 @@
     preview.command('settle');
     preview.updateConfig({ source: 'live' });
   }
-  return { physicalSize, displaySize, icon, previousMinute, config, beginLive };
+  return { physicalSize, displaySize, icon, previousMinute, fullscreenGeometry, config, beginLive };
 });

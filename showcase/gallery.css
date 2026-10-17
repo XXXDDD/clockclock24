@@ -73,8 +73,8 @@ svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width:
 .artboard { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 1; transition: opacity 180ms ease, margin-top 300ms ease; }
 .artboard.switching { opacity: 0; margin-top: 5px; }
 .artboard canvas { position: absolute; filter: var(--artwork-shadow); }
-.artboard:fullscreen { position: fixed; inset: 0; width: 100% !important; height: 100% !important; max-width: none; max-height: none; margin: 0; padding: 0; transform: none; opacity: 1; background: var(--page); transition: none; cursor: zoom-out; }
-.artboard:fullscreen::backdrop { background: var(--page); }
+.artboard:fullscreen { position: fixed; inset: 0; width: 100% !important; height: 100% !important; max-width: none; max-height: none; margin: 0; padding: 0; transform: none; opacity: 1; background: var(--fullscreen-board); transition: none; cursor: zoom-out; }
+.artboard:fullscreen::backdrop { background: var(--fullscreen-board); }
 .artboard:fullscreen canvas { filter: none; }
 .clock-fullscreen .topbar, .clock-fullscreen .bottom-bar, .clock-fullscreen .model-navigation, .clock-fullscreen .swatches { visibility: hidden; pointer-events: none; }
 .swatches { position: absolute; top: calc(50% + var(--artwork-height, 0px) / 2 + 36px); left: 50%; display: flex; justify-content: center; align-items: center; gap: 1px; transform: translateX(-50%); width: max-content; max-width: min(440px, calc(100vw - 40px)); flex-wrap: wrap; }

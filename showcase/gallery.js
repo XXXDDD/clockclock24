@@ -100,6 +100,7 @@
     return { width, height, displayWidth, displayHeight };
   }
   function sizeArtwork(model = edition) {
+    artboard.style.setProperty('--fullscreen-board', model.Settings.defaults.board);
     if (document.fullscreenElement === artboard) return;
     const { width, height } = presentation.displaySize(model, stage.clientWidth, stage.clientHeight, matchMedia('(max-width: 700px)').matches);
     artboard.style.width = width + 'px';
@@ -140,6 +141,19 @@
     $('#playback').setAttribute('aria-pressed', String(paused));
     $('#playback use').setAttribute('href', paused ? '#i-play' : '#i-pause');
   }
+  function mountPreview(config) {
+    const session = Timeform.Session.create({ canvas: $('#clock'), config, readViewport: () => viewport(artboard),
+      Renderer: { create(canvas, settings, model, readViewport) {
+        const displayModel = { ...model, geometry(width, height, values) {
+          const geometry = model.geometry(width, height, values);
+          return document.fullscreenElement === artboard && model.type !== 'circular'
+            ? presentation.fullscreenGeometry(geometry, width, height) : geometry;
+        } };
+        return Timeform.Renderer.create(canvas, settings, displayModel, readViewport);
+      } }
+    });
+    return { ...session, get renderer() { return session.renderer; }, resize: () => session.renderer.resize() };
+  }
   function show(model, initial = false) {
     clearTimeout(transition);
     document.body.dataset.category = category;
@@ -148,7 +162,7 @@
       sizeArtwork(model);
       const config = presentation.config(model, { source: 'manual', manualTime: presentation.previousMinute(), paused });
       if (preview) preview.updateConfig(config);
-      else preview = Timeform.Preview.mount({ canvas: $('#clock'), config, readViewport: () => viewport(artboard) });
+      else preview = mountPreview(config);
       presentation.beginLive(preview);
       preview.resize();
       artboard.classList.remove('switching');
