@@ -69,8 +69,12 @@ npm run check
 
 ## Lively 平台
 
-本轮整理网页版。Lively 原有适配、原生自定义设置和既有 ZIP 包继续独立维护，未自动替换为网页经典款设置。平台说明见 [src/lively/README.md](src/lively/README.md)；构建与校验使用 `npm run build:lively`、`npm run check:lively`。
+本地全集测试包：[TIMEFORM-30款全集-Lively.zip](TIMEFORM-30款全集-Lively.zip)，将圆形 3 款、横屏 23 款和竖排 4 款作为一张壁纸导入。在 Lively 卡片的「自定义」中通过一个统一下拉框直接切换全部 30 款；包内 `configure.html` 使用相同选择方式，支持导入网页版单款 JSON、旧壁纸配置并导出定制 ZIP。默认 AMT144 Black，每款共用当前网页版的几何、绘制与参考动作，包含最新的指针比例和动作修正；默认使用原作配色和尺寸，也可独立启用配色、时长、几何覆盖。
 
-线上保留[壁纸配置页](https://xxxddd.github.io/clockclock24/wallpaper/configure.html)、[Lively 导入包](https://xxxddd.github.io/clockclock24/downloads/TIMEFORM-Lively.zip)和[离线 HTML](https://xxxddd.github.io/clockclock24/downloads/TIMEFORM-wallpaper.html)。壁纸仍使用原有五型号和独立设置。
+全集源码使用 `src/lively/classic-*` 独立适配，构建与校验为 `npm run build:lively:complete`、`npm run check:lively:complete`，测试为 `npm run test:lively:complete`。输出目录 `lively-complete/` 和 `dist/lively-complete/`；在线版本与本地包使用同一份源码。
 
-本地 `github-publish/` 是已有的独立 GitHub 发布副本，开发以工作区根目录的 `src/` 为准。本次只发布网页调试台：发布副本的 `npm run build`、`npm run check` 仅生成和校验网页，现有壁纸下载保持原版本，之后单独维护。GitHub Pages 从 `main` 分支根目录自动部署。
+原有五型号适配与旧包仍保留，说明见 [src/lively/README.md](src/lively/README.md)，由 `scripts/build-lively.cjs` 独立维护。当前发布的壁纸使用 30 款全集适配与统一下拉选择。
+
+线上提供[30 款壁纸配置页](https://xxxddd.github.io/clockclock24/wallpaper/configure.html)、[Lively 导入包](https://xxxddd.github.io/clockclock24/downloads/TIMEFORM-Lively.zip)和[离线 HTML](https://xxxddd.github.io/clockclock24/downloads/TIMEFORM-wallpaper.html)。ZIP 包含全部 30 款，设置由 Lively 独立保存。
+
+本地 `github-publish/` 是已有的独立 GitHub 发布副本，开发以工作区根目录的 `src/` 为准。发布副本的 `npm run build` 同时生成网页与 30 款壁纸下载，`npm run check` 校验两者；`build:lively` 与 `build:wallpaper` 均发布全集包。GitHub Pages 从 `main` 分支根目录自动部署。

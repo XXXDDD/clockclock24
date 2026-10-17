@@ -1,0 +1,15 @@
+{
+  "AppVersion": "2.2.1.0",
+  "Title": "TIMEFORM · 30 款时钟 · 本地测试版",
+  "Desc": "圆形、横屏、竖排共 30 款时钟，统一下拉选择。包含最新的长短针比例、闲置显隐及动作修正，离线运行。",
+  "Author": "TIMEFORM",
+  "Type": 1,
+  "FileName": "index.html",
+  "IsAbsolutePath": false,
+  "Thumbnail": "thumbnail.jpg",
+  "Preview": null,
+  "Arguments": "--pause-event true",
+  "Contact": "https://github.com/XXXDDD/clockclock24",
+  "License": null,
+  "Version": 6
+}

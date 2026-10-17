@@ -79,6 +79,12 @@
 
 ## 构建与适配
 
+30 款全集 Lively 本地测试版使用 `src/lively/classic-config.js` 组合三类 `Classic.catalog`，直接复用网页版每款的 `Settings`、`create`、`Drawing` 与 `geometry`。`classic-controller.js` 将宿主属性与暂停事件转换为共享 Renderer 输入；`classic-app.js` 提供纯壁纸及离线配置页。原有五型号平台契约继续独立保留。
+
+Lively 原生菜单与离线配置页均使用一个包含全部 30 款的统一下拉框，`edition` 是规范选择 ID。已撤回分级选择；网页版调试台原有分类导航保持自身实现。配置格式 v6 继续兼容 v4、v5，以其中保存的 `edition` 恢复选择，忽略旧分组字段。
+
+附加动作按适用型号标注，离线配置页只展示当前型号适用动作。配色、时长和几何通过显式覆盖开关控制；关闭时解析为当前预设自身默认值，避免宿主初始化的通用数值覆盖各款校准结果。宿主设置保存在 Lively，浏览器配置页的保存独立；定制后重新导出 ZIP 再导入。旧指针等长默认值会迁移，新配置携带 `handGeometryVersion: 1`。`scripts/build-lively-classic.cjs` 生成独立全集包；`--publish` 同步到已有的 `wallpaper/`、`dist/wallpaper/` 和 `downloads/` 入口，发布副本的默认构建和校验包含这些输出。
+
 源代码在 `src/` 中维护，根目录及 `dist/` 的网页通过构建生成，不分别手工维护时钟逻辑。
 
 新版工作台样式在 `src/web/workbench.css`，Lively 配置页的既有基础样式独立保存在 `src/lively/workbench.css`，避免网页版布局调整改变平台界面。

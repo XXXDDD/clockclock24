@@ -15,7 +15,7 @@
     "radius": 43,
     "gap": 4.3,
     "longLength": 100,
-    "shortLength": 100,
+    "shortLength": 85,
     "longWidth": 6.2,
     "shortWidth": 6.2,
     "motion": "wave",
