@@ -1,0 +1,184 @@
+{
+  "id": 7944945139907,
+  "title": "A million Times 61c (Tidal) / Tidal",
+  "handle": "a-million-times-61c-tidal",
+  "description": "<p><meta charset=\"utf-8\"><meta charset=\"utf-8\"><em>A million Times 61c (Tidal)</em> is crafted and milled from a single block of aluminium, coated in dark blue, and features shiny metal finish clock hands. The series is evocative of sunlight reflecting on the surface of water, while the cyclical and cumulative patterns shown by the clock-hands are themselves wave-like, a constant ebb and flow between reporting the time each minute. <br><br>The artwork is hand-assembled in our Stockholm studio and is part of a highly limited edition of just 10 pieces.<br><br><meta charset=\"utf-8\">The first <em>A million Times</em> installation was exhibited in 2013 at the design fairs in Dubai and Basel. Since then artworks from this series have been included in internationally significant exhibitions at the Somerset House (UK), Smithsonian Design Museum (US), Issey Miyake's museum \"21_21 Design Sight\" (JP) and many more.<br></p>\n<!---->",
+  "published_at": "2024-06-04T09:24:40+02:00",
+  "created_at": "2024-06-04T09:24:40+02:00",
+  "vendor": "Humans since 1982",
+  "type": "",
+  "tags": [
+    "A million Times",
+    "Tidal Series"
+  ],
+  "price": 12500000,
+  "price_min": 12500000,
+  "price_max": 12500000,
+  "available": true,
+  "price_varies": false,
+  "compare_at_price": null,
+  "compare_at_price_min": 0,
+  "compare_at_price_max": 0,
+  "compare_at_price_varies": false,
+  "variants": [
+    {
+      "id": 43660791709891,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": "",
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": true,
+      "name": "A million Times 61c (Tidal) / Tidal",
+      "public_title": null,
+      "options": [
+        "Default Title"
+      ],
+      "price": 12500000,
+      "weight": 65000,
+      "compare_at_price": null,
+      "inventory_management": "shopify",
+      "barcode": null,
+      "quantity_rule": {
+        "min": 1,
+        "max": null,
+        "increment": 1
+      },
+      "quantity_price_breaks": [],
+      "requires_selling_plan": false,
+      "selling_plan_allocations": []
+    }
+  ],
+  "images": [
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT61c_TIDAL_2.png?v=1745855855",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/5be7b40472647a75d5983a177a61cf50.jpg?v=1745918102",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/027_AMT61c_Tidal_1.jpg?v=1746028504",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/AmillionTimes61cTidal-7-5.jpg?v=1746028504"
+  ],
+  "featured_image": "//cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT61c_TIDAL_2.png?v=1745855855",
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ],
+  "url": "/en-int/products/a-million-times-61c-tidal",
+  "media": [
+    {
+      "alt": null,
+      "id": 34819623551171,
+      "position": 1,
+      "preview_image": {
+        "aspect_ratio": 0.995,
+        "height": 1600,
+        "width": 1592,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT61c_TIDAL_2.png?v=1745855855"
+      },
+      "aspect_ratio": 0.995,
+      "height": 1600,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT61c_TIDAL_2.png?v=1745855855",
+      "width": 1592
+    },
+    {
+      "alt": null,
+      "id": 34806027321539,
+      "position": 2,
+      "preview_image": {
+        "aspect_ratio": 1.5,
+        "height": 1280,
+        "width": 1920,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/preview_images/e8d2c29905364cd1b7f7ace8d301246e.thumbnail.0000000000.jpg?v=1718117792"
+      },
+      "aspect_ratio": 1.5,
+      "duration": 56000,
+      "media_type": "video",
+      "sources": [
+        {
+          "format": "mp4",
+          "height": 480,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/e8d2c29905364cd1b7f7ace8d301246e/e8d2c29905364cd1b7f7ace8d301246e.SD-480p-1.5Mbps-30306417.mp4",
+          "width": 720
+        },
+        {
+          "format": "mp4",
+          "height": 1080,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/e8d2c29905364cd1b7f7ace8d301246e/e8d2c29905364cd1b7f7ace8d301246e.HD-1080p-7.2Mbps-30306417.mp4",
+          "width": 1620
+        },
+        {
+          "format": "mp4",
+          "height": 720,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/e8d2c29905364cd1b7f7ace8d301246e/e8d2c29905364cd1b7f7ace8d301246e.HD-720p-4.5Mbps-30306417.mp4",
+          "width": 1080
+        },
+        {
+          "format": "m3u8",
+          "height": 1080,
+          "mime_type": "application/x-mpegURL",
+          "url": "https://cdn.shopify.com/videos/c/vp/e8d2c29905364cd1b7f7ace8d301246e/e8d2c29905364cd1b7f7ace8d301246e.m3u8",
+          "width": 1620
+        }
+      ]
+    },
+    {
+      "alt": null,
+      "id": 34735201157315,
+      "position": 3,
+      "preview_image": {
+        "aspect_ratio": 1.5,
+        "height": 1667,
+        "width": 2500,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/5be7b40472647a75d5983a177a61cf50.jpg?v=1745918102"
+      },
+      "aspect_ratio": 1.5,
+      "height": 1667,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/5be7b40472647a75d5983a177a61cf50.jpg?v=1745918102",
+      "width": 2500
+    },
+    {
+      "alt": null,
+      "id": 34787006546115,
+      "position": 4,
+      "preview_image": {
+        "aspect_ratio": 1.5,
+        "height": 1667,
+        "width": 2500,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/027_AMT61c_Tidal_1.jpg?v=1746028504"
+      },
+      "aspect_ratio": 1.5,
+      "height": 1667,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/027_AMT61c_Tidal_1.jpg?v=1746028504",
+      "width": 2500
+    },
+    {
+      "alt": null,
+      "id": 34979468443843,
+      "position": 5,
+      "preview_image": {
+        "aspect_ratio": 1.4,
+        "height": 2324,
+        "width": 3254,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/AmillionTimes61cTidal-7-5.jpg?v=1746028504"
+      },
+      "aspect_ratio": 1.4,
+      "height": 2324,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/AmillionTimes61cTidal-7-5.jpg?v=1746028504",
+      "width": 3254
+    }
+  ],
+  "requires_selling_plan": false,
+  "selling_plan_groups": []
+}

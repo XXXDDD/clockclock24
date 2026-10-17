@@ -1,0 +1,183 @@
+{
+  "id": 7957360607427,
+  "title": "ClockClock 24 / White",
+  "handle": "clockclock-24-white",
+  "description": "<p class=\"p1\"><em>ClockClock 24 – White</em> consists of a handcrafted housing of mineral composite and electronic components. It is built on proprietary technology—in both software and hardware—which a team of in-house designers, engineers, and programmers has continuously developed since its inception. The objects are carefully hand-assembled at the studio in Stockholm.<br><br><meta charset=\"utf-8\">The work was first launched in 2008 as <em>The Clock Clock </em>and exhibited at the Saatchi Gallery in London in 2010. Later, it was reissued as <em>ClockClock 24</em> in partnership with the MoMA store in New York. Today, it is represented in the permanent collections of the Vitra Design Museum in Germany, the Musée International d'Horlogerie in Switzerland, and the Nationalmuseum in Sweden, among others.<br></p>\n<!---->",
+  "published_at": "2024-06-11T17:08:36+02:00",
+  "created_at": "2024-06-11T17:08:36+02:00",
+  "vendor": "Humans since 1982",
+  "type": "",
+  "tags": [
+    "ClockClock"
+  ],
+  "price": 650000,
+  "price_min": 650000,
+  "price_max": 650000,
+  "available": true,
+  "price_varies": false,
+  "compare_at_price": null,
+  "compare_at_price_min": 0,
+  "compare_at_price_max": 0,
+  "compare_at_price_varies": false,
+  "variants": [
+    {
+      "id": 43673972932803,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": "",
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": true,
+      "name": "ClockClock 24 / White",
+      "public_title": null,
+      "options": [
+        "Default Title"
+      ],
+      "price": 650000,
+      "weight": 18000,
+      "compare_at_price": null,
+      "inventory_management": "shopify",
+      "barcode": null,
+      "quantity_rule": {
+        "min": 1,
+        "max": null,
+        "increment": 1
+      },
+      "quantity_price_breaks": [],
+      "requires_selling_plan": false,
+      "selling_plan_allocations": []
+    }
+  ],
+  "images": [
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_White_64240f4e-2f0b-47a7-a354-f81e26e3cf91.png?v=1719329257",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_BH_WHITE_TIME_waterglas_spdetail.webp?v=1718697072",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_BH_WHITE_DETAIL_FULL_RIGHT_spdetail_1.webp?v=1718119237",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24WhiteLifestyle7-5.jpg?v=1719998268"
+  ],
+  "featured_image": "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_White_64240f4e-2f0b-47a7-a354-f81e26e3cf91.png?v=1719329257",
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ],
+  "url": "/en-int/products/clockclock-24-white",
+  "media": [
+    {
+      "alt": null,
+      "id": 34913953874115,
+      "position": 1,
+      "preview_image": {
+        "aspect_ratio": 1.563,
+        "height": 1600,
+        "width": 2500,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_White_64240f4e-2f0b-47a7-a354-f81e26e3cf91.png?v=1719329257"
+      },
+      "aspect_ratio": 1.563,
+      "height": 1600,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_White_64240f4e-2f0b-47a7-a354-f81e26e3cf91.png?v=1719329257",
+      "width": 2500
+    },
+    {
+      "alt": null,
+      "id": 34828885885123,
+      "position": 2,
+      "preview_image": {
+        "aspect_ratio": 1.5,
+        "height": 1280,
+        "width": 1920,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/preview_images/6333469ba4274dd4b1f0c72d75d12ed8.thumbnail.0000000000.jpg?v=1718290315"
+      },
+      "aspect_ratio": 1.5,
+      "duration": 41000,
+      "media_type": "video",
+      "sources": [
+        {
+          "format": "mp4",
+          "height": 480,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/6333469ba4274dd4b1f0c72d75d12ed8/6333469ba4274dd4b1f0c72d75d12ed8.SD-480p-1.5Mbps-30411505.mp4",
+          "width": 720
+        },
+        {
+          "format": "mp4",
+          "height": 1080,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/6333469ba4274dd4b1f0c72d75d12ed8/6333469ba4274dd4b1f0c72d75d12ed8.HD-1080p-7.2Mbps-30411505.mp4",
+          "width": 1620
+        },
+        {
+          "format": "mp4",
+          "height": 720,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/6333469ba4274dd4b1f0c72d75d12ed8/6333469ba4274dd4b1f0c72d75d12ed8.HD-720p-4.5Mbps-30411505.mp4",
+          "width": 1080
+        },
+        {
+          "format": "m3u8",
+          "height": 1080,
+          "mime_type": "application/x-mpegURL",
+          "url": "https://cdn.shopify.com/videos/c/vp/6333469ba4274dd4b1f0c72d75d12ed8/6333469ba4274dd4b1f0c72d75d12ed8.m3u8",
+          "width": 1620
+        }
+      ]
+    },
+    {
+      "alt": null,
+      "id": 34806126117059,
+      "position": 3,
+      "preview_image": {
+        "aspect_ratio": 1.438,
+        "height": 2187,
+        "width": 3145,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_BH_WHITE_TIME_waterglas_spdetail.webp?v=1718697072"
+      },
+      "aspect_ratio": 1.438,
+      "height": 2187,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_BH_WHITE_TIME_waterglas_spdetail.webp?v=1718697072",
+      "width": 3145
+    },
+    {
+      "alt": null,
+      "id": 34806126084291,
+      "position": 4,
+      "preview_image": {
+        "aspect_ratio": 1.333,
+        "height": 3200,
+        "width": 4267,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_BH_WHITE_DETAIL_FULL_RIGHT_spdetail_1.webp?v=1718119237"
+      },
+      "aspect_ratio": 1.333,
+      "height": 3200,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_BH_WHITE_DETAIL_FULL_RIGHT_spdetail_1.webp?v=1718119237",
+      "width": 4267
+    },
+    {
+      "alt": null,
+      "id": 34979698409667,
+      "position": 5,
+      "preview_image": {
+        "aspect_ratio": 1.4,
+        "height": 2917,
+        "width": 4083,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24WhiteLifestyle7-5.jpg?v=1719998268"
+      },
+      "aspect_ratio": 1.4,
+      "height": 2917,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24WhiteLifestyle7-5.jpg?v=1719998268",
+      "width": 4083
+    }
+  ],
+  "requires_selling_plan": false,
+  "selling_plan_groups": []
+}

@@ -1,0 +1,184 @@
+{
+  "id": 15560612741503,
+  "title": "ClockClock 24 / Pinakin Neela",
+  "handle": "clockclock-24-pinakin-neela",
+  "description": "<p class=\"p1\">From Scandinavian winter to Indian spring: <em>ClockClock 24 – Pinakin Neela</em> is one of two exclusive editions, each limited to five pieces, created in collaboration with Mumbai-based Pinakin Design. Drawing inspiration from the richness of Indian culture and the vibrant spirit of Holi, this edition introduces a refined accent of cobalt blue—an homage to celebration and color—set against the serene Scandinavian snow-white case. Sterling hands complete the composition.<br><span><br>Each piece is hand assembled at our Stockholm studio and consists of an elegant housing of mineral composite and electronic components. It is built on proprietary technology—in both software and hardware—which a team of in-house designers, engineers, and programmers has continuously developed since its inception. </span><br><br><span>The concept behind the artwork was first launched in 2008 as </span><em>The Clock Clock </em><span>and exhibited at the Saatchi Gallery in London in 2010. Later, it was reissued as </span><em>ClockClock 24</em><span> in partnership with the MoMA store in New York. Today, it is represented in the permanent collections of the Vitra Design Museum in Germany, the Musée International d'Horlogerie in Switzerland, and the Nationalmuseum in Sweden, among others.</span><br></p>\n<!---->",
+  "published_at": "2026-03-10T08:59:54+01:00",
+  "created_at": "2026-02-19T07:42:18+01:00",
+  "vendor": "Humans since 1982",
+  "type": "",
+  "tags": [
+    "ClockClock",
+    "Pinakin"
+  ],
+  "price": 950000,
+  "price_min": 950000,
+  "price_max": 950000,
+  "available": true,
+  "price_varies": false,
+  "compare_at_price": null,
+  "compare_at_price_min": 0,
+  "compare_at_price_max": 0,
+  "compare_at_price_varies": false,
+  "variants": [
+    {
+      "id": 56983891902847,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": true,
+      "name": "ClockClock 24 / Pinakin Neela",
+      "public_title": null,
+      "options": [
+        "Default Title"
+      ],
+      "price": 950000,
+      "weight": 18000,
+      "compare_at_price": null,
+      "inventory_management": "shopify",
+      "barcode": null,
+      "quantity_rule": {
+        "min": 1,
+        "max": null,
+        "increment": 1
+      },
+      "quantity_price_breaks": [],
+      "requires_selling_plan": false,
+      "selling_plan_allocations": []
+    }
+  ],
+  "images": [
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Neela_blue.png?v=1771485397",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_PINAKIN_BLUE_DETAIL_1.jpg?v=1772438026",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_PINAKIN_BLUE_PERSON_1.jpg?v=1772438026",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_PINAKIN_BLUE_SNOW_CLOSE.jpg?v=1772438026"
+  ],
+  "featured_image": "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Neela_blue.png?v=1771485397",
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ],
+  "url": "/en-int/products/clockclock-24-pinakin-neela",
+  "media": [
+    {
+      "alt": null,
+      "id": 69953600291199,
+      "position": 1,
+      "preview_image": {
+        "aspect_ratio": 1.563,
+        "height": 1600,
+        "width": 2500,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Neela_blue.png?v=1771485397"
+      },
+      "aspect_ratio": 1.563,
+      "height": 1600,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Neela_blue.png?v=1771485397",
+      "width": 2500
+    },
+    {
+      "alt": null,
+      "id": 69954386952575,
+      "position": 2,
+      "preview_image": {
+        "aspect_ratio": 1.401,
+        "height": 1542,
+        "width": 2160,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/preview_images/2d4c49356f2640b482c466d136ba9eaf.thumbnail.0000000000.jpg?v=1771488895"
+      },
+      "aspect_ratio": 1.4,
+      "duration": 11040,
+      "media_type": "video",
+      "sources": [
+        {
+          "format": "mp4",
+          "height": 480,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/2d4c49356f2640b482c466d136ba9eaf/2d4c49356f2640b482c466d136ba9eaf.SD-480p-1.5Mbps-74958665.mp4",
+          "width": 672
+        },
+        {
+          "format": "mp4",
+          "height": 1080,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/2d4c49356f2640b482c466d136ba9eaf/2d4c49356f2640b482c466d136ba9eaf.HD-1080p-7.2Mbps-74958665.mp4",
+          "width": 1512
+        },
+        {
+          "format": "mp4",
+          "height": 720,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/2d4c49356f2640b482c466d136ba9eaf/2d4c49356f2640b482c466d136ba9eaf.HD-720p-4.5Mbps-74958665.mp4",
+          "width": 1008
+        },
+        {
+          "format": "m3u8",
+          "height": 1080,
+          "mime_type": "application/x-mpegURL",
+          "url": "https://cdn.shopify.com/videos/c/vp/2d4c49356f2640b482c466d136ba9eaf/2d4c49356f2640b482c466d136ba9eaf.m3u8",
+          "width": 1512
+        }
+      ]
+    },
+    {
+      "alt": null,
+      "id": 69953611071871,
+      "position": 3,
+      "preview_image": {
+        "aspect_ratio": 1.5,
+        "height": 3744,
+        "width": 5616,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_PINAKIN_BLUE_DETAIL_1.jpg?v=1772438026"
+      },
+      "aspect_ratio": 1.5,
+      "height": 3744,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_PINAKIN_BLUE_DETAIL_1.jpg?v=1772438026",
+      "width": 5616
+    },
+    {
+      "alt": null,
+      "id": 69954658173311,
+      "position": 4,
+      "preview_image": {
+        "aspect_ratio": 1.4,
+        "height": 2059,
+        "width": 2883,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_PINAKIN_BLUE_PERSON_1.jpg?v=1772438026"
+      },
+      "aspect_ratio": 1.4,
+      "height": 2059,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_PINAKIN_BLUE_PERSON_1.jpg?v=1772438026",
+      "width": 2883
+    },
+    {
+      "alt": null,
+      "id": 69954704966015,
+      "position": 5,
+      "preview_image": {
+        "aspect_ratio": 1.401,
+        "height": 968,
+        "width": 1356,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_PINAKIN_BLUE_SNOW_CLOSE.jpg?v=1772438026"
+      },
+      "aspect_ratio": 1.401,
+      "height": 968,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_PINAKIN_BLUE_SNOW_CLOSE.jpg?v=1772438026",
+      "width": 1356
+    }
+  ],
+  "requires_selling_plan": false,
+  "selling_plan_groups": []
+}

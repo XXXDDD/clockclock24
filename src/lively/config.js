@@ -3,12 +3,13 @@
   const api = factory(commonJS ? require('../models/landscape.js') : root.Timeform.Landscape,
     commonJS ? require('../shared/config.js') : root.Timeform.Config,
     commonJS ? require('../shared/palette.js') : root.Timeform.Palette,
-    commonJS ? require('../shared/hand-animation.js') : root.Timeform.HandAnimation);
+    commonJS ? require('../shared/hand-animation.js') : root.Timeform.HandAnimation,
+    commonJS ? require('../models/amt/settings.js') : root.Timeform.AMTSettings);
   if (commonJS) module.exports = api;
   else (root.Timeform ||= {}).LivelyConfig = api;
-})(globalThis, function (Landscape, Config, Palette, HandAnimation) {
+})(globalThis, function (Landscape, Config, Palette, HandAnimation, LegacySettings) {
   'use strict';
-  const base = Landscape.get('amt144').Settings.fields;
+  const base = LegacySettings.fields;
   const fields = {
     model: { type: 'select', label: '阵列型号', value: 'amt144', options: Landscape.models.map(model => [model.id, model.name + ' · ' + model.columns + ' × ' + model.rows]), group: 'model' },
     preset: { type: 'select', label: '配色方案', value: 'custom', options: [['custom', '自定义（使用下方独立颜色）'], ...Palette.presets.map(preset => [preset.id, preset.name])], group: 'palette', help: '想单独修改背景或指针颜色，请选择自定义。' },

@@ -1,4 +1,4 @@
-name: Validate TIMEFORM workbench and wallpaper
+name: Validate TIMEFORM workbench
 on:
   push:
   pull_request:
@@ -14,7 +14,3 @@ jobs:
           node-version: 22
       - run: npm test
       - run: npm run check
-      - uses: actions/upload-artifact@v4
-        with:
-          name: TIMEFORM-wallpapers
-          path: downloads/

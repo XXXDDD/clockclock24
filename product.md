@@ -1,74 +1,97 @@
 # TIMEFORM 网页时钟产品定义
 
-## 核心定位
+## 产品定位
 
-做一个可定制的动态时钟，让多个小表盘的指针共同组成时间，并在时间变化时形成有节奏的整体动画。用户可以选择圆形小组件、横屏壁纸或竖排手机壁纸，再调整尺寸和配色，让时钟融入自己的桌面和屏幕。
+以 Humans since 1982 的 ClockClock 和 A million Times 原作为依据，提供工具性的网页时钟调试台。每个型号以原作布局、配色、指针造型和参考动画作为默认预设，支持在二维预览中调整完整参数。
 
-同时提供网页版调试工作台，按时钟种类分页，用于配置参数、预览效果和验证动画。当前阶段专注调试，演示功能留作未来扩展。
+产品固定保留**圆形、横屏、竖排**三种类别。类别用于导航，型号用于组织设计、参考资料、预览和配置；动画名称与配色不再作为额外款式。
 
-以 Humans since 1982 的 ClockClock 和 A million Times 系列作为设计参考，重点借鉴表盘排列、间距、数字构成和动画编排。产品采用二维网页表达，可以发展自己的颜色、材质和动态风格。
+## 经典款收录规则
 
-## 产品形态
+- 每个收录版本必须有对应的官方产品页，实现前逐款检查该原链接及产品媒体。有本款视频时先拆解，再实现其可见动作；剪辑或缺失的首尾衔接在设计文件中标明。
+- 同型号的每个原作版本独立登记进度。White、Black、Black Sterling、Zephyr、Tidal 及合作版本均使用原作名称。无本款视频时，按 2026-10-17 的新规则沿用已实现大型号的默认动作，只调整配色，并明确标注默认动作来源；其他型号的公共宣传片不算本款视频。
+- 原作预设保持自己的默认动作与配色；同型号共享已有原作依据的动作，形态相同而节奏不同的版本合为一项，不跨型号拼接或新增动画。自定义不提供自行添加的通用旋转、平滑或立即换时模式。快捷配色和自由颜色继续开放，修改后标为「已自定义」，不登记为官方设计。
+- ClockClock 24 全部预设（含 CCL）共用「交错旋转、斜线波浪、潮汐波浪」三项参考动作，选择后保持、不轮播。交错与潮汐沿用 CCL 原片重建，斜线保留已有 CC24 编排；各预设自身的默认参考节奏不变，每项来源与重建边界保留于设计文件。
+- 型号的阵列和字形保持自身设计；可调整表盘半径、间隙、针臂长短与粗细、闲置针显示，以及画布尺寸、位置与安全留白。原作默认值始终可一键恢复。
+- 原片未覆盖的换时衔接和其他读时沿用现有重建规则，并在型号设计文件中标明证据范围，不将其包装成新的设计款式。
 
-| 形态 | 使用场景 | 核心要求 |
-| --- | --- | --- |
-| 圆形小组件 | 桌面局部、网页嵌入或独立小窗口 | 多个表盘组成圆形阵列；支持调整组件直径；在较小尺寸下仍能看清时间；适合搭配透明或纯色背景。 |
-| 横屏壁纸 | 电脑主屏、副屏和横向展示屏 | 支持横向时钟阵列和不同屏幕比例；可调整时钟大小、位置和留白，既能居中展示，也能融入桌面布局。 |
-| 竖排手机壁纸 | 手机竖屏和其他纵向屏幕 | 为竖向阅读重新组织时间数字和动画；可调整上下留白，避开系统时间、通知及底部操作区域。 |
-| 网页版调试工作台 | 开发调试、视觉调校和效果验证 | 按圆形、横屏、竖排分类设页；提供专业参数配置和实时预览，便于检查各型号的布局与动画。 |
+## 完整经典型号目录
 
-三种展示形态共享时间、配色和配置能力，但各自拥有适合其轮廓与阅读方向的布局和动画。网页版调试工作台使用相同的时钟表现与配置，调试结果可复用于对应的小组件或壁纸。
+<!-- BEGIN:CLASSIC-CATALOG -->
+当前完整清单共 **30 款**，其中 **30 款已实现、0 款待实现**。状态按具体型号与版本计算：同型号的其他颜色、针臂材质或编排不因已有一个版本完成就视为已实现。
 
-## 官方型号参考目标
+### 圆形（3 款：3 已实现／0 待实现）
 
-以下是本产品选择的参考方向，型号到使用场景的对应关系是我们的设计选择。
+| 型号 | 经典版本 | 网页状态 | 原设计 | 设计与实现 |
+| --- | --- | --- | --- | --- |
+| ClockClock 9 | White | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/clockclock-9-white) | [设计说明](src/models/clockclock9/design.md) |
+| A million Times 61c | Zephyr | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/a-million-times-61c-zephyr) | [设计说明](src/models/amt61c/design.md) |
+| A million Times 61c | Tidal | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/a-million-times-61c-tidal) | [设计说明](src/models/amt61c/tidal/design.md) |
 
-| 参考型号 | 对应目标 | 重点借鉴 |
-| --- | --- | --- |
-| [A million Times 61c Zephyr](https://www.humanssince1982.com/en-eu/products/a-million-times-61c-zephyr) | 圆形小组件 | 圆形阵列的构图、边缘表盘的组织方式，以及整体图案向时间数字收束的效果。 |
-| [ClockClock 24 Black](https://www.humanssince1982.com/en-eu/products/clockclock-24-black) | 基础横屏时钟 | 紧凑横向布局、清晰的数字轮廓和指针过渡；作为现有实现继续完善的起点。 |
-| [A million Times 72](https://www.humanssince1982.com/en-eu/products/a-million-times-72-white-1) | 更丰富的横屏壁纸 | 较大阵列的视觉密度、数字比例，以及跨表盘的整体动画。 |
-| [A million Times 72v](https://www.humanssince1982.com/en-eu/products/a-million-times-72v-white) | 竖排手机壁纸 | 纵向构图、时间数字的竖向组织，以及动画在纵向空间中的展开方式。 |
+### 横屏（23 款：23 已实现／0 待实现）
 
-横屏工作台现已接入 AMT72（12 × 6）、AMT120（15 × 8）、AMT144（18 × 8）和 AMT288（24 × 12）四种大型阵列。数字轮廓、布局和面板比例对照官方读时照片；72 的 3 × 6 字形铺满阵列，288 使用 5 × 6 宽幅字形。不同配色和材质版本作为同一布局下的外观预设。官方 [Masterpieces 系列](https://www.humanssince1982.com/en-eu/collections/masterpieces)还包含其他型号，后续可继续扩展。
+| 型号 | 经典版本 | 网页状态 | 原设计 | 设计与实现 |
+| --- | --- | --- | --- | --- |
+| ClockClock 24 | White | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/clockclock-24-white) | [设计说明](src/models/clockclock24/white/design.md) |
+| ClockClock 24 | White Sterling | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/clockclock-24-white-sterling) | [设计说明](src/models/clockclock24/white-sterling/design.md) |
+| ClockClock 24 | White Gold | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/clockclock-24-white-gold) | [设计说明](src/models/clockclock24/white-gold/design.md) |
+| ClockClock 24 | Black | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/clockclock-24-black) | [设计说明](src/models/clockclock24/design.md) |
+| ClockClock 24 | Black Sterling | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/clockclock-24-black-sterling) | [设计说明](src/models/clockclock24/black-sterling/design.md) |
+| ClockClock 24 | Black Gold | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/clockclock-24-black-gold) | [设计说明](src/models/clockclock24/black-gold/design.md) |
+| ClockClock 24 | Pinakin Neela | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/clockclock-24-pinakin-neela) | [设计说明](src/models/clockclock24/pinakin-neela/design.md) |
+| ClockClock 24 | Pinakin Hara | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/clockclock-24-pinakin-hara) | [设计说明](src/models/clockclock24/pinakin-hara/design.md) |
+| ClockClock 24 | Bjarke Ingels · Sunset Dune | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/clockclock-24-bjarke-ingels) | [设计说明](src/models/clockclock24/bjarke-ingels/design.md) |
+| ClockClock 24 | Dada Blue | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/cc24-dada-blue) | [设计说明](src/models/clockclock24/dada-blue/design.md) |
+| ClockClock 24 | Tidal · ClockClock L | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/clockclock-l-tidal) | [设计说明](src/models/clockclockl/design.md) |
+| A million Times 72 | White Sterling | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/a-million-times-72-white-sterling) | [设计说明](src/models/amt72/white-sterling/design.md) |
+| A million Times 72 | White | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/a-million-times-72-white-1) | [设计说明](src/models/amt72/white/design.md) |
+| A million Times 72 | Black Sterling | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/a-million-times-72-black-sterling) | [设计说明](src/models/amt72/black-sterling/design.md) |
+| A million Times 72 | Black | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/a-million-times-72-black) | [设计说明](src/models/amt72/design.md) |
+| A million Times 96 | Bjarke Ingels | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/a-million-times-96-bjarke-ingels) | [设计说明](src/models/amt96/design.md) |
+| A million Times 120 | Tidal | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/a-million-times-120-tidal) | [设计说明](src/models/amt120/tidal/design.md) |
+| A million Times 120 | White | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/a-million-times-120-white) | [设计说明](src/models/amt120/white/design.md) |
+| A million Times 120 | Black | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/a-million-times-120-black) | [设计说明](src/models/amt120/design.md) |
+| A million Times 144 | White | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/a-million-times-144-white) | [设计说明](src/models/amt144/white/design.md) |
+| A million Times 144 | Black | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/a-million-times-144-black) | [设计说明](src/models/amt144/design.md) |
+| A million Times 288 | White | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/a-million-times-288-white) | [设计说明](src/models/amt288/design.md) |
+| A million Times 288 | Black | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/a-million-times-288-black) | [设计说明](src/models/amt288/black/design.md) |
 
-## 自定义能力
+### 竖排（4 款：4 已实现／0 待实现）
 
-- **尺寸与位置**：提供常用尺寸和屏幕比例预设，也允许输入画布宽高；独立调整时钟直径或整体缩放、位置和边距，缩放时保持表盘为圆形。
-- **阵列型号**：选择经过设计的表盘数量和排列方式。显示尺寸与阵列型号分开设置；改变画布大小时，优先缩放和调整留白。
-- **颜色与材质**：画布背景、背景板、表盘和两根指针可独立配色；提供经典黑白及其他配色预设。材质作为可选的二维纹理表达，先保证纯色效果，再扩展石材和金属等外观。
-- **时间与动态**：跟随设备时间，支持 12／24 小时制；提供安静读时和动态展示模式，可调节动画速度与频率，并支持指定时间预览。
-- **配置保存**：实时预览修改，保存和恢复个人方案；同一方案可在对应的展示页面或壁纸入口中复用。
+| 型号 | 经典版本 | 网页状态 | 原设计 | 设计与实现 |
+| --- | --- | --- | --- | --- |
+| A million Times 72v | Tidal | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/a-million-times-72v-tidal) | [设计说明](src/models/amt72v/tidal/design.md) |
+| A million Times 72v | White | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/a-million-times-72v-white) | [设计说明](src/models/amt72v/white/design.md) |
+| A million Times 72v | Black | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/a-million-times-72v-black) | [设计说明](src/models/amt72v/black/design.md) |
+| A million Times 72v | Black Sterling | **已实现** | [官方产品页](https://www.humanssince1982.com/en-int/products/a-million-times-72v-black-sterling) | [设计说明](src/models/amt72v/design.md) |
+<!-- END:CLASSIC-CATALOG -->
 
-## 网页版调试工作台
+具体布局、字形、原片动画观察与重建边界由每个版本的设计文件维护。已有大型号的 20 个版本补齐后，继续检查 ClockClock L Tidal 与 AMT96 Bjarke Ingels 的原链接及视频并独立实现；现有 9 个型号分组、30 款均可预览。ClockClock L 归入 ClockClock 24 分组，显示为「Tidal · ClockClock L」，该分组共 11 款；保留 CCL 自身的尺寸、动作选择、原链接和设计文件。
 
-网页版当前服务于调试和精细调校，以分类页面、预览区域和专业配置面板为核心。
+ClockClock L 为 8×3 深蓝铝板和银针，可选择散相旋转、斜线列波、Tidal 波浪，默认斜线且不轮播。原片约 16.6 秒且有剪辑，本次补充拆解中心向外传播的 Tidal，保留最早的散相旋转和用户要求的斜线动作；每项 42 秒完整流程中补足的部分与斜线复用来源已注明，不开放完整时长对照。AMT96 为 12×8 Sunset Dune 洞石阵列，按约 52.2 秒完整原片重建四表盘旋转开合及 11:34→11:35，单独实现「1」的顶部笔画，开放原片对照。两款均有自身几何测量、动作记录与设计文件。
 
-- **按种类分页**：圆形、横屏、竖排各有独立页面；在对应页面内选择该类的阵列型号，显示适用的参数与预览比例。
-- **专业配置**：按布局、表盘、指针、外观、时间和动画分组，支持精确数值输入与滑块调整。可调参数覆盖画布尺寸、缩放与位置、留白、表盘直径与间距、指针长度与粗细、颜色与材质、时间格式，以及动画类型、速度和频率；参数标明单位与有效范围。
-- **调试控制**：可切换真实时间与指定时间，暂停、继续和重播动画，检查不同时间数字以及过渡过程；支持切换目标尺寸和屏幕比例，实时观察布局变化。
-- **方案复现**：保存、载入、导入和导出配置，恢复默认参数，便于重复验证同一组效果。配置保留所属种类与型号，各分类页面分别保留调试状态。
+其中 18 个新增版本各自检查并拆解产品视频；AMT72v Tidal、AMT288 Black 无对应产品视频，分别沿用 AMT72v Black Sterling、AMT288 White 的默认动作与几何，只改配色。网页将其视频入口标为「默认动作参考视频」。有视频但未覆盖完整换时的 Pinakin、Sunset Dune、AMT72 Black Sterling、AMT120 White，在各自设计文件中标明补足部分，不提供整片时长对照按钮。
 
-未来可基于调试工作台增加演示入口与展示流程；当前阶段只完成调试所需的页面和配置能力。
+## 网页组织
 
-## 视觉和动画原则
+- **类别导航**：圆形、横屏、竖排三个版式 Tab 分别提供页面，保留现有网址与型号直达链接。
+- **型号与预设**：预览旁的第一个组件先选型号，再选此型号下的预设，支持前后箭头切换。CCL 作为 ClockClock 24 的预设并保留自身尺寸，工作台共 9 个型号分组、30 个预设。
+- **实现状态**：当前目录内 30 款均已实现；后续新增设计在完成前保留状态和官方产品页。
+- **预设来源**：预览下方折叠显示原作配色、动作、默认时长、原设计和视频链接；自定义修改不覆盖原作信息。
+- **预览与调试**：桌面页面固定于窗口，左侧预览固定，右侧控制区独立滚动，滚动与聚焦右侧深处均不移动整页。右侧按顺序为时间调试、播放调试、自定义。时间提供设备／指定时间、时区、12／24 小时制、逐分钟演示与快捷前后分钟；播放提供暂停、继续、单步、重播、立即归位、速度及适用的原片对照。
+- **自定义**：依次为动作、配色、完整自定义。动作按型号共享，24 系列三项、AMT61c 两项、AMT72 三项、AMT72v 两项；其余型号各一项。相同形态的时长与速度差异不另立动作，各预设默认实现保留自身校准。选择其他动作时载入对应参考时长，配色、尺寸和指针参数不变；视频与原片对照随所选动作更新。完整时长与闲置针显示可调整，归类依据见[同型号参考动作](src/web/shared-actions.md)。配色先列出当前型号各预设已有的完整配色，24 系列包括 CCL；只修改四项颜色，保留当前动作、尺寸和指针参数。手动取色与 HEX 输入保留。相近的自加黑白、纸色、苔原、午夜方案移出列表，仅将暮色、深海、赤陶作为补充配色折叠置于配色区末尾。完整自定义收纳尺寸、位置、边距、竖排安全留白、表盘半径和间隙、指针长度和粗细。各组可独立恢复原作默认值。
+- **配置管理**：置于全部控制项最后，统一保存、导入、导出和查看 JSON。每个预设独立自动保存完整配置，旧配置和 URL 参数经过校验后保留有效自定义。修改后标记「已自定义」，可恢复整个预设或全部重置。
 
-表盘数量增加后，布局、数字字形和动画要作为一个整体设计。每种阵列都要验证表盘直径、中心间距、指针比例和边缘留白之间的关系；具体比例按型号确定。
+## 质量要求
 
-动画需要有可感知的节奏，例如同步、波浪、旋转和逐步收束。既要让单个表盘运动顺畅，也要让全部指针组合后形成清晰、协调的图案，并自然回到正确时间。
+三类页面的选择器完整收录上述 30 个经典预设，默认配色与动作保持原作依据，原设计链接可查看。自定义状态与原始预设明确区分，保存、导入、刷新及型号切换后完整恢复有效修改；重置可回到原作默认值。每个预设有独立配置标识和设计文件。
 
-日常使用优先保证读时：动态展示应定期回到清晰的时间状态，安静模式保持时间可读。较小组件与手机屏幕需要单独检查数字辨识度；大型阵列需要检查全屏观感和运行流畅度。
+时间正确、清晰可读；缩放保持板面和指针比例，正常画布下不拉伸或意外裁切。暂停、单步、重播与配置恢复稳定，各型号的动画按独立设计文件验收。
 
-二维版本可以简化立体结构和打光，也可以尝试新的视觉表达。保留官方设计中值得借鉴的构图与节奏，同时依据实际屏幕效果调整。
+10 个大型号的默认板面宽高遵循官方实物尺寸；先确定参考图的板面投影并校正到正视平面，再测量表盘直径、轴心间距与外围留白，最后将模型投回原图逐一叠合验收。各大型号独立校准。尺寸依据、投影方法、测量误差及验收数据见[经典款投影对齐与尺寸校准](src/models/geometry-reference.md)。同型号版本沿用这一基准；CC24 Sunset Dune 官方尺寸为 92×42 cm，保留轴距并增加外围板面留白，独立记录于其设计文件。
 
-## 首轮完成标准
+后续同型号经典版本优先沿用本轮校准的几何基准，再依据该版本的官方参考接入配色、针臂材质表现与动画。若参考显示尺寸或布局差异，单独登记修正。保留现有原图、投影变换、正视图、叠图与测量记录，供后续版本直接查用；实现进度仍按具体经典版本维护。
 
-三种展示形态各有一个可用的代表布局，支持尺寸、位置和颜色调整，能够保存方案并持续显示正确时间。每个布局都具备清晰的读时状态和完整的动态过渡，在目标尺寸下没有拉伸、裁切或明显卡顿。
+## 当前范围
 
-网页版调试工作台具备三个分类页面，可精确配置、实时预览、控制动画并保存和复现方案。调试配置与对应展示入口的效果保持一致。
-
-网页承担时钟运行、配置与预览。桌面及手机系统的动态壁纸接入方式按平台确定，展示布局与平台接入分别验证。
-
-## 当前开发范围
-
-横屏页支持 ClockClock 24、AMT72、AMT120、AMT144、AMT288，提供型号切换、独立配置保存、型号识别导入和统一调试控制。大阵列采用对照官方照片的二维轮廓字形与本项目的波浪编排，按模型几何等比缩放。圆形与竖排仍提供独立空页面；其代表型号和各平台壁纸适配在后续阶段接入。
+完整目录保持 30 款，现均已实现并有设计文件。新增版本先检查官方来源，再决定动作、配色与证据边界；不新增自定义款式。根目录与 `dist/` 的网页同步生成，`clockclock24.html` 保留为横屏入口别名。Lively 壁纸及既有 ZIP 发布包按单独的平台需求维护。

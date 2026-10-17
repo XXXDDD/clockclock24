@@ -1,0 +1,166 @@
+{
+  "id": 7960222761155,
+  "title": "ClockClock 24 / Black Sterling",
+  "handle": "clockclock-24-black-sterling",
+  "description": "<p class=\"product-page__content__title\"><em>ClockClock 24 – Black Sterling Hands</em> consists of a handcrafted housing of mineral composite,<span> metal-plated clock hands</span> and electronic components. It is built on proprietary technology—in both software and hardware—which a team of in-house designers, engineers, and programmers has continuously developed since its inception. The objects are carefully hand-assembled at our studio in Stockholm.<br><br><meta charset=\"utf-8\">The work was first launched in 2008 as <em>The Clock Clock </em>and exhibited at the Saatchi Gallery in London in 2010. Later, it was reissued as <em>ClockClock 24</em> in partnership with the MoMA store in New York. Today, it is represented in the permanent collections of the Vitra Design Museum in Germany, the Musée International d'Horlogerie in Switzerland, and the Nationalmuseum in Sweden, among others.<br></p>\n<!---->",
+  "published_at": "2024-06-12T12:24:53+02:00",
+  "created_at": "2024-06-12T12:24:53+02:00",
+  "vendor": "Humans since 1982",
+  "type": "",
+  "tags": [
+    "ClockClock"
+  ],
+  "price": 980000,
+  "price_min": 980000,
+  "price_max": 980000,
+  "available": true,
+  "price_varies": false,
+  "compare_at_price": null,
+  "compare_at_price_min": 0,
+  "compare_at_price_max": 0,
+  "compare_at_price_varies": false,
+  "variants": [
+    {
+      "id": 43680129089731,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": true,
+      "name": "ClockClock 24 / Black Sterling",
+      "public_title": null,
+      "options": [
+        "Default Title"
+      ],
+      "price": 980000,
+      "weight": 18000,
+      "compare_at_price": null,
+      "inventory_management": "shopify",
+      "barcode": null,
+      "quantity_rule": {
+        "min": 1,
+        "max": null,
+        "increment": 1
+      },
+      "quantity_price_breaks": [],
+      "requires_selling_plan": false,
+      "selling_plan_allocations": []
+    }
+  ],
+  "images": [
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_BlackSterling_27b7ab82-e561-4d96-837f-8af22ed63104.png?v=1718190965",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24-BlackSterlingHands_Humanssince1982_3.png?v=1718190965",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24BlackSterlingLifestyle7-5.jpg?v=1719999470"
+  ],
+  "featured_image": "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_BlackSterling_27b7ab82-e561-4d96-837f-8af22ed63104.png?v=1718190965",
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ],
+  "url": "/en-int/products/clockclock-24-black-sterling",
+  "media": [
+    {
+      "alt": null,
+      "id": 34815571394755,
+      "position": 1,
+      "preview_image": {
+        "aspect_ratio": 1.563,
+        "height": 1600,
+        "width": 2500,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_BlackSterling_27b7ab82-e561-4d96-837f-8af22ed63104.png?v=1718190965"
+      },
+      "aspect_ratio": 1.563,
+      "height": 1600,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_BlackSterling_27b7ab82-e561-4d96-837f-8af22ed63104.png?v=1718190965",
+      "width": 2500
+    },
+    {
+      "alt": null,
+      "id": 34828662341827,
+      "position": 2,
+      "preview_image": {
+        "aspect_ratio": 1.5,
+        "height": 1280,
+        "width": 1920,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/preview_images/aeddb6eb57084f4989c405c6f5fcfc72.thumbnail.0000000000.jpg?v=1718288656"
+      },
+      "aspect_ratio": 1.5,
+      "duration": 42000,
+      "media_type": "video",
+      "sources": [
+        {
+          "format": "mp4",
+          "height": 480,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/aeddb6eb57084f4989c405c6f5fcfc72/aeddb6eb57084f4989c405c6f5fcfc72.SD-480p-1.5Mbps-30410489.mp4",
+          "width": 720
+        },
+        {
+          "format": "mp4",
+          "height": 1080,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/aeddb6eb57084f4989c405c6f5fcfc72/aeddb6eb57084f4989c405c6f5fcfc72.HD-1080p-7.2Mbps-30410489.mp4",
+          "width": 1620
+        },
+        {
+          "format": "mp4",
+          "height": 720,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/aeddb6eb57084f4989c405c6f5fcfc72/aeddb6eb57084f4989c405c6f5fcfc72.HD-720p-4.5Mbps-30410489.mp4",
+          "width": 1080
+        },
+        {
+          "format": "m3u8",
+          "height": 1080,
+          "mime_type": "application/x-mpegURL",
+          "url": "https://cdn.shopify.com/videos/c/vp/aeddb6eb57084f4989c405c6f5fcfc72/aeddb6eb57084f4989c405c6f5fcfc72.m3u8",
+          "width": 1620
+        }
+      ]
+    },
+    {
+      "alt": null,
+      "id": 34815544656067,
+      "position": 3,
+      "preview_image": {
+        "aspect_ratio": 1.411,
+        "height": 1388,
+        "width": 1958,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24-BlackSterlingHands_Humanssince1982_3.png?v=1718190965"
+      },
+      "aspect_ratio": 1.411,
+      "height": 1388,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24-BlackSterlingHands_Humanssince1982_3.png?v=1718190965",
+      "width": 1958
+    },
+    {
+      "alt": null,
+      "id": 34980062888131,
+      "position": 4,
+      "preview_image": {
+        "aspect_ratio": 1.399,
+        "height": 1798,
+        "width": 2516,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24BlackSterlingLifestyle7-5.jpg?v=1719999470"
+      },
+      "aspect_ratio": 1.399,
+      "height": 1798,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24BlackSterlingLifestyle7-5.jpg?v=1719999470",
+      "width": 2516
+    }
+  ],
+  "requires_selling_plan": false,
+  "selling_plan_groups": []
+}

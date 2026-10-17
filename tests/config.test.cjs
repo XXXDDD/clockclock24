@@ -33,15 +33,18 @@ test('invalid configuration is rejected before application', () => {
   assert.equal(Model.Settings.normalize({ longLength: 80, shortLength: 100 }).shortLength, 80);
 });
 
-test('default geometry preserves original 24 points and stays inside target canvases', () => {
+test('CC24 centers 24 points on the photographed 9:4 board and fits target canvases', () => {
   const original = Model.geometry(1920, 1080, {});
-  assert.equal(original.boardWidth, 1000); assert.equal(original.boardHeight, 445); assert.equal(original.points.length, 24);
+  const pitch = 114;
+  assert.ok(Math.abs(original.boardWidth - pitch * 1010.36 / 112.16) < 1e-8); assert.equal(original.boardWidth / original.boardHeight, 9 / 4); assert.equal(original.points.length, 24);
   original.points.forEach((point, index) => {
-    assert.equal(point.x, 105 + index % 8 * 112); assert.equal(point.y, 110 + Math.floor(index / 8) * 112); assert.equal(point.i, index * 2);
+    assert.ok(Math.abs(point.x - ((original.boardWidth - 7 * pitch) / 2 + index % 8 * pitch)) < 1e-8);
+    assert.ok(Math.abs(point.y - (original.boardHeight / 2 - pitch + Math.floor(index / 8) * pitch)) < 1e-8); assert.equal(point.i, index * 2);
   });
   for (const [width, height] of [[1920, 1080], [3440, 1440], [1080, 1920], [240, 240]]) {
     for (const radius of [20, 53.2, 80]) for (const gap of [0, 5.6, 40]) for (const offset of [-100, 0, 100]) {
       const geometry = Model.geometry(width, height, { radius, gap, offsetX: offset, offsetY: offset, padding: 160, scale: 100 });
+      assert.ok(Math.abs(geometry.boardWidth / geometry.boardHeight - 9 / 4) < 1e-8);
       assert.ok(geometry.x >= -1e-8 && geometry.y >= -1e-8);
       assert.ok(geometry.x + geometry.width <= width + 1e-8 && geometry.y + geometry.height <= height + 1e-8);
       geometry.points.forEach(point => {
@@ -70,12 +73,19 @@ test('time input supports live timezone and manual midnight', () => {
   assert.equal(source.read({ source: 'manual', manualTime: '00:00' }), 0);
 });
 
-test('placeholder pages stay empty and all browser entries come from the same sources', () => {
+test('working browser entries are offline pages generated from their sources', () => {
   const root = path.resolve(__dirname, '..');
   assert.equal(fs.readFileSync(path.join(root, 'clockclock24.html'), 'utf8'), fs.readFileSync(path.join(root, 'dist/index.html'), 'utf8'));
-  for (const kind of ['circular', 'portrait']) {
+  for (const kind of ['circular']) {
     const html = fs.readFileSync(path.join(root, 'dist', kind + '.html'), 'utf8');
-    assert.match(html, /型号暂未接入/); assert.ok(!html.includes('<canvas')); assert.ok(!html.includes('const GLYPHS'));
+    assert.match(html, /<canvas/); assert.doesNotMatch(html, /型号暂未接入|<script[^>]+src=/);
+    assert.match(html, /ClockClock9Drawing/); assert.match(html, /AMT61c/);
+    assert.equal(html, fs.readFileSync(path.join(root, kind + '.html'), 'utf8'));
     assert.match(html, new RegExp('data-category="' + kind + '"'));
   }
+  const portrait = fs.readFileSync(path.join(root, 'dist/portrait.html'), 'utf8');
+  assert.equal(portrait, fs.readFileSync(path.join(root, 'portrait.html'), 'utf8'));
+  assert.match(portrait, /data-category="portrait"/);
+  assert.match(portrait, /<canvas/);
+  assert.doesNotMatch(portrait, /型号暂未接入|<script[^>]+src=/);
 });

@@ -1,0 +1,201 @@
+{
+  "id": 7953532387523,
+  "title": "A million Times 120 (Tidal) / Tidal",
+  "handle": "a-million-times-120-tidal",
+  "description": "<p><meta charset=\"utf-8\"><em>A million Times 120 (Tidal)</em> is crafted and milled from a single block of aluminium, coated in dark blue, and features shiny metal finish clock hands. The series is evocative of sunlight reflecting on the surface of water, while the cyclical and cumulative patterns shown by the clock hands are themselves wave-like, a constant ebb and flow between reporting the time each minute. <br><br>The artwork is hand-assembled in our Stockholm studio <meta charset=\"utf-8\"><span>and is part of the <em>A million Times 120 (Tidal)</em> edition, which is limited to just 10 pieces.</span> <br><br><meta charset=\"utf-8\">The first <em>A million Times </em>installation was exhibited in 2013 at the design fairs in Dubai and Basel. Since then artworks from this series have been included in internationally significant exhibitions at the Somerset House (UK), Smithsonian Design Museum (US), Issey Miyake's museum \"21_21 Design Sight\" (JP) and many more.<br></p>\n<!---->",
+  "published_at": "2024-06-07T17:05:55+02:00",
+  "created_at": "2024-06-07T17:05:55+02:00",
+  "vendor": "Humans since 1982",
+  "type": "",
+  "tags": [
+    "A million Times",
+    "Tidal Series"
+  ],
+  "price": 18300000,
+  "price_min": 18300000,
+  "price_max": 18300000,
+  "available": true,
+  "price_varies": false,
+  "compare_at_price": null,
+  "compare_at_price_min": 0,
+  "compare_at_price_max": 0,
+  "compare_at_price_varies": false,
+  "variants": [
+    {
+      "id": 43661666484419,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": true,
+      "name": "A million Times 120 (Tidal) / Tidal",
+      "public_title": null,
+      "options": [
+        "Default Title"
+      ],
+      "price": 18300000,
+      "weight": 90000,
+      "compare_at_price": null,
+      "inventory_management": "shopify",
+      "barcode": null,
+      "quantity_rule": {
+        "min": 1,
+        "max": null,
+        "increment": 1
+      },
+      "quantity_price_breaks": [],
+      "requires_selling_plan": false,
+      "selling_plan_allocations": []
+    }
+  ],
+  "images": [
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT120Tidal_PNG.png?v=1718116942",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/008_AMT120_Tidal_1.jpg?v=1719994344",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/005_AMT120_Tidal_1.jpg?v=1719994344",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/014_AMT120_Tidal.jpg?v=1719214628",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/LS_A_million_Times_120_Tidal_-_5.7.jpg?v=1719210315"
+  ],
+  "featured_image": "//cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT120Tidal_PNG.png?v=1718116942",
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ],
+  "url": "/en-int/products/a-million-times-120-tidal",
+  "media": [
+    {
+      "alt": null,
+      "id": 34805956444355,
+      "position": 1,
+      "preview_image": {
+        "aspect_ratio": 1.563,
+        "height": 1600,
+        "width": 2500,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT120Tidal_PNG.png?v=1718116942"
+      },
+      "aspect_ratio": 1.563,
+      "height": 1600,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT120Tidal_PNG.png?v=1718116942",
+      "width": 2500
+    },
+    {
+      "alt": null,
+      "id": 34901982740675,
+      "position": 2,
+      "preview_image": {
+        "aspect_ratio": 1.5,
+        "height": 1280,
+        "width": 1920,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/preview_images/17b328db26974f07b5f6bcb7d563c991.thumbnail.0000000000.jpg?v=1719212231"
+      },
+      "aspect_ratio": 1.5,
+      "duration": 53000,
+      "media_type": "video",
+      "sources": [
+        {
+          "format": "mp4",
+          "height": 480,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/17b328db26974f07b5f6bcb7d563c991/17b328db26974f07b5f6bcb7d563c991.SD-480p-1.5Mbps-30820649.mp4",
+          "width": 720
+        },
+        {
+          "format": "mp4",
+          "height": 1080,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/17b328db26974f07b5f6bcb7d563c991/17b328db26974f07b5f6bcb7d563c991.HD-1080p-7.2Mbps-30820649.mp4",
+          "width": 1620
+        },
+        {
+          "format": "mp4",
+          "height": 720,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/17b328db26974f07b5f6bcb7d563c991/17b328db26974f07b5f6bcb7d563c991.HD-720p-4.5Mbps-30820649.mp4",
+          "width": 1080
+        },
+        {
+          "format": "m3u8",
+          "height": 1080,
+          "mime_type": "application/x-mpegURL",
+          "url": "https://cdn.shopify.com/videos/c/vp/17b328db26974f07b5f6bcb7d563c991/17b328db26974f07b5f6bcb7d563c991.m3u8",
+          "width": 1620
+        }
+      ]
+    },
+    {
+      "alt": null,
+      "id": 34786767601859,
+      "position": 3,
+      "preview_image": {
+        "aspect_ratio": 1.5,
+        "height": 1667,
+        "width": 2500,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/008_AMT120_Tidal_1.jpg?v=1719994344"
+      },
+      "aspect_ratio": 1.5,
+      "height": 1667,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/008_AMT120_Tidal_1.jpg?v=1719994344",
+      "width": 2500
+    },
+    {
+      "alt": null,
+      "id": 34786767536323,
+      "position": 4,
+      "preview_image": {
+        "aspect_ratio": 1.5,
+        "height": 1667,
+        "width": 2500,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/005_AMT120_Tidal_1.jpg?v=1719994344"
+      },
+      "aspect_ratio": 1.5,
+      "height": 1667,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/005_AMT120_Tidal_1.jpg?v=1719994344",
+      "width": 2500
+    },
+    {
+      "alt": null,
+      "id": 34786767667395,
+      "position": 5,
+      "preview_image": {
+        "aspect_ratio": 1.5,
+        "height": 1667,
+        "width": 2500,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/014_AMT120_Tidal.jpg?v=1719214628"
+      },
+      "aspect_ratio": 1.5,
+      "height": 1667,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/014_AMT120_Tidal.jpg?v=1719214628",
+      "width": 2500
+    },
+    {
+      "alt": null,
+      "id": 34901708570819,
+      "position": 6,
+      "preview_image": {
+        "aspect_ratio": 1.4,
+        "height": 1500,
+        "width": 2100,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/LS_A_million_Times_120_Tidal_-_5.7.jpg?v=1719210315"
+      },
+      "aspect_ratio": 1.4,
+      "height": 1500,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/LS_A_million_Times_120_Tidal_-_5.7.jpg?v=1719210315",
+      "width": 2100
+    }
+  ],
+  "requires_selling_plan": false,
+  "selling_plan_groups": []
+}

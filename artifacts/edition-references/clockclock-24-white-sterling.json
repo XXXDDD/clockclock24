@@ -1,0 +1,183 @@
+{
+  "id": 7960437686467,
+  "title": "ClockClock 24 / White Sterling",
+  "handle": "clockclock-24-white-sterling",
+  "description": "<p class=\"product-page__content__title\"><em>ClockClock 24 – White Sterling Hands</em> consists of a handcrafted housing of mineral composite,<span> metal-plated clock hands</span> and electronic components. It is built on proprietary technology—in both software and hardware—which a team of in-house designers, engineers, and programmers has continuously developed since its inception. The objects are <meta charset=\"utf-8\">carefully hand-assembled at our studio in Stockholm.<br><br><meta charset=\"utf-8\">The work was first launched in 2008 as <em>The Clock Clock </em>and exhibited at the Saatchi Gallery in London in 2010. Later, it was reissued as <em>ClockClock 24</em> in partnership with the MoMA store in New York. Today, it is represented in the permanent collections of the Vitra Design Museum in Germany, the Musée International d'Horlogerie in Switzerland, and the Nationalmuseum in Sweden, among others.<br></p>\n<!---->",
+  "published_at": "2024-06-12T13:19:13+02:00",
+  "created_at": "2024-06-12T13:19:13+02:00",
+  "vendor": "Humans since 1982",
+  "type": "",
+  "tags": [
+    "ClockClock"
+  ],
+  "price": 930000,
+  "price_min": 930000,
+  "price_max": 930000,
+  "available": true,
+  "price_varies": false,
+  "compare_at_price": null,
+  "compare_at_price_min": 0,
+  "compare_at_price_max": 0,
+  "compare_at_price_varies": false,
+  "variants": [
+    {
+      "id": 43680513654979,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": true,
+      "name": "ClockClock 24 / White Sterling",
+      "public_title": null,
+      "options": [
+        "Default Title"
+      ],
+      "price": 930000,
+      "weight": 18000,
+      "compare_at_price": null,
+      "inventory_management": "shopify",
+      "barcode": null,
+      "quantity_rule": {
+        "min": 1,
+        "max": null,
+        "increment": 1
+      },
+      "quantity_price_breaks": [],
+      "requires_selling_plan": false,
+      "selling_plan_allocations": []
+    }
+  ],
+  "images": [
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_WhiteSterling_eca53966-8cd7-42f1-bab6-235971076511.png?v=1718699642",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/thumbnail_HS1982_WhiteSterlingHands.jpg?v=1720000006",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24-WhiteSterlingHands_Humanssince1982_4_99aa171a-643b-4527-97de-be8203678be6.png?v=1720000006",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24WhiteSTerlingLifestyle7-5.jpg?v=1719999971"
+  ],
+  "featured_image": "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_WhiteSterling_eca53966-8cd7-42f1-bab6-235971076511.png?v=1718699642",
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ],
+  "url": "/en-int/products/clockclock-24-white-sterling",
+  "media": [
+    {
+      "alt": null,
+      "id": 34856709095619,
+      "position": 1,
+      "preview_image": {
+        "aspect_ratio": 1.563,
+        "height": 1600,
+        "width": 2500,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_WhiteSterling_eca53966-8cd7-42f1-bab6-235971076511.png?v=1718699642"
+      },
+      "aspect_ratio": 1.563,
+      "height": 1600,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_WhiteSterling_eca53966-8cd7-42f1-bab6-235971076511.png?v=1718699642",
+      "width": 2500
+    },
+    {
+      "alt": null,
+      "id": 34828493521091,
+      "position": 2,
+      "preview_image": {
+        "aspect_ratio": 1.5,
+        "height": 1280,
+        "width": 1920,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/preview_images/007a5e35df7f43319b26485203d04f98.thumbnail.0000000000.jpg?v=1718287333"
+      },
+      "aspect_ratio": 1.5,
+      "duration": 42000,
+      "media_type": "video",
+      "sources": [
+        {
+          "format": "mp4",
+          "height": 480,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/007a5e35df7f43319b26485203d04f98/007a5e35df7f43319b26485203d04f98.SD-480p-1.5Mbps-30409424.mp4",
+          "width": 720
+        },
+        {
+          "format": "mp4",
+          "height": 1080,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/007a5e35df7f43319b26485203d04f98/007a5e35df7f43319b26485203d04f98.HD-1080p-7.2Mbps-30409424.mp4",
+          "width": 1620
+        },
+        {
+          "format": "mp4",
+          "height": 720,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/007a5e35df7f43319b26485203d04f98/007a5e35df7f43319b26485203d04f98.HD-720p-4.5Mbps-30409424.mp4",
+          "width": 1080
+        },
+        {
+          "format": "m3u8",
+          "height": 1080,
+          "mime_type": "application/x-mpegURL",
+          "url": "https://cdn.shopify.com/videos/c/vp/007a5e35df7f43319b26485203d04f98/007a5e35df7f43319b26485203d04f98.m3u8",
+          "width": 1620
+        }
+      ]
+    },
+    {
+      "alt": null,
+      "id": 34815691555011,
+      "position": 3,
+      "preview_image": {
+        "aspect_ratio": 1.0,
+        "height": 1080,
+        "width": 1080,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/thumbnail_HS1982_WhiteSterlingHands.jpg?v=1720000006"
+      },
+      "aspect_ratio": 1.0,
+      "height": 1080,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/thumbnail_HS1982_WhiteSterlingHands.jpg?v=1720000006",
+      "width": 1080
+    },
+    {
+      "alt": null,
+      "id": 34856713683139,
+      "position": 4,
+      "preview_image": {
+        "aspect_ratio": 1.411,
+        "height": 1388,
+        "width": 1958,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24-WhiteSterlingHands_Humanssince1982_4_99aa171a-643b-4527-97de-be8203678be6.png?v=1720000006"
+      },
+      "aspect_ratio": 1.411,
+      "height": 1388,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24-WhiteSterlingHands_Humanssince1982_4_99aa171a-643b-4527-97de-be8203678be6.png?v=1720000006",
+      "width": 1958
+    },
+    {
+      "alt": null,
+      "id": 34980277485763,
+      "position": 5,
+      "preview_image": {
+        "aspect_ratio": 1.401,
+        "height": 2368,
+        "width": 3317,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24WhiteSTerlingLifestyle7-5.jpg?v=1719999971"
+      },
+      "aspect_ratio": 1.401,
+      "height": 2368,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24WhiteSTerlingLifestyle7-5.jpg?v=1719999971",
+      "width": 3317
+    }
+  ],
+  "requires_selling_plan": false,
+  "selling_plan_groups": []
+}

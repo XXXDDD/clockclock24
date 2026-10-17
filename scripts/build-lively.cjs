@@ -6,7 +6,7 @@ const Zip = require('../src/shared/zip.js');
 const root = path.resolve(__dirname, '..'), read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const modules = [...require('./modules.cjs'), 'src/shared/zip.js', 'src/lively/config.js', 'src/lively/controller.js', 'src/lively/app.js', 'src/lively/editor.js'];
 const template = read('src/lively/template.html')
-  .replace('/* BUILD:STYLES */', () => read('src/web/workbench.css') + '\n' + read('src/lively/styles.css'))
+  .replace('/* BUILD:STYLES */', () => read('src/lively/workbench.css') + '\n' + read('src/lively/styles.css'))
   .replace('/* BUILD:CONFIG */', () => JSON.stringify(Spec.defaults))
   .replace('/* BUILD:SCRIPTS */', () => modules.map(read).join('\n').replace(/<\/script/gi, '<\\/script'));
 const files = {

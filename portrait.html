@@ -3,65 +3,2425 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f4ee">
-  <meta name="description" content="TIMEFORM 开发工作台，按种类配置与调试动态时钟。">
+  <meta name="theme-color" content="#f3f4f5">
+  <meta name="description" content="TIMEFORM 时钟调试台，选择版式、型号与预设，实时调试时间、动作、配色与指针。">
   <title>TIMEFORM · 竖排调试</title>
-  <style>:root{color-scheme:light;--paper:#f5f4ee;--ink:#313a31;--muted:#79816f;--line:#dedfd3;--accent:#526549}
-*{box-sizing:border-box}body{margin:0;min-width:320px;background:var(--paper);color:var(--ink);font:13px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}button,input,select,textarea{font:inherit;color:inherit}a{color:inherit;text-decoration:none}button,.file-button,.button-link{cursor:pointer}button{background:#fcfcf8;border:1px solid var(--line);border-radius:5px;padding:7px 11px;font-size:11px}button:hover,.file-button:hover{background:#edf0e6}button:disabled{opacity:.45;cursor:default}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid #82976c;outline-offset:3px}[hidden]{display:none!important}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-.topbar{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:28px;padding:0 38px;border-bottom:1px solid var(--line);background:#fafaf5}.brand{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:600;letter-spacing:.16em;white-space:nowrap}.brand-mark{width:24px;height:24px;border:1.3px solid var(--ink);border-radius:50%;position:relative;flex:none}.brand-mark:before,.brand-mark:after{content:"";position:absolute;width:7px;height:1px;background:var(--ink);left:11px;top:11px;transform-origin:left}.brand-mark:before{transform:rotate(-90deg)}.brand-mark:after{transform:rotate(35deg)}.dev-badge{letter-spacing:.03em;font-size:10px;font-weight:400;border:1px solid #c8d2bb;background:#eef3e6;color:#5d754a;padding:3px 8px;border-radius:4px;margin-left:5px}.navigation{display:flex;gap:6px}.navigation a{display:flex;gap:9px;align-items:center;padding:9px 15px;border-radius:5px;color:#737f66;font-size:12px}.navigation a span{font-size:9px;color:#969e8b}.navigation a[aria-current="page"]{background:#e8edde;color:#42583a}.navigation a:hover{background:#eef1e8}.top-note{font-size:10px;color:#8b9580;white-space:nowrap}.shell{max-width:1600px;padding:0 38px;margin:auto}.page-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:28px 0 25px}.eyebrow{color:#869078;font-size:10px;letter-spacing:.07em;margin-bottom:5px}h1{font-weight:500;font-size:27px;letter-spacing:-.02em;line-height:1.3;margin:0}.page-heading p{font-size:11px;color:#88927d;margin:7px 0 0}.heading-meta{font-size:11px;color:#7c896f;display:flex;gap:10px;align-items:center}.status-dot{width:5px;height:5px;border-radius:50%;background:#7c9165}.separator{color:#b3bba6}.model-badge{font-size:9px;padding:2px 7px;border:1px solid #d7ddcb;border-radius:4px;color:#7b8c68;white-space:nowrap}
-.workspace{display:grid;grid-template-columns:minmax(0,1fr) 370px;gap:23px;align-items:start}.viewer{min-width:0}.preview-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:51px;padding:0 15px;border:1px solid var(--line);border-radius:9px 9px 0 0;background:#fafaf5}.preview-title{display:flex;align-items:center;gap:12px;white-space:nowrap}.preview-title span{font-size:10px;color:#8a947e}.preview-title strong{font:11px Consolas,monospace;font-weight:400}.preview-actions{display:flex;gap:7px}.preview-actions select{background:#f4f5ed;border:1px solid var(--line);border-radius:5px;padding:5px;font-size:10px;max-width:200px}.stage{height:clamp(280px,40vw,560px);min-height:280px;background:radial-gradient(ellipse at 40% 35%,#e9eae1,#dce1d2);padding:32px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);border-top:0;overflow:hidden}.stage:fullscreen{height:100vh;width:100vw;border:0;padding:32px}#viewport{position:relative;overflow:hidden;flex:none;background:#000;border-radius:2px;box-shadow:0 18px 35px #27371b1b}#clock{display:block;position:absolute}.transport{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid var(--line);border-top:0;padding:12px 15px;border-radius:0 0 9px 9px;background:#fafaf5}.transport-main,.minute-controls{display:flex;gap:7px}.primary{background:#526549;color:#f6f8f0;border:1px solid #526549}.primary:hover{background:#43583a}.readout{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:18px 0 0;background:#eeefe5;border-radius:6px;padding:15px 17px;gap:16px}.readout div{min-width:0}.readout span{display:block;font-size:9px;color:#929b86;margin-bottom:4px}.readout strong{display:block;font:12px Consolas,"Microsoft YaHei",monospace;font-weight:400;color:#637457;white-space:nowrap}.preview-note{color:#8b9580;font-size:10px;margin:12px 0 18px;line-height:1.8}.snapshot{border:1px solid var(--line);border-radius:6px;background:#fafaf5}.snapshot summary{font-size:11px;color:#718362;cursor:pointer;padding:12px 15px}.snapshot summary span{float:right;font:9px Consolas,monospace;color:#9ba78b}.snapshot textarea{width:calc(100% - 30px);height:260px;resize:vertical;display:block;margin:0 15px 15px;border:1px solid var(--line);border-radius:4px;background:#f2f4eb;padding:12px;color:#5c6f4f;font:11px/1.7 Consolas,monospace}
-.editor{background:#fbfbf7;border:1px solid var(--line);border-radius:9px;overflow:hidden}.editor-title{display:flex;align-items:center;justify-content:space-between;padding:19px 20px 13px}.editor-title h2{margin:0;font-size:14px;font-weight:600}.editor-title p{margin:3px 0 0;font-size:10px;color:#929c84}.config-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;padding:0 20px}.config-actions button,.file-button{font-size:10px;padding:7px 3px;text-align:center;white-space:nowrap}.file-button{border:1px solid var(--line);border-radius:5px;background:#fcfcf8}.notice{font-size:10px;line-height:1.8;color:#879879;margin:10px 20px 0;min-height:36px}.notice[data-error="true"]{color:#aa4b39}.editor-scroll{max-height:calc(100vh - 270px);min-height:320px;overflow-y:auto;padding:0 20px 22px;scrollbar-width:thin}.control-section{border-top:1px solid #e3e6d9;padding-top:17px;margin-top:16px}.control-section h3{font-size:11px;font-weight:600;margin:0 0 13px;display:flex;justify-content:space-between}.control-section h3 span{font-size:9px;font-weight:400;color:#9ba38e}.presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:15px}.preset{font-size:9px;padding:7px 2px;display:flex;gap:5px;align-items:center;flex-direction:column}.preset[aria-pressed="true"]{background:#edf2e5;border-color:#95a782}.preset-swatch{width:24px;height:15px;border:1px solid #0001;border-radius:2px;position:relative}.preset-swatch:after{content:"";position:absolute;width:12px;height:2px;top:6px;left:5px;background:var(--hand)}.color-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.field{margin-bottom:13px}.field-label{display:flex;align-items:center;justify-content:space-between;font-size:10px;color:#7c896e;margin-bottom:6px;gap:6px}.field-label .bounds{font-size:8px;color:#a0aa94;white-space:nowrap}.color-inputs{border:1px solid var(--line);border-radius:4px;display:flex;gap:7px;align-items:center;padding:5px;background:#fff}.color-inputs input[type="color"]{width:25px;height:24px;padding:0;border:0;background:none;flex:none;cursor:pointer}.color-inputs input[type="text"]{width:100%;min-width:0;border:0;background:none;font:10px Consolas,monospace;text-transform:uppercase;padding:0}.field input[type="number"],.field input[type="time"],.field input[type="text"],.field select{border:1px solid var(--line);border-radius:4px;background:#fff;min-width:0;padding:6px 8px;width:100%;font-size:11px}.color-inputs input[type="text"]{border:0;padding:0;font-size:10px}.numeric-controls{display:flex;align-items:center;gap:10px}.numeric-controls input[type="range"]{flex:1;width:0;accent-color:#71855a;margin:0;min-width:35px;height:4px}.numeric-controls input[type="number"]{width:79px;flex:none;font-variant-numeric:tabular-nums}.field .check-label{display:flex;gap:7px;align-items:center;font-size:10px;color:#7c896e}.field input[type="checkbox"]{accent-color:#71855a}.field input[aria-invalid="true"]{outline:1px solid #b65e49}.field input:disabled{background:#eff0e8;color:#a1a793}.field-help{color:#a0a892;font-size:9px;line-height:1.8;margin:6px 0 0}.empty-state{display:flex;flex-direction:column;align-items:center;text-align:center;min-height:480px;justify-content:center;padding:45px 25px;border:1px dashed #cbd3bc;border-radius:10px;background:#edf0e6}.empty-symbol{font-size:62px;line-height:1;margin-bottom:23px;color:#8c9e76;font-weight:200}.portrait-symbol{font-size:75px}.empty-state h2{font-size:20px;font-weight:500;margin:0 0 12px;color:#617653}.empty-state p{font-size:12px;color:#8d9980;margin:3px 0;max-width:450px}.button-link{display:inline-block;padding:9px 17px;font-size:11px;border-radius:5px;margin-top:26px}.footer{max-width:1600px;margin:30px auto 0;padding:18px 38px 22px;color:#a1aa92;font-size:9px;display:flex;justify-content:space-between;gap:15px}
-@media(min-width:1600px){.editor-scroll{max-height:660px}}@media(max-width:1100px){.topbar,.shell{padding-left:24px;padding-right:24px}.top-note{display:none}.workspace{grid-template-columns:minmax(0,1fr) 340px;gap:16px}.preview-title span{display:none}.stage{padding:20px}.readout{gap:10px;padding:13px}.readout strong{font-size:10px}.preview-toolbar{padding:0 10px}.preview-actions select{max-width:157px}.transport{flex-wrap:wrap}}
-@media(max-width:820px){.topbar{flex-wrap:wrap;gap:10px;padding-top:15px;padding-bottom:10px}.navigation{width:100%;justify-content:space-between}.navigation a{padding:7px 9px}.page-heading{padding-top:24px}.heading-meta{display:none}.workspace{grid-template-columns:1fr}.stage{height:380px}.editor-scroll{max-height:none;min-height:0}.editor{margin-top:2px}.control-section{scroll-margin-top:10px}.editor-title{padding-top:20px}.editor-scroll{padding-bottom:23px}}
-@media(max-width:460px){.shell,.topbar{padding-left:16px;padding-right:16px}.navigation a span{font-size:8px}.navigation a{font-size:11px;gap:5px}.preview-toolbar{gap:5px;min-height:57px}.preview-title strong{font-size:9px}.preview-actions select{max-width:123px;font-size:9px}.preview-actions button{font-size:9px;padding:6px}.stage{height:290px;min-height:240px;padding:15px}.transport{padding:10px;gap:8px}.transport button{font-size:10px;padding:6px 8px}.readout{grid-template-columns:1fr 1fr;gap:15px}.page-heading p{max-width:290px}.empty-state{min-height:420px}.footer{padding-left:16px;padding-right:16px;font-size:8px}}
-.model-picker{margin:0 0 22px;padding:14px 16px;background:#fafaf5;border:1px solid var(--line);border-radius:9px;display:flex;align-items:center;gap:24px}.model-picker-label{font-size:11px;white-space:nowrap}.model-picker-label span{display:block;font-size:9px;color:#8b9580;margin-top:3px}.model-options{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;flex:1}.model-option{display:flex;flex-direction:column;align-items:flex-start;padding:11px 14px;gap:4px;text-align:left}.model-option strong{font-size:12px;font-weight:500}.model-option span{font-size:9px;color:#8b9580}.model-option[aria-pressed="true"]{background:#e8edde;border-color:#95a782;color:#42583a}.model-option[aria-pressed="true"] span{color:#6b7e5b}
-@media(max-width:820px){.model-picker{align-items:stretch;flex-direction:column;gap:11px}.model-picker-label{display:flex;justify-content:space-between}.model-picker-label span{margin:0}.model-option{padding:9px 10px}.model-option strong{font-size:10px}.model-option span{font-size:8px}}
-@media(max-width:460px){.model-options{grid-template-columns:repeat(2,minmax(0,1fr))}.model-picker{padding:12px}.model-option:last-child{grid-column:1/-1}.navigation a[data-kind="landscape"] span{display:none}}
-@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+  <style>:root{color-scheme:light;--paper:#f3f4f5;--panel:#fff;--ink:#252b31;--muted:#8a9097;--line:#e7e9eb;--accent:#236c5b;--accent-soft:#eaf3ef;--mono:"Cascadia Code",Consolas,monospace}
+*{box-sizing:border-box}html{scroll-padding-top:90px}body{margin:0;min-width:320px;background:var(--paper);color:var(--ink);font:13px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}button,input,select,textarea{font:inherit;color:inherit}a{color:inherit;text-decoration:none}button,.file-button,summary{cursor:pointer}button,.file-button{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:6px 11px;border:1px solid #dfe3e5;border-radius:6px;background:#fff;transition:background .15s,border-color .15s;font-size:11px;white-space:nowrap}button:hover,.file-button:hover{background:#f3f6f5;border-color:#bfcac5}button:disabled{opacity:.4;cursor:default}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,.file-button:focus-within{outline:2px solid var(--accent);outline-offset:3px}[hidden]{display:none!important}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.topbar{position:sticky;top:0;z-index:10;min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 32px;border-bottom:1px solid var(--line);background:#ffffffed;backdrop-filter:blur(15px)}.brand{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:650;letter-spacing:.13em;white-space:nowrap}.brand-mark{width:24px;height:24px;border:1.5px solid currentColor;border-radius:50%;position:relative;flex:none}.brand-mark:before,.brand-mark:after{content:"";position:absolute;width:7px;height:1.5px;background:currentColor;left:10.5px;top:10.5px;transform-origin:left}.brand-mark:before{transform:rotate(-90deg)}.brand-mark:after{transform:rotate(25deg)}.dev-badge{margin-left:2px;font:9px var(--mono);font-weight:400;letter-spacing:.08em;color:var(--muted);padding-left:12px;border-left:1px solid #dce0e2}.navigation{display:flex;align-items:center;gap:4px;background:#f1f3f3;padding:4px;border:1px solid #e9eceb;border-radius:9px}.navigation a{display:flex;align-items:center;justify-content:center;gap:9px;min-width:91px;padding:6px 16px;border:1px solid transparent;border-radius:6px;color:#7d858b;font-size:12px;transition:background .15s}.navigation a[aria-current="page"]{background:#fff;border-color:#e4e9e7;box-shadow:0 1px 3px #1e39220a;color:var(--accent);font-weight:650}.navigation a:hover{background:#ffffffb0}.shape-icon{width:16px;height:12px;border:1.4px solid currentColor;border-radius:2px}.shape-circular{width:13px;height:13px;border-radius:50%}.shape-portrait{width:10px;height:15px}.save-status{display:flex;gap:7px;align-items:center;font-size:10px;color:#838b88;white-space:nowrap}.save-status i,.status-dot{width:5px;height:5px;background:#4b927b;border-radius:50%;flex:none}.save-status[data-error="true"]{color:#bd5942}.save-status[data-error="true"] i{background:currentColor}.shell{max-width:1720px;margin:auto;padding:0 32px}.page-heading{display:flex;align-items:center;justify-content:space-between;padding:25px 0 23px;gap:20px}.eyebrow{color:#929aa1;font:9px var(--mono);letter-spacing:.1em;display:flex;gap:10px;align-items:center;margin-bottom:7px}.eyebrow span:last-child{font:10px "Microsoft YaHei",sans-serif;letter-spacing:.03em;color:#68746c}h1{font-size:23px;font-weight:600;letter-spacing:.04em;line-height:1.4;margin:0}.page-heading p{font-size:11px;color:#969da3;margin:5px 0 0}.workspace-caption{font:9px var(--mono);letter-spacing:.1em;color:#92999f}.workspace-caption span{padding:0 10px;color:#b9c1c4}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:24px;align-items:start}.viewer{min-width:0;position:sticky;top:88px}.preview-card{border:1px solid #dfe3e5;border-radius:10px;overflow:hidden;background:#fff;box-shadow:0 4px 18px #24372b03}.preview-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 18px;min-height:52px}.preview-title{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:550}.resolution-label{font:10px var(--mono);color:#9aa1a7;margin-left:8px;font-weight:400}.quiet-button{border:0;background:transparent;color:#7d878e;min-height:28px;padding:3px 5px;gap:5px;font-size:10px}.quiet-button span{font-size:17px;line-height:1}.stage{height:clamp(280px,calc(100dvh - 370px),720px);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:32px;background-color:#e5e8e8;background-image:radial-gradient(#cbd1d1 .65px,transparent .65px);background-size:12px 12px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.stage:fullscreen{width:100vw;height:100dvh;border:0;padding:32px}.stage-corner{position:absolute;width:14px;height:14px;border-color:#b7c1bd;pointer-events:none}.top-left{top:16px;left:16px;border-top:1px solid;border-left:1px solid}.bottom-right{bottom:16px;right:16px;border-bottom:1px solid;border-right:1px solid}#viewport{position:relative;overflow:hidden;flex:none;background:#000;box-shadow:0 12px 28px #16261e18}#clock{display:block;position:absolute}.readout{display:grid;grid-template-columns:.7fr 1.5fr 1fr 1fr;padding:17px 18px;gap:12px}.readout>div{min-width:0;border-left:1px solid var(--line);padding-left:14px}.readout>div:first-child{border-left:0;padding-left:0}.readout span{display:block;font-size:9px;color:#929a9f;margin-bottom:5px}.readout strong{display:block;font:10px/1.6 var(--mono),"Microsoft YaHei",sans-serif;color:#56636b;font-weight:400;overflow-wrap:anywhere}.readout #displayTime{font-size:18px;line-height:1.1;color:#34473e;letter-spacing:-.03em}.readout #playbackStatus{font-size:10px}.preview-description{padding:20px 3px 15px}.model-title{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.model-title h2{margin:0;font-size:17px;font-weight:550;letter-spacing:-.02em}.edition-badge,.custom-badge,.model-badge{font-size:9px;padding:2px 7px;border:1px solid #d8e2dc;border-radius:4px;background:#eef3f0;color:#5c7669;white-space:nowrap}.custom-badge{background:#fff4e7;color:#a5773e;border-color:#eedcc2}.preview-description>p{font-size:11px;color:#899198;margin:6px 0 8px;line-height:1.8}.heading-meta{display:flex;align-items:center;gap:12px;font:10px var(--mono),"Microsoft YaHei",sans-serif;color:#8c969c}.heading-meta span+span:before{content:"·";padding-right:12px;color:#b4bbbf}.editor{min-width:0;border:1px solid #e0e4e5;border-radius:10px;background:#fff;overflow:hidden}.control-section{padding:20px;border-bottom:1px solid var(--line)}.control-section:last-child{border:0}.section-heading{display:flex;align-items:center;gap:9px;margin-bottom:17px;min-height:22px}.section-number{font:9px var(--mono);color:#a2aea7;border:1px solid #dfe7e3;padding:2px 4px;border-radius:3px}.section-heading h2{margin:0;font-size:13px;font-weight:650;letter-spacing:.03em}.section-heading>.model-badge,.section-hint{margin-left:auto}.section-hint{font-size:9px;color:#9da5aa;font-weight:400}.selection-field{margin-bottom:12px}.selection-field label,.field-label{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:6px;font-size:10px;color:#69757d}.selection-field label span{font:9px var(--mono);color:#a1a9ad}select,input[type="time"],input[type="text"],input[type="number"]{width:100%;min-width:0;border:1px solid #dfe4e5;border-radius:5px;background:#fcfdfd;padding:7px 9px;min-height:34px;font-size:11px}select{cursor:pointer}select:hover,input:hover{border-color:#c4cfc9}.preset-controls{display:flex;gap:5px}.preset-controls select{flex:1;min-width:0}.preset-arrow{width:33px;flex:none;font-size:16px;padding:0}.preset-status{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:7px 0 9px}.preset-status>span{font-size:10px;color:#8c9791}.preset-status>span[data-custom="true"]{color:#ac7a35}.text-button{color:var(--accent);border:0;background:transparent;padding:2px 0;min-height:24px;font-size:10px}.text-button:hover{background:transparent;text-decoration:underline}.notice{font-size:10px;color:#89968f;background:#f4f7f5;border-radius:4px;padding:7px 9px;margin:0;line-height:1.7;overflow-wrap:anywhere}.notice[data-error="true"]{color:#b2523e;background:#fff1eb}.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px 14px}.field{min-width:0}.field-wide{grid-column:1/-1}.field-help{font-size:9px;color:#a0a7ac;line-height:1.8;margin:5px 0 0}.field-label .bounds{font:8px var(--mono);color:#a7afb3;white-space:nowrap}.numeric-controls{display:flex;align-items:center;gap:8px}.numeric-controls input[type="number"]{width:66px;flex:none;padding:5px 6px;font:10px var(--mono);text-align:right;min-height:30px}.numeric-controls input[type="range"]{width:100%;min-width:0;margin:0;accent-color:var(--accent);height:16px;cursor:pointer}.check-label{display:flex;align-items:center;gap:7px;font-size:10px;color:#6f7a81;min-height:28px;cursor:pointer}.check-label input{accent-color:var(--accent);margin:0}.field:has(input:disabled){opacity:.45}.field input[aria-invalid="true"]{border-color:#c76651;background:#fff6f2}.time-shortcuts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin-top:16px}.time-shortcuts button{font-size:9px;padding:5px 3px;min-height:30px}.transport-main{display:grid;grid-template-columns:.8fr .8fr 1.2fr 1fr;gap:5px}.transport-main button{font-size:10px;padding:6px 5px}.primary{background:var(--accent);border-color:var(--accent);color:#fff}.primary:hover{background:#1e5c4e;border-color:#1e5c4e}#fields-playback{margin-top:16px}.speed-presets{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:9px}.speed-presets button{font:10px var(--mono);min-height:27px;padding:3px 8px;color:#8b949a;background:#fafbfb}.speed-presets button[aria-pressed="true"]{color:var(--accent);background:var(--accent-soft);border-color:#c3dace}.reference-demo{margin-top:11px;width:100%;min-height:28px;background:#fafcfa;border-style:dashed;color:#788b7d;font-size:10px}.customization{padding-bottom:4px}.custom-panel{border-top:1px solid var(--line)}summary{list-style:none;display:flex;align-items:center;gap:10px;font-size:11px;user-select:none}summary::-webkit-details-marker{display:none}summary:after{content:"›";margin-left:2px;font-size:17px;line-height:1;color:#a5adae;transition:transform .15s}details[open]>summary:after{transform:rotate(90deg)}summary>span:first-child{display:flex;align-items:center;gap:9px}.custom-panel>summary{padding:14px 0;min-height:48px}.summary-hint{font-size:9px;font-weight:400;color:#a0a8ad;margin-left:auto}.panel-icon{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;font-size:17px;font-style:normal;color:#859b8f}.color-icon{width:12px;height:12px;border:1px solid #a0b2a7;border-radius:50%;background:linear-gradient(135deg,#829d8c 0 50%,#e3e9e3 50%);margin:0 2px}.panel-body{padding:1px 0 17px}.panel-body>.text-button{margin-top:11px}.palettes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:15px}.palette-chip{display:flex;flex-direction:column;gap:5px;padding:8px 3px;min-height:58px;background:#fcfdfd;font-size:9px;color:#8a9397}.palette-chip[aria-pressed="true"]{border-color:#71a18b;background:#f3f8f5;color:var(--accent)}.palette-swatch{display:flex;gap:3px}.palette-swatch i{width:11px;height:11px;border-radius:50%;border:1px solid #0000000c}.color-inputs{display:flex;align-items:center;border:1px solid #dfe4e5;border-radius:5px;background:#fcfdfd;padding:5px 7px;gap:7px}.color-inputs input[type="color"]{appearance:none;width:22px;height:22px;padding:0;border:0;border-radius:4px;overflow:hidden;background:transparent;cursor:pointer;flex:none}.color-inputs input[type="color"]::-webkit-color-swatch-wrapper{padding:0}.color-inputs input[type="color"]::-webkit-color-swatch{border:1px solid #00000015;border-radius:4px}.color-inputs input[type="text"]{font:10px var(--mono);min-height:22px;padding:2px;border:0;background:transparent}.subheading{font-size:11px;font-weight:600;margin:10px 0 13px;display:flex;align-items:center;gap:10px}.subheading:after{content:"";height:1px;flex:1;background:var(--line)}#fields-screen{margin-top:15px}#fields-geometry{margin-top:12px}.advanced-panel .subheading:not(:first-child){margin-top:25px}.reference-panel{margin-top:0;border-top:1px solid #dde2e1;color:#76857e}.reference-panel>summary{padding:11px 3px;font-size:10px}.reference-body{padding:2px 3px 12px}.classic-details{margin:4px 0 9px;display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;font-size:10px}.classic-details>div{display:flex;gap:10px}.classic-details dt{color:#9aa49e;white-space:nowrap}.classic-details dd{margin:0;color:#748079}.classic-swatch{display:inline-block;position:relative;flex:none;width:13px;height:13px;border-radius:3px;border:1px solid #00000020}.classic-swatch:after{content:"";position:absolute;left:5px;top:2px;width:1px;height:8px;background:var(--hand,#fff);transform:rotate(35deg)}.preview-note{font-size:10px;color:#8e9893;line-height:1.8;margin:9px 0}.reference-links{display:flex;gap:17px;flex-wrap:wrap;font-size:10px;color:#628473}.reference-links a:hover{text-decoration:underline}.config-help{color:#98a19e;font-size:10px;margin:-3px 0 13px;line-height:1.8}.config-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.config-actions button,.config-actions .file-button{font-size:10px}#reset{color:#9c7468}.snapshot{margin-top:15px;border:1px solid var(--line);border-radius:5px}.snapshot summary{padding:9px 10px;color:#818e87;font-size:10px}.snapshot summary>span{margin-left:auto;font:9px var(--mono);color:#a3ada8}.snapshot textarea{resize:vertical;width:calc(100% - 20px);height:300px;margin:0 10px 10px;border:1px solid #e2e8e3;border-radius:4px;padding:9px;background:#f5f8f6;color:#6b7c71;font:10px/1.7 var(--mono);outline-offset:1px}.footer{max-width:1720px;margin:27px auto 0;padding:17px 32px 22px;border-top:1px solid #e1e5e6;display:flex;justify-content:space-between;gap:15px;color:#a4acb0;font-size:9px}.model-section .section-heading{margin-bottom:18px}
+.palette-heading{display:flex;align-items:center;gap:10px;font-size:10px;color:#78867e;margin:0 0 9px}.palette-heading>span{margin-left:auto;font-size:9px;color:#a0aaa4}.manual-color-heading{margin:18px 0 11px}.palette-chip{white-space:normal;min-height:65px;justify-content:flex-start;gap:7px}.palette-name{max-width:100%;overflow-wrap:anywhere;text-align:center;line-height:1.5}.palettes{align-items:stretch;margin-bottom:9px}.palette-help{margin-top:0}.supplemental-palettes{margin-top:14px;border-top:1px solid var(--line)}.supplemental-palettes>summary{padding:12px 0 2px;font-size:10px;color:#7f8d85}.supplemental-palettes>.palettes{grid-template-columns:repeat(3,minmax(0,1fr));padding-top:13px;margin-bottom:0}
+@media(min-width:1550px){.workspace{grid-template-columns:minmax(0,1fr) 430px;gap:28px}.control-section{padding:22px 24px}.customization{padding-bottom:4px}.field-grid{gap:15px 18px}.stage{padding:42px}}
+@media(max-width:1130px){.workspace{grid-template-columns:minmax(0,1fr) 365px;gap:18px}.topbar{padding:0 24px}.shell{padding:0 24px}.control-section{padding:17px}.customization{padding-bottom:3px}.stage{padding:22px}.readout{grid-template-columns:1fr 1.7fr;padding:15px;gap:15px}.readout>div:nth-child(3){border-left:0;padding-left:0}.readout strong{font-size:10px}.viewer{top:85px}.dev-badge{display:none}.field-grid{gap:12px}.classic-details{grid-template-columns:1fr}.workspace-caption{font-size:8px}}
+@media(max-width:820px){.topbar{gap:15px;flex-wrap:wrap;padding:14px 18px 10px}.brand{font-size:13px}.save-status{font-size:9px;margin-left:auto}.navigation{order:3;width:100%;margin-top:2px}.navigation a{flex:1;min-width:0}.shell{padding:0 18px}.page-heading{padding:23px 0 18px}.page-heading h1{font-size:21px}.workspace-caption{display:none}.workspace{display:flex;flex-direction:column;gap:16px}.editor{display:contents}.viewer{position:static;order:2;width:100%}.control-section{width:100%;order:3;background:#fff;border:1px solid #e0e4e5!important;border-radius:9px}.model-section{order:1}.stage{height:clamp(270px,52vw,450px);padding:24px}body[data-category="portrait"] .stage{height:480px}body[data-category="circular"] .stage{height:clamp(300px,72vw,480px)}.readout{grid-template-columns:.8fr 1.6fr 1fr 1fr;gap:10px;padding:16px}.readout>div:nth-child(3){border-left:1px solid var(--line);padding-left:14px}.preview-description{padding-top:17px}.control-section{padding:20px}.customization{padding-bottom:4px}.section-heading h2{font-size:14px}.field-grid{gap:15px 18px}.footer{padding:16px 18px}.reference-panel>summary{padding-bottom:3px}}
+@media(max-width:440px){.shell{padding:0 12px}.topbar{padding:13px 13px 10px}.page-heading{padding:20px 1px 17px}.preview-toolbar{padding:10px 12px}.resolution-label{font-size:9px;margin-left:4px}.stage{padding:17px;height:270px}.readout{grid-template-columns:1fr 1.8fr;gap:14px;padding:15px}.readout>div:nth-child(3){border-left:0;padding-left:0}.preview-description>p{font-size:10px}.model-title h2{font-size:16px}.control-section{padding:18px}.customization{padding-bottom:4px}.field-grid{gap:13px 12px}.field-label .bounds{font-size:7px}.numeric-controls{gap:5px}.numeric-controls input[type="number"]{width:59px}.summary-hint{font-size:8px}.heading-meta{font-size:9px;gap:8px}.heading-meta span+span:before{padding-right:8px}.footer{font-size:8px;padding:14px 13px}.footer span:last-child{max-width:140px;text-align:right}}
+@media(min-width:821px){html{height:100%;overflow:clip}body{position:fixed;inset:0;height:100%;overflow:clip;display:flex;flex-direction:column}.topbar{flex-shrink:0}.shell{width:100%;flex:1;min-height:0;overflow:clip;display:flex;flex-direction:column;padding-bottom:22px}.page-heading{flex-shrink:0}.workspace{flex:1;min-height:0}.viewer{position:static;top:auto;height:100%;min-height:0;display:flex;flex-direction:column;overflow-y:auto;overscroll-behavior-y:contain;scrollbar-width:thin;scrollbar-color:#c4ccc7 transparent}.preview-card{flex:1;min-height:300px;display:flex;flex-direction:column}.preview-toolbar,.readout,.preview-description,.reference-panel{flex-shrink:0}.stage{height:auto;flex:1;min-height:160px}.editor{height:100%;min-height:0;overflow-y:auto;overscroll-behavior-y:contain;scrollbar-width:thin;scrollbar-color:#c4ccc7 transparent;scrollbar-gutter:stable}.footer{display:none}}
+@media(min-width:821px) and (max-height:720px){.page-heading{padding:13px 0}.page-heading p{display:none}.preview-description{padding:12px 3px 10px}.preview-card{min-height:260px}.stage{min-height:130px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body data-category="portrait">
   <header class="topbar">
-    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>TIMEFORM</span><span class="dev-badge">开发模式</span></a>
-    <nav class="navigation" aria-label="时钟种类">
-      <a href="index.html" data-kind="landscape">横屏<span>24 / 72 / 120 / 144 / 288</span></a>
-      <a href="circular.html" data-kind="circular">圆形<span>待整理</span></a>
-      <a href="portrait.html" data-kind="portrait">竖排<span>待整理</span></a>
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>TIMEFORM</span><span class="dev-badge">WORKBENCH</span></a>
+    <nav class="navigation" aria-label="选择形状版式">
+      <a href="circular.html" data-kind="circular"><i class="shape-icon shape-circular" aria-hidden="true"></i>圆形</a>
+      <a href="index.html" data-kind="landscape"><i class="shape-icon shape-landscape" aria-hidden="true"></i>横屏</a>
+      <a href="portrait.html" data-kind="portrait"><i class="shape-icon shape-portrait" aria-hidden="true"></i>竖排</a>
     </nav>
-    <span class="top-note">配置 · 预览 · 调试</span>
+    <span class="save-status" id="saveStatus"><i aria-hidden="true"></i>本地自动保存</span>
   </header>
-  <main class="shell"><section class="page-heading"><div><div class="eyebrow">竖排 / 型号调试</div><h1>竖排手机壁纸</h1><p>保留分类入口，后续整理独立的竖排型号。</p></div><span class="model-badge">待整理</span></section>
-<section class="empty-state"><span class="empty-symbol portrait-symbol" aria-hidden="true">▯</span><h2>竖排型号暂未接入</h2><p>参考方向为 AMT72v。竖向数字布局与整体动画将作为独立型号处理。</p><p>当前先完成 ClockClock 24 的整理与调试。</p><a class="primary button-link" href="index.html">打开横屏调试</a></section>
+  <main class="shell"><section class="page-heading">
+  <div><div class="eyebrow">CLOCK EXPLORER <span>/</span> <span id="categoryLabel">横屏</span></div><h1>时钟调试台</h1><p>选择预设，即时预览，逐项微调。</p></div>
+  <span class="workspace-caption">PREVIEW <span>＋</span> CONTROLS</span>
+</section>
+<div class="workspace">
+  <section class="viewer" aria-label="时钟实时预览">
+    <div class="preview-card">
+      <div class="preview-toolbar">
+        <div class="preview-title"><span class="status-dot" aria-hidden="true"></span>实时预览 <span id="resolutionLabel" class="resolution-label"></span></div>
+        <button id="fullscreen" class="quiet-button" type="button"><span aria-hidden="true">⛶</span> 全屏</button>
+      </div>
+      <div class="stage" id="stage"><span class="stage-corner top-left" aria-hidden="true"></span><span class="stage-corner bottom-right" aria-hidden="true"></span><div id="viewport"><canvas id="clock" role="img" aria-label="时钟预览"></canvas></div></div>
+      <div class="readout" aria-label="调试状态">
+        <div><span>显示时间</span><strong id="displayTime">--:--</strong></div>
+        <div class="playback-readout"><span>播放状态</span><strong id="playbackStatus">读取中</strong></div>
+        <div><span>板面尺寸</span><strong id="boardSize">--</strong></div>
+        <div><span>渲染尺寸</span><strong id="renderSize">--</strong></div>
+      </div>
+    </div>
+    <div class="preview-description">
+      <div class="model-title"><h2 id="modelName">ClockClock 24</h2><span id="modelEdition" class="edition-badge"></span><span id="customStatus" class="custom-badge" hidden>已自定义</span></div>
+      <p id="modelDescription"></p>
+      <div class="heading-meta"><span id="clockCount"></span><span id="handCount"></span><span id="arraySize"></span></div>
+    </div>
+    <details class="reference-panel">
+  <summary><span><i id="classicSwatch" class="classic-swatch" aria-hidden="true"></i>预设来源与参考</span><span class="summary-hint">原作信息</span></summary>
+  <div class="reference-body">
+    <dl class="classic-details"><div><dt>预设</dt><dd id="classicEdition"></dd></div><div><dt>配色</dt><dd id="classicColors"></dd></div><div><dt>动作</dt><dd id="classicMotion"></dd></div><div><dt>原始时长</dt><dd id="classicDuration"></dd></div></dl>
+    <p id="modelNote" class="preview-note"></p><div class="reference-links"><a id="modelReference" hidden target="_blank" rel="noopener noreferrer">原设计 ↗</a><a id="motionReference" hidden target="_blank" rel="noopener noreferrer">原作视频 ↗</a></div>
+  </div>
+</details>
+
+  </section>
+  <aside id="editor" class="editor" aria-label="时钟调试控制">
+    <section class="control-section model-section" aria-labelledby="selectionTitle">
+      <div class="section-heading"><span class="section-number">01</span><h2 id="selectionTitle">型号与预设</h2><span id="editorModel" class="model-badge"></span></div>
+      <div id="modelOptions"><div class="selection-field"><label for="modelSelect">型号<span>MODEL</span></label><select id="modelSelect"><option value="amt72v" data-name="AMT 72v" data-size="95 × 173 cm">AMT 72v · 95 × 173 cm</option></select></div><div class="selection-field"><label for="presetSelect">预设<span id="presetCount">PRESET</span></label><div class="preset-controls"><select id="presetSelect"><option value="amt72v-tidal" data-family="amt72v" data-edition="a-million-times-72v-tidal" data-model="amt72v-tidal">Tidal</option><option value="amt72v-white" data-family="amt72v" data-edition="a-million-times-72v-white" data-model="amt72v-white">White</option><option value="amt72v-black" data-family="amt72v" data-edition="a-million-times-72v-black" data-model="amt72v-black">Black</option><option value="amt72v" data-family="amt72v" data-edition="a-million-times-72v-black-sterling" data-model="amt72v">Black Sterling</option></select><button id="previousPreset" class="preset-arrow" type="button" aria-label="上一个预设">‹</button><button id="nextPreset" class="preset-arrow" type="button" aria-label="下一个预设">›</button></div></div></div>
+      <div class="preset-status"><span id="presetState">原始预设</span><button id="restorePreset" type="button" class="text-button">恢复此预设 ↺</button></div>
+      <p id="notice" class="notice" role="status" aria-live="polite">正在载入调试台…</p>
+    </section>
+    <section class="control-section" aria-labelledby="timeTitle">
+      <div class="section-heading"><span class="section-number">02</span><h2 id="timeTitle">时间调试</h2><span class="section-hint">输入</span></div>
+      <div id="fields-time" class="field-grid"></div>
+      <div class="time-shortcuts"><button id="previousMinute" type="button">−1 分钟</button><button id="nextMinute" type="button">+1 分钟</button><button id="referenceTime" type="button">示例时间</button><button id="liveTime" type="button">跟随设备</button></div>
+    </section>
+    <section class="control-section" aria-labelledby="playbackTitle">
+      <div class="section-heading"><span class="section-number">03</span><h2 id="playbackTitle">播放调试</h2><span class="section-hint">控制</span></div>
+      <div class="transport-main"><button id="pause" class="primary" type="button" aria-pressed="false">暂停</button><button id="replay" type="button">重播</button><button id="step" type="button" disabled>单步 100 ms</button><button id="settle" type="button">立即归位</button></div>
+      <div id="fields-playback"></div>
+      <div class="speed-presets" aria-label="快捷播放速度"><button type="button" data-speed="0.5">0.5×</button><button type="button" data-speed="1">1×</button><button type="button" data-speed="2">2×</button><button type="button" data-speed="3">3×</button></div>
+      <button id="referenceDemo" class="reference-demo" type="button" hidden>按原片节奏播放 ↗</button>
+    </section>
+    <section class="control-section customization" aria-labelledby="customizationTitle">
+      <div class="section-heading"><span class="section-number">04</span><h2 id="customizationTitle">自定义</h2><span class="section-hint">即时生效</span></div>
+      <details class="custom-panel" open>
+        <summary><span><i class="panel-icon" aria-hidden="true">↻</i>动作</span><span class="summary-hint">原作参考</span></summary>
+        <div class="panel-body"><div id="fields-motion" class="field-grid"></div><button id="resetMotion" class="text-button" type="button">恢复预设动作 ↺</button></div>
+      </details>
+      <details class="custom-panel" open>
+        <summary><span><i class="panel-icon color-icon" aria-hidden="true"></i>配色</span><span class="summary-hint">板面与指针</span></summary>
+        <div class="panel-body">
+          <div class="palette-heading">预设配色<span id="paletteCount"></span></div>
+          <div id="palettes" class="palettes" aria-label="当前型号的预设配色"></div>
+          <p class="field-help palette-help">只应用颜色，保留当前动作、尺寸与指针参数。</p>
+          <div class="palette-heading manual-color-heading">手动调色</div>
+          <div id="fields-colors" class="field-grid"></div>
+          <button id="resetColors" class="text-button" type="button">恢复当前预设配色 ↺</button>
+          <details id="extraPalettes" class="supplemental-palettes">
+            <summary><span>补充配色</span><span id="extraPaletteCount" class="summary-hint"></span></summary>
+            <div id="supplementalPalettes" class="palettes" aria-label="补充配色"></div>
+          </details>
+        </div>
+      </details>
+      <details id="fullCustomization" class="custom-panel advanced-panel">
+        <summary><span><i class="panel-icon" aria-hidden="true">⚙</i>完整自定义</span><span class="summary-hint">尺寸、位置、指针</span></summary>
+        <div class="panel-body">
+          <h3 class="subheading">画布与位置</h3>
+          <label class="field-label" for="previewPreset">画布尺寸预设</label><select id="previewPreset"><option value="1080x1920">1080 × 1920 · 9:16</option>
+<option value="1080x2340">1080 × 2340 · 6:13</option>
+<option value="1170x2532">1170 × 2532 · 手机竖屏</option>
+<option value="1440x3200">1440 × 3200 · 9:20</option>
+<option value="950x1730">950 × 1730 · 原作比例</option>
+<option value="1920x1080">1920 × 1080 · 横向画布</option>
+<option value="custom">自定义尺寸</option></select>
+          <div id="fields-screen" class="field-grid"></div><p class="field-help">位置按剩余留白计算，±100% 对齐画布两侧。</p>
+          <h3 class="subheading">表盘与指针</h3><div id="fields-geometry" class="field-grid"></div><p id="geometryHelp" class="field-help"></p>
+          <button id="resetGeometry" class="text-button" type="button">恢复尺寸与指针参数 ↺</button>
+        </div>
+      </details>
+    </section>
+    <section class="control-section config-section" aria-labelledby="configTitle">
+      <div class="section-heading"><span class="section-number">05</span><h2 id="configTitle">配置管理</h2><span class="section-hint">本地 · JSON</span></div>
+      <p class="config-help">修改自动保存在当前浏览器，导出后可随时恢复。</p>
+      <div class="config-actions"><button id="save" type="button">保存配置</button><button id="exportConfig" type="button">导出 JSON</button><label class="file-button" for="importConfig">导入 JSON</label><input id="importConfig" type="file" accept=".json,application/json" class="sr-only"><button id="reset" type="button">全部重置</button></div>
+      <details class="snapshot"><summary>查看当前配置 <span>JSON</span></summary><textarea id="configSnapshot" readonly aria-label="当前配置 JSON" spellcheck="false"></textarea></details>
+    </section>
+  </aside>
+</div>
 </main>
-  <footer class="footer"><span>TIMEFORM 开发工作台</span><span>网页版先行 · 型号分别设计</span></footer>
-  <script>(function (root) {
+  <footer class="footer"><span>TIMEFORM / 时钟调试台</span><span>原作参考 Humans since 1982</span></footer>
+  <script>(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).Math = api;
+})(globalThis, function () {
+  'use strict';
+  const TAU = Math.PI * 2;
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const wrap = value => ((value % TAU) + TAU) % TAU;
+  const normalizeMinutes = value => ((value % 1440) + 1440) % 1440;
+  const smooth = value => value * value * (3 - 2 * value);
+  const fadeEase = value => value * value * value * (value * (value * 6 - 15) + 10);
+  function tween(now, start, end, from, to) {
+    const progress = end <= start ? Number(now >= end) : clamp((now - start) / (end - start), 0, 1);
+    return from + (to - from) * fadeEase(progress);
+  }
+  return { TAU, clamp, wrap, normalizeMinutes, smooth, tween };
+});
+
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).Palette = api;
+})(globalThis, function () {
+  'use strict';
+  const presets = [
+    { id: 'classic-black', name: '经典黑', background: '#000000', board: '#111213', long: '#f9faf7', short: '#eef0ec' },
+    { id: 'classic-white', name: '经典白', background: '#e9e6de', board: '#f6f4ef', long: '#50534f', short: '#757873' },
+    { id: 'moss', name: '苔原', background: '#171e19', board: '#3d493f', long: '#f3f1e7', short: '#bfcdb0' },
+    { id: 'paper', name: '纸与墨', background: '#d3d0c7', board: '#e9e6de', long: '#2a312b', short: '#858775' },
+    { id: 'dusk', name: '暮色', background: '#17151e', board: '#393746', long: '#cecce6', short: '#e8a991' },
+    { id: 'ocean', name: '深海', background: '#0a1b20', board: '#21444c', long: '#e7e9dd', short: '#91c1c6' },
+    { id: 'clay', name: '赤陶', background: '#301c19', board: '#a95441', long: '#f6ecdc', short: '#e8bd90' },
+    { id: 'midnight', name: '午夜', background: '#080b09', board: '#232624', long: '#dfc797', short: '#f1efe2' }
+  ];
+  const fields = {
+    background: { type: 'color', label: '画布背景', value: '#000000', group: 'colors' },
+    board: { type: 'color', label: '背景板', value: '#111213', group: 'colors' },
+    long: { type: 'color', label: '长针', value: '#f9faf7', group: 'colors' },
+    short: { type: 'color', label: '短针', value: '#eef0ec', group: 'colors' }
+  };
+  const colors = config => Object.fromEntries(['background', 'board', 'long', 'short'].map(key => [key, config[key]]));
+  const material = config => config.board === '#111213' ? 'black' : config.board === '#f6f4ef' ? 'white' : null;
+  function tint(hex, amount) {
+    const value = parseInt(hex.slice(1), 16);
+    return '#' + [value >> 16, (value >> 8) & 255, value & 255].map(channel =>
+      Math.round(channel + (amount > 0 ? 255 - channel : channel) * amount).toString(16).padStart(2, '0')).join('');
+  }
+  function roundRect(context, x, y, width, height, radius) {
+    context.beginPath();
+    if (typeof context.roundRect === 'function') { context.roundRect(x, y, width, height, radius); return; }
+    context.moveTo(x + radius, y); context.lineTo(x + width - radius, y);
+    context.quadraticCurveTo(x + width, y, x + width, y + radius);
+    context.lineTo(x + width, y + height - radius);
+    context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    context.lineTo(x + radius, y + height);
+    context.quadraticCurveTo(x, y + height, x, y + height - radius);
+    context.lineTo(x, y + radius); context.quadraticCurveTo(x, y, x + radius, y); context.closePath();
+  }
+  function drawBoard(context, width, height, config) {
+    const kind = material(config), board = config.board;
+    context.save(); roundRect(context, 1, 1, width - 2, height - 2, 6); context.clip();
+    const gradient = context.createLinearGradient(0, 0, width, height);
+    const stops = kind === 'white' ? ['#e9e7e1', '#f6f4ef', '#d8d6d0'] : kind === 'black' ? ['#242627', '#111213', '#0d0e0f'] : [tint(board, .09), board, tint(board, -.11)];
+    stops.forEach((color, index) => gradient.addColorStop([0, kind === 'white' ? .45 : kind === 'black' ? .43 : .5, 1][index], color));
+    context.fillStyle = gradient; context.fillRect(0, 0, width, height);
+    context.fillStyle = '#ffffff17'; context.fillRect(0, 0, width, 2);
+    context.fillStyle = '#00000020'; context.fillRect(0, height - 4, width, 4); context.restore();
+    context.strokeStyle = tint(board, -.17); context.lineWidth = 2;
+    roundRect(context, 1, 1, width - 2, height - 2, 6); context.stroke();
+  }
+  return { fields, presets, colors, material, tint, roundRect, drawBoard };
+});
+
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).Config = api;
+})(globalThis, function () {
+  'use strict';
+  function decode(field, value, strict = false) {
+    if (value === undefined || value === null) return undefined;
+    if (field.type === 'color') {
+      if (typeof value !== 'string') return undefined;
+      const color = value.startsWith('#') ? value : '#' + value;
+      return /^#[0-9a-f]{6}$/i.test(color) ? color.toLowerCase() : undefined;
+    }
+    if (field.type === 'number') {
+      if (value === '' || typeof value === 'boolean' || !['string', 'number'].includes(typeof value)) return undefined;
+      let number = Number(value);
+      if (!Number.isFinite(number) || (strict && (number < field.min || number > field.max))) return undefined;
+      number = Math.max(field.min, Math.min(field.max, number));
+      return Number((Math.round((number - field.min) / field.step) * field.step + field.min).toFixed(6));
+    }
+    if (field.type === 'select') return field.options.some(option => option[0] === value) ? value : undefined;
+    if (field.type === 'checkbox') {
+      if ([true, 'true', '1', 1].includes(value)) return true;
+      if ([false, 'false', '0', 0].includes(value)) return false;
+      return undefined;
+    }
+    if (field.type === 'time') return typeof value === 'string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(value) ? value : undefined;
+    if (field.type === 'timezone' && typeof value === 'string') {
+      const zone = value.trim();
+      try { if (zone) new Intl.DateTimeFormat('en', { timeZone: zone }); return zone; } catch (_) { return undefined; }
+    }
+    return undefined;
+  }
+  function normalize(fields, input = {}, base = {}) {
+    return Object.fromEntries(Object.entries(fields).map(([key, field]) => [key, decode(field, input[key]) ?? decode(field, base[key]) ?? field.value]));
+  }
+  function serialize(model, settings) {
+    return JSON.stringify({ version: 2, type: model.type, model: model.id, settings: model.Settings.normalize(settings) }, null, 2);
+  }
+  function parse(model, text) {
+    const data = JSON.parse(text);
+    if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('请选择有效的 TIMEFORM 配置。');
+    let input;
+    if (data.version === 2) {
+      if (data.type !== model.type || data.model !== model.id) throw new Error('配置所属种类或型号与当前页面不一致。');
+      input = data.settings;
+    } else if (data.version === 1) input = data.settings;
+    else if (data.version === undefined && typeof data.board === 'string') input = data;
+    else throw new Error('无法识别此配置版本。');
+    if (!input || typeof input !== 'object' || Array.isArray(input)) throw new Error('配置参数格式无效。');
+    input = { ...input };
+    if (data.version !== 2 && ['wave', 'orbit'].includes(input.motion)) input.motion = 'spin';
+    for (const [key, field] of Object.entries(model.Settings.fields)) {
+      if (Object.hasOwn(input, key) && decode(field, input[key], true) === undefined) throw new Error('「' + field.label + '」无效，请检查单位和范围。');
+    }
+    return model.Settings.normalize(input);
+  }
+  return { decode, normalize, serialize, parse };
+});
+
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).Time = api;
+})(globalThis, function () {
+  'use strict';
+  const normalizeMinutes = value => ((value % 1440) + 1440) % 1440;
+  const minutesFromText = text => Number(text.slice(0, 2)) * 60 + Number(text.slice(3, 5));
+  const textFromMinutes = value => {
+    const minute = normalizeMinutes(value);
+    return String(Math.floor(minute / 60)).padStart(2, '0') + ':' + String(minute % 60).padStart(2, '0');
+  };
+  function createSource(readDate = () => new Date()) {
+    let cachedZone, formatter;
+    function read(config) {
+      if (config.source === 'manual') return minutesFromText(config.manualTime);
+      const date = readDate();
+      if (!config.timezone) return date.getHours() * 60 + date.getMinutes();
+      if (cachedZone !== config.timezone) {
+        formatter = new Intl.DateTimeFormat('en-GB', { timeZone: config.timezone, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+        cachedZone = config.timezone;
+      }
+      const parts = formatter.formatToParts(date);
+      return Number(parts.find(part => part.type === 'hour').value) % 24 * 60 + Number(parts.find(part => part.type === 'minute').value);
+    }
+    return { read };
+  }
+  // One monotonic timeline drives the whole array, including paused single steps.
+  function createPlayback(readNow = () => performance.now()) {
+    let position = 0, anchor = readNow(), paused = false, speed = 1;
+    function now() {
+      const current = readNow();
+      if (!paused) position += Math.max(0, current - anchor) * speed;
+      anchor = current; return position;
+    }
+    function setPaused(value) { now(); paused = Boolean(value); }
+    function setSpeed(value) {
+      if (!Number.isFinite(value) || value <= 0) throw new Error('播放速度必须大于零。');
+      now(); speed = value;
+    }
+    function step(milliseconds = 100) { if (paused) position += Math.max(0, milliseconds); return now(); }
+    return { now, setPaused, setSpeed, step, get paused() { return paused; }, get speed() { return speed; } };
+  }
+  return { createSource, createPlayback, normalizeMinutes, minutesFromText, textFromMinutes };
+});
+
+(function (root, factory) {
+  const api = factory(typeof module === 'object' && module.exports ? require('./palette.js') : root.Timeform.Palette);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).SingleClock = api;
+})(globalThis, function (Palette) {
+  'use strict';
+  const TAU = Math.PI * 2;
+  function local(context, point) {
+    context.save(); context.translate(point.x, point.y); context.scale(point.radius / 53.2, point.radius / 53.2);
+  }
+  // Geometry and hand poses are inputs; this component has no time or model state.
+  function drawFace(context, point, config) {
+    local(context, point);
+    const kind = Palette.material(config), white = kind === 'white', black = kind === 'black';
+    const rim = context.createRadialGradient(-11, -17, 3, 0, 0, 55);
+    const stops = white ? [[0, '#f4f2ed'], [.82, '#e5e2dc'], [.97, '#c6c4bd'], [1, '#dedbd5']] : black ? [[0, '#121415'], [.70, '#0d0f10'], [.94, '#08090a'], [1, '#242628']] : [[0, Palette.tint(config.board, -.06)], [.82, Palette.tint(config.board, -.12)], [.96, Palette.tint(config.board, -.24)], [1, Palette.tint(config.board, .06)]];
+    stops.forEach(([offset, color]) => rim.addColorStop(offset, color));
+    context.shadowColor = black ? '#000000b8' : '#0000003b'; context.shadowBlur = 7; context.shadowOffsetY = 2;
+    context.fillStyle = rim; context.beginPath(); context.arc(0, 0, 53.2, 0, TAU); context.fill();
+    context.shadowBlur = 0; context.shadowOffsetY = 0; context.lineWidth = 1;
+    context.strokeStyle = white ? '#0000001a' : '#ffffff13'; context.beginPath(); context.arc(0, 0, 52.2, 0, TAU); context.stroke();
+    context.strokeStyle = white ? '#ffffff7a' : '#00000018'; context.beginPath(); context.arc(0, 0, 49.5, 0, TAU); context.stroke();
+    context.restore();
+  }
+  function drawHand(context, angle, opacity, secondary, config) {
+    if (opacity <= .001) return;
+    context.save(); context.globalAlpha = opacity; context.rotate(angle);
+    const color = secondary ? config.short : config.long;
+    const length = 49.3 * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100;
+    const width = secondary ? config.shortWidth : config.longWidth;
+    const shade = context.createLinearGradient(0, -width / 2, 0, width / 2);
+    const kind = Palette.material(config), original = Palette.presets.find(preset => preset.id === 'classic-' + kind);
+    if (original && color === (secondary ? original.short : original.long)) {
+      shade.addColorStop(0, kind === 'white' ? (secondary ? '#555853' : '#303330') : (secondary ? '#c6c8c6' : '#e8e9e7'));
+      shade.addColorStop(.55, color); shade.addColorStop(1, kind === 'white' ? '#383b38' : (secondary ? '#abaeab' : '#c2c5c1'));
+    } else { shade.addColorStop(0, Palette.tint(color, .10)); shade.addColorStop(.5, color); shade.addColorStop(1, Palette.tint(color, -.12)); }
+    context.shadowColor = '#00000038'; context.shadowBlur = 2; context.shadowOffsetY = 1.3; context.fillStyle = shade;
+    Palette.roundRect(context, -1.6, -width / 2, length + 1.6, width, Math.min(1.5, width / 2)); context.fill(); context.restore();
+  }
+  function drawHands(context, point, poses, config) {
+    local(context, point);
+    // Preserve the original stroke order when the two hands overlap.
+    drawHand(context, poses[1].angle, poses[1].opacity, true, config);
+    drawHand(context, poses[0].angle, poses[0].opacity, false, config);
+    const opacity = Math.max(poses[0].opacity, poses[1].opacity);
+    if (opacity > .001) {
+      context.globalAlpha = opacity; context.fillStyle = config.long; context.beginPath(); context.arc(0, 0, 3.1, 0, TAU); context.fill();
+      context.fillStyle = Palette.tint(config.long, .22); context.beginPath(); context.arc(-.6, -.6, 1, 0, TAU); context.fill();
+    }
+    context.restore();
+  }
+  return { drawFace, drawHands };
+});
+
+(function (root, factory) {
+  const api = factory(typeof module === 'object' && module.exports ? require('./math.js') : root.Timeform.Math);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).HandAnimation = api;
+})(globalThis, function (Maths) {
+  'use strict';
+  const { TAU, clamp, wrap, smooth, tween } = Maths;
+  const stages = Object.freeze({ align: .22, hold: .30, pattern: .74, settle: .94 });
+  const shortest = value => ((value + Math.PI) % TAU + TAU) % TAU - Math.PI;
+  // The caller supplies one timeline. No DOM, timers, storage or host integration.
+  function create({ Settings, digitPose, displayDigits, handCount, phase = () => 0, choreography = null }, initial, { reducedMotion = false } = {}) {
+    const state = { ...Settings.normalize(initial), minuteKey: null };
+    let sequence = null;
+    const hands = Array.from({ length: handCount }, (_, index) => {
+      const angle = Math.PI * .75 + (index % 2 ? .18 : -.18);
+      return { angle, from: angle, to: angle, start: 0, duration: 1, path: null, used: false, opacity: 0, revealFrom: 0, revealStart: 0, revealEnd: 0, travelOpacity: 0, motionEnd: 0, fadeStart: 0, fadeEnd: 0, fadeFrom: 0, fadeTo: 0 };
+    });
+    const settleOpacity = hand => hand.used || state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
+    function pathAngle(path, now) {
+      const p = clamp((now - path.start) / path.duration, 0, 1);
+      if (path.direct) return p === 1 ? wrap(path.target) : path.from + (path.target - path.from) * smooth(p);
+      if (p < stages.align) return path.from + (path.aligned - path.from) * smooth(p / stages.align);
+      if (p < stages.hold) return path.aligned;
+      if (p < stages.pattern) {
+        const progress = (p - stages.hold) / (stages.pattern - stages.hold);
+        const local = clamp((progress - path.delay) / (1 - path.delay), 0, 1);
+        return path.aligned + (path.patternEnd - path.aligned) * smooth(local);
+      }
+      if (p < stages.settle) return path.patternEnd + (path.target - path.patternEnd) * smooth((p - stages.pattern) / (stages.settle - stages.pattern));
+      return wrap(path.target);
+    }
+    function sample(now) {
+      for (const hand of hands) {
+        const progress = clamp((now - hand.start) / hand.duration, 0, 1);
+        hand.angle = hand.path ? pathAngle(hand.path, now) : progress === 1 ? wrap(hand.to) : hand.from + (hand.to - hand.from) * smooth(progress);
+        if (now < hand.revealEnd) hand.opacity = tween(now, hand.revealStart, hand.revealEnd, hand.revealFrom, hand.travelOpacity);
+        else if (now < hand.fadeStart) hand.opacity = hand.travelOpacity;
+        else hand.opacity = tween(now, hand.fadeStart, hand.fadeEnd, hand.fadeFrom, hand.fadeTo);
+      }
+      return hands;
+    }
+    function initialize(minutes, now) {
+      sequence = null;
+      const digits = displayDigits(minutes, state.format24), pose = digitPose(digits);
+      for (let index = 0; index < handCount; index++) {
+        const hand = hands[index]; hand.angle = pose[index].angle; hand.from = hand.angle; hand.to = hand.angle; hand.used = pose[index].used;
+        hand.opacity = settleOpacity(hand); hand.revealFrom = hand.opacity; hand.travelOpacity = hand.opacity; hand.fadeFrom = hand.opacity; hand.fadeTo = hand.opacity;
+        hand.path = null; hand.start = now; hand.duration = 1; hand.motionEnd = now; hand.revealStart = now; hand.revealEnd = now; hand.fadeStart = now; hand.fadeEnd = now;
+      }
+      state.minuteKey = digits;
+    }
+    function animate(minutes, now, force = false) {
+      const digits = displayDigits(minutes, state.format24);
+      if (!force && state.minuteKey === digits) return false;
+      if (state.motion === 'none') { initialize(minutes, now); return true; }
+      if (force && state.motion === 'quiet' && state.minuteKey === digits) return false;
+      sample(now);
+      const target = digitPose(digits), duration = reducedMotion ? 300 : state.duration * 1000;
+      const rotating = ['spin', 'wave'].includes(state.motion) && !reducedMotion;
+      const staged = rotating && choreography;
+      sequence = staged ? { start: now, duration } : null;
+      const reveal = reducedMotion ? 60 : Math.min(rotating ? 350 : 160, duration * .15);
+      const hide = reducedMotion ? 80 : Math.min(350, duration * (staged ? .06 : .18));
+      const travel = duration - reveal - hide, idleAlpha = state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
+      for (let index = 0; index < handCount; index++) {
+        const hand = hands[index], current = hand.angle;
+        let turn = shortest(target[index].angle - current);
+        if (rotating) turn = index % 2 ? -wrap(wrap(current) - target[index].angle) - TAU : wrap(target[index].angle - wrap(current)) + TAU;
+        const participating = rotating || hand.used || target[index].used || hand.opacity > idleAlpha + .001;
+        hand.revealFrom = hand.opacity; hand.travelOpacity = participating ? 1 : idleAlpha; hand.used = target[index].used;
+        const delay = state.motion === 'wave' && !reducedMotion ? travel * .3 * clamp(phase(index), 0, 1) : 0;
+        hand.from = current; hand.to = current + turn; hand.start = now + reveal + delay; hand.duration = travel - delay; hand.motionEnd = now + duration - hide;
+        hand.revealStart = now; hand.revealEnd = now + reveal;
+        hand.fadeStart = hand.motionEnd; hand.fadeEnd = now + duration; hand.fadeFrom = hand.travelOpacity; hand.fadeTo = settleOpacity(hand);
+        hand.path = null;
+        if (staged) {
+          const aligned = current + shortest(choreography.alignment(index) - current);
+          const patternEnd = aligned + TAU * choreography.direction(index);
+          hand.path = { from: current, aligned, patternEnd, target: patternEnd + shortest(target[index].angle - patternEnd),
+            start: now, duration, delay: state.motion === 'wave' ? .22 * clamp(phase(index), 0, 1) : 0 };
+          hand.start = now; hand.duration = duration; hand.to = hand.path.target;
+        }
+      }
+      state.minuteKey = digits; return true;
+    }
+    // A long live performance may cross a minute boundary. Keep its choreography
+    // running and bring the latest time home instead of restarting forever.
+    function retarget(minutes, now) {
+      if (!sequence || now >= sequence.start + sequence.duration) return animate(minutes, now);
+      const digits = displayDigits(minutes, state.format24);
+      if (digits === state.minuteKey) return false;
+      sample(now);
+      const target = digitPose(digits), settling = sequence.settling || now >= sequence.start + sequence.duration * stages.pattern;
+      const finish = Math.max(sequence.start + sequence.duration, now + 350);
+      const motionEnd = finish - Math.min(200, (finish - now) * .06);
+      if (settling) sequence = { start: now, duration: finish - now, motionEnd, settling: true };
+      hands.forEach((hand, index) => {
+        hand.used = target[index].used;
+        if (settling) {
+          hand.from = hand.angle; hand.to = hand.angle + shortest(target[index].angle - hand.angle);
+          hand.path = { direct: true, from: hand.from, target: hand.to, start: now, duration: motionEnd - now };
+          hand.start = now; hand.duration = motionEnd - now; hand.motionEnd = motionEnd;
+          hand.revealFrom = hand.opacity; hand.travelOpacity = 1; hand.revealStart = now; hand.revealEnd = Math.min(motionEnd, now + 80);
+          hand.fadeFrom = 1; hand.fadeStart = motionEnd; hand.fadeEnd = finish;
+        } else {
+          hand.path.target = hand.path.patternEnd + shortest(target[index].angle - hand.path.patternEnd);
+          hand.to = hand.path.target;
+        }
+        hand.fadeTo = settleOpacity(hand);
+      });
+      state.minuteKey = digits; return true;
+    }
+    function setVisibility(mode, now) {
+      if (mode === state.visibility) return;
+      sample(now); state.visibility = mode;
+      for (const hand of hands) {
+        const target = settleOpacity(hand);
+        if (now < hand.fadeStart) {
+          hand.fadeTo = target;
+          if (target > hand.travelOpacity) {
+            hand.revealFrom = hand.opacity; hand.revealStart = now; hand.revealEnd = Math.min(now + 250, hand.fadeStart);
+            hand.travelOpacity = target; hand.fadeFrom = target;
+          }
+        } else {
+          hand.revealStart = now; hand.revealEnd = now; hand.travelOpacity = hand.opacity; hand.fadeFrom = hand.opacity; hand.fadeTo = target;
+          hand.fadeStart = now; hand.fadeEnd = now + (reducedMotion ? 150 : 350);
+        }
+      }
+    }
+    function update(config, now) {
+      const next = Settings.normalize(config, state), visibility = next.visibility;
+      const reformat = next.format24 !== state.format24;
+      Object.assign(state, next, { visibility: state.visibility });
+      setVisibility(visibility, now); return { reformat };
+    }
+    function getStage(now) {
+      if (!sequence || now >= sequence.start + sequence.duration) return '';
+      if (sequence.settling) return now < sequence.motionEnd ? '时间归位' : '读时停留';
+      const p = (now - sequence.start) / sequence.duration;
+      return p < stages.align ? '整队对齐' : p < stages.hold ? '统一停留' : p < stages.pattern ? '图案运动' : p < stages.settle ? '时间归位' : '读时停留';
+    }
+    return { state, hands, sample, initialize, animate, retarget, setVisibility, update, getStage, isAnimating: now => hands.some(hand => now < hand.fadeEnd) };
+  }
+  return { create, stages };
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('../../shared/config.js') : root.Timeform.Config,
+    commonJS ? require('../../shared/palette.js') : root.Timeform.Palette);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).ClockClock24Settings = api;
+})(globalThis, function (Config, Palette) {
+  'use strict';
+  const number = (label, value, min, max, step, unit, group) => ({ type: 'number', label, value, min, max, step, unit, group });
+  const fields = {
+    ...Palette.fields,
+    canvasWidth: number('画布宽度', 1920, 240, 7680, 1, 'px', 'screen'),
+    canvasHeight: number('画布高度', 1080, 240, 7680, 1, 'px', 'screen'),
+    scale: number('整体缩放', 90, 20, 100, 1, '%', 'screen'),
+    padding: number('画布安全边距', 0, 0, 160, 1, 'px', 'screen'),
+    offsetX: number('水平位置', 0, -100, 100, 1, '%', 'screen'),
+    offsetY: number('垂直位置', 0, -100, 100, 1, '%', 'screen'),
+    radius: number('表盘半径', 53.2, 20, 80, .1, '设计单位', 'geometry'),
+    gap: number('表盘间隙', 7.6, 0, 40, .1, '设计单位', 'geometry'),
+    longLength: number('长针长度', 100, 70, 100, 1, '%', 'geometry'),
+    shortLength: number('短针长度', 100, 55, 100, 1, '%', 'geometry'),
+    longWidth: number('长针粗细', 9.3, 2, 14, .1, '设计单位', 'geometry'),
+    shortWidth: number('短针粗细', 9.3, 2, 14, .1, '设计单位', 'geometry'),
+    motion: { type: 'select', label: '换时动画', value: 'wave', options: [['wave', '斜线列波 · 参考编排'], ['spin', '经典旋转'], ['quiet', '平滑过渡'], ['none', '立即换时']], group: 'motion' },
+    duration: { ...number('完整编排时长', 40.1, 1, 120, .1, 's', 'motion'), help: '原片约 40.08 秒；整条时间线同比缩放，可用参考节奏按钮恢复 40.1 秒。' },
+    visibility: { type: 'select', label: '闲置指针', value: 'show', options: [['hide', '归位后隐藏'], ['ghost', '微光显示'], ['show', '全部显示']], group: 'motion' },
+    playbackSpeed: number('调试播放速度', 1, .1, 3, .1, '倍', 'motion'),
+    format24: { type: 'checkbox', label: '24 小时制', value: true, group: 'time' },
+    timezone: { type: 'timezone', label: '时区', value: '', group: 'time', help: '留空跟随设备，例如 Asia/Hong_Kong。' },
+    source: { type: 'select', label: '时间来源', value: 'live', options: [['live', '设备时间'], ['manual', '指定时间']], group: 'time' },
+    manualTime: { type: 'time', label: '指定时间', value: '09:34', group: 'time' },
+    autoDemo: { type: 'checkbox', label: '指定时间自动逐分钟切换', value: false, group: 'time' },
+    demoInterval: number('自动切换间隔', 5, 1, 20, .1, 's', 'time')
+  };
+  function normalize(input = {}, base = {}) {
+    const settings = Config.normalize(fields, input, base);
+    settings.shortLength = Math.min(settings.shortLength, settings.longLength);
+    return settings;
+  }
+  return { fields, defaults: normalize(), normalize };
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('../../shared/config.js') : root.Timeform.Config,
+    commonJS ? require('../clockclock24/settings.js') : root.Timeform.ClockClock24Settings);
+  if (commonJS) module.exports = api;
+  else (root.Timeform ||= {}).AMTSettings = api;
+})(globalThis, function (Config, Base) {
+  'use strict';
+  // The large arrays share control units, but have their own typography and motion.
+  const fields = {
+    ...Base.fields,
+    radius: { ...Base.fields.radius, value: 43, min: 20, max: 65 },
+    gap: { ...Base.fields.gap, value: 4.3 },
+    longWidth: { ...Base.fields.longWidth, value: 6.2 },
+    shortWidth: { ...Base.fields.shortWidth, value: 6.2 },
+    motion: { ...Base.fields.motion, value: 'wave', options: [['wave', '逐列波浪收束'], ['spin', '同步旋转'], ['quiet', '平滑过渡'], ['none', '立即换时']] },
+    duration: { ...Base.fields.duration, label: '动画时长', value: 6, max: 10, help: '' },
+    manualTime: { ...Base.fields.manualTime, value: '12:38' },
+    visibility: { ...Base.fields.visibility, value: 'show', help: '参考图保留闲置指针的斜线；也可选择归位后隐藏或微光显示。' }
+  };
+  function normalize(input = {}, base = {}) {
+    const settings = Config.normalize(fields, input, base);
+    settings.shortLength = Math.min(settings.shortLength, settings.longLength);
+    return settings;
+  }
+  return { fields, defaults: normalize(), normalize };
+});
+
+(function (root, factory) {
+  const api = factory(typeof module === 'object' && module.exports ? require('../../shared/math.js') : root.Timeform.Math);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).AMTTypography = api;
+})(globalThis, function (Maths) {
+  'use strict';
+  const IDLE = Math.PI * .75;
+  const DIR = { E: 0, S: Math.PI / 2, W: Math.PI, N: -Math.PI / 2, P: IDLE };
+  function displayDigits(minutes, format24 = true) {
+    const value = Maths.normalizeMinutes(minutes), hour = Math.floor(value / 60);
+    return String(format24 ? hour : hour % 12 || 12).padStart(2, '0') + String(value % 60).padStart(2, '0');
+  }
+  // Trace orthogonal paths through clock centres. A centre can carry at most two directions.
+  function trace(pose, columns, path, originX, originY) {
+    const directions = new Map();
+    function add(x, y, dx, dy) {
+      const index = ((y + originY) * columns + x + originX) * 2;
+      if (!directions.has(index)) directions.set(index, new Set());
+      directions.get(index).add(Math.atan2(dy, dx));
+    }
+    for (let i = 1; i < path.length; i++) {
+      let [x, y] = path[i - 1];
+      const [endX, endY] = path[i], dx = Math.sign(endX - x), dy = Math.sign(endY - y);
+      while (x !== endX || y !== endY) {
+        add(x, y, dx, dy); x += dx; y += dy; add(x, y, -dx, -dy);
+      }
+    }
+    for (const [index, set] of directions) {
+      const angles = [...set];
+      if (angles.length > 2) throw new Error('数字字形超出两根指针。');
+      pose[index] = { angle: angles[0], used: true };
+      pose[index + 1] = { angle: angles[1] ?? angles[0], used: angles.length === 2 };
+    }
+  }
+  // Outlines of the broad digital strokes, including the inner counters.
+  // A 3-clock-wide counter collapses into a vertical stroke; at width 5 it is a box.
+  function glyphPaths(digit, width) {
+    const right = width - 1, inner = right - 1;
+    const box = (left, top, endX, endY) => [[left, top], [endX, top], [endX, endY], [left, endY], [left, top]];
+    return {
+      '0': [box(0, 0, right, 5), box(1, 1, inner, 4)],
+      '1': [box(inner, 0, right, 5)],
+      '2': [[[0, 0], [right, 0], [right, 3], [1, 3], [1, 4], [right, 4], [right, 5], [0, 5], [0, 2], [inner, 2], [inner, 1], [0, 1], [0, 0]]],
+      '3': [[[0, 0], [right, 0], [right, 5], [0, 5], [0, 4], [inner, 4], [inner, 3], [0, 3], [0, 2], [inner, 2], [inner, 1], [0, 1], [0, 0]]],
+      '4': [[[0, 0], [1, 0], [1, 2], [inner, 2], [inner, 0], [right, 0], [right, 5], [inner, 5], [inner, 3], [0, 3], [0, 0]]],
+      '5': [[[0, 0], [right, 0], [right, 1], [1, 1], [1, 2], [right, 2], [right, 5], [0, 5], [0, 4], [inner, 4], [inner, 3], [0, 3], [0, 0]]],
+      '6': [[[0, 0], [right, 0], [right, 1], [1, 1], [1, 2], [right, 2], [right, 5], [0, 5], [0, 0]], box(1, 3, inner, 4)],
+      '7': [[[0, 0], [right, 0], [right, 5], [inner, 5], [inner, 1], [0, 1], [0, 0]]],
+      '8': [box(0, 0, right, 5), box(1, 1, inner, 2), box(1, 3, inner, 4)],
+      '9': [[[0, 0], [right, 0], [right, 5], [0, 5], [0, 4], [inner, 4], [inner, 3], [0, 3], [0, 0]], box(1, 1, inner, 2)]
+    }[digit];
+  }
+  function glyphPose(digit, width) {
+    if (digit === '4' && width === 3) {
+      // The narrow four has a shared top join: match the two-hand poses in the AMT72 photo.
+      return ['SE', 'SW', 'SW', 'NS', 'NS', 'NS', 'NS', 'NE', 'NS', 'NE', 'SW', 'NS', 'PP', 'NS', 'NS', 'PP', 'NE', 'NW'].flatMap(([a, b]) => [
+        { angle: DIR[a], used: a !== 'P' }, { angle: DIR[b], used: b !== 'P' && b !== a }
+      ]);
+    }
+    const pose = Array.from({ length: width * 6 * 2 }, () => ({ angle: IDLE, used: false }));
+    for (const path of glyphPaths(digit, width)) trace(pose, width, path, 0, 0);
+    return pose;
+  }
+  return { IDLE, trace, glyphPose, displayDigits };
+});
+
+(function (root) {
+  'use strict';
+  const { Palette, SingleClock, Time } = root.Timeform;
+  function create(canvas, config, model, readViewport) {
+    const context = canvas.getContext('2d'), surface = document.createElement('canvas'), surfaceContext = surface.getContext('2d');
+    const playback = Time.createPlayback(), source = Time.createSource();
+    playback.setSpeed(config.playbackSpeed);
+    const instance = model.create(config, { reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches });
+    let settings = { ...config }, geometry, frame = 0, frames = 0, dirty = true, surfaceDirty = true, disposed = false;
+    let demoAt = playback.now();
+    function request() { if (!disposed && !document.hidden && !frame) frame = requestAnimationFrame(draw); }
+    function refresh() {
+      dirty = true;
+      if (playback.paused || document.hidden) { cancelAnimationFrame(frame); frame = 0; draw(); }
+      else request();
+    }
+    function resize() {
+      const viewport = readViewport(); geometry = model.geometry(viewport.width, viewport.height, settings);
+      const factor = Math.min(viewport.displayWidth / viewport.width, viewport.displayHeight / viewport.height);
+      const width = geometry.width * factor, height = geometry.height * factor;
+      Object.assign(canvas.style, { width: width + 'px', height: height + 'px', left: geometry.x * factor + 'px', top: geometry.y * factor + 'px' });
+      const dpr = Math.min(2.5, window.devicePixelRatio || 1, Math.sqrt(8000000 / Math.max(1, width * height)));
+      canvas.width = surface.width = Math.max(1, Math.round(width * dpr)); canvas.height = surface.height = Math.max(1, Math.round(height * dpr));
+      surfaceContext.setTransform(surface.width / geometry.boardWidth, 0, 0, surface.height / geometry.boardHeight, 0, 0);
+      cancelAnimationFrame(frame); frame = 0;
+      dirty = surfaceDirty = true; draw();
+    }
+    function paintSurface() {
+      surfaceContext.clearRect(0, 0, geometry.boardWidth, geometry.boardHeight);
+      if (model.Drawing?.drawSurface) model.Drawing.drawSurface(surfaceContext, geometry, settings);
+      else {
+        Palette.drawBoard(surfaceContext, geometry.boardWidth, geometry.boardHeight, settings);
+        geometry.points.forEach(point => SingleClock.drawFace(surfaceContext, point, settings));
+      }
+      surfaceDirty = false;
+    }
+    function draw() {
+      frame = 0; if (disposed) return;
+      const now = playback.now();
+      instance.sample(now); if (surfaceDirty) paintSurface();
+      context.setTransform(canvas.width / geometry.boardWidth, 0, 0, canvas.height / geometry.boardHeight, 0, 0);
+      context.clearRect(0, 0, geometry.boardWidth, geometry.boardHeight);
+      context.drawImage(surface, 0, 0, geometry.boardWidth, geometry.boardHeight);
+      if (model.Drawing?.drawHands) model.Drawing.drawHands(context, geometry, instance, settings);
+      else geometry.points.forEach(point => SingleClock.drawHands(context, point, [instance.hands[point.i], instance.hands[point.i + 1]], settings));
+      const digits = instance.state.minuteKey;
+      canvas.setAttribute('aria-label', model.name + '，现在显示 ' + digits.slice(0, 2) + ':' + digits.slice(2));
+      frames++; dirty = false;
+      if (!playback.paused && instance.isAnimating(now)) request();
+    }
+    function update(next) {
+      const previous = settings; settings = model.Settings.normalize(next, settings);
+      playback.setSpeed(settings.playbackSpeed);
+      const now = playback.now(), result = instance.update(settings, now);
+      if (previous.board !== settings.board || previous.radius !== settings.radius || previous.gap !== settings.gap) surfaceDirty = true;
+      if (result.reformat) instance.initialize(source.read(settings), now);
+      else if (previous.choreography !== settings.choreography || model.classic && ['motion', 'duration'].some(key => previous[key] !== settings[key])) instance.animate(source.read(settings),now,true);
+      else if (['source', 'manualTime', 'timezone'].some(key => previous[key] !== settings[key])) instance.animate(source.read(settings), now);
+      if (['radius', 'gap', 'scale', 'padding', 'offsetX', 'offsetY', 'canvasWidth', 'canvasHeight', 'safeTop', 'safeBottom'].some(key => previous[key] !== settings[key])) resize();
+      if (previous.autoDemo !== settings.autoDemo || previous.source !== settings.source || previous.demoInterval !== settings.demoInterval) demoAt = now;
+      refresh();
+    }
+    function tick() {
+      if (document.hidden || playback.paused) return;
+      const now = playback.now();
+      const demoPeriod = Math.max(settings.demoInterval, model.choreographed && ['wave', 'spin'].includes(settings.motion) ? settings.duration + 2 : 0) * 1000;
+      if (settings.source === 'manual' && settings.autoDemo && now - demoAt >= demoPeriod) {
+        const count = Math.floor((now - demoAt) / demoPeriod); demoAt += count * demoPeriod;
+        settings.manualTime = Time.textFromMinutes(Time.minutesFromText(settings.manualTime) + count);
+        document.dispatchEvent(new CustomEvent('timeform-auto-time', { detail: settings.manualTime }));
+      }
+      const changed = settings.source === 'live' && instance.getStage?.(now) && instance.retarget
+        ? instance.retarget(source.read(settings), now) : instance.animate(source.read(settings), now);
+      if (changed) request();
+      if (dirty) request();
+    }
+    function setPaused(value) {
+      playback.setPaused(value);
+      if (playback.paused) { cancelAnimationFrame(frame); frame = 0; }
+      else { tick(); request(); }
+      refresh();
+    }
+    function replay() { const changed = instance.animate(source.read(settings), playback.now(), true); if (changed) refresh(); return changed; }
+    function playReference() {
+      if (!instance.playReference) return false;
+      const changed = instance.playReference(source.read(settings), playback.now());
+      if (changed) refresh();
+      return changed;
+    }
+    function showCurrentTime() { instance.initialize(source.read(settings), playback.now()); refresh(); }
+    function step(milliseconds = 100) { playback.step(milliseconds); refresh(); }
+    function restoreVisibility() {
+      if (document.hidden) { cancelAnimationFrame(frame); frame = 0; }
+      else { if (!playback.paused) tick(); resize(); }
+    }
+    instance.initialize(source.read(settings), playback.now()); resize();
+    const timer = setInterval(tick, 100);
+    document.addEventListener('visibilitychange', restoreVisibility);
+    return {
+      update, resize, replay, playReference, showCurrentTime, step, setPaused,
+      getStats() {
+        const now = playback.now();
+        return { display: instance.state.minuteKey, geometry, frames, timeline: now, paused: playback.paused, animating: instance.isAnimating(now), stage: instance.getStage?.(now) || '', pixelWidth: canvas.width, pixelHeight: canvas.height };
+      },
+      dispose() { disposed = true; cancelAnimationFrame(frame); clearInterval(timer); document.removeEventListener('visibilitychange', restoreVisibility); }
+    };
+  }
+  root.Timeform.Renderer = { create };
+})(globalThis);
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('../../shared/config.js') : root.Timeform.Config,
+    commonJS ? require('../amt/settings.js') : root.Timeform.AMTSettings);
+  if (commonJS) module.exports = api;
+  else (root.Timeform ||= {}).AMT72vSettings = api;
+})(globalThis, function (Config, Base) {
+  'use strict';
+  const fields = {
+    ...Base.fields,
+    gap: { ...Base.fields.gap, value: 3.6 },
+    canvasWidth: { ...Base.fields.canvasWidth, value: 1080 },
+    canvasHeight: { ...Base.fields.canvasHeight, value: 1920 },
+    long: { ...Base.fields.long, value: '#d6d8d7' },
+    short: { ...Base.fields.short, value: '#d6d8d7' },
+    longWidth: { ...Base.fields.longWidth, value: 8.2 },
+    shortWidth: { ...Base.fields.shortWidth, value: 8.2 },
+    safeTop: { type: 'number', label: '顶部留白', value: 100, min: 0, max: 1200, step: 1, unit: 'px', group: 'screen', help: '在安全边距内额外预留空间，避开系统时间与通知。' },
+    safeBottom: { type: 'number', label: '底部留白', value: 100, min: 0, max: 1200, step: 1, unit: 'px', group: 'screen', help: '在安全边距内额外预留空间，避开底部操作区域。' },
+    motion: { ...Base.fields.motion, options: [['wave', '列间相位 · 双速成型'], ['spin', '同步旋转'], ['quiet', '平滑过渡'], ['none', '立即换时']] },
+    duration: { ...Base.fields.duration, label: '完整编排时长', value: 38, max: 120,
+      help: '默认含 6 秒补充拆字，再接原片旋转与双速成型；对照原片按钮略过补充段，直接播放约 32 秒。' },
+    manualTime: { ...Base.fields.manualTime, value: '09:34' },
+    demoInterval: { ...Base.fields.demoInterval, help: '完整编排结束并读时停留至少 2 秒，再演示下一分钟。' }
+  };
+  function normalize(input = {}, base = {}) {
+    const settings = Config.normalize(fields, input, base);
+    settings.shortLength = Math.min(settings.shortLength, settings.longLength);
+    return settings;
+  }
+  return { fields, defaults: normalize(), normalize };
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('../../shared/math.js') : root.Timeform.Math,
+    commonJS ? require('../../shared/hand-animation.js') : root.Timeform.HandAnimation);
+  if (commonJS) module.exports = api;
+  else (root.Timeform ||= {}).AMT72vAnimation = api;
+})(globalThis, function (Maths, HandAnimation) {
+  'use strict';
+  const { TAU, wrap, clamp, smooth } = Maths;
+  const referenceDuration = 32.03203125, entryDuration = 6, fullDuration = referenceDuration + entryDuration;
+  const rad = degrees => degrees * Math.PI / 180;
+  const shortest = angle => Math.atan2(Math.sin(angle), Math.cos(angle));
+  const columnOffsets = [0, 12.36, 24.46, 36.25, 48.51, 60.09].map(rad);
+  const phaseKnots = [[0, 6.78], [2.002, 63.29], [4.004, 123.24], [6.006, 185.14],
+    [8.008, 245.43], [10.01, 306.29], [12.012, 362.10], [14.014, 413.94], [16.016, 470.92]];
+  const secants = phaseKnots.slice(1).map(([t, a], i) => (a - phaseKnots[i][1]) / (t - phaseKnots[i][0]));
+  const slopes = phaseKnots.map((_, i) => i === 0 ? 26 : i === phaseKnots.length - 1 ? 29.5
+    : 2 / (1 / secants[i - 1] + 1 / secants[i]));
+  // Sparse per-cell reconstruction: departure time, glyph slow lane, fast tours,
+  // slow braking shape, fast braking shape. No sampled motor stream is embedded.
+  const lanes = [
+    [16.0,0,1,2,0.65], [15.5,0,1,7.5,0.65], [15.0,0,1,7.5,0.65], [19.0,0,1,7.5,0.65], [13.0,0,1,4,0.65], [14.0,0,1,7.5,0.65],
+    [17.0,0,1,2,1], [15.5,0,1,1,0.65], [16.0,1,1,2,1], [15.66,1,1,2,1], [20.0,0,0,4,0.65], [16.0,0,1,7.5,0.65],
+    [16.0,1,1,1,0.65], [16.22,1,1,2,1], [16.0,1,1,1,1], [15.66,1,1,2,1], [15.379999999999999,0,1,2,1], [16.0,0,1,7.5,0.65],
+    [16.5,0,1,2,1], [15.0,0,1,2,0.65], [15.94,1,1,2,1], [16.0,1,1,4,0.65], [14.5,1,1,7.5,0.65], [15.1,1,1,2,1],
+    [17.0,0,1,2,1], [14.0,0,2,1,0.65], [16.5,0,1,4,1], [18.5,0,0,1,0.65], [15.379999999999999,0,1,2,1], [15.1,0,1,2,1],
+    [17.0,0,1,1,1], [16.22,1,1,2,1], [16.5,0,1,4,1], [16.0,1,1,4,0.65], [15.379999999999999,1,1,2,1], [15.5,0,1,7.5,1],
+    [20.0,1,0,1,0.65], [16.5,1,1,1,1], [16.5,1,1,1,1], [19.5,0,1,7.5,0.65], [15.379999999999999,1,1,2,1], [13.5,1,1,1,0.65],
+    [16.5,1,1,2,1], [16.5,0,1,2,1], [16.0,1,1,1,1], [17.5,1,1,7.5,0.65], [15.379999999999999,1,1,2,1], [13.5,1,1,7.5,0.65],
+    [20.0,0,0,2,0.65], [16.0,0,1,7.5,1], [15.94,1,1,2,1], [15.66,1,1,2,1], [15.379999999999999,1,1,2,1], [15.1,1,1,2,1],
+    [17.0,0,1,1,1], [16.5,0,1,2,1], [16.0,1,1,1,1], [15.66,1,1,2,1], [15.379999999999999,1,1,2,1], [15.1,1,1,2,1],
+    [20.0,0,0,4,0.65], [13.5,0,2,2,0.65], [15.94,0,1,2,1], [19.0,1,1,7.5,0.65], [15.379999999999999,1,1,2,1], [16.0,0,1,7.5,0.65],
+    [17.0,0,1,1,1], [16.22,1,1,2,1], [16.0,1,1,7.5,1], [16.0,1,1,4,0.65], [13.0,1,1,4,1], [13.5,1,1,7.5,0.65]
+  ];
+  function hermite(from, to, v0, v1, start, end, now) {
+    const duration = end - start, u = clamp((now - start) / duration, 0, 1), u2 = u * u, u3 = u2 * u;
+    return { angle: from + (to - from) * (3 * u2 - 2 * u3)
+      + duration * (v0 * (u3 - 2 * u2 + u) + v1 * (u3 - u2)),
+    velocity: (to - from) * 6 * u * (1 - u) / duration
+      + v0 * (3 * u2 - 4 * u + 1) + v1 * (3 * u2 - 2 * u) };
+  }
+  function phaseAt(seconds) {
+    const last = phaseKnots.length - 1;
+    if (seconds >= phaseKnots[last][0]) return { angle: rad(phaseKnots[last][1] + (seconds - phaseKnots[last][0]) * 29.5), velocity: rad(29.5) };
+    const i = Math.max(0, phaseKnots.findIndex(k => k[0] > seconds) - 1);
+    const value = hermite(phaseKnots[i][1], phaseKnots[i + 1][1], slopes[i], slopes[i + 1], phaseKnots[i][0], phaseKnots[i + 1][0], Math.max(0, seconds));
+    return { angle: rad(value.angle), velocity: rad(value.velocity) };
+  }
+  function returnTrack(from, velocity, target, slow, start, end, power, tours = null) {
+    const duration = end - start;
+    if (slow) {
+      const drift = velocity * duration / (power + 1);
+      const to = from + drift + shortest(target - from - drift);
+      return { from, to, velocity, slow, start, end, power, drift, correction: to - from - drift };
+    }
+    let travel = wrap(target - from);
+    if (travel > TAU - 1e-8) travel = 0;
+    if (tours !== null) travel += tours * TAU;
+    const minimum = Math.max(0, velocity) * duration / (power + 2);
+    while (travel < minimum - 1e-8) travel += TAU;
+    const bump = (travel / duration - velocity / (power + 1)) * (power + 1) * (power + 2);
+    return { from, to: from + travel, velocity, slow, start, end, power, bump };
+  }
+  function trackAt(track, now) {
+    if (now >= track.end) return { angle: track.to, velocity: 0 };
+    const duration = track.end - track.start, u = clamp((now - track.start) / duration, 0, 1);
+    const tail = Math.pow(1 - u, track.power), integral = (1 - Math.pow(1 - u, track.power + 1)) / (track.power + 1);
+    if (track.slow) return { angle: track.from + track.drift * (1 - Math.pow(1 - u, track.power + 1)) + track.correction * smooth(u),
+      velocity: track.velocity * tail + track.correction * 6 * u * (1 - u) / duration };
+    const bumpIntegral = integral - (1 - Math.pow(1 - u, track.power + 2)) / (track.power + 2);
+    return { angle: track.from + duration * (track.velocity * integral + track.bump * bumpIntegral),
+      velocity: (track.velocity + track.bump * u) * tail };
+  }
+  function create(spec, initial, options = {}) {
+    const fallback = HandAnimation.create({ ...spec, handCount: 144 }, initial, options);
+    const { state, hands } = fallback;
+    let sequence = null;
+    const active = now => sequence && now < sequence.finish;
+    const opacityFor = hand => hand.used || state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
+    function motorAt(motor, now) {
+      if (motor.direct) return trackAt(motor.forming, now);
+      if (now < motor.alignStart) return { angle: motor.from, velocity: 0 };
+      if (now < motor.waveStart) return hermite(motor.from, motor.aligned, motor.entryVelocity,
+        phaseAt(0).velocity / sequence.unit, motor.alignStart, motor.waveStart, now);
+      if (now < motor.formStart) {
+        const phase = phaseAt((now - motor.waveStart) / sequence.unit);
+        return { angle: motor.aligned + phase.angle - phaseAt(0).angle, velocity: phase.velocity / sequence.unit };
+      }
+      return trackAt(motor.forming, now);
+    }
+    function sample(now) {
+      if (!sequence) return fallback.sample(now);
+      sequence.motors.forEach((motor, i) => {
+        const hand = hands[i]; hand.angle = motorAt(motor, now).angle;
+        hand.opacity = now < hand.revealEnd
+          ? hand.revealFrom + (1 - hand.revealFrom) * smooth(clamp((now - hand.revealStart) / Math.max(1, hand.revealEnd - hand.revealStart), 0, 1))
+          : now < hand.fadeStart ? 1 : hand.fadeFrom + (hand.fadeTo - hand.fadeFrom)
+            * smooth(clamp((now - hand.fadeStart) / Math.max(1, hand.fadeEnd - hand.fadeStart), 0, 1));
+      });
+      return hands;
+    }
+    function snapshot(now) {
+      sample(now);
+      return hands.map((hand, i) => {
+        const u = clamp((now - hand.start) / hand.duration, 0, 1);
+        return { angle: hand.angle, opacity: hand.opacity,
+          velocity: sequence ? motorAt(sequence.motors[i], now).velocity : (hand.to - hand.from) * 6 * u * (1 - u) / hand.duration };
+      });
+    }
+    function initialize(minutes, now) { sequence = null; fallback.initialize(minutes, now); }
+    function freeze(now) {
+      sample(now); sequence = null;
+      hands.forEach(hand => Object.assign(hand, { from: hand.angle, to: hand.angle, path: null,
+        start: now, duration: 1, motionEnd: now, revealFrom: hand.opacity, travelOpacity: hand.opacity,
+        revealStart: now, revealEnd: now, fadeFrom: hand.opacity, fadeTo: hand.opacity, fadeStart: now, fadeEnd: now }));
+    }
+    function publish(target, minutes) {
+      sequence.motors.forEach((motor, i) => {
+        const hand = hands[i]; hand.used = target[i].used;
+        Object.assign(hand, { to: motor.forming.to, motionEnd: motor.forming.end,
+          fadeStart: motor.forming.end, fadeEnd: sequence.finish, fadeFrom: 1, fadeTo: opacityFor(hand) });
+      });
+      state.minuteKey = spec.displayDigits(minutes, state.format24);
+    }
+    function makeReturn(motor, target, sequenceStart, entry, unit) {
+      const wave = phaseAt(motor.departure);
+      const start = sequenceStart + (entry + motor.departure) * unit;
+      const from = motor.aligned + wave.angle - phaseAt(0).angle;
+      // Small individual stopping differences preserve a clear final reading hold.
+      const distance = Math.abs(shortest(target - from));
+      const stop = motor.slow ? 31.45 + .4 * distance / Math.PI : 31.85 + .1 * distance / Math.PI;
+      motor.formStart = start;
+      motor.forming = returnTrack(from, wave.velocity / unit, target, motor.slow, start,
+        sequenceStart + (entry + stop) * unit, motor.power, motor.slow ? null : motor.tours);
+    }
+    function plan(minutes, now, reference = false) {
+      const current = snapshot(now), duration = state.duration * 1000;
+      const unit = duration / (reference ? referenceDuration : fullDuration), entry = reference ? 0 : entryDuration;
+      const target = spec.digitPose(spec.displayDigits(minutes, state.format24));
+      sequence = { start: now, finish: now + duration, entry, unit, reference, motors: [] };
+      sequence.motors = hands.map((hand, i) => {
+        const cell = Math.floor(i / 2), col = cell % 6;
+        const [departure, slowLane, tours, slowPower, fastPower] = lanes[cell];
+        const slow = i % 2 === slowLane;
+        const heading = phaseAt(0).angle + columnOffsets[col] + (slow ? 0 : Math.PI);
+        const aligned = reference ? heading : current[i].angle + shortest(heading - current[i].angle);
+        const waveStart = now + entry * unit;
+        const motor = { from: reference ? heading : current[i].angle, aligned, waveStart,
+          alignStart: reference || Math.abs(current[i].velocity) > 1e-10 ? now : now + col * .1 * unit,
+          entryVelocity: current[i].velocity, slow, departure, tours, power: slow ? slowPower : fastPower };
+        makeReturn(motor, target[i].angle, now, entry, unit);
+        Object.assign(hand, { from: motor.from, start: now, duration, path: null,
+          opacity: reference ? 1 : current[i].opacity, revealFrom: reference ? 1 : current[i].opacity,
+          revealStart: now, revealEnd: now + (reference ? 0 : Math.min(250, duration * .02)) });
+        return motor;
+      });
+      publish(target, minutes); sample(now);
+    }
+    function animate(minutes, now, force = false) {
+      const digits = spec.displayDigits(minutes, state.format24);
+      if (!force && digits === state.minuteKey) return false;
+      if (force && state.motion === 'quiet' && digits === state.minuteKey) return false;
+      if (state.motion === 'none') { initialize(minutes, now); return true; }
+      if (state.motion !== 'wave' || options.reducedMotion) { freeze(now); return fallback.animate(minutes, now, force); }
+      plan(minutes, now); return true;
+    }
+    function playReference(minutes, now) {
+      if (options.reducedMotion) return animate(minutes, now, true);
+      plan(minutes, now, true); return true;
+    }
+    function retarget(minutes, now) {
+      if (!active(now)) return animate(minutes, now);
+      const digits = spec.displayDigits(minutes, state.format24);
+      if (digits === state.minuteKey) return false;
+      sample(now);
+      const target = spec.digitPose(digits), opacities = hands.map(hand => hand.opacity);
+      sequence.motors.forEach((motor, i) => {
+        if (motor.direct || now >= motor.formStart) {
+          const current = motorAt(motor, now), end = Math.max(motor.forming.end, now + 350);
+          motor.forming = returnTrack(current.angle, current.velocity, target[i].angle, motor.slow,
+            now, end, motor.power);
+          motor.direct = true; sequence.finish = Math.max(sequence.finish, end + 80);
+        } else makeReturn(motor, target[i].angle, sequence.start, sequence.entry, sequence.unit);
+      });
+      publish(target, minutes);
+      hands.forEach((hand, i) => Object.assign(hand, { revealFrom: opacities[i], revealStart: now,
+        revealEnd: Math.min(hand.motionEnd, now + 80) }));
+      return true;
+    }
+    function setVisibility(mode, now) {
+      if (!sequence) return fallback.setVisibility(mode, now);
+      if (mode === state.visibility) return;
+      sample(now); state.visibility = mode;
+      hands.forEach(hand => {
+        if (now < hand.fadeStart) hand.fadeTo = opacityFor(hand);
+        else Object.assign(hand, { fadeFrom: hand.opacity, fadeTo: opacityFor(hand), fadeStart: now, fadeEnd: now + 350 });
+      });
+    }
+    function update(config, now) {
+      const next = spec.Settings.normalize(config, state), visibility = next.visibility;
+      const reformat = next.format24 !== state.format24;
+      Object.assign(state, next, { visibility: state.visibility }); setVisibility(visibility, now); return { reformat };
+    }
+    function getStage(now) {
+      if (!active(now)) return '';
+      if (sequence.motors.some(motor => (motor.direct || now >= motor.formStart) && now < motor.forming.end)) return '双速逐针成型';
+      if (now < sequence.start + sequence.entry * sequence.unit) return '拆字归队';
+      return sequence.motors.every(motor => now >= motor.forming.end) ? '读时停留' : '列间相位旋转';
+    }
+    return { state, hands, initialize, sample, animate, playReference, retarget, update, setVisibility, getStage,
+      isAnimating: now => Boolean(active(now)) || hands.some(hand => now < hand.fadeEnd) };
+  }
+  return { create, referenceDuration, fullDuration, phaseAt, columnOffsets };
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('../../shared/palette.js') : root.Timeform.Palette);
+  if (commonJS) module.exports = api;
+  else (root.Timeform ||= {}).AMT72vDrawing = api;
+})(globalThis, function (Palette) {
+  'use strict';
+  const TAU = Math.PI * 2;
+  function drawSurface(ctx, geometry, config) {
+    const { boardWidth: w, boardHeight: h } = geometry;
+    const kind = Palette.material(config), black = kind === 'black', white = kind === 'white';
+    ctx.save();
+    const board = ctx.createLinearGradient(0, 0, w * .3, h);
+    const colors = black ? ['#282829', '#1c1c1e', '#111113'] : white ? ['#f6f4ef', '#f1efea', '#e5e3de']
+      : [Palette.tint(config.board, .06), config.board, Palette.tint(config.board, -.12)];
+    colors.forEach((color, i) => board.addColorStop(i / 2, color));
+    ctx.fillStyle = board; ctx.fillRect(0, 0, w, h);
+    geometry.points.forEach(point => {
+      ctx.save(); ctx.translate(point.x, point.y); ctx.scale(point.radius / 53.2, point.radius / 53.2);
+      const face = ctx.createLinearGradient(-15, -53.2, 8, 53.2);
+      const shades = black ? ['#1b1b1d', '#202022', '#151517'] : white ? ['#e3e1dc', '#efede8', '#f6f4ef']
+        : [Palette.tint(config.board, -.20), Palette.tint(config.board, -.07), Palette.tint(config.board, -.12)];
+      shades.forEach((color, i) => face.addColorStop(i / 2, color));
+      ctx.beginPath(); ctx.arc(0, 0, 53.2, 0, TAU); ctx.fillStyle = face; ctx.fill();
+      ctx.strokeStyle = black ? '#050506' : '#00000030'; ctx.lineWidth = 1.3;
+      ctx.beginPath(); ctx.arc(0, .3, 52.6, Math.PI, TAU); ctx.stroke();
+      ctx.strokeStyle = black ? '#ffffff0d' : '#ffffff50'; ctx.lineWidth = .8;
+      ctx.beginPath(); ctx.arc(0, 0, 52.8, 0, Math.PI); ctx.stroke(); ctx.restore();
+    });
+    ctx.strokeStyle = '#00000050'; ctx.lineWidth = 1; ctx.strokeRect(.5, .5, w - 1, h - 1); ctx.restore();
+  }
+  function hand(ctx, pose, secondary, config) {
+    if (pose.opacity <= .001) return;
+    const width = secondary ? config.shortWidth : config.longWidth;
+    const length = 49.3 * (secondary ? Math.min(config.shortLength, config.longLength) : config.longLength) / 100;
+    const color = secondary ? config.short : config.long;
+    ctx.save(); ctx.rotate(pose.angle); ctx.globalAlpha = pose.opacity;
+    const metal = ctx.createLinearGradient(0, -width / 2, 0, width / 2);
+    [[0, -.38], [.18, .02], [.42, .3], [.58, -.16], [1, -.45]].forEach(([stop, tint]) => metal.addColorStop(stop, Palette.tint(color, tint)));
+    // Restrained angle-dependent reflections; derived from the selected hand colour.
+    ctx.fillStyle = metal; ctx.shadowColor = '#00000080'; ctx.shadowBlur = 1.1; ctx.shadowOffsetY = 1.1;
+    ctx.fillRect(-width * .15, -width / 2, length + width * .15, width);
+    ctx.shadowColor = 'transparent';
+    ctx.globalAlpha = pose.opacity * (.15 + .22 * Math.pow(Math.cos(pose.angle + .7), 2));
+    ctx.fillStyle = Palette.tint(color, .55); ctx.fillRect(0, -width / 2, length, Math.min(1, width * .18));
+    ctx.restore();
+  }
+  function drawHands(ctx, geometry, instance, config) {
+    geometry.points.forEach(point => {
+      ctx.save(); ctx.translate(point.x, point.y); ctx.scale(point.radius / 53.2, point.radius / 53.2);
+      hand(ctx, instance.hands[point.i + 1], true, config); hand(ctx, instance.hands[point.i], false, config); ctx.restore();
+    });
+  }
+  return { drawSurface, drawHands };
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('../amt/typography.js') : root.Timeform.AMTTypography,
+    commonJS ? require('./settings.js') : root.Timeform.AMT72vSettings,
+    commonJS ? require('./animation.js') : root.Timeform.AMT72vAnimation,
+    commonJS ? require('./drawing.js') : root.Timeform.AMT72vDrawing);
+  if (commonJS) module.exports = api;
+  else (root.Timeform ||= {}).AMT72v = api;
+})(globalThis, function (Typography, Settings, Animation, Drawing) {
+  'use strict';
+  const { IDLE, displayDigits } = Typography;
+  const columns = 6, rows = 12, count = 72, digitWidth = 3, digitHeight = 6, frameAspect = 95 / 173;
+  const digitOrigins = [[0, 0], [3, 0], [0, 6], [3, 6]];
+  const glyphs = Object.fromEntries(Array.from({ length: 10 }, (_, digit) => [digit, Typography.glyphPose(String(digit), digitWidth)]));
+  function digitPose(digits) {
+    const pose = Array.from({ length: count * 2 }, () => ({ angle: IDLE, used: false }));
+    digitOrigins.forEach(([x, y], digit) => {
+      const glyph = glyphs[digits[digit]];
+      for (let row = 0; row < digitHeight; row++) for (let col = 0; col < digitWidth; col++) {
+        const target = ((y + row) * columns + x + col) * 2, source = (row * digitWidth + col) * 2;
+        pose[target] = { ...glyph[source] }; pose[target + 1] = { ...glyph[source + 1] };
+      }
+    });
+    return pose;
+  }
+  function geometry(width, height, input) {
+    const config = Settings.normalize(input), radius = config.radius, step = radius * 2 + config.gap;
+    const gridWidth = radius * 2 + (columns - 1) * step, gridHeight = radius * 2 + (rows - 1) * step;
+    // Black Sterling measured in the rectified front-board plane.
+    const boardWidth = step * 457.46 / 62.45, boardHeight = boardWidth / frameAspect;
+    const originX = (boardWidth - gridWidth) / 2 + radius, originY = (boardHeight - gridHeight) / 2 + radius;
+    const padding = Math.min(config.padding, (width - 1) / 2, (height - 1) / 2);
+    const innerHeight = Math.max(1, height - padding * 2), requested = config.safeTop + config.safeBottom;
+    // Large safe areas shrink proportionally on small canvases, leaving a positive drawing region.
+    const safeFactor = requested ? Math.min(1, (innerHeight - 1) / requested) : 1;
+    const safeTop = config.safeTop * safeFactor, safeBottom = config.safeBottom * safeFactor;
+    const availableWidth = Math.max(1, width - padding * 2), availableHeight = Math.max(1, innerHeight - safeTop - safeBottom);
+    const factor = Math.min(availableWidth / boardWidth, availableHeight / boardHeight) * config.scale / 100;
+    const displayWidth = boardWidth * factor, displayHeight = boardHeight * factor;
+    const x = padding + (availableWidth - displayWidth) / 2 * (1 + config.offsetX / 100);
+    const y = padding + safeTop + (availableHeight - displayHeight) / 2 * (1 + config.offsetY / 100);
+    const points = Array.from({ length: count }, (_, index) => ({
+      x: originX + index % columns * step, y: originY + Math.floor(index / columns) * step, radius, i: index * 2
+    }));
+    return { x, y, width: displayWidth, height: displayHeight, boardWidth, boardHeight, points, padding, safeTop, safeBottom, layout: 'portrait' };
+  }
+  function create(initial, options) {
+    return Animation.create({ Settings, displayDigits, digitPose }, initial, options);
+  }
+  return { id: 'amt72v', type: 'portrait', name: 'A million Times 72v', badge: 'AMT72v',
+    count, columns, rows, digitWidth, digitHeight, digitOrigins, frameAspect,
+    reference: 'https://www.humanssince1982.com/en-int/products/a-million-times-72v-black-sterling',
+    referenceLabel: 'AMT72v Black Sterling · 原作参考',
+    motionReference: 'https://cdn.shopify.com/videos/c/vp/c9a11576a51645cf9c158a61c4a2706f/c9a11576a51645cf9c158a61c4a2706f.HD-1080p-7.2Mbps-31645859.mp4',
+    referenceTime: '09:34', referenceDuration: 32, referenceClip: true, choreographed: true,
+    description: '6 × 12 黑板银针；同列同步、列间错相旋转，双针沿快慢两路逐渐组成上方小时与下方分钟。',
+    previewNote: 'Black Sterling 原片约 32.03 秒，从已在旋转的直线开始，片尾为 09:35。完整换时另补 6 秒拆字；原片对照略过此段。上下留白可独立调节。',
+    Settings, Drawing, displayDigits, digitPose, geometry, create };
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('./amt72v/model.js') : root.Timeform.AMT72v,
+    commonJS ? require('../shared/config.js') : root.Timeform.Config);
+  if (commonJS) module.exports = api;
+  else (root.Timeform ||= {}).Portrait = api;
+})(globalThis, function (AMT72v, Config) {
+  'use strict';
+  const models = [AMT72v];
+  const get = id => models.find(model => model.id === id);
+  function parse(text) {
+    const data = JSON.parse(text), model = get(data?.model);
+    if (data?.version !== 2 || !model || data.type !== 'portrait') throw new Error('请选择 AMT72v 竖排配置；横屏方案请在横屏页面导入。');
+    return { model, settings: Config.parse(model, text) };
+  }
+  return { models, get, parse };
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('./math.js') : root.Timeform.Math,
+    commonJS ? require('./hand-animation.js') : root.Timeform.HandAnimation);
+  if (commonJS) module.exports = api;
+  else (root.Timeform ||= {}).EditionAnimation = api;
+})(globalThis, function (Maths, HandAnimation) {
+  'use strict';
+  const { TAU, clamp, smooth } = Maths;
+  const shortest = angle => Math.atan2(Math.sin(angle), Math.cos(angle));
+  function hermite(from, to, v0, v1, start, end, now) {
+    if (now < start) return { angle: from, velocity: 0 };
+    if (now >= end) return { angle: to, velocity: 0 };
+    const span = end - start, u = clamp((now - start) / span, 0, 1), u2 = u*u, u3 = u2*u;
+    return { angle: from + (to-from)*smooth(u) + span*(v0*(u3-2*u2+u) + v1*(u3-u2)),
+      velocity: (to-from)*6*u*(1-u)/span + v0*(3*u2-4*u+1) + v1*(3*u2-2*u) };
+  }
+  // Continuous phase curves, expressed in source seconds. Each edition supplies
+  // its own timing/propagation measurements; no images or frame playback are used.
+  function phaseAt(seconds, profile) {
+    if (seconds <= 0) return { angle: 0, velocity: 0 };
+    if (profile.phaseAt) return profile.phaseAt(seconds);
+    if (profile.knots) {
+      const points = profile.knots, last = points.length-1;
+      const secant = i => (points[i+1][1]-points[i][1])/(points[i+1][0]-points[i][0]);
+      const slope = i => i === 0 ? 0 : i === last ? secant(last-1)
+        : 2*secant(i-1)*secant(i)/(secant(i-1)+secant(i) || 1);
+      const radians = Math.PI/180;
+      if (seconds >= points[last][0]) return {
+        angle:(points[last][1]+(seconds-points[last][0])*slope(last))*radians,
+        velocity:slope(last)*radians };
+      let i=0; while (seconds >= points[i+1][0]) i++;
+      const value=hermite(points[i][1],points[i+1][1],slope(i),slope(i+1),points[i][0],points[i+1][0],seconds);
+      return { angle:value.angle*radians,velocity:value.velocity*radians };
+    }
+    const rampTime = profile.ramp || .65;
+    const ramp = Math.exp(-seconds/rampTime);
+    const phase = TAU * (seconds-rampTime*(1-ramp))/(profile.period || 11.5);
+    const modulation = profile.modulation ?? .25;
+    return { angle: phase-modulation*Math.sin(phase),
+      velocity: TAU*(1-ramp)/(profile.period || 11.5)*(1-modulation*Math.cos(phase)) };
+  }
+  function create(model, Settings, initialProfile, initial, options = {}) {
+    let profile=initialProfile;
+    const fallback = HandAnimation.create({ Settings, digitPose: model.digitPose,
+      displayDigits: model.displayDigits, handCount: model.count*2 }, initial, options);
+    const { state, hands } = fallback;
+    let sequence = null;
+    const active = now => sequence && now < sequence.finish;
+    const alpha = hand => hand.used || state.visibility === 'show' ? 1 : state.visibility === 'ghost' ? .12 : 0;
+    const geometry = model.geometry(1920, 1920, Settings.defaults);
+    const positions = geometry.points.map(point => {
+      const step = geometry.points[1].x-geometry.points[0].x;
+      return { x: (point.x-geometry.boardWidth/2)/step,
+        y: (point.y-geometry.boardHeight/2)/step };
+    });
+    const maxX = Math.max(...positions.map(p => p.x));
+    const minX = Math.min(...positions.map(p => p.x));
+    function wave(motor, now) {
+      if (motor.rate !== undefined) return { angle:motor.aligned+motor.rate*(now-motor.waveStart)/sequence.unit,
+        velocity:motor.rate/sequence.unit };
+      const phase = phaseAt((now-motor.waveStart)/sequence.unit, profile);
+      return { angle: motor.aligned + motor.direction*phase.angle,
+        velocity: motor.direction*phase.velocity/sequence.unit };
+    }
+    function motorAt(motor, now) {
+      if (motor.direct || now >= motor.formStart) {
+        const track = motor.returning;
+        return hermite(track.from, track.to, track.velocity, 0, track.start, track.end, now);
+      }
+      if (now < motor.alignEnd) return hermite(motor.from, motor.aligned, motor.entryVelocity,
+        (motor.rate || 0)/sequence.unit, motor.alignStart, motor.alignEnd, now);
+      return wave(motor, now);
+    }
+    function sample(now) {
+      if (!sequence) return fallback.sample(now);
+      sequence.motors.forEach((motor, i) => {
+        const hand = hands[i]; hand.angle = motorAt(motor, now).angle;
+        const reveal = smooth(clamp((now-sequence.start)/Math.max(1,sequence.reveal),0,1));
+        hand.opacity = now < motor.returning.end ? hand.revealFrom+(1-hand.revealFrom)*reveal : alpha(hand);
+      });
+      return hands;
+    }
+    function returning(from, velocity, target, direction, start, end) {
+      let distance = (direction*(target-from)%TAU+TAU)%TAU;
+      if (distance > TAU-1e-8) distance = 0;
+      // Preserve a moving arm's direction, and only add a lap when braking from
+      // the incoming speed would otherwise reverse it. No universal extra lap.
+      const speed = Math.max(0,velocity*direction);
+      while (distance+1e-8 < speed*(end-start)/3) distance += TAU;
+      return { from, to: from+direction*distance, velocity, start, end };
+    }
+    function publish(minutes) {
+      const pose = model.digitPose(model.displayDigits(minutes,state.format24));
+      sequence.motors.forEach((motor,i) => {
+        const current = motor.direct ? { angle: motor.returning.from, velocity: motor.returning.velocity } : wave(motor,motor.formStart);
+        motor.returning = returning(current.angle,current.velocity,pose[i].angle,motor.direction,
+          motor.formStart,motor.end);
+        Object.assign(hands[i],{ used:pose[i].used, to:motor.returning.to, motionEnd:motor.end, fadeEnd:sequence.finish });
+      });
+      state.minuteKey = model.displayDigits(minutes,state.format24);
+    }
+    function plan(minutes, now) {
+      sample(now);
+      const previous = hands.map((hand,i) => ({ angle:hand.angle, opacity:hand.opacity,
+        velocity:sequence ? motorAt(sequence.motors[i],now).velocity : 0 }));
+      profile=options.profileFor?.(minutes,state) || profile;
+      const unit = state.duration*1000/profile.duration;
+      sequence = { start:now, finish:now+state.duration*1000, unit, reveal:Math.min(200,state.duration*20), motors:[] };
+      sequence.motors = hands.map((hand,i) => {
+        const p = positions[Math.floor(i/2)], lane = i%2;
+        const col = profile.order === -1 ? maxX-p.x : p.x-minX;
+        const radius = Math.hypot(p.x,p.y);
+        const delay = col*(profile.columnDelay || 0) + radius*(profile.radialDelay || 0) + Math.abs(p.y)*(profile.rowDelay || 0);
+        const track=profile.tracks?.[Math.floor(i/2)], rate=track ? track[lane+2]*Math.PI/180 : undefined;
+        const direction = rate === undefined ? profile.counter && lane ? -1 : 1 : Math.sign(rate);
+        let heading = (profile.heading ?? 135)*Math.PI/180;
+        if (profile.tileAngles) heading=profile.tileAngles[Math.floor(i/2/model.columns)%2][Math.floor(i/2)%model.columns%2]*Math.PI/180;
+        if (profile.layout === 'radial') heading = Math.atan2(-p.y,-p.x)+(profile.tangent ? Math.PI/2 : 0);
+        if (profile.splay) heading += direction*profile.splay*Math.PI/180;
+        if (profile.layout === 'arc') heading = radius < .1 ? -Math.PI/2
+          : Math.atan2(-p.y,-p.x)-direction*Math.atan2(radius,profile.curvature || .3);
+        if (profile.opposed && lane) heading += Math.PI;
+        if (track) heading=track[lane]*Math.PI/180;
+        let aligned = previous[i].angle+shortest(heading-previous[i].angle);
+        const entryDelay=delay+col*(profile.alignColumnDelay || 0);
+        const alignStart = now+(profile.alignStart+entryDelay)*unit;
+        const alignEnd = now+(profile.alignEnd+entryDelay)*unit;
+        const waveStart = now+(profile.waveStart+delay)*unit;
+        if (track) {
+          // Join a measured moving shot with matching angular speed. The entry
+          // is reconstructed because the source starts after the motion began.
+          aligned=returning(previous[i].angle,previous[i].velocity,heading,direction,now,waveStart).to;
+          while ((aligned-previous[i].angle)*direction < Math.abs(rate)*(waveStart-now)/unit/3) aligned+=direction*TAU;
+        }
+        const formStart = now+(profile.formStart+delay)*unit;
+        const end = now+Math.min(profile.duration-.12,profile.formEnd+delay*.35+(i%7)*.015)*unit;
+        Object.assign(hand,{ revealFrom:previous[i].opacity });
+        return { from:previous[i].angle, aligned, direction,
+          alignStart:Math.abs(previous[i].velocity)>1e-10 ? now : alignStart,
+          alignEnd:track ? waveStart : Math.min(alignEnd,waveStart), waveStart, formStart, end, rate,
+          entryVelocity:previous[i].velocity, direct:false };
+      });
+      publish(minutes); sample(now);
+    }
+    function initialize(minutes,now) { sequence=null; fallback.initialize(minutes,now); }
+    function animate(minutes,now,force=false) {
+      if (!force && state.minuteKey === model.displayDigits(minutes,state.format24)) return false;
+      if (options.reducedMotion || state.motion !== 'wave') {
+        sample(now); sequence=null;
+        // Hand the current pose to the shared transition without resampling an old track.
+        hands.forEach(hand => Object.assign(hand,{ from:hand.angle,to:hand.angle,path:null,start:now,duration:1,
+          motionEnd:now,revealFrom:hand.opacity,travelOpacity:hand.opacity,revealStart:now,revealEnd:now,
+          fadeFrom:hand.opacity,fadeTo:hand.opacity,fadeStart:now,fadeEnd:now }));
+        return fallback.animate(minutes,now,force);
+      }
+      plan(minutes,now); return true;
+    }
+    function retarget(minutes,now) {
+      if (!active(now)) return animate(minutes,now);
+      if (state.minuteKey === model.displayDigits(minutes,state.format24)) return false;
+      const pose = model.digitPose(model.displayDigits(minutes,state.format24));
+      sample(now);
+      sequence.motors.forEach((motor,i) => {
+        hands[i].used=pose[i].used;
+        if (now >= motor.formStart) {
+          const current=motorAt(motor,now);
+          motor.formStart=now; motor.end=Math.max(motor.end,now+350); motor.direct=true;
+          motor.returning=returning(current.angle,current.velocity,pose[i].angle,motor.direction,now,motor.end);
+          sequence.finish=Math.max(sequence.finish,motor.end+80);
+        } else {
+          const current=wave(motor,motor.formStart);
+          motor.returning=returning(current.angle,current.velocity,pose[i].angle,motor.direction,motor.formStart,motor.end);
+        }
+        hands[i].to=motor.returning.to; hands[i].motionEnd=motor.end; hands[i].fadeEnd=sequence.finish;
+      });
+      state.minuteKey=model.displayDigits(minutes,state.format24); return true;
+    }
+    function update(config,now) {
+      const next=Settings.normalize(config,state), reformat=next.format24!==state.format24;
+      sample(now); Object.assign(state,next,{visibility:state.visibility});
+      fallback.setVisibility(next.visibility,now); return { reformat };
+    }
+    function getStage(now) {
+      if (!active(now)) return '';
+      if (sequence.motors.every(m => now >= m.end)) return '读时停留';
+      if (sequence.motors.some(m => now >= m.formStart && now < m.end)) return '逐针成型';
+      if (sequence.motors.some(m => now >= m.waveStart && now < m.formStart)) return profile.stage || '列间相位流动';
+      if (sequence.motors.every(m => now >= m.alignEnd)) return '归队停留';
+      return '逐位拆字归队';
+    }
+    return { state,hands,sample,initialize,animate,retarget,update,getStage,
+      setVisibility(mode,now) { sample(now); state.visibility=mode; },
+      isAnimating:now => Boolean(active(now)) || (!sequence && fallback.isAnimating(now)) };
+  }
+  return { create,phaseAt };
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('./palette.js') : root.Timeform.Palette,
+    commonJS ? require('./single-clock.js') : root.Timeform.SingleClock);
+  if (commonJS) module.exports = api;
+  else (root.Timeform ||= {}).EditionDrawing = api;
+})(globalThis, function (Palette, SingleClock) {
+  'use strict';
+  const TAU = Math.PI*2;
+  function stone(context, geometry, config) {
+    const { boardWidth:w,boardHeight:h } = geometry;
+    context.save(); context.fillStyle=config.board; context.fillRect(0,0,w,h);
+    // A deterministic illustration of Sunset Dune's horizontal strata. The
+    // natural stone varies between pieces; this is not a photograph of a slab.
+    for (let i=0;i<115;i++) {
+      const y=h*i/115, thickness=h*(.002+.008*(.5+.5*Math.sin(i*17.13)));
+      context.strokeStyle=['#e6b783','#a85336','#d78c60','#f0d5a9','#8b4230'][i%5];
+      context.lineWidth=thickness; context.globalAlpha=.35+.3*Math.sin(i*2.4)**2;
+      context.beginPath(); context.moveTo(0,y);
+      context.bezierCurveTo(w*.32,y+Math.sin(i*.7)*h*.023,w*.61,y+Math.cos(i*.4)*h*.02,w,y-h*.035);
+      context.stroke();
+    }
+    // Fine pits and broken mineral flecks break up the smooth bands.
+    let seed=1982;
+    const random=()=>{ seed=(Math.imul(seed,1664525)+1013904223)>>>0; return seed/4294967296; };
+    for (let i=0;i<12000;i++) {
+      const x=random()*w,y=random()*h;
+      context.globalAlpha=.07+random()*.22;
+      context.fillStyle=i%3===0 ? '#f4d2a6' : i%3===1 ? '#743d2a' : '#d78955';
+      context.fillRect(x,y,w*(.0005+random()*.0028),h*(.0007+random()*.0018));
+    }
+    context.globalAlpha=1;
+    geometry.points.forEach(point => {
+      const gradient=context.createRadialGradient(point.x-point.radius*.25,point.y-point.radius*.3,0,point.x,point.y,point.radius);
+      gradient.addColorStop(0,'#29180e50'); gradient.addColorStop(.8,'#42201436'); gradient.addColorStop(1,'#1c0e0b92');
+      context.beginPath(); context.arc(point.x,point.y,point.radius,0,TAU); context.fillStyle=gradient; context.fill();
+      context.strokeStyle='#f8dab654'; context.lineWidth=1; context.stroke();
+    });
+    context.restore();
+  }
+  function arm(context, pose, secondary, config, variant, family) {
+    if (pose.opacity<=.001) return;
+    const width=secondary ? config.shortWidth : config.longWidth;
+    const length=49.3*(secondary ? Math.min(config.shortLength,config.longLength) : config.longLength)/100;
+    const color=secondary ? config.short : config.long;
+    const finish=Array.isArray(variant.finish) ? variant.finish[secondary ? 1 : 0] : variant.finish;
+    context.save(); context.globalAlpha=pose.opacity; context.rotate(pose.angle);
+    context.shadowColor='#00000055'; context.shadowBlur=1.1; context.shadowOffsetY=1.1;
+    if (finish==='metal' || finish==='outlined') {
+      const gradient=context.createLinearGradient(0,-width/2,0,width/2);
+      [[0,-.4],[.16,.17],[.38,.45],[.55,-.12],[.8,.06],[1,-.45]].forEach(([stop,tint]) => gradient.addColorStop(stop,Palette.tint(color,tint)));
+      context.fillStyle=gradient;
+    } else context.fillStyle=color;
+    const rounded=family.startsWith('amt') || variant.rounded;
+    if (rounded) Palette.roundRect(context,-width*.12,-width/2,length+width*.12,width,width*.35);
+    else { context.beginPath(); context.rect(-width*.3,-width/2,length+width*.3,width); }
+    context.fill();
+    if (finish==='outlined') {
+      context.shadowColor='transparent'; context.strokeStyle='#d1d2cd'; context.lineWidth=Math.max(.7,width*.12); context.stroke();
+    } else if (finish==='metal') {
+      context.shadowColor='transparent'; context.globalAlpha=pose.opacity*(.22+.23*Math.cos(pose.angle+.7)**2);
+      context.fillStyle=Palette.tint(color,.65); context.fillRect(0,-width/2,length,Math.min(1,width*.15));
+    }
+    context.restore();
+  }
+  function wrap(model,variant) {
+    return {
+      drawSurface(context,geometry,config) {
+        if (variant.texture==='travertine') return stone(context,geometry,config);
+        if (model.Drawing?.drawSurface) return model.Drawing.drawSurface(context,geometry,config);
+        Palette.drawBoard(context,geometry.boardWidth,geometry.boardHeight,config);
+        geometry.points.forEach(point=>SingleClock.drawFace(context,point,config));
+      },
+      drawHands(context,geometry,instance,config) {
+        geometry.points.forEach(point=>{
+          context.save(); context.translate(point.x,point.y); context.scale(point.radius/53.2,point.radius/53.2);
+          arm(context,instance.hands[point.i+1],true,config,variant,model.id);
+          arm(context,instance.hands[point.i],false,config,variant,model.id);
+          context.restore();
+        });
+      }
+    };
+  }
+  return { wrap };
+});
+
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).ClassicEditions = api;
+})(globalThis, function () {
+  'use strict';
+  // Each record has been inspected against its own official product gallery.
+  // The source and reconstruction boundaries are maintained in designPath.
+  return [
+  {
+    "palette": {
+      "background": "#e9e6de",
+      "board": "#101c38",
+      "long": "#cbd0d2",
+      "short": "#cbd0d2"
+    },
+    "finish": "metal",
+    "duration": 56.0,
+    "motion": "Tidal · 环弧与反向开合",
+    "profile": {
+      "duration": 56,
+      "layout": "arc",
+      "curvature": 0.3,
+      "counter": true,
+      "alignStart": 0.6,
+      "alignEnd": 9.2,
+      "waveStart": 14.8,
+      "formStart": 47.5,
+      "formEnd": 54.7,
+      "period": 11.7,
+      "ramp": 1.0,
+      "modulation": 0.15,
+      "radialDelay": 0.28,
+      "stage": "环弧反向开合"
+    },
+    "id": "amt61c-tidal",
+    "family": "amt61c",
+    "slug": "a-million-times-61c-tidal",
+    "edition": "Tidal",
+    "designPath": "src/models/amt61c/tidal/design.md",
+    "video": "https://cdn.shopify.com/videos/c/vp/e8d2c29905364cd1b7f7ace8d301246e/e8d2c29905364cd1b7f7ace8d301246e.HD-1080p-7.2Mbps-30306417.mp4",
+    "sourceDuration": 55.96,
+    "completeVideo": true,
+    "colors": "深蓝板面 · 银色金属双针",
+    "note": "依据本款原片重建Tidal · 环弧与反向开合，示例为 09:34 → 09:35；其他读时路径为网页重建。",
+    "description": "A million Times 61c Tidal；深蓝板面 · 银色金属双针，Tidal · 环弧与反向开合。"
+  },
+  {
+    "palette": {
+      "background": "#e9e6de",
+      "board": "#f6f4ef",
+      "long": "#373a37",
+      "short": "#424541"
+    },
+    "finish": "plain",
+    "duration": 41.1,
+    "motion": "斜线列波 · 本款原片节奏",
+    "baseProfile": {
+      "entryHold": 1.04,
+      "referenceDuration": 41.11998697916667
+    },
+    "id": "clockclock24-white",
+    "family": "clockclock24",
+    "slug": "clockclock-24-white",
+    "edition": "White",
+    "designPath": "src/models/clockclock24/white/design.md",
+    "video": "https://cdn.shopify.com/videos/c/vp/6333469ba4274dd4b1f0c72d75d12ed8/6333469ba4274dd4b1f0c72d75d12ed8.HD-1080p-7.2Mbps-30411505.mp4",
+    "sourceDuration": 41.12,
+    "completeVideo": true,
+    "colors": "白色板面 · 深色双针",
+    "note": "依据本款原片重建斜线列波 · 本款原片节奏，示例为 09:34 → 09:35；其他读时路径为网页重建。",
+    "description": "ClockClock 24 White；白色板面 · 深色双针，斜线列波 · 本款原片节奏。"
+  },
+  {
+    "palette": {
+      "background": "#e9e6de",
+      "board": "#f6f4ef",
+      "long": "#cbd0d2",
+      "short": "#cbd0d2"
+    },
+    "finish": "metal",
+    "duration": 41.5,
+    "motion": "斜线列波 · 本款原片节奏",
+    "baseProfile": {
+      "entryHold": 1.4,
+      "referenceDuration": 41.47994791666667
+    },
+    "id": "clockclock24-white-sterling",
+    "family": "clockclock24",
+    "slug": "clockclock-24-white-sterling",
+    "edition": "White Sterling",
+    "designPath": "src/models/clockclock24/white-sterling/design.md",
+    "video": "https://cdn.shopify.com/videos/c/vp/007a5e35df7f43319b26485203d04f98/007a5e35df7f43319b26485203d04f98.HD-1080p-7.2Mbps-30409424.mp4",
+    "sourceDuration": 41.48,
+    "completeVideo": true,
+    "colors": "白色板面 · 银色金属双针",
+    "note": "依据本款原片重建斜线列波 · 本款原片节奏，示例为 09:34 → 09:35；其他读时路径为网页重建。",
+    "description": "ClockClock 24 White Sterling；白色板面 · 银色金属双针，斜线列波 · 本款原片节奏。"
+  },
+  {
+    "palette": {
+      "background": "#e9e6de",
+      "board": "#f6f4ef",
+      "long": "#ceaa63",
+      "short": "#ceaa63"
+    },
+    "finish": "metal",
+    "duration": 42.0,
+    "motion": "斜线列波 · 本款原片节奏",
+    "baseProfile": {
+      "entryHold": 1.96,
+      "referenceDuration": 42.039973958333334
+    },
+    "id": "clockclock24-white-gold",
+    "family": "clockclock24",
+    "slug": "clockclock-24-white-gold",
+    "edition": "White Gold",
+    "designPath": "src/models/clockclock24/white-gold/design.md",
+    "video": "https://cdn.shopify.com/videos/c/vp/5f05fd5a18c34a1f991b31df74ccc9a1/5f05fd5a18c34a1f991b31df74ccc9a1.HD-1080p-7.2Mbps-30469559.mp4",
+    "sourceDuration": 42.04,
+    "completeVideo": true,
+    "colors": "白色板面 · 金色双针",
+    "note": "依据本款原片重建斜线列波 · 本款原片节奏，示例为 09:34 → 09:35；其他读时路径为网页重建。",
+    "description": "ClockClock 24 White Gold；白色板面 · 金色双针，斜线列波 · 本款原片节奏。"
+  },
+  {
+    "palette": {
+      "background": "#000000",
+      "board": "#111213",
+      "long": "#cbd0d2",
+      "short": "#cbd0d2"
+    },
+    "finish": "metal",
+    "duration": 41.5,
+    "motion": "斜线列波 · 本款原片节奏",
+    "baseProfile": {
+      "entryHold": 1.4,
+      "referenceDuration": 41.47994791666667
+    },
+    "id": "clockclock24-black-sterling",
+    "family": "clockclock24",
+    "slug": "clockclock-24-black-sterling",
+    "edition": "Black Sterling",
+    "designPath": "src/models/clockclock24/black-sterling/design.md",
+    "video": "https://cdn.shopify.com/videos/c/vp/aeddb6eb57084f4989c405c6f5fcfc72/aeddb6eb57084f4989c405c6f5fcfc72.HD-1080p-7.2Mbps-30410489.mp4",
+    "sourceDuration": 41.48,
+    "completeVideo": true,
+    "colors": "黑色板面 · 银色金属双针",
+    "note": "依据本款原片重建斜线列波 · 本款原片节奏，示例为 09:34 → 09:35；其他读时路径为网页重建。",
+    "description": "ClockClock 24 Black Sterling；黑色板面 · 银色金属双针，斜线列波 · 本款原片节奏。"
+  },
+  {
+    "palette": {
+      "background": "#000000",
+      "board": "#111213",
+      "long": "#ceaa63",
+      "short": "#ceaa63"
+    },
+    "finish": "metal",
+    "duration": 42.0,
+    "motion": "斜线列波 · 本款原片节奏",
+    "baseProfile": {
+      "entryHold": 1.96,
+      "referenceDuration": 42.039973958333334
+    },
+    "id": "clockclock24-black-gold",
+    "family": "clockclock24",
+    "slug": "clockclock-24-black-gold",
+    "edition": "Black Gold",
+    "designPath": "src/models/clockclock24/black-gold/design.md",
+    "video": "https://cdn.shopify.com/videos/c/vp/02d92f5a9f16446bbffc2eb6399ed3c1/02d92f5a9f16446bbffc2eb6399ed3c1.HD-1080p-7.2Mbps-30469617.mp4",
+    "sourceDuration": 42.04,
+    "completeVideo": true,
+    "colors": "黑色板面 · 金色双针",
+    "note": "依据本款原片重建斜线列波 · 本款原片节奏，示例为 09:34 → 09:35；其他读时路径为网页重建。",
+    "description": "ClockClock 24 Black Gold；黑色板面 · 金色双针，斜线列波 · 本款原片节奏。"
+  },
+  {
+    "palette": {
+      "background": "#e9e6de",
+      "board": "#f6f4ef",
+      "long": "#222d91",
+      "short": "#c7c9c6"
+    },
+    "finish": [
+      "plain",
+      "metal"
+    ],
+    "rounded": true,
+    "duration": 40.1,
+    "completeVideo": false,
+    "referenceTime": "09:39",
+    "motion": "Neela · 错相斜线列波",
+    "profile": {
+      "duration": 40.1,
+      "alignStart": 0.45,
+      "alignEnd": 5.5,
+      "waveStart": 9.2,
+      "formStart": 27,
+      "formEnd": 38.7,
+      "heading": 135,
+      "opposed": true,
+      "period": 12,
+      "columnDelay": 0.4,
+      "stage": "斜线列波",
+      "order": -1
+    },
+    "id": "clockclock24-pinakin-neela",
+    "family": "clockclock24",
+    "slug": "clockclock-24-pinakin-neela",
+    "edition": "Pinakin Neela",
+    "designPath": "src/models/clockclock24/pinakin-neela/design.md",
+    "video": "https://cdn.shopify.com/videos/c/vp/2d4c49356f2640b482c466d136ba9eaf/2d4c49356f2640b482c466d136ba9eaf.HD-1080p-7.2Mbps-74958665.mp4",
+    "sourceDuration": 11.044,
+    "colors": "白色板面 · 蓝色针 · 银色金属针",
+    "note": "依据本款视频片段重建Neela · 错相斜线列波，完整换时补足为 40.1 秒；原片未覆盖的首尾衔接为网页重建。",
+    "description": "ClockClock 24 Pinakin Neela；白色板面 · 蓝色针 · 银色金属针，Neela · 错相斜线列波。"
+  },
+  {
+    "palette": {
+      "background": "#e9e6de",
+      "board": "#f6f4ef",
+      "long": "#276750",
+      "short": "#d1b16c"
+    },
+    "finish": [
+      "plain",
+      "metal"
+    ],
+    "rounded": true,
+    "duration": 40.1,
+    "completeVideo": false,
+    "motion": "Hara · 双针反向开合",
+    "profile": {
+      "duration": 40.1,
+      "alignStart": 0.4,
+      "alignEnd": 5.8,
+      "waveStart": 7.2,
+      "formStart": 27,
+      "formEnd": 38.7,
+      "heading": 0,
+      "counter": true,
+      "columnDelay": 0.34,
+      "period": 10.7,
+      "ramp": 0.65,
+      "modulation": 0.2,
+      "stage": "双针反向开合"
+    },
+    "id": "clockclock24-pinakin-hara",
+    "family": "clockclock24",
+    "slug": "clockclock-24-pinakin-hara",
+    "edition": "Pinakin Hara",
+    "designPath": "src/models/clockclock24/pinakin-hara/design.md",
+    "video": "https://cdn.shopify.com/videos/c/vp/2a7b147708ed461590a4e94cea73cdf2/2a7b147708ed461590a4e94cea73cdf2.HD-1080p-7.2Mbps-74979670.mp4",
+    "sourceDuration": 10.244,
+    "colors": "白色板面 · 绿色针 · 金色金属针",
+    "note": "依据本款视频片段重建Hara · 双针反向开合，完整换时补足为 40.1 秒；原片未覆盖的首尾衔接为网页重建。",
+    "description": "ClockClock 24 Pinakin Hara；白色板面 · 绿色针 · 金色金属针，Hara · 双针反向开合。"
+  },
+  {
+    "palette": {
+      "background": "#000000",
+      "board": "#b56a43",
+      "long": "#31312d",
+      "short": "#31312d"
+    },
+    "finish": "outlined",
+    "texture": "travertine",
+    "sizeCm": [
+      92,
+      42
+    ],
+    "duration": 40.1,
+    "completeVideo": false,
+    "motion": "Sunset Dune · 列间错相旋转",
+    "profile": {
+      "duration": 40.1,
+      "alignStart": 0.45,
+      "alignEnd": 5.5,
+      "waveStart": 8.8,
+      "formStart": 27,
+      "formEnd": 38.7,
+      "heading": 135,
+      "opposed": true,
+      "period": 12,
+      "columnDelay": 0.4,
+      "stage": "斜线列波",
+      "order": -1
+    },
+    "id": "clockclock24-bjarke-ingels",
+    "family": "clockclock24",
+    "slug": "clockclock-24-bjarke-ingels",
+    "edition": "Bjarke Ingels · Sunset Dune",
+    "designPath": "src/models/clockclock24/bjarke-ingels/design.md",
+    "video": "https://cdn.shopify.com/videos/c/vp/7c10b595ed8d42e98741848298bb846c/7c10b595ed8d42e98741848298bb846c.HD-1080p-7.2Mbps-55178830.mp4",
+    "sourceDuration": 6.16,
+    "colors": "Sunset Dune 洞石板面 · 深色针 · 银色金属边",
+    "note": "依据本款视频片段重建Sunset Dune · 列间错相旋转，完整换时补足为 40.1 秒；原片未覆盖的首尾衔接为网页重建。",
+    "description": "ClockClock 24 Bjarke Ingels · Sunset Dune；Sunset Dune 洞石板面 · 深色针 · 银色金属边，Sunset Dune · 列间错相旋转。"
+  },
+  {
+    "palette": {
+      "background": "#000000",
+      "board": "#24245b",
+      "long": "#f9faf7",
+      "short": "#eef0ec"
+    },
+    "finish": "plain",
+    "duration": 47.4,
+    "motion": "Dada Blue · 延后启动的斜线列波",
+    "baseProfile": {
+      "referenceDuration": 47.36,
+      "waveStart": 14.3,
+      "formStart": 32.7,
+      "finish": 46.7
+    },
+    "id": "clockclock24-dada-blue",
+    "family": "clockclock24",
+    "slug": "cc24-dada-blue",
+    "edition": "Dada Blue",
+    "designPath": "src/models/clockclock24/dada-blue/design.md",
+    "video": "https://cdn.shopify.com/videos/c/vp/7b84afa6bf7d458594d29c24cc273d3a/7b84afa6bf7d458594d29c24cc273d3a.HD-1080p-7.2Mbps-35307977.mp4",
+    "sourceDuration": 47.36,
+    "completeVideo": true,
+    "colors": "蓝色板面 · 浅色双针",
+    "note": "依据本款原片重建Dada Blue · 延后启动的斜线列波，示例为 09:34 → 09:35；其他读时路径为网页重建。",
+    "description": "ClockClock 24 Dada Blue；蓝色板面 · 浅色双针，Dada Blue · 延后启动的斜线列波。"
+  },
+  {
+    "palette": {
+      "background": "#e9e6de",
+      "board": "#f6f4ef",
+      "long": "#cbd0d2",
+      "short": "#cbd0d2"
+    },
+    "finish": "metal",
+    "duration": 43.5,
+    "motion": "White Sterling · 横向风势开合",
+    "profile": {
+      "duration": 43.5,
+      "alignStart": 0.5,
+      "alignEnd": 4.8,
+      "waveStart": 5.3,
+      "formStart": 29.2,
+      "formEnd": 41.6,
+      "heading": 0,
+      "counter": true,
+      "columnDelay": 0.27,
+      "period": 11.4,
+      "ramp": 0.65,
+      "modulation": 0.28,
+      "stage": "横向风势开合"
+    },
+    "id": "amt72-white-sterling",
+    "family": "amt72",
+    "slug": "a-million-times-72-white-sterling",
+    "edition": "White Sterling",
+    "designPath": "src/models/amt72/white-sterling/design.md",
+    "video": "https://cdn.shopify.com/videos/c/vp/855b357a392b4fceaec9a184014d7182/855b357a392b4fceaec9a184014d7182.HD-1080p-7.2Mbps-37771679.mp4",
+    "sourceDuration": 43.48,
+    "completeVideo": true,
+    "colors": "白色板面 · 银色金属双针",
+    "note": "依据本款原片重建White Sterling · 横向风势开合，示例为 09:34 → 09:35；其他读时路径为网页重建。",
+    "description": "A million Times 72 White Sterling；白色板面 · 银色金属双针，White Sterling · 横向风势开合。"
+  },
+  {
+    "palette": {
+      "background": "#e9e6de",
+      "board": "#f6f4ef",
+      "long": "#373a37",
+      "short": "#424541"
+    },
+    "finish": "plain",
+    "duration": 54.8,
+    "motion": "斜线列波与逐针成型",
+    "profile": {
+      "duration": 54.8,
+      "alignStart": 0.45,
+      "alignEnd": 5.4,
+      "waveStart": 11.2248,
+      "formStart": 37.6,
+      "formEnd": 52.7,
+      "heading": 135,
+      "opposed": true,
+      "period": 14.1825,
+      "columnDelay": 0.48,
+      "stage": "斜线列波",
+      "order": 1,
+      "ramp": 1.7439,
+      "modulation": -0.0177
+    },
+    "id": "amt72-white",
+    "family": "amt72",
+    "slug": "a-million-times-72-white-1",
+    "edition": "White",
+    "designPath": "src/models/amt72/white/design.md",
+    "video": "https://cdn.shopify.com/videos/c/vp/0d86a82c60c04cffa50801aeeeb20086/0d86a82c60c04cffa50801aeeeb20086.HD-1080p-7.2Mbps-30996264.mp4",
+    "sourceDuration": 54.76,
+    "completeVideo": true,
+    "colors": "白色板面 · 深色双针",
+    "note": "依据本款原片重建斜线列波与逐针成型，示例为 09:34 → 09:35；其他读时路径为网页重建。",
+    "description": "A million Times 72 White；白色板面 · 深色双针，斜线列波与逐针成型。"
+  },
+  {
+    "palette": {
+      "background": "#e9e6de",
+      "board": "#f6f4ef",
+      "long": "#373a37",
+      "short": "#424541"
+    },
+    "finish": "plain",
+    "duration": 45.9,
+    "motion": "斜线列波与逐针成型",
+    "profile": {
+      "duration": 45.9,
+      "alignStart": 0.45,
+      "alignEnd": 5.4,
+      "waveStart": 9.4761,
+      "formStart": 29.7,
+      "formEnd": 43.3,
+      "heading": 135,
+      "opposed": true,
+      "period": 12.1796,
+      "columnDelay": 0.3985,
+      "stage": "斜线列波",
+      "order": 1,
+      "ramp": 1.0562,
+      "modulation": 0.0137
+    },
+    "id": "amt144-white",
+    "family": "amt144",
+    "slug": "a-million-times-144-white",
+    "edition": "White",
+    "designPath": "src/models/amt144/white/design.md",
+    "video": "https://cdn.shopify.com/videos/c/vp/ebff444d06fb460db256871476276317/ebff444d06fb460db256871476276317.HD-1080p-7.2Mbps-32754010.mp4",
+    "sourceDuration": 45.88,
+    "completeVideo": true,
+    "colors": "白色板面 · 深色双针",
+    "note": "依据本款原片重建斜线列波与逐针成型，示例为 09:34 → 09:35；其他读时路径为网页重建。",
+    "description": "A million Times 144 White；白色板面 · 深色双针，斜线列波与逐针成型。"
+  },
+  {
+    "palette": {
+      "background": "#e9e6de",
+      "board": "#f6f4ef",
+      "long": "#373a37",
+      "short": "#424541"
+    },
+    "finish": "plain",
+    "duration": 47.0,
+    "motion": "斜线列波与逐针成型",
+    "profile": {
+      "duration": 47.0,
+      "alignStart": 0.45,
+      "alignEnd": 5.4,
+      "waveStart": 10.1341,
+      "formStart": 31.7,
+      "formEnd": 46.0,
+      "heading": 135,
+      "opposed": true,
+      "period": 12.1382,
+      "columnDelay": 0.3956,
+      "stage": "斜线列波",
+      "order": -1,
+      "ramp": 1.1848,
+      "modulation": 0.0149
+    },
+    "id": "amt72v-white",
+    "family": "amt72v",
+    "slug": "a-million-times-72v-white",
+    "edition": "White",
+    "designPath": "src/models/amt72v/white/design.md",
+    "video": "https://cdn.shopify.com/videos/c/vp/f7f2a011cc9e4c8eb0d9598a87a4851b/f7f2a011cc9e4c8eb0d9598a87a4851b.HD-1080p-7.2Mbps-32750138.mp4",
+    "sourceDuration": 47.04,
+    "completeVideo": true,
+    "colors": "白色板面 · 深色双针",
+    "note": "依据本款原片重建斜线列波与逐针成型，示例为 09:34 → 09:35；其他读时路径为网页重建。",
+    "description": "A million Times 72v White；白色板面 · 深色双针，斜线列波与逐针成型。"
+  },
+  {
+    "palette": {
+      "background": "#000000",
+      "board": "#111213",
+      "long": "#f9faf7",
+      "short": "#eef0ec"
+    },
+    "finish": "plain",
+    "duration": 47.0,
+    "motion": "斜线列波与逐针成型",
+    "profile": {
+      "duration": 47.0,
+      "alignStart": 0.45,
+      "alignEnd": 5.4,
+      "waveStart": 10.1341,
+      "formStart": 31.7,
+      "formEnd": 46.0,
+      "heading": 135,
+      "opposed": true,
+      "period": 12.1382,
+      "columnDelay": 0.3956,
+      "stage": "斜线列波",
+      "order": -1,
+      "ramp": 1.1848,
+      "modulation": 0.0149
+    },
+    "id": "amt72v-black",
+    "family": "amt72v",
+    "slug": "a-million-times-72v-black",
+    "edition": "Black",
+    "designPath": "src/models/amt72v/black/design.md",
+    "video": "https://cdn.shopify.com/videos/c/vp/7d520d69528e44b7948d244264ff2119/7d520d69528e44b7948d244264ff2119.HD-1080p-7.2Mbps-32749981.mp4",
+    "sourceDuration": 47.04,
+    "completeVideo": true,
+    "colors": "黑色板面 · 浅色双针",
+    "note": "依据本款原片重建斜线列波与逐针成型，示例为 09:34 → 09:35；其他读时路径为网页重建。",
+    "description": "A million Times 72v Black；黑色板面 · 浅色双针，斜线列波与逐针成型。"
+  },
+  {
+    "palette": {
+      "background": "#000000",
+      "board": "#111213",
+      "long": "#cbd0d2",
+      "short": "#cbd0d2"
+    },
+    "finish": "metal",
+    "duration": 50.0,
+    "completeVideo": false,
+    "motion": "Black Sterling · 斜线列波",
+    "profile": {
+      "duration": 50,
+      "alignStart": 0.45,
+      "alignEnd": 5.5,
+      "waveStart": 12.5,
+      "formStart": 36.5,
+      "formEnd": 47.8,
+      "heading": 135,
+      "opposed": true,
+      "period": 11.8,
+      "columnDelay": 0.48,
+      "stage": "斜线列波",
+      "ramp": 1.1
+    },
+    "id": "amt72-black-sterling",
+    "family": "amt72",
+    "slug": "a-million-times-72-black-sterling",
+    "edition": "Black Sterling",
+    "designPath": "src/models/amt72/black-sterling/design.md",
+    "video": "https://cdn.shopify.com/videos/c/vp/bc5a96c9728845bbbafb646c740ce339/bc5a96c9728845bbbafb646c740ce339.HD-1080p-7.2Mbps-31210951.mp4",
+    "sourceDuration": 28.76,
+    "colors": "黑色板面 · 银色金属双针",
+    "note": "依据本款视频片段重建Black Sterling · 斜线列波，完整换时补足为 50 秒；原片未覆盖的首尾衔接为网页重建。",
+    "description": "A million Times 72 Black Sterling；黑色板面 · 银色金属双针，Black Sterling · 斜线列波。"
+  },
+  {
+    "palette": {
+      "background": "#e9e6de",
+      "board": "#101c38",
+      "long": "#cbd0d2",
+      "short": "#cbd0d2"
+    },
+    "finish": "metal",
+    "duration": 52.8,
+    "completeVideo": true,
+    "motion": "环弧流动与反向开合",
+    "profile": {
+      "duration": 52.8,
+      "layout": "arc",
+      "curvature": 0.3,
+      "counter": true,
+      "alignStart": 0.6,
+      "alignEnd": 9.2,
+      "waveStart": 13.1,
+      "formStart": 46.4,
+      "formEnd": 51.8,
+      "period": 11.4,
+      "ramp": 1.0,
+      "modulation": 0.15,
+      "radialDelay": 0.23,
+      "stage": "环弧反向开合"
+    },
+    "id": "amt120-tidal",
+    "family": "amt120",
+    "slug": "a-million-times-120-tidal",
+    "edition": "Tidal",
+    "designPath": "src/models/amt120/tidal/design.md",
+    "video": "https://cdn.shopify.com/videos/c/vp/17b328db26974f07b5f6bcb7d563c991/17b328db26974f07b5f6bcb7d563c991.HD-1080p-7.2Mbps-30820649.mp4",
+    "sourceDuration": 52.84,
+    "colors": "深蓝板面 · 银色金属双针",
+    "note": "依据本款原片重建环弧流动与反向开合，示例为 09:34 → 09:35；其他读时路径为网页重建。",
+    "description": "A million Times 120 Tidal；深蓝板面 · 银色金属双针，环弧流动与反向开合。"
+  },
+  {
+    "palette": {
+      "background": "#e9e6de",
+      "board": "#f6f4ef",
+      "long": "#373a37",
+      "short": "#424541"
+    },
+    "finish": "plain",
+    "duration": 55.0,
+    "completeVideo": false,
+    "motion": "环弧流动与反向开合",
+    "profile": {
+      "duration": 55.0,
+      "layout": "arc",
+      "curvature": 0.3,
+      "counter": true,
+      "alignStart": 0.6,
+      "alignEnd": 9.2,
+      "waveStart": 13.1,
+      "formStart": 47.5,
+      "formEnd": 53.5,
+      "period": 11.4,
+      "ramp": 1.0,
+      "modulation": 0.15,
+      "radialDelay": 0.23,
+      "stage": "环弧反向开合"
+    },
+    "id": "amt120-white",
+    "family": "amt120",
+    "slug": "a-million-times-120-white",
+    "edition": "White",
+    "designPath": "src/models/amt120/white/design.md",
+    "video": "https://cdn.shopify.com/videos/c/vp/a303689d589549d1ab49dd3ac2308382/a303689d589549d1ab49dd3ac2308382.HD-1080p-7.2Mbps-30992626.mp4",
+    "sourceDuration": 50.96,
+    "colors": "白色板面 · 深色双针",
+    "note": "依据本款视频片段重建环弧流动与反向开合，完整换时补足为 55 秒；原片未覆盖的首尾衔接为网页重建。",
+    "description": "A million Times 120 White；白色板面 · 深色双针，环弧流动与反向开合。"
+  },
+  {
+    "palette": {
+      "background": "#e9e6de",
+      "board": "#101c38",
+      "long": "#cbd0d2",
+      "short": "#cbd0d2"
+    },
+    "duration": 38.0,
+    "completeVideo": false,
+    "motion": "默认动作 · 列间相位与双速成型",
+    "id": "amt72v-tidal",
+    "family": "amt72v",
+    "slug": "a-million-times-72v-tidal",
+    "edition": "Tidal",
+    "designPath": "src/models/amt72v/tidal/design.md",
+    "video": null,
+    "colors": "深蓝板面 · 银色金属双针",
+    "note": "本款产品页未提供对应视频；沿用 AMT72v Black Sterling 的默认动作，仅调整配色。",
+    "description": "A million Times 72v Tidal；深蓝板面 · 银色金属双针，默认动作 · 列间相位与双速成型。"
+  },
+  {
+    "palette": {
+      "background": "#000000",
+      "board": "#111213",
+      "long": "#f9faf7",
+      "short": "#eef0ec"
+    },
+    "duration": 54.2,
+    "completeVideo": false,
+    "motion": "默认动作 · 环弧归队与环波开合",
+    "id": "amt288-black",
+    "family": "amt288",
+    "slug": "a-million-times-288-black",
+    "edition": "Black",
+    "designPath": "src/models/amt288/black/design.md",
+    "video": null,
+    "colors": "黑色板面 · 浅色双针",
+    "note": "本款产品页未提供对应视频；沿用 AMT288 White 的默认动作，仅调整配色。",
+    "description": "A million Times 288 Black；黑色板面 · 浅色双针，默认动作 · 环弧归队与环波开合。"
+  }
+];
+});
+
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).ReferenceMotion = api;
+})(globalThis, function () {
+  'use strict';
+  const choices = [['scatter', '交错旋转'], ['diagonal', '斜线波浪'], ['tidal', '潮汐波浪']];
+  // Preserve each edition's measured default performance. The other two choices
+  // borrow the existing CCL reference motions, with the edition's own geometry.
+  function create(primary, alternate, referenceChoice, Settings) {
+    const choice = settings => settings.choreography || referenceChoice;
+    return connect(settings => choice(settings) === referenceChoice ? primary : alternate, Settings, choices, primary.state);
+  }
+  function connect(engine, Settings, actionChoices, initial) {
+    const choice = settings => settings.choreography || Settings.defaults.choreography;
+    let active = engine(initial);
+    active.state.choreography = choice(initial);
+    function update(input, now) {
+      const settings = Settings.normalize(input, active.state), next = engine(settings);
+      if (next === active) {
+        const result = active.update(settings, now);
+        active.state.choreography = settings.choreography;
+        return result;
+      }
+      active.sample(now);
+      const pose = active.hands.map(hand => ({ angle: hand.angle, opacity: hand.opacity }));
+      const digits = active.state.minuteKey;
+      if (!digits) {
+        const result = next.update(settings, now);
+        next.state.choreography = settings.choreography; active = next;
+        return result;
+      }
+      const minutes = Number(digits.slice(0, 2)) * 60 + Number(digits.slice(2));
+      const reformat = settings.format24 !== active.state.format24;
+      next.update(settings, now); next.state.choreography = settings.choreography;
+      next.initialize(minutes, now);
+      next.hands.forEach((hand, index) => Object.assign(hand, {
+        angle: pose[index].angle, from: pose[index].angle, to: pose[index].angle, path: null,
+        opacity: pose[index].opacity, start: now, duration: 1, motionEnd: now,
+        revealFrom: pose[index].opacity, travelOpacity: pose[index].opacity,
+        revealStart: now, revealEnd: now, fadeFrom: pose[index].opacity, fadeTo: pose[index].opacity,
+        fadeStart: now, fadeEnd: now
+      }));
+      active = next;
+      return { reformat };
+    }
+    const result = { update, get state() { return active.state; }, get hands() { return active.hands; },
+      getChoreography: () => ({ id: choice(active.state), name: actionChoices.find(([id]) => id === choice(active.state))[1] }),
+      playReference: (...args) => active.playReference?.(...args) || false };
+    for (const method of ['sample', 'initialize', 'animate', 'retarget', 'setVisibility', 'getStage', 'isAnimating']) {
+      result[method] = (...args) => active[method](...args);
+    }
+    return result;
+  }
+  return { choices, create, connect };
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('../shared/config.js') : root.Timeform.Config,
+    commonJS ? require('./reference-motion.js') : root.Timeform.ReferenceMotion);
+  if (commonJS) module.exports = api;
+  else (root.Timeform ||= {}).SharedActions = api;
+})(globalThis, function (Config, ReferenceMotion) {
+  'use strict';
+  // Group by visible choreography, not by color, clip length or timing fit.
+  // Every source points at an existing, individually documented implementation.
+  const families = {
+    amt61c: [
+      { id: 'zephyr', name: '风势流动 · Zephyr', sources: ['amt61c'] },
+      { id: 'tidal', name: '环弧波浪 · Tidal', sources: ['amt61c-tidal'] }
+    ],
+    amt72: [
+      { id: 'radial', name: '向心涟漪', sources: ['amt72'] },
+      { id: 'wind', name: '横向风势', sources: ['amt72-white-sterling'] },
+      { id: 'diagonal', name: '斜线波浪', sources: ['amt72-white', 'amt72-black-sterling'] }
+    ],
+    amt72v: [
+      { id: 'phased', name: '错相旋转 · 双速归位', sources: ['amt72v', 'amt72v-tidal'] },
+      { id: 'diagonal', name: '斜线波浪', sources: ['amt72v-white', 'amt72v-black'] }
+    ]
+  };
+  const singleNames = { amt120: '环弧波浪', amt144: '斜线波浪', amt288: '环弧波浪' };
+  function install(models) {
+    const get = id => models.find(model => model.id === id);
+    const nativeCreates = new Map(models.map(model => [model.id, model.create]));
+    const nativeDefaults = new Map(models.map(model => [model.id, model.Settings.defaults]));
+    for (const model of models) {
+      const definitions = families[model.group];
+      if (!definitions) {
+        if (singleNames[model.group]) model.Settings.fields.motion.options = [['wave', singleNames[model.group]]];
+        continue;
+      }
+      const defaultAction = definitions.find(action => action.sources.includes(model.id));
+      if (!defaultAction) throw new Error('此预设缺少型号动作归类：' + model.id);
+      const actions = definitions.map(action => {
+        // Keep a preset's own measured timing when it already has this action.
+        // No-video Tidal borrows the original Black Sterling reference explicitly.
+        const source = get(action.sources.includes(model.id) && model.motionProvenance !== 'family-default' ? model.id : action.sources[0]);
+        if (!source) throw new Error('缺少共享动作来源：' + action.id);
+        return { id: action.id, name: action.name, source: source.id, sourceLabel: source.presetLabel,
+          duration: nativeDefaults.get(source.id).duration, referenceTime: source.referenceTime,
+          referenceDuration: source.referenceDuration, referenceClip: source.referenceClip,
+          motionReference: source.motionReference, motionReferenceLabel: source.motionReferenceLabel };
+      });
+      const original = model.Settings;
+      const fields = { ...original.fields,
+        motion: { ...original.fields.motion, hidden: true },
+        choreography: { type: 'select', label: '动作类型', value: defaultAction.id, group: 'motion',
+          options: actions.map(action => [action.id, action.name]),
+          help: '同型号预设共享参考动作；切换会载入动作默认时长，配色和尺寸保持不变。' } };
+      const normalize = (input = {}, base = {}) => {
+        const config = Config.normalize(fields, input, base);
+        return { ...original.normalize(config), choreography: config.choreography };
+      };
+      const Settings = { fields, normalize, defaults: normalize() };
+      model.Settings = Settings;
+      model.actions = actions;
+      model.getMotion = input => actions.find(action => action.id === Settings.normalize(input).choreography);
+      model.create = (input, options) => {
+        const initial = normalize(input), engines = new Map();
+        function resolve(settings) {
+          const action = model.getMotion(settings);
+          if (!engines.has(action.source)) engines.set(action.source, nativeCreates.get(action.source)(settings, options));
+          return engines.get(action.source);
+        }
+        return ReferenceMotion.connect(resolve, Settings, fields.choreography.options, initial);
+      };
+    }
+  }
+  return { install };
+});
+
+(function (root, factory) {
+  const commonJS = typeof module === 'object' && module.exports;
+  const api = factory(commonJS ? require('../shared/config.js') : root.Timeform.Config,
+    commonJS ? require('./classic-editions.js') : root.Timeform.ClassicEditions,
+    commonJS ? require('../shared/edition-animation.js') : root.Timeform.EditionAnimation,
+    commonJS ? require('../shared/edition-drawing.js') : root.Timeform.EditionDrawing,
+    commonJS ? require('../models/classic-landscape.js') : root.Timeform.ClassicLandscape || [],
+    commonJS ? require('./reference-motion.js') : root.Timeform.ReferenceMotion,
+    commonJS ? require('../models/clockclockl/animation.js') : root.Timeform.ClockClockLAnimation,
+    commonJS ? require('./shared-actions.js') : root.Timeform.SharedActions);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).Classic = api;
+})(globalThis, function (Config, Variants, EditionAnimation, EditionDrawing, AdditionalLandscape, ReferenceMotion, ClockClockLAnimation, SharedActions) {
+  'use strict';
+  // Official editions are editable starting points for the web workbench.
+  const editions = {
+    clockclock9: { name: 'ClockClock 9', edition: 'White', colors: '白色圆板 · 深灰双针', motion: '斜线扫动与菱形成型',
+      note: '依据官方短片重建共同扫动与菱形成型；18 秒完整换时含原片未覆盖的衔接。' },
+    amt61c: { name: 'A million Times 61c', edition: 'Zephyr', colors: '森林绿圆板 · 金色双针', motion: 'Zephyr 风势流动', duration: 53.1,
+      note: '依据 Zephyr 原片重建整理、停留、风势流动与逐针成型；数字排布与其他读时为网页重建。' },
+    clockclock24: { name: 'ClockClock 24', edition: 'Black', colors: '黑色板面 · 浅色双针', motion: '斜线列波',
+      note: '依据 Black 原片重建斜线列波与逐针成型，参考读时为 09:34 → 09:35。' },
+    clockclockl: {name:'ClockClock L',edition:'Tidal',colors:'深蓝铝板 · 银色双针',motion:'交错旋转 / 斜线波浪 / 潮汐波浪',
+      note:'选择一种动作，换时与重播沿用当前选择，默认斜线波浪。交错旋转与潮汐波浪根据 CCL 片段重建，斜线沿用 CC24 参考编排；完整衔接为网页重建。'},
+    amt96: {name:'A million Times 96',edition:'Bjarke Ingels',colors:'Sunset Dune 洞石 · 银色双针',motion:'四表盘旋转开合',
+      note:'依据本款约 52.2 秒完整原片重建四表盘旋转开合与逐针成型，参考读时为 11:34 → 11:35；洞石纹理为二维近似。'},
+    amt72: { name: 'A million Times 72', edition: 'Black', colors: '黑色板面 · 浅色双针', motion: '中心放射与涟漪开合',
+      note: '依据普通 Black 款原片重建向心归队、涟漪开合与逐针成型。' },
+    amt120: { name: 'A million Times 120', edition: 'Black', colors: '黑色板面 · 浅色双针', motion: '环弧归队与环波开合',
+      note: '依据 Black 原片重建环弧归队、反向开合与逐针减速成型。' },
+    amt144: { name: 'A million Times 144', edition: 'Black', colors: '黑色板面 · 浅色双针', motion: '斜线列波与双速归位',
+      note: '依据 Black 原片重建逐列斜线、顺时针列波与双速归位。' },
+    amt288: { name: 'A million Times 288', edition: 'White', colors: '白色板面 · 深色双针', motion: '环弧归队与环波开合',
+      note: '依据 White 专属原片重建环弧与环波，保留宽幅字形和双方形冒号。' },
+    amt72v: { name: 'A million Times 72v', edition: 'Black Sterling', colors: '黑色板面 · 银色双针', motion: '列间相位与双速成型',
+      note: '原片从运动中段开始；完整换时保留既有 6 秒衔接，原片对照直接播放约 32 秒的参考片段。' }
+  };
+  function wrap(model, variant) {
+    const edition = variant ? { ...editions[model.id], ...variant } : editions[model.id];
+    if (!edition || !model.reference || !model.motionReference) throw new Error('此型号缺少经典款原设计依据。');
+    const original = model.Settings;
+    const is24 = ['clockclock24', 'clockclockl'].includes(model.id);
+    const referenceChoice = variant?.id === 'clockclock24-pinakin-hara' ? 'tidal'
+      : variant?.id === 'clockclock24-bjarke-ingels' ? 'scatter' : 'diagonal';
+    const preset = { ...original.defaults, motion: 'wave', ...variant?.palette };
+    if (is24) preset.choreography = referenceChoice;
+    if (Object.hasOwn(preset, 'visibility')) preset.visibility = 'show';
+    if (edition.duration) preset.duration = edition.duration;
+    const fields = Object.fromEntries(Object.entries(original.fields).map(([key, field]) => [key, { ...field, value: preset[key] }]));
+    fields.motion = { ...fields.motion, label: '参考动作', options: [['wave', edition.motion.replace(/ · 本款原片节奏| · 预设动作/g, '')]], hidden: is24 };
+    if (is24) fields.choreography = { type: 'select', label: '动作类型', value: referenceChoice, group: 'motion',
+      options: ReferenceMotion.choices, help: '交错旋转与潮汐波浪来自 CCL 参考；各预设保留自己的默认动作节奏。' };
+    fields.duration.help = '此预设默认 ' + preset.duration + ' 秒，调整后整段动作按比例缩放。';
+    fields.autoDemo.label = '自动逐分钟演示';
+    const normalize = (input = {}, base = {}) => {
+      const config = Config.normalize(fields, input, base);
+      return { ...original.normalize(config), motion: 'wave', ...(is24 ? { choreography: config.choreography } : {}) };
+    };
+    const Settings = { fields, normalize, defaults: normalize() };
+    function geometry(width, height, input) {
+      const config = normalize(input), measured = model.geometry(width, height, config);
+      if (!variant?.sizeCm) return measured;
+      // Sunset Dune is 92 × 42 cm rather than the standard 90 × 40 cm.
+      // The measured dial pitch is retained and the stone border grows by 1 cm.
+      const boardWidth=measured.boardWidth*variant.sizeCm[0]/90;
+      const boardHeight=measured.boardHeight*variant.sizeCm[1]/40;
+      const availableWidth=Math.max(1,width-measured.padding*2),availableHeight=Math.max(1,height-measured.padding*2);
+      const factor=Math.min(availableWidth/boardWidth,availableHeight/boardHeight)*config.scale/100;
+      const displayWidth=boardWidth*factor,displayHeight=boardHeight*factor;
+      return { ...measured,boardWidth,boardHeight,width:displayWidth,height:displayHeight,
+        x:(width-displayWidth)/2+(availableWidth-displayWidth)/2*config.offsetX/100,
+        y:(height-displayHeight)/2+(availableHeight-displayHeight)/2*config.offsetY/100,
+        points:measured.points.map(point=>({ ...point,x:point.x+(boardWidth-measured.boardWidth)/2,y:point.y+(boardHeight-measured.boardHeight)/2 })) };
+    }
+    function create(input, options) {
+      let clock = variant?.profile ? EditionAnimation.create(model, Settings, variant.profile, normalize(input), options)
+        : model.create(normalize(input), variant?.baseProfile ? { ...options, motionProfile: variant.baseProfile } : options);
+      if (model.id === 'clockclock24') {
+        const config = normalize(input);
+        clock.state.choreography = config.choreography;
+        const alternate = ClockClockLAnimation.create({ ...model, Settings }, config, options);
+        clock = ReferenceMotion.create(clock, alternate, referenceChoice, Settings);
+      }
+      const update = clock.update.bind(clock);
+      clock.update = (input, now) => update(normalize(input, clock.state), now);
+      if (!variant && model.referenceClip && clock.playReference) {
+        const playReference = clock.playReference.bind(clock);
+        clock.playReference = (minutes, now) => {
+          // The source clip omits the full transition's entry segment.
+          const settings = normalize(clock.state);
+          update({ ...settings, duration: model.referenceDuration }, now);
+          const changed = playReference(minutes, now);
+          update(settings, now);
+          return changed;
+        };
+      }
+      return clock;
+    }
+    const reference = variant ? 'https://www.humanssince1982.com/en-int/products/' + variant.slug : model.reference;
+    return { ...model, ...edition, id: variant?.id || model.id, family: model.id, group: is24 ? 'clockclock24' : model.id, reference,
+      presetLabel: model.id === 'clockclockl' ? 'CCL · Tidal' : edition.edition,
+      panelSize: model.id === 'clockclockl' ? '157 × 72 cm' : null,
+      description: model.id === 'clockclockl' ? '24 系列的 CCL 预设，8 × 3 深蓝铝板与银色双针。' : edition.description || model.description,
+      motionReference: variant ? variant.video || model.motionReference : model.motionReference,
+      motionReferenceLabel: variant?.video ? '本款原片视频 ↗' : variant ? '默认动作参考视频 ↗' : '原片视频 ↗',
+      motionProvenance: variant ? variant.video ? 'official-video' : 'family-default' : 'official-video',
+      referenceClip: variant ? false : model.referenceClip,
+      Drawing: variant?.video ? EditionDrawing.wrap(model, variant) : model.Drawing,
+      classic: true, Settings,
+      pickerName: model.id.startsWith('clockclock') ? edition.name : 'AMT ' + model.id.slice(3),
+      pickerDetail: edition.edition + ' · ' + (model.countLabel || model.count + ' 个表盘'),
+      referenceLabel: '原设计 · ' + edition.name + ' ' + edition.edition + ' ↗',
+      previewNote: edition.note,
+      referenceDuration: variant ? variant.completeVideo ? variant.duration : null
+        : model.id === 'amt61c' ? edition.duration : model.referenceDuration,
+      create,
+      geometry };
+  }
+  function catalog(source) {
+    const originals=[...source.models,...(source.models[0]?.type === 'landscape' ? AdditionalLandscape : [])];
+    const models = originals.flatMap(model => [wrap(model), ...Variants.filter(v => v.family === model.id).map(v => wrap(model, v))]);
+    SharedActions.install(models);
+    const get = id => models.find(model => model.id === id);
+    function parse(text) {
+      const data = JSON.parse(text);
+      const model = data?.version === 2 ? get(data.model) : get('clockclock24');
+      if (!model) throw new Error('请选择当前类别内的型号配置。');
+      const input = data?.settings || data;
+      if (input && typeof input === 'object' && (['spin', 'quiet', 'none', 'orbit'].includes(input.motion)
+        || data?.version !== 2 && input.motion === 'wave')) delete input.motion;
+      return { model, settings: Config.parse(model, JSON.stringify(data)) };
+    }
+    return { models, get, parse };
+  }
+  return { catalog };
+});
+
+(function (root, factory) {
+  const api = factory(typeof module === 'object' && module.exports ? require('../shared/palette.js') : root.Timeform.Palette);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else (root.Timeform ||= {}).PaletteOptions = api;
+})(globalThis, function (Palette) {
+  'use strict';
+  // Black/white, paper, moss and midnight repeat existing neutral, green or gold
+  // references. Keep only three visibly distinct additions, after model colors.
+  const supplementalIds = ['dusk', 'ocean', 'clay'];
+  const keys = Object.keys(Palette.fields);
+  const sameColors = (a, b) => keys.every(key => a[key] === b[key]);
+  function forModel(models, model, order = []) {
+    const ranks = new Map(order.map((id, index) => [id, index]));
+    const originals = models.filter(entry => entry.group === model.group)
+      .sort((a, b) => (ranks.get(a.id) ?? models.indexOf(a)) - (ranks.get(b.id) ?? models.indexOf(b)))
+      .map(entry => ({ id: entry.id, name: entry.presetLabel, origin: 'preset', ...Palette.colors(entry.Settings.defaults) }));
+    const supplemental = supplementalIds.map(id => Palette.presets.find(palette => palette.id === id))
+      .filter(palette => palette && !originals.some(original => sameColors(original, palette)))
+      .map(palette => ({ ...palette, id: 'extra-' + palette.id, origin: 'supplemental' }));
+    return { originals, supplemental };
+  }
+  return { forModel };
+});
+
+(function (root) {
   'use strict';
   const category = document.body.dataset.category;
   document.querySelectorAll('.navigation a').forEach(link => { if (link.dataset.kind === category) link.setAttribute('aria-current', 'page'); });
-  if (category !== 'landscape') return;
-  const { Landscape, Config, Palette, Time, Renderer } = root.Timeform;
+  if (!['landscape', 'portrait', 'circular'].includes(category)) return;
+  const { Config, Classic, Time, Renderer, Palette, PaletteOptions } = root.Timeform;
+  const catalog = Classic.catalog(category === 'circular' ? root.Timeform.Circular : category === 'portrait' ? root.Timeform.Portrait : root.Timeform.Landscape);
   const byId = id => document.getElementById(id);
-  const selectedKey = 'timeform-dev-landscape-model-v2';
+  const selectedKey = 'timeform-dev-' + category + '-model-v2';
   const parameters = Object.fromEntries(new URLSearchParams(location.search));
-  let selected = 'clockclock24';
+  let selected = catalog.models[0].id;
   try { selected = localStorage.getItem(selectedKey) || selected; } catch (_) {}
-  let model = Landscape.get(parameters.model) || Landscape.get(selected) || Landscape.models[0];
+  let model = catalog.get(parameters.model) || catalog.get(selected) || catalog.models[0];
   let fields = model.Settings.fields;
-  const storageKey = () => 'timeform-dev-landscape-' + model.id + '-v2';
-  const controls = new Map(), configurations = new Map(), presetButtons = [], modelButtons = [];
+  const storageKey = () => 'timeform-dev-' + category + '-' + model.id + '-v2';
+  const controls = new Map(), configurations = new Map(), familySelections = new Map(), paletteButtons = [];
+  const presetOptions = [...byId('presetSelect').options].map(option => option.cloneNode(true));
   const source = Time.createSource();
-  let settings, renderer, storageAvailable = true, startupMessage = '配置已加载，修改即时预览。';
+  let settings, renderer, storageAvailable = true, startupMessage = '预设已载入，所有修改即时预览并自动保存。';
+  byId('categoryLabel').textContent = { landscape: '横屏', circular: '圆形', portrait: '竖排' }[category];
   function notice(message, error = false) { byId('notice').textContent = message; byId('notice').dataset.error = String(error); }
   function restore() {
     if (configurations.has(model.id)) return { ...configurations.get(model.id) };
     let restored = model.Settings.normalize();
     try {
       const saved = localStorage.getItem(storageKey());
-      if (saved) restored = Config.parse(model, saved);
+      if (saved) {
+        const parsed = catalog.parse(saved);
+        if (parsed.model.id !== model.id) throw new Error('本地预设配置不匹配。');
+        restored = parsed.settings;
+      }
       else if (model.id === 'clockclock24') {
         const legacy = localStorage.getItem('timeform-wallpaper-v1') || localStorage.getItem('timeform-scheme-v1');
-        if (legacy) { restored = Config.parse(model, legacy); startupMessage = '已恢复旧版配色与设置，当前使用 ClockClock 24。'; }
+        if (legacy) { restored = catalog.parse(legacy).settings; startupMessage = '已恢复旧版配置，可继续调整。'; }
       }
+      if (saved) startupMessage = '已恢复此预设上次保存的调试配置。';
     } catch (_) { startupMessage = '此型号的本地配置无法恢复，已使用默认参数；可继续调试并导出 JSON。'; }
     return restored;
   }
@@ -85,16 +2445,59 @@
   renderer = createRenderer();
   function persist() {
     configurations.set(model.id, { ...settings });
-    try { localStorage.setItem(storageKey(), Config.serialize(model, settings)); localStorage.setItem(selectedKey, model.id); storageAvailable = true; }
+    familySelections.set(model.group, model.id);
+    try { localStorage.setItem(storageKey(), Config.serialize(model, settings)); localStorage.setItem(selectedKey, model.id); localStorage.setItem(selectedKey + '-' + model.group, model.id); storageAvailable = true; }
     catch (_) { storageAvailable = false; }
+    byId('saveStatus').dataset.error = String(!storageAvailable);
+    byId('saveStatus').lastChild.textContent = storageAvailable ? '本地自动保存' : '保存不可用 · 请导出';
   }
   function refreshValues() {
+    const action = model.getMotion?.(settings);
     byId('modelName').textContent = model.name; byId('modelDescription').textContent = model.description;
-    byId('clockCount').textContent = model.count + ' 个表盘'; byId('handCount').textContent = model.count * 2 + ' 根指针';
-    byId('arraySize').textContent = model.columns + ' × ' + model.rows; byId('editorModel').textContent = model.badge;
-    byId('editor').setAttribute('aria-label', model.name + ' 专业配置');
+    byId('modelEdition').textContent = model.presetLabel;
+    byId('classicEdition').textContent = model.edition;
+    byId('classicColors').textContent = model.colors;
+    byId('classicMotion').textContent = model.motion;
+    byId('classicDuration').textContent = model.Settings.defaults.duration + ' s';
+    byId('classicSwatch').style.background = model.Settings.defaults.board;
+    byId('classicSwatch').style.setProperty('--hand', model.Settings.defaults.long);
+    byId('clockCount').textContent = model.countLabel || model.count + ' 个表盘'; byId('handCount').textContent = (model.handCount || model.count * 2) + ' 根指针';
+    byId('arraySize').textContent = model.arrayLabel || model.columns + ' × ' + model.rows; byId('editorModel').textContent = model.badge;
+    if (byId('modelReference')) {
+      byId('modelReference').hidden = !model.reference;
+      if (model.reference) { byId('modelReference').href = model.reference; byId('modelReference').textContent = model.referenceLabel || model.badge + ' · 原作参考'; }
+    }
+    if (byId('motionReference')) {
+      const borrowed = model.group === 'clockclock24' && model.family !== 'clockclockl' && settings.choreography !== model.Settings.defaults.choreography;
+      const reference = action ? action.motionReference : borrowed ? catalog.get('clockclockl').motionReference : model.motionReference;
+      byId('motionReference').hidden = !reference;
+      if (reference) {
+        byId('motionReference').href = reference;
+        byId('motionReference').textContent = action ? action.source === model.id ? action.motionReferenceLabel : '动作参考 · ' + action.sourceLabel + ' ↗'
+          : borrowed ? '当前动作参考 · CCL ↗' : model.motionReferenceLabel;
+      }
+    }
+    if (byId('referenceDemo')) {
+      const referenceDuration = action ? action.referenceDuration : model.referenceDuration;
+      byId('referenceDemo').hidden = !referenceDuration;
+      if (referenceDuration) byId('referenceDemo').textContent = '按原片节奏播放 · ' + referenceDuration + ' s ↗';
+    }
+    if (byId('modelNote')) byId('modelNote').textContent = model.previewNote || '画布按比例缩放预览。竖向画布仍展示横屏型号；独立竖排型号见竖排页面。';
+    if (byId('referenceTime') && model.referenceTime) byId('referenceTime').textContent = '示例读时 ' + (action?.referenceTime || model.referenceTime);
+    byId('editor').setAttribute('aria-label', model.name + ' 调试控制');
+    byId('geometryHelp').textContent = model.geometryHelp || '短针长度不超过长针；更改比例会同步更新预览。';
     byId('clock').setAttribute('aria-label', model.name + '，现在显示 ' + byId('displayTime').textContent);
-    for (const { button, entry } of modelButtons) button.setAttribute('aria-pressed', String(entry.id === model.id));
+    byId('modelSelect').value = model.group;
+    const selectedOption = byId('modelSelect').selectedOptions[0];
+    selectedOption.textContent = selectedOption.dataset.name + ' · ' + (model.panelSize || (model.sizeCm ? model.sizeCm.join(' × ') + ' cm' : selectedOption.dataset.size));
+    byId('presetSelect').value = model.id;
+    const modified = Object.keys(fields).filter(key => fields[key].group !== 'time' && key !== 'playbackSpeed' && settings[key] !== model.Settings.defaults[key]);
+    byId('customStatus').hidden = !modified.length;
+    byId('presetState').textContent = modified.length ? '已自定义 · ' + modified.length + ' 项修改' : '原始预设';
+    byId('presetState').dataset.custom = String(Boolean(modified.length));
+    byId('restorePreset').disabled = !modified.length;
+    for (const { button, palette } of paletteButtons) button.setAttribute('aria-pressed', String(Object.keys(Palette.fields).every(key => settings[key] === palette[key])));
+    for (const button of document.querySelectorAll('[data-speed]')) button.setAttribute('aria-pressed', String(Number(button.dataset.speed) === settings.playbackSpeed));
     for (const [key, entry] of controls) {
       if (entry.input.type === 'checkbox') entry.input.checked = settings[key];
       else entry.input.value = settings[key];
@@ -102,17 +2505,18 @@
       if (entry.hex) { entry.hex.value = settings[key].toUpperCase(); entry.hex.removeAttribute('aria-invalid'); }
       if (entry.range) entry.range.value = settings[key];
     }
-    for (const { button, preset } of presetButtons) button.setAttribute('aria-pressed', String(Object.keys(Palette.colors(settings)).every(key => settings[key] === preset[key])));
     controls.get('manualTime').input.disabled = settings.source !== 'manual';
     controls.get('autoDemo').input.disabled = settings.source !== 'manual';
     controls.get('demoInterval').input.disabled = settings.source !== 'manual' || !settings.autoDemo;
     controls.get('demoInterval').range.disabled = controls.get('demoInterval').input.disabled;
+    if (controls.has('choreography')) controls.get('choreography').input.disabled = settings.motion !== 'wave';
+    if (action && controls.get('duration').help) controls.get('duration').help.textContent = '此动作默认 ' + action.duration + ' 秒，调整后整段动作按比例缩放。';
     byId('resolutionLabel').textContent = settings.canvasWidth + ' × ' + settings.canvasHeight;
     const size = settings.canvasWidth + 'x' + settings.canvasHeight;
     byId('previewPreset').value = [...byId('previewPreset').options].some(option => option.value === size) ? size : 'custom';
     byId('configSnapshot').value = Config.serialize(model, settings);
   }
-  function update(patch, message = '预览已更新。') {
+  function update(patch, message = '预览已更新，修改已自动保存。') {
     settings = model.Settings.normalize(patch, settings); arrange(); renderer.update(settings); refreshValues(); persist();
     notice(storageAvailable ? message : message + ' 浏览器无法保存，请导出 JSON。'); refreshStats();
   }
@@ -122,22 +2526,33 @@
       input.setAttribute('aria-invalid', 'true');
       notice('「' + fields[key].label + '」无效，请检查格式与有效范围。', true); return;
     }
-    update({ [key]: decoded });
+    const patch = { [key]: decoded };
+    if (key === 'choreography' && model.getMotion) patch.duration = model.getMotion({ ...settings, choreography: decoded }).duration;
+    update(patch);
   }
   function buildControls() {
     controls.clear();
-    for (const group of ['colors', 'screen', 'geometry', 'motion', 'time']) byId('fields-' + group).replaceChildren();
-    for (const [key, field] of Object.entries(fields)) {
+    for (const group of ['screen', 'motion', 'time', 'colors', 'geometry', 'playback']) byId('fields-' + group).replaceChildren();
+    const timeOrder = ['source', 'manualTime', 'format24', 'autoDemo', 'timezone', 'demoInterval'];
+    const motionOrder = ['motion', 'choreography', 'duration', 'visibility', 'playbackSpeed'];
+    const groupOrder = ['colors', 'screen', 'geometry', 'motion', 'time'];
+    const rank = key => groupOrder.indexOf(fields[key].group) * 100 + Math.max(0, (fields[key].group === 'time' ? timeOrder : motionOrder).indexOf(key));
+    const ordered = Object.entries(fields).sort(([a], [b]) => rank(a) - rank(b));
+    for (const [key, field] of ordered) {
+      if (field.hidden) continue;
       const wrapper = document.createElement('div'); wrapper.className = 'field';
+      if (field.group === 'motion') wrapper.classList.add('field-wide');
       const label = document.createElement('label'); label.htmlFor = 'setting-' + key; label.textContent = field.label;
       const heading = document.createElement('div'); heading.className = 'field-label'; heading.append(label);
       const input = document.createElement(field.type === 'select' ? 'select' : 'input'); input.id = 'setting-' + key;
-      const entry = { input, hex: null, range: null };
+      const entry = { input, hex: null, range: null, help: null };
       if (field.type === 'color') {
         input.type = 'color';
         const hex = document.createElement('input'); hex.type = 'text'; hex.maxLength = 7; hex.spellcheck = false; hex.setAttribute('aria-label', field.label + ' HEX');
         const group = document.createElement('div'); group.className = 'color-inputs'; group.append(input, hex); wrapper.append(heading, group); entry.hex = hex;
-        input.addEventListener('input', () => accept(key, input.value, input)); hex.addEventListener('change', () => accept(key, hex.value.trim(), hex));
+        input.addEventListener('input', () => accept(key, input.value, input));
+        hex.addEventListener('input', () => { if (Config.decode(field, hex.value.trim(), true) !== undefined) accept(key, hex.value.trim(), hex); });
+        hex.addEventListener('change', () => accept(key, hex.value.trim(), hex));
       } else if (field.type === 'checkbox') {
         input.type = 'checkbox'; label.className = 'check-label'; label.prepend(input); wrapper.append(label);
         input.addEventListener('change', () => accept(key, input.checked, input));
@@ -151,48 +2566,73 @@
       } else {
         if (field.type === 'select') {
           field.options.forEach(([value, text]) => { const option = document.createElement('option'); option.value = value; option.textContent = text; input.append(option); });
+          if (field.options.length === 1) input.disabled = true;
         } else { input.type = field.type === 'time' ? 'time' : 'text'; if (field.type === 'timezone') input.placeholder = '跟随设备'; }
         wrapper.append(heading, input); input.addEventListener('change', () => accept(key, input.value, input));
         if (field.type === 'time') input.addEventListener('input', () => accept(key, input.value, input));
       }
-      if (field.help) { const help = document.createElement('p'); help.className = 'field-help'; help.textContent = field.help; wrapper.append(help); }
-      controls.set(key, entry); byId('fields-' + field.group).append(wrapper);
+      if (field.help) { const help = document.createElement('p'); help.className = 'field-help'; help.textContent = field.help; wrapper.append(help); entry.help = help; }
+      controls.set(key, entry); byId('fields-' + (key === 'playbackSpeed' ? 'playback' : field.group)).append(wrapper);
+    }
+    byId('palettes').replaceChildren(); byId('supplementalPalettes').replaceChildren(); paletteButtons.length = 0;
+    const { originals, supplemental } = PaletteOptions.forModel(catalog.models, model, presetOptions.map(option => option.value));
+    byId('paletteCount').textContent = originals.length + ' 款';
+    byId('extraPaletteCount').textContent = supplemental.length + ' 款';
+    byId('extraPalettes').hidden = !supplemental.length;
+    for (const palette of [...originals, ...supplemental]) {
+      const button = document.createElement('button'); button.type = 'button'; button.className = 'palette-chip'; button.setAttribute('aria-label', '应用配色：' + palette.name);
+      button.dataset.palette = palette.id; button.dataset.origin = palette.origin; button.title = palette.name;
+      const swatch = document.createElement('span'); swatch.className = 'palette-swatch'; swatch.setAttribute('aria-hidden', 'true');
+      for (const color of [palette.background, palette.board, palette.long, palette.short]) { const dot = document.createElement('i'); dot.style.background = color; swatch.append(dot); }
+      const label = document.createElement('span'); label.className = 'palette-name'; label.textContent = palette.name; button.append(swatch, label);
+      button.addEventListener('click', () => update(Palette.colors(palette), '已应用「' + palette.name + '」配色。'));
+      paletteButtons.push({ button, palette }); byId(palette.origin === 'preset' ? 'palettes' : 'supplementalPalettes').append(button);
     }
   }
   buildControls();
   function selectModel(next, imported) {
     if (next.id === model.id && !imported) return;
     persist();
+    const previousFields = Object.keys(settings);
     const paused = renderer.getStats().paused;
     renderer.dispose(); model = next; fields = model.Settings.fields;
-    startupMessage = '已切换到 ' + model.name + '，该型号的配置已恢复。';
-    settings = imported || restore(); buildControls(); arrange(); renderer = createRenderer(); renderer.setPaused(paused);
+    startupMessage = '已切换到 ' + model.name + ' · ' + model.edition + '。';
+    settings = imported || restore(); buildControls(); refreshPresetOptions(); arrange(); renderer = createRenderer(); renderer.setPaused(paused);
     const url = new URL(location.href);
-    for (const key of Object.keys(fields)) url.searchParams.delete(key);
+    for (const key of new Set([...previousFields, ...Object.keys(settings)])) url.searchParams.delete(key);
     url.searchParams.set('model', model.id);
     try { history.replaceState(null, '', url); } catch (_) {}
     refreshValues(); refreshStats(); persist();
     notice(storageAvailable ? startupMessage : startupMessage + ' 浏览器无法保存，请导出 JSON。');
   }
-  for (const entry of Landscape.models) {
-    const button = document.createElement('button'); button.type = 'button'; button.className = 'model-option';
-    button.setAttribute('aria-label', '选择 ' + entry.name);
-    const name = document.createElement('strong'); name.textContent = entry.badge === 'CC24' ? entry.name : 'AMT ' + entry.count;
-    const detail = document.createElement('span'); detail.textContent = entry.count + ' 个表盘 · ' + entry.columns + ' × ' + entry.rows;
-    button.append(name, detail); button.addEventListener('click', () => selectModel(entry));
-    byId('modelOptions').append(button); modelButtons.push({ button, entry });
+  function refreshPresetOptions() {
+    const list = presetOptions.filter(option => option.dataset.family === model.group);
+    byId('presetSelect').replaceChildren(...list.map(option => option.cloneNode(true)));
+    byId('presetSelect').value = model.id;
+    byId('presetCount').textContent = list.length + ' PRESETS';
+    byId('previousPreset').disabled = byId('nextPreset').disabled = list.length < 2;
   }
-  for (const preset of Palette.presets) {
-    const button = document.createElement('button'); button.type = 'button'; button.className = 'preset'; button.setAttribute('aria-label', '应用' + preset.name);
-    const swatch = document.createElement('span'); swatch.className = 'preset-swatch'; swatch.style.background = preset.board; swatch.style.setProperty('--hand', preset.long);
-    const name = document.createElement('span'); name.textContent = preset.name; button.append(swatch, name);
-    button.addEventListener('click', () => update(Palette.colors(preset), '已应用「' + preset.name + '」，动画与布局设置保持。'));
-    byId('presets').append(button); presetButtons.push({ button, preset });
+  refreshPresetOptions();
+  byId('modelSelect').addEventListener('change', event => {
+    const family = event.target.value;
+    let remembered = familySelections.get(family);
+    try { remembered ||= localStorage.getItem(selectedKey + '-' + family); } catch (_) {}
+    const next = catalog.get(remembered);
+    selectModel(next?.group === family ? next : catalog.get(family) || catalog.models.find(entry => entry.group === family));
+  });
+  byId('presetSelect').addEventListener('change', event => selectModel(catalog.get(event.target.value)));
+  function cyclePreset(delta) {
+    const options = [...byId('presetSelect').options].filter(option => !option.disabled);
+    const index = options.findIndex(option => option.value === model.id);
+    selectModel(catalog.get(options[(index + delta + options.length) % options.length].value));
   }
+  byId('previousPreset').addEventListener('click', () => cyclePreset(-1));
+  byId('nextPreset').addEventListener('click', () => cyclePreset(1));
   function refreshStats() {
     const stats = renderer.getStats(), digits = stats.display;
     byId('displayTime').textContent = digits.slice(0, 2) + ':' + digits.slice(2);
-    byId('playbackStatus').textContent = (stats.paused ? '已暂停' : stats.animating ? '过渡中' : '已归位') + ' · ' + settings.playbackSpeed + '×';
+    const stageName = stats.stage.replace('散相旋转', '交错旋转').replace('斜线列波', '斜线波浪').replace('Tidal 波浪', '潮汐波浪');
+    byId('playbackStatus').textContent = (stats.paused ? '已暂停' + (stageName ? ' / ' + stageName : '') : stageName || (stats.animating ? '过渡中' : '已归位')) + ' · ' + settings.playbackSpeed + '×';
     byId('boardSize').textContent = Math.round(stats.geometry.boardWidth * 10) / 10 + ' × ' + Math.round(stats.geometry.boardHeight * 10) / 10;
     byId('renderSize').textContent = stats.pixelWidth + ' × ' + stats.pixelHeight + ' px';
     byId('pause').textContent = stats.paused ? '继续' : '暂停'; byId('pause').setAttribute('aria-pressed', String(stats.paused)); byId('step').disabled = !stats.paused;
@@ -201,12 +2641,33 @@
   byId('step').addEventListener('click', () => { renderer.step(100); refreshStats(); });
   byId('replay').addEventListener('click', () => {
     const changed = renderer.replay();
-    notice(changed ? '动画已重播；暂停时可用单步检查。' : '当前为平滑过渡，请切换一分钟观察变化。'); refreshStats();
+    notice(changed ? '正在重播当前动作；暂停后可单步检查。' : '当前动作需改变时间后观察，可点击 +1 分钟。'); refreshStats();
   });
+  byId('settle').addEventListener('click', () => { renderer.showCurrentTime(); refreshStats(); notice('指针已归位到当前目标时间。'); });
+  for (const button of document.querySelectorAll('[data-speed]')) button.addEventListener('click', () => update({ playbackSpeed: Number(button.dataset.speed) }));
   function advance(delta) { update({ source: 'manual', manualTime: Time.textFromMinutes(source.read(settings) + delta), autoDemo: false }, '已切换到指定时间。'); }
   byId('previousMinute').addEventListener('click', () => advance(-1)); byId('nextMinute').addEventListener('click', () => advance(1));
+  byId('liveTime').addEventListener('click', () => update({ source: 'live', autoDemo: false }, '已恢复跟随设备时间。'));
+  byId('referenceTime')?.addEventListener('click', () => {
+    const time = model.getMotion?.(settings).referenceTime || model.referenceTime || '12:36';
+    update({ source: 'manual', manualTime: time, autoDemo: false }, '已切换到示例时间 ' + time + '。');
+  });
+  byId('referenceDemo')?.addEventListener('click', () => {
+    const action = model.getMotion?.(settings), reference = action || model;
+    if (!reference.referenceDuration) return;
+    const motion = Object.fromEntries(Object.entries(fields).filter(([key, field]) => field.group === 'motion' && key !== 'playbackSpeed').map(([key]) => [key, model.Settings.defaults[key]]));
+    update({ ...(action ? { duration: action.duration } : motion), source: 'manual', manualTime: reference.referenceTime, autoDemo: false });
+    renderer.showCurrentTime();
+    const targetTime = Time.textFromMinutes(Time.minutesFromText(reference.referenceTime) + 1);
+    update({ manualTime: targetTime, playbackSpeed: 1 }, '按原片节奏播放 ' + reference.referenceTime + ' → ' + targetTime + '；可暂停、单步对照。');
+    if (reference.referenceClip) {
+      renderer.playReference();
+      notice('从原片首帧的旋转姿态开始，约 ' + reference.referenceDuration + ' 秒形成 ' + targetTime + '；可暂停、单步对照。');
+    }
+    refreshStats();
+  });
   byId('previewPreset').addEventListener('change', event => {
-    if (event.target.value === 'custom') { controls.get('canvasWidth').input.focus(); return; }
+    if (event.target.value === 'custom') { byId('fullCustomization').open = true; controls.get('canvasWidth').input.focus(); return; }
     const [canvasWidth, canvasHeight] = event.target.value.split('x').map(Number); update({ canvasWidth, canvasHeight });
   });
   byId('save').addEventListener('click', () => { persist(); notice(storageAvailable ? '方案已保存到当前浏览器。' : '当前浏览器无法保存，请导出 JSON。', !storageAvailable); });
@@ -218,12 +2679,20 @@
     const file = event.target.files[0]; if (!file) return;
     try {
       if (file.size > 65536) throw new Error('请选择小于 64 KB 的配置文件。');
-      const imported = Landscape.parse(await file.text());
+      const imported = catalog.parse(await file.text());
       selectModel(imported.model, imported.settings);
-      notice('方案已导入，当前为 ' + model.name + '。');
+      notice('完整配置已导入：' + model.name + ' · ' + model.edition + '。');
     } catch (error) { notice(error.message, true); } finally { event.target.value = ''; }
   });
-  byId('reset').addEventListener('click', () => { renderer.setPaused(false); update(model.Settings.defaults, '已恢复经典黑和默认调试参数。'); });
+  function resetGroups(groups, message) {
+    const patch = Object.fromEntries(Object.entries(fields).filter(([key, field]) => groups.includes(field.group) && key !== 'playbackSpeed').map(([key]) => [key, model.Settings.defaults[key]]));
+    update(patch, message);
+  }
+  byId('restorePreset').addEventListener('click', () => resetGroups(['screen', 'motion', 'colors', 'geometry'], '已恢复此预设的动作、配色和尺寸参数。'));
+  byId('resetMotion').addEventListener('click', () => resetGroups(['motion'], '已恢复此预设的动作。'));
+  byId('resetColors').addEventListener('click', () => resetGroups(['colors'], '已恢复此预设的配色。'));
+  byId('resetGeometry').addEventListener('click', () => resetGroups(['screen', 'geometry'], '已恢复此预设的尺寸、位置与指针参数。'));
+  byId('reset').addEventListener('click', () => { renderer.setPaused(false); update(model.Settings.defaults, '当前预设的全部参数已重置。'); renderer.showCurrentTime(); refreshStats(); });
   byId('fullscreen').addEventListener('click', async () => {
     try { if (document.fullscreenElement) await document.exitFullscreen(); else await stage.requestFullscreen(); }
     catch (_) { notice('此浏览器暂不支持全屏预览。', true); }

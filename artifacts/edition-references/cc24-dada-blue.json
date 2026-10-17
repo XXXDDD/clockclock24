@@ -1,0 +1,200 @@
+{
+  "id": 8044119916739,
+  "title": "ClockClock 24 / Dada Blue",
+  "handle": "cc24-dada-blue",
+  "description": "<p dir=\"ltr\">Kit Kemp Design Studio and Humans since 1982 have collaborated to create a striking new <em>ClockClock 24</em> edition. <meta charset=\"utf-8\"><meta charset=\"utf-8\">Both a kinetic sculpture and a functioning wall clock, embodying both analogue and digital elements the <em>ClockClock 24 - Dada Blue</em> is a mesmerising ode to the passing of time.</p>\n<p dir=\"ltr\"><meta charset=\"utf-8\"> <em>ClockClock 24 - Dada Blue</em> consists of a handcrafted housing of mineral composite and electronic components. It is built on proprietary technology—in both software and hardware—which a team of in-house designers, engineers, and programmers has continuously developed since its inception. The objects are <meta charset=\"utf-8\">carefully hand-assembled at the studio in Stockholm.<em><br><br></em><meta charset=\"utf-8\">The roots of this project reach back to 2008 when the first edition was launched as <em>The Clock Clock</em>, and later exhibited at the Saatchi Gallery in London in 2010. In 2016 it was reissued as<em> ClockClock 24 </em>in partnership with the MoMA store in New York. Today, artworks of this series are represented in the permanent collections of the Vitra Design Museum in Germany, the Musée International d'Horlogerie in Switzerland, and the Nationalmuseum in Sweden, among others.</p>",
+  "published_at": "2024-09-25T15:39:55+02:00",
+  "created_at": "2024-09-20T16:53:56+02:00",
+  "vendor": "Humans since 1982",
+  "type": "",
+  "tags": [
+    "ClockClock"
+  ],
+  "price": 830000,
+  "price_min": 830000,
+  "price_max": 830000,
+  "available": true,
+  "price_varies": false,
+  "compare_at_price": null,
+  "compare_at_price_min": 0,
+  "compare_at_price_max": 0,
+  "compare_at_price_varies": false,
+  "variants": [
+    {
+      "id": 43958908977347,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": "",
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": true,
+      "name": "ClockClock 24 / Dada Blue",
+      "public_title": null,
+      "options": [
+        "Default Title"
+      ],
+      "price": 830000,
+      "weight": 18000,
+      "compare_at_price": null,
+      "inventory_management": "shopify",
+      "barcode": null,
+      "quantity_rule": {
+        "min": 1,
+        "max": null,
+        "increment": 1
+      },
+      "quantity_price_breaks": [],
+      "requires_selling_plan": false,
+      "selling_plan_allocations": []
+    }
+  ],
+  "images": [
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_DadaBlue_main.png?v=1726844790",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/UP_03_ClockClock_24_Dada_BLUE.jpg?v=1727271188",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/UUP_06_ClockClock_24_Dada_BLUE.jpg?v=1727271406",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/04_ClockClock_24_Dada_BLue_closeup_1.jpg?v=1727270273",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/7_certificate_ClockClock24_Dada_Blue.jpg?v=1727350779"
+  ],
+  "featured_image": "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_DadaBlue_main.png?v=1726844790",
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ],
+  "url": "/en-int/products/cc24-dada-blue",
+  "media": [
+    {
+      "alt": null,
+      "id": 35417804964035,
+      "position": 1,
+      "preview_image": {
+        "aspect_ratio": 1.563,
+        "height": 1600,
+        "width": 2500,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_DadaBlue_main.png?v=1726844790"
+      },
+      "aspect_ratio": 1.563,
+      "height": 1600,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_DadaBlue_main.png?v=1726844790",
+      "width": 2500
+    },
+    {
+      "alt": null,
+      "id": 35439548661955,
+      "position": 2,
+      "preview_image": {
+        "aspect_ratio": 1.5,
+        "height": 1280,
+        "width": 1920,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/preview_images/7b84afa6bf7d458594d29c24cc273d3a.thumbnail.0000000000.jpg?v=1727269966"
+      },
+      "aspect_ratio": 1.5,
+      "duration": 47000,
+      "media_type": "video",
+      "sources": [
+        {
+          "format": "mp4",
+          "height": 480,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/7b84afa6bf7d458594d29c24cc273d3a/7b84afa6bf7d458594d29c24cc273d3a.SD-480p-1.5Mbps-35307977.mp4",
+          "width": 720
+        },
+        {
+          "format": "mp4",
+          "height": 1080,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/7b84afa6bf7d458594d29c24cc273d3a/7b84afa6bf7d458594d29c24cc273d3a.HD-1080p-7.2Mbps-35307977.mp4",
+          "width": 1620
+        },
+        {
+          "format": "mp4",
+          "height": 720,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/7b84afa6bf7d458594d29c24cc273d3a/7b84afa6bf7d458594d29c24cc273d3a.HD-720p-4.5Mbps-35307977.mp4",
+          "width": 1080
+        },
+        {
+          "format": "m3u8",
+          "height": 1080,
+          "mime_type": "application/x-mpegURL",
+          "url": "https://cdn.shopify.com/videos/c/vp/7b84afa6bf7d458594d29c24cc273d3a/7b84afa6bf7d458594d29c24cc273d3a.m3u8",
+          "width": 1620
+        }
+      ]
+    },
+    {
+      "alt": null,
+      "id": 35439878340803,
+      "position": 3,
+      "preview_image": {
+        "aspect_ratio": 0.874,
+        "height": 3639,
+        "width": 3180,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/UP_03_ClockClock_24_Dada_BLUE.jpg?v=1727271188"
+      },
+      "aspect_ratio": 0.874,
+      "height": 3639,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/UP_03_ClockClock_24_Dada_BLUE.jpg?v=1727271188",
+      "width": 3180
+    },
+    {
+      "alt": null,
+      "id": 35439892955331,
+      "position": 4,
+      "preview_image": {
+        "aspect_ratio": 0.875,
+        "height": 4000,
+        "width": 3500,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/UUP_06_ClockClock_24_Dada_BLUE.jpg?v=1727271406"
+      },
+      "aspect_ratio": 0.875,
+      "height": 4000,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/UUP_06_ClockClock_24_Dada_BLUE.jpg?v=1727271406",
+      "width": 3500
+    },
+    {
+      "alt": null,
+      "id": 35439575433411,
+      "position": 5,
+      "preview_image": {
+        "aspect_ratio": 1.227,
+        "height": 3483,
+        "width": 4274,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/04_ClockClock_24_Dada_BLue_closeup_1.jpg?v=1727270273"
+      },
+      "aspect_ratio": 1.227,
+      "height": 3483,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/04_ClockClock_24_Dada_BLue_closeup_1.jpg?v=1727270273",
+      "width": 4274
+    },
+    {
+      "alt": null,
+      "id": 35446476439747,
+      "position": 6,
+      "preview_image": {
+        "aspect_ratio": 1.333,
+        "height": 1790,
+        "width": 2386,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/7_certificate_ClockClock24_Dada_Blue.jpg?v=1727350779"
+      },
+      "aspect_ratio": 1.333,
+      "height": 1790,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/7_certificate_ClockClock24_Dada_Blue.jpg?v=1727350779",
+      "width": 2386
+    }
+  ],
+  "requires_selling_plan": false,
+  "selling_plan_groups": []
+}

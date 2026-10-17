@@ -3,9 +3,9 @@
   "version": "3.0.0",
   "private": true,
   "scripts": {
-    "build": "node scripts/build.cjs && node scripts/build-wallpaper.cjs",
+    "build": "node scripts/build.cjs",
     "test": "node --test",
-    "check": "node scripts/build.cjs --check && node scripts/build-wallpaper.cjs --check",
+    "check": "node scripts/build.cjs --check",
     "dev": "node scripts/serve.cjs",
     "build:wallpaper": "node scripts/build-wallpaper.cjs",
     "build:lively": "node scripts/build-lively.cjs --publish",

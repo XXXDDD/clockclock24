@@ -1,0 +1,100 @@
+{
+  "slug": "a-million-times-96-bjarke-ingels",
+  "product": "https://www.humanssince1982.com/en-int/products/a-million-times-96-bjarke-ingels",
+  "checked": "2026-10-17",
+  "gallery_videos": [
+    {
+      "alt": null,
+      "id": 67373796950399,
+      "position": 2,
+      "preview_image": {
+        "aspect_ratio": 1.4,
+        "height": 1500,
+        "width": 2100,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/preview_images/92842d6272864a9f9437d9bd1c884cbf.thumbnail.0000000000.jpg?v=1755597867"
+      },
+      "aspect_ratio": 1.4,
+      "duration": 52000,
+      "media_type": "video",
+      "sources": [
+        {
+          "format": "mp4",
+          "height": 480,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/92842d6272864a9f9437d9bd1c884cbf/92842d6272864a9f9437d9bd1c884cbf.SD-480p-1.5Mbps-55167783.mp4",
+          "width": 672
+        },
+        {
+          "format": "mp4",
+          "height": 1080,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/92842d6272864a9f9437d9bd1c884cbf/92842d6272864a9f9437d9bd1c884cbf.HD-1080p-7.2Mbps-55167783.mp4",
+          "width": 1512
+        },
+        {
+          "format": "mp4",
+          "height": 720,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/92842d6272864a9f9437d9bd1c884cbf/92842d6272864a9f9437d9bd1c884cbf.HD-720p-4.5Mbps-55167783.mp4",
+          "width": 1008
+        },
+        {
+          "format": "m3u8",
+          "height": 1080,
+          "mime_type": "application/x-mpegURL",
+          "url": "https://cdn.shopify.com/videos/c/vp/92842d6272864a9f9437d9bd1c884cbf/92842d6272864a9f9437d9bd1c884cbf.m3u8",
+          "width": 1512
+        }
+      ]
+    },
+    {
+      "alt": null,
+      "id": 68072653717887,
+      "position": 3,
+      "preview_image": {
+        "aspect_ratio": 1.778,
+        "height": 1080,
+        "width": 1920,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/preview_images/c59d051b25cf49639d1a0c254fa1ed12.thumbnail.0000000000.jpg?v=1759998727"
+      },
+      "aspect_ratio": 1.775,
+      "duration": 61000,
+      "media_type": "video",
+      "sources": [
+        {
+          "format": "mp4",
+          "height": 480,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/c59d051b25cf49639d1a0c254fa1ed12/c59d051b25cf49639d1a0c254fa1ed12.SD-480p-1.5Mbps-59185525.mp4",
+          "width": 852
+        },
+        {
+          "format": "mp4",
+          "height": 1080,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/c59d051b25cf49639d1a0c254fa1ed12/c59d051b25cf49639d1a0c254fa1ed12.HD-1080p-7.2Mbps-59185525.mp4",
+          "width": 1920
+        },
+        {
+          "format": "mp4",
+          "height": 720,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/c59d051b25cf49639d1a0c254fa1ed12/c59d051b25cf49639d1a0c254fa1ed12.HD-720p-4.5Mbps-59185525.mp4",
+          "width": 1280
+        },
+        {
+          "format": "m3u8",
+          "height": 1080,
+          "mime_type": "application/x-mpegURL",
+          "url": "https://cdn.shopify.com/videos/c/vp/c59d051b25cf49639d1a0c254fa1ed12/c59d051b25cf49639d1a0c254fa1ed12.m3u8",
+          "width": 1920
+        }
+      ]
+    }
+  ],
+  "page_videos": [
+    "//www.humanssince1982.com/cdn/shop/videos/c/vp/92842d6272864a9f9437d9bd1c884cbf/92842d6272864a9f9437d9bd1c884cbf.HD-1080p-7.2Mbps-55167783.mp4?v=0',",
+    "//www.humanssince1982.com/cdn/shop/videos/c/vp/b16c34da0b2645ebad6a3584da62b49e/b16c34da0b2645ebad6a3584da62b49e.HD-1080p-7.2Mbps-30888798.mp4?v=0',",
+    "//www.humanssince1982.com/cdn/shop/videos/c/vp/c59d051b25cf49639d1a0c254fa1ed12/c59d051b25cf49639d1a0c254fa1ed12.HD-1080p-7.2Mbps-59185525.mp4?v=0',"
+  ]
+}

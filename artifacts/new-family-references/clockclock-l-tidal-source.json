@@ -1,0 +1,55 @@
+{
+  "slug": "clockclock-l-tidal",
+  "product": "https://www.humanssince1982.com/en-int/products/clockclock-l-tidal",
+  "checked": "2026-10-17",
+  "gallery_videos": [
+    {
+      "alt": null,
+      "id": 34856792719555,
+      "position": 2,
+      "preview_image": {
+        "aspect_ratio": 1.778,
+        "height": 1080,
+        "width": 1920,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/preview_images/91ac411a0c094baf96ef32338ed2c6c7.thumbnail.0000000000.jpg?v=1718700625"
+      },
+      "aspect_ratio": 1.775,
+      "duration": 16610,
+      "media_type": "video",
+      "sources": [
+        {
+          "format": "mp4",
+          "height": 480,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/91ac411a0c094baf96ef32338ed2c6c7/91ac411a0c094baf96ef32338ed2c6c7.SD-480p-1.5Mbps-30583308.mp4",
+          "width": 852
+        },
+        {
+          "format": "mp4",
+          "height": 1080,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/91ac411a0c094baf96ef32338ed2c6c7/91ac411a0c094baf96ef32338ed2c6c7.HD-1080p-7.2Mbps-30583308.mp4",
+          "width": 1920
+        },
+        {
+          "format": "mp4",
+          "height": 720,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/91ac411a0c094baf96ef32338ed2c6c7/91ac411a0c094baf96ef32338ed2c6c7.HD-720p-4.5Mbps-30583308.mp4",
+          "width": 1280
+        },
+        {
+          "format": "m3u8",
+          "height": 1080,
+          "mime_type": "application/x-mpegURL",
+          "url": "https://cdn.shopify.com/videos/c/vp/91ac411a0c094baf96ef32338ed2c6c7/91ac411a0c094baf96ef32338ed2c6c7.m3u8",
+          "width": 1920
+        }
+      ]
+    }
+  ],
+  "page_videos": [
+    "//www.humanssince1982.com/cdn/shop/videos/c/vp/91ac411a0c094baf96ef32338ed2c6c7/91ac411a0c094baf96ef32338ed2c6c7.HD-1080p-7.2Mbps-30583308.mp4?v=0',",
+    "//www.humanssince1982.com/cdn/shop/videos/c/vp/b16c34da0b2645ebad6a3584da62b49e/b16c34da0b2645ebad6a3584da62b49e.HD-1080p-7.2Mbps-30888798.mp4?v=0',"
+  ]
+}

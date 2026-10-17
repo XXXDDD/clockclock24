@@ -14,7 +14,8 @@
     longWidth: { ...Base.fields.longWidth, value: 6.2 },
     shortWidth: { ...Base.fields.shortWidth, value: 6.2 },
     motion: { ...Base.fields.motion, value: 'wave', options: [['wave', '逐列波浪收束'], ['spin', '同步旋转'], ['quiet', '平滑过渡'], ['none', '立即换时']] },
-    duration: { ...Base.fields.duration, value: 6 },
+    duration: { ...Base.fields.duration, label: '动画时长', value: 6, max: 10, help: '' },
+    manualTime: { ...Base.fields.manualTime, value: '12:38' },
     visibility: { ...Base.fields.visibility, value: 'show', help: '参考图保留闲置指针的斜线；也可选择归位后隐藏或微光显示。' }
   };
   function normalize(input = {}, base = {}) {

@@ -1,0 +1,201 @@
+{
+  "id": 15560730739071,
+  "title": "ClockClock 24 / Pinakin Hara",
+  "handle": "clockclock-24-pinakin-hara",
+  "description": "<p class=\"p1\">From Scandinavian winter to Indian spring: <em>ClockClock 24 – Pinakin Hara</em> is one of two exclusive editions, each limited to five pieces, created in collaboration with Mumbai-based Pinakin Design. Drawing inspiration from the richness of Indian culture and the vibrant spirit of Holi, this edition introduces a refined accent of emerald green—an homage to celebration and color—set against the serene Scandinavian snow-white case. <span>22 Karat gold-plated clock hands</span> complete the composition.<br><span><br>Each piece is hand assembled at our Stockholm studio and consists of an elegant housing of mineral composite and electronic components. It is built on proprietary technology—in both software and hardware—which a team of in-house designers, engineers, and programmers has continuously developed since its inception. </span><br><br><span>The concept behind the artwork was first launched in 2008 as </span><em>The Clock Clock </em><span>and exhibited at the Saatchi Gallery in London in 2010. Later, it was reissued as </span><em>ClockClock 24</em><span> in partnership with the MoMA store in New York. Today, it is represented in the permanent collections of the Vitra Design Museum in Germany, the Musée International d'Horlogerie in Switzerland, and the Nationalmuseum in Sweden, among others.</span><br></p>\n<!---->",
+  "published_at": "2026-03-10T08:50:53+01:00",
+  "created_at": "2026-02-19T10:28:53+01:00",
+  "vendor": "Humans since 1982",
+  "type": "",
+  "tags": [
+    "ClockClock",
+    "Pinakin"
+  ],
+  "price": 1050000,
+  "price_min": 1050000,
+  "price_max": 1050000,
+  "available": true,
+  "price_varies": false,
+  "compare_at_price": null,
+  "compare_at_price_min": 0,
+  "compare_at_price_max": 0,
+  "compare_at_price_varies": false,
+  "variants": [
+    {
+      "id": 56984362123647,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": true,
+      "name": "ClockClock 24 / Pinakin Hara",
+      "public_title": null,
+      "options": [
+        "Default Title"
+      ],
+      "price": 1050000,
+      "weight": 18000,
+      "compare_at_price": null,
+      "inventory_management": "shopify",
+      "barcode": null,
+      "quantity_rule": {
+        "min": 1,
+        "max": null,
+        "increment": 1
+      },
+      "quantity_price_breaks": [],
+      "requires_selling_plan": false,
+      "selling_plan_allocations": []
+    }
+  ],
+  "images": [
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Hara_green.png?v=1771493735",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Hara_green_person_3.jpg?v=1771496845",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Hara_green_time.jpg?v=1771496845",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Hara_green_detail_3.jpg?v=1772437610",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Hara_green_Snow_close.jpg?v=1772437610"
+  ],
+  "featured_image": "//cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Hara_green.png?v=1771493735",
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ],
+  "url": "/en-int/products/clockclock-24-pinakin-hara",
+  "media": [
+    {
+      "alt": null,
+      "id": 69955027796351,
+      "position": 1,
+      "preview_image": {
+        "aspect_ratio": 1.563,
+        "height": 1600,
+        "width": 2500,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Hara_green.png?v=1771493735"
+      },
+      "aspect_ratio": 1.563,
+      "height": 1600,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Hara_green.png?v=1771493735",
+      "width": 2500
+    },
+    {
+      "alt": null,
+      "id": 69955135078783,
+      "position": 2,
+      "preview_image": {
+        "aspect_ratio": 1.401,
+        "height": 1542,
+        "width": 2160,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/preview_images/2a7b147708ed461590a4e94cea73cdf2.thumbnail.0000000000.jpg?v=1771494375"
+      },
+      "aspect_ratio": 1.4,
+      "duration": 10240,
+      "media_type": "video",
+      "sources": [
+        {
+          "format": "mp4",
+          "height": 480,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/2a7b147708ed461590a4e94cea73cdf2/2a7b147708ed461590a4e94cea73cdf2.SD-480p-1.5Mbps-74979670.mp4",
+          "width": 672
+        },
+        {
+          "format": "mp4",
+          "height": 1080,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/2a7b147708ed461590a4e94cea73cdf2/2a7b147708ed461590a4e94cea73cdf2.HD-1080p-7.2Mbps-74979670.mp4",
+          "width": 1512
+        },
+        {
+          "format": "mp4",
+          "height": 720,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/2a7b147708ed461590a4e94cea73cdf2/2a7b147708ed461590a4e94cea73cdf2.HD-720p-4.5Mbps-74979670.mp4",
+          "width": 1008
+        },
+        {
+          "format": "m3u8",
+          "height": 1080,
+          "mime_type": "application/x-mpegURL",
+          "url": "https://cdn.shopify.com/videos/c/vp/2a7b147708ed461590a4e94cea73cdf2/2a7b147708ed461590a4e94cea73cdf2.m3u8",
+          "width": 1512
+        }
+      ]
+    },
+    {
+      "alt": null,
+      "id": 69955640656255,
+      "position": 3,
+      "preview_image": {
+        "aspect_ratio": 1.4,
+        "height": 3744,
+        "width": 5242,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Hara_green_person_3.jpg?v=1771496845"
+      },
+      "aspect_ratio": 1.4,
+      "height": 3744,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Hara_green_person_3.jpg?v=1771496845",
+      "width": 5242
+    },
+    {
+      "alt": null,
+      "id": 69955888841087,
+      "position": 4,
+      "preview_image": {
+        "aspect_ratio": 1.401,
+        "height": 3518,
+        "width": 4927,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Hara_green_time.jpg?v=1771496845"
+      },
+      "aspect_ratio": 1.401,
+      "height": 3518,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Hara_green_time.jpg?v=1771496845",
+      "width": 4927
+    },
+    {
+      "alt": null,
+      "id": 70102768058751,
+      "position": 5,
+      "preview_image": {
+        "aspect_ratio": 1.401,
+        "height": 2508,
+        "width": 3513,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Hara_green_detail_3.jpg?v=1772437610"
+      },
+      "aspect_ratio": 1.401,
+      "height": 2508,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Hara_green_detail_3.jpg?v=1772437610",
+      "width": 3513
+    },
+    {
+      "alt": null,
+      "id": 69955129409919,
+      "position": 6,
+      "preview_image": {
+        "aspect_ratio": 1.401,
+        "height": 968,
+        "width": 1356,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Hara_green_Snow_close.jpg?v=1772437610"
+      },
+      "aspect_ratio": 1.401,
+      "height": 968,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/CC24_Pinakin_Hara_green_Snow_close.jpg?v=1772437610",
+      "width": 1356
+    }
+  ],
+  "requires_selling_plan": false,
+  "selling_plan_groups": []
+}

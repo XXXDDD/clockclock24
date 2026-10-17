@@ -1,0 +1,140 @@
+{
+  "id": 7953475240131,
+  "title": "A million Times 72v (Tidal) / Tidal",
+  "handle": "a-million-times-72v-tidal",
+  "description": "<p><meta charset=\"utf-8\"><em>A million Times (Tidal)</em> is crafted and milled from a single block of aluminium, coated in dark blue, and features shiny metal finish clock hands. The series is evocative of sunlight reflecting on the surface of water, while the cyclical and cumulative patterns shown by the clock-hands are themselves wave-like, a constant ebb and flow between reporting the time each minute. <br><br><meta charset=\"utf-8\">The artwork is hand-assembled in our Stockholm studio and is part of a highly limited edition of just 10 pieces.<br><br><meta charset=\"utf-8\">The first <em>A million Times</em> installation was exhibited in 2013 at the design fairs in Dubai and Basel. Since then artworks from this series have been included in internationally significant exhibitions at the Somerset House (UK), Smithsonian Design Museum (US), Issey Miyake's museum \"21_21 Design Sight\" (JP) and many more.<br></p>\n<!---->",
+  "published_at": "2024-06-07T16:28:31+02:00",
+  "created_at": "2024-06-07T16:28:32+02:00",
+  "vendor": "Humans since 1982",
+  "type": "",
+  "tags": [
+    "A million Times",
+    "Tidal Series"
+  ],
+  "price": 11800000,
+  "price_min": 11800000,
+  "price_max": 11800000,
+  "available": true,
+  "price_varies": false,
+  "compare_at_price": null,
+  "compare_at_price_min": 0,
+  "compare_at_price_max": 0,
+  "compare_at_price_varies": false,
+  "variants": [
+    {
+      "id": 43661552058563,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": true,
+      "name": "A million Times 72v (Tidal) / Tidal",
+      "public_title": null,
+      "options": [
+        "Default Title"
+      ],
+      "price": 11800000,
+      "weight": 70000,
+      "compare_at_price": null,
+      "inventory_management": "shopify",
+      "barcode": null,
+      "quantity_rule": {
+        "min": 1,
+        "max": null,
+        "increment": 1
+      },
+      "quantity_price_breaks": [],
+      "requires_selling_plan": false,
+      "selling_plan_allocations": []
+    }
+  ],
+  "images": [
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT_72VTidal_cfcad7bd-b5b1-4a11-96e0-e0be7a284cf4.png?v=1720180378",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT72vTidal_front_time_web_crop.jpg?v=1720180378",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT72vTidal_side_choreography_web.jpg?v=1720180378",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT72v_Tidal_front_Choreography_2.jpg?v=1717770921"
+  ],
+  "featured_image": "//cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT_72VTidal_cfcad7bd-b5b1-4a11-96e0-e0be7a284cf4.png?v=1720180378",
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ],
+  "url": "/en-int/products/a-million-times-72v-tidal",
+  "media": [
+    {
+      "alt": null,
+      "id": 34864999596227,
+      "position": 1,
+      "preview_image": {
+        "aspect_ratio": 0.579,
+        "height": 1380,
+        "width": 799,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT_72VTidal_cfcad7bd-b5b1-4a11-96e0-e0be7a284cf4.png?v=1720180378"
+      },
+      "aspect_ratio": 0.579,
+      "height": 1380,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT_72VTidal_cfcad7bd-b5b1-4a11-96e0-e0be7a284cf4.png?v=1720180378",
+      "width": 799
+    },
+    {
+      "alt": null,
+      "id": 34786612281539,
+      "position": 2,
+      "preview_image": {
+        "aspect_ratio": 1.334,
+        "height": 1700,
+        "width": 2268,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT72vTidal_front_time_web_crop.jpg?v=1720180378"
+      },
+      "aspect_ratio": 1.334,
+      "height": 1700,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT72vTidal_front_time_web_crop.jpg?v=1720180378",
+      "width": 2268
+    },
+    {
+      "alt": null,
+      "id": 34786612347075,
+      "position": 3,
+      "preview_image": {
+        "aspect_ratio": 1.5,
+        "height": 1667,
+        "width": 2500,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT72vTidal_side_choreography_web.jpg?v=1720180378"
+      },
+      "aspect_ratio": 1.5,
+      "height": 1667,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT72vTidal_side_choreography_web.jpg?v=1720180378",
+      "width": 2500
+    },
+    {
+      "alt": null,
+      "id": 34786624143555,
+      "position": 4,
+      "preview_image": {
+        "aspect_ratio": 1.5,
+        "height": 1667,
+        "width": 2500,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT72v_Tidal_front_Choreography_2.jpg?v=1717770921"
+      },
+      "aspect_ratio": 1.5,
+      "height": 1667,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/AMT72v_Tidal_front_Choreography_2.jpg?v=1717770921",
+      "width": 2500
+    }
+  ],
+  "requires_selling_plan": false,
+  "selling_plan_groups": []
+}

@@ -1,0 +1,103 @@
+{
+  "waveStart": 13,
+  "period": 12.284413,
+  "ramp": 3.0,
+  "modulation": 0.027426,
+  "columnDelay": 0,
+  "rowDelay": 0,
+  "tileAngles": [
+    [
+      45,
+      315
+    ],
+    [
+      135,
+      225
+    ]
+  ],
+  "cells": [
+    0,
+    1,
+    12,
+    13,
+    4,
+    5,
+    16,
+    17,
+    48,
+    49,
+    60,
+    61,
+    10,
+    11,
+    82,
+    83
+  ],
+  "sourceRange": [
+    14,
+    40
+  ],
+  "method": "Unordered first and second complex moments; robust phase fit, no motor-identity labels. Source 24 s excluded at overlap; 42 s excluded during return.",
+  "knots": [
+    [
+      0,
+      0
+    ],
+    [
+      1,
+      1.97
+    ],
+    [
+      2,
+      20.332
+    ],
+    [
+      3,
+      45.717
+    ],
+    [
+      5,
+      82.581
+    ],
+    [
+      7,
+      146.287
+    ],
+    [
+      9,
+      200.275
+    ],
+    [
+      13,
+      310.765
+    ],
+    [
+      15,
+      367.803
+    ],
+    [
+      17,
+      423.957
+    ],
+    [
+      19,
+      485.38
+    ],
+    [
+      21,
+      546.745
+    ],
+    [
+      23,
+      606.525
+    ],
+    [
+      25,
+      669.27
+    ],
+    [
+      27,
+      728.954
+    ]
+  ]
+}

@@ -1,0 +1,262 @@
+{
+  "id": 15221453455743,
+  "title": "A million Times 96 (Bjarke Ingels)",
+  "handle": "a-million-times-96-bjarke-ingels",
+  "description": "<p data-renderer-start-pos=\"105\">Humans since 1982 are proudly collaborating with BIG - Bjarke Ingels Group - and SolidNature to create a new series of kinetic timepieces that unite architectural vision, material mastery and precision technology.</p>\n<p data-renderer-start-pos=\"322\">Limited to only 5 pieces, this edition is offered in a curated selection of five natural stones personally selected by Bjarke Ingels with Humans since 1982, each expressing time through its texture and materiality. The images here show the artwork in ‘Sunset Dune Travertine’. Contact the studio for finishes and availability.</p>\n<p data-renderer-start-pos=\"650\">The collaboration grew from Bjarke Ingels’ own collection of Humans since 1982’s work and a shared belief in art’s ability to elevate architectural space. Together, we conceived a series where time is embodied not only through movement and technology but also through material.</p>\n<p data-renderer-start-pos=\"931\">Travertine, a stone formed over hundreds of thousands of years, becomes a living canvas for our signature clock hand choreographies. Its layered stratas act as a geological clock, fusing millennia with hours and minutes. Each edition of A million Times 96 (Bjarke Ingels) is hand-crafted in natural materials, its unique layering and texture ensure no two artworks are entirely alike.</p>\n<p data-renderer-start-pos=\"1319\">The stone artwork body is combined with Humans since 1982’s proprietary technology, refined by our in-house designers, engineers and programmers since 2009. Each piece is meticulously hand-assembled in our Stockholm studio.</p>",
+  "published_at": "2025-09-25T13:09:47+02:00",
+  "created_at": "2025-08-05T13:29:52+02:00",
+  "vendor": "Humans since 1982",
+  "type": "",
+  "tags": [
+    "A million Times",
+    "X Bjarke Ingels"
+  ],
+  "price": 19000000,
+  "price_min": 19000000,
+  "price_max": 19000000,
+  "available": true,
+  "price_varies": false,
+  "compare_at_price": null,
+  "compare_at_price_min": 0,
+  "compare_at_price_max": 0,
+  "compare_at_price_varies": false,
+  "variants": [
+    {
+      "id": 55808339673471,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": true,
+      "name": "A million Times 96 (Bjarke Ingels)",
+      "public_title": null,
+      "options": [
+        "Default Title"
+      ],
+      "price": 19000000,
+      "weight": 230000,
+      "compare_at_price": null,
+      "inventory_management": "shopify",
+      "barcode": null,
+      "quantity_rule": {
+        "min": 1,
+        "max": null,
+        "increment": 1
+      },
+      "quantity_price_breaks": [],
+      "requires_selling_plan": false,
+      "selling_plan_allocations": []
+    }
+  ],
+  "images": [
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/HS82xBIGxSN_main_300.png?v=1755591477",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/HS82xBIGxSN_1_compressed.jpg?v=1759999034",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/HS82xBIG_CU.jpg?v=1759999034",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/HS82xBIG_Front.jpg?v=1759999034",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/HS82xBIG_material2jpg.jpg?v=1760008948",
+    "//cdn.shopify.com/s/files/1/0640/8241/1715/files/All_samples_clean.jpg?v=1759999034"
+  ],
+  "featured_image": "//cdn.shopify.com/s/files/1/0640/8241/1715/files/HS82xBIGxSN_main_300.png?v=1755591477",
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ],
+  "url": "/en-int/products/a-million-times-96-bjarke-ingels",
+  "media": [
+    {
+      "alt": null,
+      "id": 67373104005503,
+      "position": 1,
+      "preview_image": {
+        "aspect_ratio": 1.308,
+        "height": 1804,
+        "width": 2360,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/HS82xBIGxSN_main_300.png?v=1755591477"
+      },
+      "aspect_ratio": 1.308,
+      "height": 1804,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/HS82xBIGxSN_main_300.png?v=1755591477",
+      "width": 2360
+    },
+    {
+      "alt": null,
+      "id": 67373796950399,
+      "position": 2,
+      "preview_image": {
+        "aspect_ratio": 1.4,
+        "height": 1500,
+        "width": 2100,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/preview_images/92842d6272864a9f9437d9bd1c884cbf.thumbnail.0000000000.jpg?v=1755597867"
+      },
+      "aspect_ratio": 1.4,
+      "duration": 52000,
+      "media_type": "video",
+      "sources": [
+        {
+          "format": "mp4",
+          "height": 480,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/92842d6272864a9f9437d9bd1c884cbf/92842d6272864a9f9437d9bd1c884cbf.SD-480p-1.5Mbps-55167783.mp4",
+          "width": 672
+        },
+        {
+          "format": "mp4",
+          "height": 1080,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/92842d6272864a9f9437d9bd1c884cbf/92842d6272864a9f9437d9bd1c884cbf.HD-1080p-7.2Mbps-55167783.mp4",
+          "width": 1512
+        },
+        {
+          "format": "mp4",
+          "height": 720,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/92842d6272864a9f9437d9bd1c884cbf/92842d6272864a9f9437d9bd1c884cbf.HD-720p-4.5Mbps-55167783.mp4",
+          "width": 1008
+        },
+        {
+          "format": "m3u8",
+          "height": 1080,
+          "mime_type": "application/x-mpegURL",
+          "url": "https://cdn.shopify.com/videos/c/vp/92842d6272864a9f9437d9bd1c884cbf/92842d6272864a9f9437d9bd1c884cbf.m3u8",
+          "width": 1512
+        }
+      ]
+    },
+    {
+      "alt": null,
+      "id": 68072653717887,
+      "position": 3,
+      "preview_image": {
+        "aspect_ratio": 1.778,
+        "height": 1080,
+        "width": 1920,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/preview_images/c59d051b25cf49639d1a0c254fa1ed12.thumbnail.0000000000.jpg?v=1759998727"
+      },
+      "aspect_ratio": 1.775,
+      "duration": 61000,
+      "media_type": "video",
+      "sources": [
+        {
+          "format": "mp4",
+          "height": 480,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/c59d051b25cf49639d1a0c254fa1ed12/c59d051b25cf49639d1a0c254fa1ed12.SD-480p-1.5Mbps-59185525.mp4",
+          "width": 852
+        },
+        {
+          "format": "mp4",
+          "height": 1080,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/c59d051b25cf49639d1a0c254fa1ed12/c59d051b25cf49639d1a0c254fa1ed12.HD-1080p-7.2Mbps-59185525.mp4",
+          "width": 1920
+        },
+        {
+          "format": "mp4",
+          "height": 720,
+          "mime_type": "video/mp4",
+          "url": "https://cdn.shopify.com/videos/c/vp/c59d051b25cf49639d1a0c254fa1ed12/c59d051b25cf49639d1a0c254fa1ed12.HD-720p-4.5Mbps-59185525.mp4",
+          "width": 1280
+        },
+        {
+          "format": "m3u8",
+          "height": 1080,
+          "mime_type": "application/x-mpegURL",
+          "url": "https://cdn.shopify.com/videos/c/vp/c59d051b25cf49639d1a0c254fa1ed12/c59d051b25cf49639d1a0c254fa1ed12.m3u8",
+          "width": 1920
+        }
+      ]
+    },
+    {
+      "alt": null,
+      "id": 68072698052991,
+      "position": 4,
+      "preview_image": {
+        "aspect_ratio": 0.695,
+        "height": 2159,
+        "width": 1500,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/HS82xBIGxSN_1_compressed.jpg?v=1759999034"
+      },
+      "aspect_ratio": 0.695,
+      "height": 2159,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/HS82xBIGxSN_1_compressed.jpg?v=1759999034",
+      "width": 1500
+    },
+    {
+      "alt": null,
+      "id": 67374332903807,
+      "position": 5,
+      "preview_image": {
+        "aspect_ratio": 1.4,
+        "height": 2857,
+        "width": 4000,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/HS82xBIG_CU.jpg?v=1759999034"
+      },
+      "aspect_ratio": 1.4,
+      "height": 2857,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/HS82xBIG_CU.jpg?v=1759999034",
+      "width": 4000
+    },
+    {
+      "alt": null,
+      "id": 67374624407935,
+      "position": 6,
+      "preview_image": {
+        "aspect_ratio": 1.4,
+        "height": 2857,
+        "width": 4000,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/HS82xBIG_Front.jpg?v=1759999034"
+      },
+      "aspect_ratio": 1.4,
+      "height": 2857,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/HS82xBIG_Front.jpg?v=1759999034",
+      "width": 4000
+    },
+    {
+      "alt": null,
+      "id": 67376783884671,
+      "position": 7,
+      "preview_image": {
+        "aspect_ratio": 1.4,
+        "height": 2857,
+        "width": 4000,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/HS82xBIG_material2jpg.jpg?v=1760008948"
+      },
+      "aspect_ratio": 1.4,
+      "height": 2857,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/HS82xBIG_material2jpg.jpg?v=1760008948",
+      "width": 4000
+    },
+    {
+      "alt": null,
+      "id": 67738127106431,
+      "position": 8,
+      "preview_image": {
+        "aspect_ratio": 1.4,
+        "height": 2500,
+        "width": 3500,
+        "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/All_samples_clean.jpg?v=1759999034"
+      },
+      "aspect_ratio": 1.4,
+      "height": 2500,
+      "media_type": "image",
+      "src": "https://cdn.shopify.com/s/files/1/0640/8241/1715/files/All_samples_clean.jpg?v=1759999034",
+      "width": 3500
+    }
+  ],
+  "requires_selling_plan": false,
+  "selling_plan_groups": []
+}

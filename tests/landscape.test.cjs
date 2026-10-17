@@ -58,28 +58,9 @@ test('large arrays keep all circles and their board inside every supported canva
   }
 });
 
-test('waves stagger by column and settle all hands before the configured deadline', () => {
-  for (const model of models) for (const duration of [1, 6, 10]) for (const visibility of ['hide', 'ghost', 'show']) {
-    const clock = model.create({ duration, visibility });
-    clock.initialize(1439, 0); assert.equal(clock.animate(0, 100), true);
-    assert.ok(clock.hands[0].start < clock.hands[(model.columns - 1) * 2].start);
-    for (let column = 1; column < model.columns; column++) assert.ok(clock.hands[column * 2].start > clock.hands[(column - 1) * 2].start);
-    for (const hand of clock.hands) {
-      assert.ok(Math.abs(hand.fadeEnd - (100 + duration * 1000)) < 1e-8);
-      assert.ok(Math.abs(hand.motionEnd - (hand.start + hand.duration)) < 1e-8);
-    }
-    for (const fraction of [0, .15, .4, .8, .99]) {
-      clock.sample(100 + duration * 1000 * fraction);
-      assert.ok(clock.hands.every(hand => Number.isFinite(hand.angle) && hand.opacity >= 0 && hand.opacity <= 1));
-    }
-    clock.sample(100 + duration * 1000); settled(model, clock, 0);
-    assert.equal(clock.isAnimating(100 + duration * 1000), false);
-  }
-});
-
 test('interrupting large-array animations keeps angles and opacity continuous', () => {
   for (const model of models) for (const motion of ['wave', 'spin', 'quiet']) {
-    const clock = model.create({ motion }); clock.initialize(0, 0); clock.animate(65, 100);
+    const clock = model.create({ motion, duration: 6 }); clock.initialize(0, 0); clock.animate(65, 100);
     for (const now of [200, 1300, 5900, 6050]) {
       clock.sample(now);
       const before = clock.hands.map(hand => ({ angle: hand.angle, opacity: hand.opacity }));

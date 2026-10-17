@@ -1,0 +1,11 @@
+{
+  "source": "clockclock-l-tidal-0.mp4",
+  "method": "Visually checked radial ray measurements in ccl-recheck/radial-rectified.jpg. At 8.6109 s, cell 16 has a visible horizontal arm (0 degrees); the automatic 199 degree peak is a reflection artefact.",
+  "cells": [0, 8, 16],
+  "samples": [
+    {"time": 7.6497, "poses": [[35, 0], [343, 14], [316, 356]]},
+    {"time": 8.6109, "poses": [[32, 0.5], [13, 341], [317, 0]]},
+    {"time": 9.5721, "poses": [[65, 322], [46, 297], [28, 289]]},
+    {"time": 10.5333, "poses": [[94, 293], [79, 276], [62, 261]]}
+  ]
+}
