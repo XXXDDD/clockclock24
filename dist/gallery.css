@@ -55,6 +55,9 @@ svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width:
 .icon-button:hover { background: var(--glass); }
 .icon-button:active { transform: scale(.93); }
 .topbar { position: absolute; z-index: 3; top: 36px; left: 42px; right: 42px; display: flex; justify-content: space-between; align-items: center; }
+.topbar-actions { display: flex; align-items: center; gap: 12px; }
+.repo-button { color: var(--muted); }
+.repo-button:hover { color: var(--ink); }
 .collection-button { color: var(--muted); }
 .collection-button:hover { color: var(--ink); }
 .download-button { background: var(--ink); color: var(--page); width: 48px; height: 48px; }
