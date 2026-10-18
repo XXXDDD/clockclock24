@@ -56,23 +56,16 @@ svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width:
 .icon-button:active { transform: scale(.93); }
 .topbar { position: absolute; z-index: 3; top: 36px; left: 42px; right: 42px; display: flex; justify-content: space-between; align-items: center; }
 .topbar-actions { display: flex; align-items: center; gap: 12px; }
-.repo-button { color: var(--muted); }
-.repo-button:hover { color: var(--ink); }
-.collection-button { color: var(--muted); }
-.collection-button:hover { color: var(--ink); }
-.download-button { background: var(--ink); color: var(--page); width: 48px; height: 48px; }
-.download-button svg { width: 20px; height: 20px; }
-.download-button:hover { background: var(--ink); transform: translateY(-2px); }
+.repo-button, .collection-button, .download-button { color: var(--muted); }
+.repo-button:hover, .collection-button:hover, .download-button:hover { color: var(--ink); }
 .downloads-panel { position: fixed; inset: 98px 42px auto auto; width: 202px; margin: 0; padding: 16px; border: 1px solid var(--line); border-radius: 18px; background: var(--panel); color: var(--ink); box-shadow: 0 12px 32px rgb(0 0 0 / 12%); }
 .download-platform { display: flex; justify-content: center; padding: 1px 0 13px; color: var(--muted); }
 .download-platform svg { width: 15px; height: 15px; }
 .download-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .android-platform { padding-top: 16px; }
 .android-download { grid-template-columns: 1fr; }
-.android-download .download-option { flex-direction: row; min-height: 68px; gap: 20px; padding: 10px; }
-.download-option { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-height: 100px; padding: 12px 8px 10px; border: 1px solid var(--line); border-radius: 12px; background: transparent; color: var(--muted); text-decoration: none; transition: background 180ms ease, color 180ms ease; }
+.download-option { display: flex; align-items: center; justify-content: center; min-height: 68px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: transparent; color: var(--muted); text-decoration: none; transition: background 180ms ease, color 180ms ease; }
 .download-option img { display: block; width: 42px; height: 42px; object-fit: contain; }
-.download-option .package-arrow { width: 14px; height: 14px; }
 .download-option:hover { background: var(--glass); color: var(--ink); }
 .gallery { position: absolute; inset: 0; }
 .stage { position: absolute; left: 9%; right: 9%; top: 14%; bottom: 22%; max-width: 1200px; margin: 0 auto; }
@@ -120,7 +113,6 @@ svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width:
 .error-state > svg { width: 28px; height: 28px; }
 @media (max-width: 700px) {
   .topbar { top: max(24px, env(safe-area-inset-top)); left: 20px; right: 20px; }
-  .download-button { width: 44px; height: 44px; }
   .downloads-panel { inset: max(80px, calc(env(safe-area-inset-top) + 56px)) 20px auto auto; }
   .stage { top: 16%; bottom: 26%; left: 14%; right: 14%; }
   .swatches { top: calc(50% + var(--artwork-height, 0px) / 2 + 28px); max-width: calc(100vw - 32px); }
