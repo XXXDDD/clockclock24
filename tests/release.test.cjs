@@ -7,7 +7,7 @@ const path = require('node:path');
 const { createHash } = require('node:crypto');
 const { releaseNotes, describeRelease } = require('../scripts/prepare-release.cjs');
 
-test('release metadata follows one version, selects matching notes and fingerprints both download packages', t => {
+test('release metadata follows one version, selects matching notes and fingerprints all three downloads', t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'timeform-release-'));
   t.after(() => {
     assert.equal(path.dirname(root), path.resolve(os.tmpdir()));
@@ -18,11 +18,12 @@ test('release metadata follows one version, selects matching notes and fingerpri
   fs.writeFileSync(path.join(root, 'docs/rundown.md'), '# Notes\r\n\r\n## v4.7.2 — today\r\n\r\n- New lighting.\r\n\r\n## v4.7.1\r\n\r\n- Older changes.\r\n');
   fs.writeFileSync(path.join(root, 'downloads/TIMEFORM-Lively.zip'), 'lively-package');
   fs.writeFileSync(path.join(root, 'downloads/TIMEFORM-WallpaperEngine.zip'), 'engine-package');
+  fs.writeFileSync(path.join(root, 'downloads/Shizhen-Android.apk'), 'signed-android-package');
   const { manifest, notes } = describeRelease(root);
   assert.equal(manifest.version, '4.7.2'); assert.equal(manifest.tag, 'v4.7.2');
   assert.equal(manifest.repository, 'XXXDDD/clockclock24');
   assert.match(notes, /New lighting/); assert.doesNotMatch(notes, /Older changes/);
-  assert.deepEqual(manifest.assets.map(asset => asset.name), ['TIMEFORM-Lively.zip', 'TIMEFORM-WallpaperEngine.zip']);
+  assert.deepEqual(manifest.assets.map(asset => asset.name), ['TIMEFORM-Lively.zip', 'TIMEFORM-WallpaperEngine.zip', 'Shizhen-Android.apk']);
   for (const asset of manifest.assets) {
     const bytes = fs.readFileSync(path.join(root, asset.file));
     assert.equal(asset.size, bytes.length); assert.equal(asset.sha256, createHash('sha256').update(bytes).digest('hex'));
@@ -37,6 +38,6 @@ test('release metadata follows one version, selects matching notes and fingerpri
 test('gallery download entries follow Latest without embedding a release number', () => {
   const source = fs.readFileSync(path.join(__dirname, '../showcase/index.html'), 'utf8');
   const downloads = [...source.matchAll(/class="download-option" href="([^"]+)"/g)].map(match => match[1]);
-  assert.deepEqual(downloads, ['TIMEFORM-Lively.zip', 'TIMEFORM-WallpaperEngine.zip'].map(name =>
+  assert.deepEqual(downloads, ['TIMEFORM-Lively.zip', 'TIMEFORM-WallpaperEngine.zip', 'Shizhen-Android.apk'].map(name =>
     'https://github.com/XXXDDD/clockclock24/releases/latest/download/' + name));
 });

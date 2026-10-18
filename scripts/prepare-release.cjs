@@ -18,7 +18,7 @@ function describeRelease(root) {
   const repository = /^https:\/\/github\.com\/([^/]+\/[^/]+?)(?:\.git)?$/.exec(pkg.repository)?.[1];
   if (!repository) throw new Error('Set the GitHub repository in package.json');
   const notes = releaseNotes(root, pkg.version);
-  const assets = ['TIMEFORM-Lively.zip', 'TIMEFORM-WallpaperEngine.zip'].map(name => {
+  const assets = ['TIMEFORM-Lively.zip', 'TIMEFORM-WallpaperEngine.zip', 'Shizhen-Android.apk'].map(name => {
     const file = 'downloads/' + name, bytes = fs.readFileSync(path.join(root, file));
     return { name, file, size: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') };
   });
@@ -38,6 +38,7 @@ function prepare(root) {
   // Let npm own command parsing and the existing build/test definitions.
   const script = name => run([npmCli, 'run', name]);
   script('build:all');
+  script('android:apk');
   for (const file of ['scripts/build-lively-classic.cjs', 'scripts/build-runtime.cjs']) run([file, '--publish']);
   script('test');
   script('check:all');
@@ -46,7 +47,7 @@ function prepare(root) {
   fs.mkdirSync(path.join(root, 'dist'), { recursive: true });
   fs.writeFileSync(path.join(root, 'dist/release.json'), JSON.stringify(manifest, null, 2) + '\n');
   fs.writeFileSync(path.join(root, 'dist/release-notes.md'), notes);
-  console.log('Prepared ' + manifest.tag + ': demo, both wallpaper packages, dist/release.json and dist/release-notes.md. No upload performed.');
+  console.log('Prepared ' + manifest.tag + ': demo, two desktop ZIPs, signed Android APK, dist/release.json and dist/release-notes.md.');
 }
 
 module.exports = { releaseNotes, describeRelease };

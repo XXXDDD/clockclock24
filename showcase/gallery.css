@@ -64,6 +64,9 @@ svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width:
 .download-platform { display: flex; justify-content: center; padding: 1px 0 13px; color: var(--muted); }
 .download-platform svg { width: 15px; height: 15px; }
 .download-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.android-platform { padding-top: 16px; }
+.android-download { grid-template-columns: 1fr; }
+.android-download .download-option { flex-direction: row; min-height: 68px; gap: 20px; padding: 10px; }
 .download-option { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-height: 100px; padding: 12px 8px 10px; border: 1px solid var(--line); border-radius: 12px; background: transparent; color: var(--muted); text-decoration: none; transition: background 180ms ease, color 180ms ease; }
 .download-option img { display: block; width: 42px; height: 42px; object-fit: contain; }
 .download-option .package-arrow { width: 14px; height: 14px; }

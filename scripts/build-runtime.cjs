@@ -3,6 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const Sources = require('./source-graph.cjs');
 const Spec = require('../src/core/presentation-config.js');
+const releaseDefaults = Spec.normalize({ borderless: true });
 const Collection = require('../src/catalog/collection.js');
 const Engine = require('../src/hosts/wallpaper-engine/adapter.js');
 const Zip = require('../src/shared/zip.js');
@@ -11,13 +12,13 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\
 const bundle = files => files.map(read).join('\n');
 const runtime = bundle([...Sources.complete, 'src/hosts/browser-preview.js']);
 const html = read('src/hosts/wallpaper-engine/template.html')
-  .replace('/* BUILD:CONFIG */', () => JSON.stringify(Spec.defaults).replace(/</g, '\\u003c'))
+  .replace('/* BUILD:CONFIG */', () => JSON.stringify(releaseDefaults).replace(/</g, '\\u003c'))
   .replace('/* BUILD:SCRIPTS */', () => (runtime + '\n' + bundle([
     'src/hosts/localization.js', 'src/hosts/wallpaper-engine/adapter.js', 'src/hosts/wallpaper-engine/app.js'])).replace(/<\/script/gi, '<\\/script'));
 const engineFiles = {
   'index.html': html,
-  'project.json': JSON.stringify(Engine.project(), null, 2) + '\n',
-  'default-config.json': Spec.serialize(Spec.defaults) + '\n',
+  'project.json': JSON.stringify(Engine.project(releaseDefaults), null, 2) + '\n',
+  'default-config.json': Spec.serialize(releaseDefaults) + '\n',
   'preview.jpg': fs.readFileSync(path.join(root, 'src/lively/classic-thumbnail.jpg')),
   'README.txt': read('src/hosts/wallpaper-engine/README.en.txt'),
   'README.en.txt': read('src/hosts/wallpaper-engine/README.en.txt'),

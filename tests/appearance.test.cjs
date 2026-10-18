@@ -10,6 +10,26 @@ const Renderer = require('../src/runtime/renderer.js');
 const Presentation = require('../src/core/presentation-config.js');
 const models = ['circular', 'landscape', 'portrait'].flatMap(kind => Classic.catalog(require('../src/models/' + kind + '.js')).models);
 
+test('shared recess rim and AMT72v use one concentric full circle with no half-circle seams', () => {
+  const SingleClock=require('../src/shared/single-clock.js');
+  const Portrait=require('../src/models/amt72v/drawing.js');
+  for(const board of ['#111213','#f6f4ef','#21444c']) {
+    const strokes=[]; let arcs=[];
+    const context=new Proxy({}, {get:(_,key)=>{
+      if(key==='createLinearGradient'||key==='createRadialGradient')return()=>({addColorStop(){}});
+      if(key==='beginPath')return()=>{arcs=[];};
+      if(key==='arc')return(...args)=>arcs.push(args);
+      if(key==='stroke')return()=>strokes.push(...arcs);
+      return()=>{};
+    }});
+    SingleClock.drawRecessRim(context,{board});
+    assert.deepEqual(strokes,[[0,0,52.6,0,Math.PI*2]]);
+    strokes.length=0;
+    Portrait.drawSurface(context,{boardWidth:200,boardHeight:200,points:[{x:100,y:100,radius:53.2}]},{board});
+    assert.deepEqual(strokes,[[0,0,52.6,0,Math.PI*2]],board+' has a continuous rim');
+  }
+});
+
 function recorder() {
   const arms = [], stack = []; let state = { scale: 1, active: null }, surfaces = 0;
   const tip = value => { if (state.active && !state.active.clipped) state.active.tip = Math.max(state.active.tip, value * state.scale); };

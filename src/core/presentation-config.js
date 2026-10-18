@@ -4,10 +4,11 @@
     cjs ? require('../models/landscape.js') : root.Timeform.Landscape,
     cjs ? require('../models/circular.js') : root.Timeform.Circular,
     cjs ? require('../models/portrait.js') : root.Timeform.Portrait,
-    cjs ? require('../shared/config.js') : root.Timeform.Config);
+    cjs ? require('../shared/config.js') : root.Timeform.Config,
+    cjs ? require('../shared/borderless.js') : root.Timeform.Borderless);
   if (cjs) module.exports = api;
   else root.Timeform.PresentationConfig = api;
-})(globalThis, function (Classic, Landscape, Circular, Portrait, Config) {
+})(globalThis, function (Classic, Landscape, Circular, Portrait, Config, Borderless) {
   'use strict';
   const categories = { landscape: '横屏', circular: '圆形', portrait: '竖排' };
   const catalogs = [Landscape, Circular, Portrait].map(source => Classic.catalog(source));
@@ -35,6 +36,7 @@
     // the selection without adding experimental controls to native host menus.
     appearance: { ...base.appearance, group: 'motion', hidden: true },
     handAppearance: { ...base.handAppearance, group: 'motion', hidden: true },
+    borderless: checkbox('板面铺满屏幕', 'screen', '自动适配屏幕并放大表盘；开启后忽略背景色、缩放、留白和位置设置。'),
     ...Object.fromEntries(['scale', 'padding', 'offsetX', 'offsetY'].map(key => [key, base[key]])),
     customColors: checkbox('启用自定义配色', 'colors', '关闭时使用所选款式的原作配色；开启后使用下方四项颜色。'),
     ...Object.fromEntries(['background', 'board', 'long', 'short'].map(key => [key, base[key]])),
@@ -66,7 +68,7 @@
       patch.duration = motion?.duration || 42;
     }
     if (config.customDuration) patch.duration = config.duration;
-    return { model, settings: model.Settings.normalize(patch) };
+    return { model: config.borderless ? Borderless.wrap(model) : model, settings: model.Settings.normalize(patch) };
   }
   function serialize(input) {
     return JSON.stringify({ schema: 'timeform.presentation', version: 1, handGeometryVersion: 1, settings: normalize(input) }, null, 2);

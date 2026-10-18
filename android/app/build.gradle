@@ -1,0 +1,31 @@
+plugins { id 'com.android.application' }
+
+def versionFile = new groovy.json.JsonSlurper().parse(file('../../package.json'))
+android {
+    namespace 'com.timeform.wallpaper'
+    compileSdk 36
+    defaultConfig {
+        applicationId 'com.timeform.wallpaper'
+        minSdk 26
+        targetSdk 36
+        versionCode versionFile.version.tokenize('.').with { parts -> parts[0].toInteger() * 1000000 + parts[1].toInteger() * 10000 + parts[2].toInteger() * 100 }
+        versionName versionFile.version
+    }
+    signingConfigs {
+        localRelease {
+            if (System.getenv('TIMEFORM_KEYSTORE')) {
+                storeFile file(System.getenv('TIMEFORM_KEYSTORE'))
+                storePassword System.getenv('TIMEFORM_STORE_PASSWORD')
+                keyAlias 'timeform'
+                keyPassword System.getenv('TIMEFORM_KEY_PASSWORD')
+            }
+        }
+    }
+    buildTypes {
+        release {
+            if (System.getenv('TIMEFORM_KEYSTORE')) signingConfig signingConfigs.localRelease
+            minifyEnabled false
+        }
+    }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+}

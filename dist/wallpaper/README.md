@@ -3,7 +3,8 @@ TIMEFORM - 30 Clock Designs for Lively Wallpaper
 Import: drag TIMEFORM-Lively.zip into the Lively wallpaper library as a new wallpaper.
 Settings: right-click its wallpaper card and choose Customize. Select any of the 30 designs from the Clock design dropdown.
 
-Includes 23 landscape, 3 circular and 4 portrait editions. The default is AMT144 Black, device time and 90% size. All clocks work offline.
+Includes 23 landscape, 3 circular and 4 portrait editions. The default is AMT144 Black, device time and a borderless board. All clocks work offline.
+Borderless board fills the screen and automatically fits the dial array without stretching. Disable it to use the original board with background, size, margin and position controls.
 Each design retains its own colors, geometry, hand proportions and reference motion. Size, position and time settings are preserved when changing designs.
 Custom colors, duration and dimensions are optional overrides. Turn an override off to restore the selected design's original values.
 Extra motions apply only to the model named in the option. Other models use their original motion.

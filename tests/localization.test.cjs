@@ -59,7 +59,7 @@ test('English-named release ZIPs include both languages and complete offline ass
   assert.match(lively.get('README.zh-CN.txt').toString(), han);
   const engine = archiveEntries('dist/TIMEFORM-WallpaperEngine.zip');
   for (const name of ['index.html', 'project.json', 'README.en.txt', 'README.zh-CN.txt']) assert.ok(engine.has(name), name);
-  assert.deepEqual(JSON.parse(engine.get('project.json')), Engine.project());
+  assert.deepEqual(JSON.parse(engine.get('project.json')), Engine.project({ borderless: true }));
   assert.doesNotMatch(engine.get('README.en.txt').toString(), han);
 });
 

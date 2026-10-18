@@ -4,8 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f3f4f5">
-  <meta name="description" content="TIMEFORM 时钟调试台，选择版式、型号与预设，实时调试时间、动作、配色与指针。">
-  <title>TIMEFORM · 竖排调试</title>
+  <meta name="description" content="时阵时钟调试台，选择版式、型号与预设，实时调试时间、动作、配色与指针。">
+  <title>时阵 · 竖排调试</title>
+  <link rel="icon" href="assets/brand/shizhen.svg">
   <style>:root{color-scheme:light;--paper:#f3f4f5;--panel:#fff;--ink:#252b31;--muted:#8a9097;--line:#e7e9eb;--accent:#236c5b;--accent-soft:#eaf3ef;--mono:"Cascadia Code",Consolas,monospace}
 *{box-sizing:border-box}html{scroll-padding-top:90px}body{margin:0;min-width:320px;background:var(--paper);color:var(--ink);font:13px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}button,input,select,textarea{font:inherit;color:inherit}a{color:inherit;text-decoration:none}button,.file-button,summary{cursor:pointer}button,.file-button{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:6px 11px;border:1px solid #dfe3e5;border-radius:6px;background:#fff;transition:background .15s,border-color .15s;font-size:11px;white-space:nowrap}button:hover,.file-button:hover{background:#f3f6f5;border-color:#bfcac5}button:disabled{opacity:.4;cursor:default}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,.file-button:focus-within{outline:2px solid var(--accent);outline-offset:3px}[hidden]{display:none!important}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.topbar{position:sticky;top:0;z-index:10;min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 32px;border-bottom:1px solid var(--line);background:#ffffffed;backdrop-filter:blur(15px)}.brand{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:650;letter-spacing:.13em;white-space:nowrap}.brand-mark{width:24px;height:24px;border:1.5px solid currentColor;border-radius:50%;position:relative;flex:none}.brand-mark:before,.brand-mark:after{content:"";position:absolute;width:7px;height:1.5px;background:currentColor;left:10.5px;top:10.5px;transform-origin:left}.brand-mark:before{transform:rotate(-90deg)}.brand-mark:after{transform:rotate(25deg)}.dev-badge{margin-left:2px;font:9px var(--mono);font-weight:400;letter-spacing:.08em;color:var(--muted);padding-left:12px;border-left:1px solid #dce0e2}.navigation{display:flex;align-items:center;gap:4px;background:#f1f3f3;padding:4px;border:1px solid #e9eceb;border-radius:9px}.navigation a{display:flex;align-items:center;justify-content:center;gap:9px;min-width:91px;padding:6px 16px;border:1px solid transparent;border-radius:6px;color:#7d858b;font-size:12px;transition:background .15s}.navigation a[aria-current="page"]{background:#fff;border-color:#e4e9e7;box-shadow:0 1px 3px #1e39220a;color:var(--accent);font-weight:650}.navigation a:hover{background:#ffffffb0}.shape-icon{width:16px;height:12px;border:1.4px solid currentColor;border-radius:2px}.shape-circular{width:13px;height:13px;border-radius:50%}.shape-portrait{width:10px;height:15px}.save-status{display:flex;gap:7px;align-items:center;font-size:10px;color:#838b88;white-space:nowrap}.save-status i,.status-dot{width:5px;height:5px;background:#4b927b;border-radius:50%;flex:none}.save-status[data-error="true"]{color:#bd5942}.save-status[data-error="true"] i{background:currentColor}.shell{max-width:1720px;margin:auto;padding:0 32px}.page-heading{display:flex;align-items:center;justify-content:space-between;padding:25px 0 23px;gap:20px}.eyebrow{color:#929aa1;font:9px var(--mono);letter-spacing:.1em;display:flex;gap:10px;align-items:center;margin-bottom:7px}.eyebrow span:last-child{font:10px "Microsoft YaHei",sans-serif;letter-spacing:.03em;color:#68746c}h1{font-size:23px;font-weight:600;letter-spacing:.04em;line-height:1.4;margin:0}.page-heading p{font-size:11px;color:#969da3;margin:5px 0 0}.workspace-caption{font:9px var(--mono);letter-spacing:.1em;color:#92999f}.workspace-caption span{padding:0 10px;color:#b9c1c4}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:24px;align-items:start}.viewer{min-width:0;position:sticky;top:88px}.preview-card{border:1px solid #dfe3e5;border-radius:10px;overflow:hidden;background:#fff;box-shadow:0 4px 18px #24372b03}.preview-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 18px;min-height:52px}.preview-title{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:550}.resolution-label{font:10px var(--mono);color:#9aa1a7;margin-left:8px;font-weight:400}.quiet-button{border:0;background:transparent;color:#7d878e;min-height:28px;padding:3px 5px;gap:5px;font-size:10px}.quiet-button span{font-size:17px;line-height:1}.stage{height:clamp(280px,calc(100dvh - 370px),720px);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:32px;background-color:#e5e8e8;background-image:radial-gradient(#cbd1d1 .65px,transparent .65px);background-size:12px 12px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.stage:fullscreen{width:100vw;height:100dvh;border:0;padding:32px}.stage-corner{position:absolute;width:14px;height:14px;border-color:#b7c1bd;pointer-events:none}.top-left{top:16px;left:16px;border-top:1px solid;border-left:1px solid}.bottom-right{bottom:16px;right:16px;border-bottom:1px solid;border-right:1px solid}#viewport{position:relative;overflow:hidden;flex:none;background:#000;box-shadow:0 12px 28px #16261e18}#clock{display:block;position:absolute}.readout{display:grid;grid-template-columns:.7fr 1.5fr 1fr 1fr;padding:17px 18px;gap:12px}.readout>div{min-width:0;border-left:1px solid var(--line);padding-left:14px}.readout>div:first-child{border-left:0;padding-left:0}.readout span{display:block;font-size:9px;color:#929a9f;margin-bottom:5px}.readout strong{display:block;font:10px/1.6 var(--mono),"Microsoft YaHei",sans-serif;color:#56636b;font-weight:400;overflow-wrap:anywhere}.readout #displayTime{font-size:18px;line-height:1.1;color:#34473e;letter-spacing:-.03em}.readout #playbackStatus{font-size:10px}.preview-description{padding:20px 3px 15px}.model-title{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.model-title h2{margin:0;font-size:17px;font-weight:550;letter-spacing:-.02em}.edition-badge,.custom-badge,.model-badge{font-size:9px;padding:2px 7px;border:1px solid #d8e2dc;border-radius:4px;background:#eef3f0;color:#5c7669;white-space:nowrap}.custom-badge{background:#fff4e7;color:#a5773e;border-color:#eedcc2}.preview-description>p{font-size:11px;color:#899198;margin:6px 0 8px;line-height:1.8}.heading-meta{display:flex;align-items:center;gap:12px;font:10px var(--mono),"Microsoft YaHei",sans-serif;color:#8c969c}.heading-meta span+span:before{content:"·";padding-right:12px;color:#b4bbbf}.editor{min-width:0;border:1px solid #e0e4e5;border-radius:10px;background:#fff;overflow:hidden}.control-section{padding:20px;border-bottom:1px solid var(--line)}.control-section:last-child{border:0}.section-heading{display:flex;align-items:center;gap:9px;margin-bottom:17px;min-height:22px}.section-number{font:9px var(--mono);color:#a2aea7;border:1px solid #dfe7e3;padding:2px 4px;border-radius:3px}.section-heading h2{margin:0;font-size:13px;font-weight:650;letter-spacing:.03em}.section-heading>.model-badge,.section-hint{margin-left:auto}.section-hint{font-size:9px;color:#9da5aa;font-weight:400}.selection-field{margin-bottom:12px}.selection-field label,.field-label{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:6px;font-size:10px;color:#69757d}.selection-field label span{font:9px var(--mono);color:#a1a9ad}select,input[type="time"],input[type="text"],input[type="number"]{width:100%;min-width:0;border:1px solid #dfe4e5;border-radius:5px;background:#fcfdfd;padding:7px 9px;min-height:34px;font-size:11px}select{cursor:pointer}select:hover,input:hover{border-color:#c4cfc9}.preset-controls{display:flex;gap:5px}.preset-controls select{flex:1;min-width:0}.preset-arrow{width:33px;flex:none;font-size:16px;padding:0}.preset-status{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:7px 0 9px}.preset-status>span{font-size:10px;color:#8c9791}.preset-status>span[data-custom="true"]{color:#ac7a35}.text-button{color:var(--accent);border:0;background:transparent;padding:2px 0;min-height:24px;font-size:10px}.text-button:hover{background:transparent;text-decoration:underline}.notice{font-size:10px;color:#89968f;background:#f4f7f5;border-radius:4px;padding:7px 9px;margin:0;line-height:1.7;overflow-wrap:anywhere}.notice[data-error="true"]{color:#b2523e;background:#fff1eb}.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px 14px}.field{min-width:0}.field-wide{grid-column:1/-1}.field-help{font-size:9px;color:#a0a7ac;line-height:1.8;margin:5px 0 0}.field-label .bounds{font:8px var(--mono);color:#a7afb3;white-space:nowrap}.numeric-controls{display:flex;align-items:center;gap:8px}.numeric-controls input[type="number"]{width:66px;flex:none;padding:5px 6px;font:10px var(--mono);text-align:right;min-height:30px}.numeric-controls input[type="range"]{width:100%;min-width:0;margin:0;accent-color:var(--accent);height:16px;cursor:pointer}.check-label{display:flex;align-items:center;gap:7px;font-size:10px;color:#6f7a81;min-height:28px;cursor:pointer}.check-label input{accent-color:var(--accent);margin:0}.field:has(input:disabled){opacity:.45}.field input[aria-invalid="true"]{border-color:#c76651;background:#fff6f2}.time-shortcuts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin-top:16px}.time-shortcuts button{font-size:9px;padding:5px 3px;min-height:30px}.transport-main{display:grid;grid-template-columns:.8fr .8fr 1.2fr 1fr;gap:5px}.transport-main button{font-size:10px;padding:6px 5px}.primary{background:var(--accent);border-color:var(--accent);color:#fff}.primary:hover{background:#1e5c4e;border-color:#1e5c4e}#fields-playback{margin-top:16px}.speed-presets{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:9px}.speed-presets button{font:10px var(--mono);min-height:27px;padding:3px 8px;color:#8b949a;background:#fafbfb}.speed-presets button[aria-pressed="true"]{color:var(--accent);background:var(--accent-soft);border-color:#c3dace}.reference-demo{margin-top:11px;width:100%;min-height:28px;background:#fafcfa;border-style:dashed;color:#788b7d;font-size:10px}.customization{padding-bottom:4px}.custom-panel{border-top:1px solid var(--line)}summary{list-style:none;display:flex;align-items:center;gap:10px;font-size:11px;user-select:none}summary::-webkit-details-marker{display:none}summary:after{content:"›";margin-left:2px;font-size:17px;line-height:1;color:#a5adae;transition:transform .15s}details[open]>summary:after{transform:rotate(90deg)}summary>span:first-child{display:flex;align-items:center;gap:9px}.custom-panel>summary{padding:14px 0;min-height:48px}.summary-hint{font-size:9px;font-weight:400;color:#a0a8ad;margin-left:auto}.panel-icon{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;font-size:17px;font-style:normal;color:#859b8f}.color-icon{width:12px;height:12px;border:1px solid #a0b2a7;border-radius:50%;background:linear-gradient(135deg,#829d8c 0 50%,#e3e9e3 50%);margin:0 2px}.panel-body{padding:1px 0 17px}.panel-body>.text-button{margin-top:11px}.palettes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:15px}.palette-chip{display:flex;flex-direction:column;gap:5px;padding:8px 3px;min-height:58px;background:#fcfdfd;font-size:9px;color:#8a9397}.palette-chip[aria-pressed="true"]{border-color:#71a18b;background:#f3f8f5;color:var(--accent)}.palette-swatch{display:flex;gap:3px}.palette-swatch i{width:11px;height:11px;border-radius:50%;border:1px solid #0000000c}.color-inputs{display:flex;align-items:center;border:1px solid #dfe4e5;border-radius:5px;background:#fcfdfd;padding:5px 7px;gap:7px}.color-inputs input[type="color"]{appearance:none;width:22px;height:22px;padding:0;border:0;border-radius:4px;overflow:hidden;background:transparent;cursor:pointer;flex:none}.color-inputs input[type="color"]::-webkit-color-swatch-wrapper{padding:0}.color-inputs input[type="color"]::-webkit-color-swatch{border:1px solid #00000015;border-radius:4px}.color-inputs input[type="text"]{font:10px var(--mono);min-height:22px;padding:2px;border:0;background:transparent}.subheading{font-size:11px;font-weight:600;margin:10px 0 13px;display:flex;align-items:center;gap:10px}.subheading:after{content:"";height:1px;flex:1;background:var(--line)}#fields-screen{margin-top:15px}#fields-geometry{margin-top:12px}.advanced-panel .subheading:not(:first-child){margin-top:25px}.reference-panel{margin-top:0;border-top:1px solid #dde2e1;color:#76857e}.reference-panel>summary{padding:11px 3px;font-size:10px}.reference-body{padding:2px 3px 12px}.classic-details{margin:4px 0 9px;display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;font-size:10px}.classic-details>div{display:flex;gap:10px}.classic-details dt{color:#9aa49e;white-space:nowrap}.classic-details dd{margin:0;color:#748079}.classic-swatch{display:inline-block;position:relative;flex:none;width:13px;height:13px;border-radius:3px;border:1px solid #00000020}.classic-swatch:after{content:"";position:absolute;left:5px;top:2px;width:1px;height:8px;background:var(--hand,#fff);transform:rotate(35deg)}.preview-note{font-size:10px;color:#8e9893;line-height:1.8;margin:9px 0}.reference-links{display:flex;gap:17px;flex-wrap:wrap;font-size:10px;color:#628473}.reference-links a:hover{text-decoration:underline}.config-help{color:#98a19e;font-size:10px;margin:-3px 0 13px;line-height:1.8}.config-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.config-actions button,.config-actions .file-button{font-size:10px}#reset{color:#9c7468}.snapshot{margin-top:15px;border:1px solid var(--line);border-radius:5px}.snapshot summary{padding:9px 10px;color:#818e87;font-size:10px}.snapshot summary>span{margin-left:auto;font:9px var(--mono);color:#a3ada8}.snapshot textarea{resize:vertical;width:calc(100% - 20px);height:300px;margin:0 10px 10px;border:1px solid #e2e8e3;border-radius:4px;padding:9px;background:#f5f8f6;color:#6b7c71;font:10px/1.7 var(--mono);outline-offset:1px}.footer{max-width:1720px;margin:27px auto 0;padding:17px 32px 22px;border-top:1px solid #e1e5e6;display:flex;justify-content:space-between;gap:15px;color:#a4acb0;font-size:9px}.model-section .section-heading{margin-bottom:18px}
 .palette-heading{display:flex;align-items:center;gap:10px;font-size:10px;color:#78867e;margin:0 0 9px}.palette-heading>span{margin-left:auto;font-size:9px;color:#a0aaa4}.manual-color-heading{margin:18px 0 11px}.palette-chip{white-space:normal;min-height:65px;justify-content:flex-start;gap:7px}.palette-name{max-width:100%;overflow-wrap:anywhere;text-align:center;line-height:1.5}.palettes{align-items:stretch;margin-bottom:9px}.palette-help{margin-top:0}.supplemental-palettes{margin-top:14px;border-top:1px solid var(--line)}.supplemental-palettes>summary{padding:12px 0 2px;font-size:10px;color:#7f8d85}.supplemental-palettes>.palettes{grid-template-columns:repeat(3,minmax(0,1fr));padding-top:13px;margin-bottom:0}
@@ -20,7 +21,7 @@
 </head>
 <body data-category="portrait">
   <header class="topbar">
-    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>TIMEFORM</span><span class="dev-badge">WORKBENCH</span></a>
+    <a class="brand" href="index.html"><img src="assets/brand/shizhen.svg" width="28" height="28" alt=""><span>时阵</span><span class="dev-badge">WORKBENCH</span></a>
     <nav class="navigation" aria-label="选择形状版式">
       <a href="circular.html" data-kind="circular"><i class="shape-icon shape-circular" aria-hidden="true"></i>圆形</a>
       <a href="clockclock24.html" data-kind="landscape"><i class="shape-icon shape-landscape" aria-hidden="true"></i>横屏</a>
@@ -131,7 +132,7 @@
   </aside>
 </div>
 </main>
-  <footer class="footer"><span>TIMEFORM / 时钟调试台</span><span>原作参考 Humans since 1982</span></footer>
+  <footer class="footer"><span>时阵 / 时钟调试台</span><span>原作参考 Humans since 1982</span></footer>
   <script>(function (root, factory) {
   const api = factory();
   if (typeof module === 'object' && module.exports) module.exports = api;
@@ -329,6 +330,18 @@
   function local(context, point) {
     context.save(); context.translate(point.x, point.y); context.scale(point.radius / 53.2, point.radius / 53.2);
   }
+  // One concentric path keeps the dial wall continuous at every angle. Split
+  // shadow/highlight semicircles create visible endpoints and mismatched radii.
+  function drawRecessRim(context, config) {
+    const kind = Palette.material(config), white = kind === 'white', black = kind === 'black';
+    const rim = context.createLinearGradient(-20, -53.2, 20, 53.2);
+    const stops = white ? [[0, '#b3b0a8'], [.4, '#d7d4cd'], [.65, '#f4f2ec'], [1, '#ffffff']]
+      : black ? [[0, '#00000024'], [.45, '#00000012'], [1, '#ffffff0c']]
+      : [[0, Palette.tint(config.board, -.20)], [.5, config.board], [1, Palette.tint(config.board, .13)]];
+    stops.forEach(([offset, color]) => rim.addColorStop(offset, color));
+    context.strokeStyle = rim; context.lineWidth = white ? 1.2 : 1;
+    context.beginPath(); context.arc(0, 0, 52.6, 0, TAU); context.stroke();
+  }
   // Draw in the caller's canonical dial coordinates; lighting stays inside the
   // opening, with a quiet floor and a continuous, directionally lit inner wall.
   function drawWhiteRecess(context) {
@@ -342,11 +355,7 @@
     [[0, '#00000000'], [.65, '#00000002'], [.9, '#00000012'], [1, '#00000032']]
       .forEach(([stop, color]) => shadow.addColorStop(stop, color));
     context.fillStyle = shadow; context.beginPath(); context.arc(0, 0, 53.2, 0, TAU); context.fill();
-    const rim = context.createLinearGradient(-20, -53.2, 20, 53.2);
-    [[0, '#b3b0a8'], [.4, '#d7d4cd'], [.65, '#f4f2ec'], [1, '#ffffff']]
-      .forEach(([stop, color]) => rim.addColorStop(stop, color));
-    context.strokeStyle = rim; context.lineWidth = 1.2;
-    context.beginPath(); context.arc(0, 0, 52.6, 0, TAU); context.stroke();
+    drawRecessRim(context, { board: '#f6f4ef' });
     context.restore();
   }
   // Geometry and hand poses are inputs; this component has no time or model state.
@@ -391,7 +400,7 @@
     }
     context.restore();
   }
-  return { drawFace, drawHands, drawWhiteRecess };
+  return { drawFace, drawHands, drawWhiteRecess, drawRecessRim };
 });
 
 (function (root, factory) {
@@ -1393,10 +1402,11 @@
 
 (function (root, factory) {
   const commonJS = typeof module === 'object' && module.exports;
-  const api = factory(commonJS ? require('../../shared/palette.js') : root.Timeform.Palette);
+  const api = factory(commonJS ? require('../../shared/palette.js') : root.Timeform.Palette,
+    commonJS ? require('../../shared/single-clock.js') : root.Timeform.SingleClock);
   if (commonJS) module.exports = api;
   else (root.Timeform ||= {}).AMT72vDrawing = api;
-})(globalThis, function (Palette) {
+})(globalThis, function (Palette, SingleClock) {
   'use strict';
   const TAU = Math.PI * 2;
   // Axis-to-tip proportions measured in the rectified official reference.
@@ -1420,19 +1430,7 @@
         : [Palette.tint(config.board, -.20), Palette.tint(config.board, -.07), Palette.tint(config.board, -.12)];
       shades.forEach((color, i) => face.addColorStop(i / 2, color));
       ctx.beginPath(); ctx.arc(0, 0, 53.2, 0, TAU); ctx.fillStyle = face; ctx.fill();
-      if (white) {
-        // A single concentric rim avoids seams between shadow and highlight.
-        const rim = ctx.createLinearGradient(-20, -53.2, 20, 53.2);
-        [[0, '#b3b0a8'], [.4, '#d7d4cd'], [.65, '#f4f2ec'], [1, '#ffffff']]
-          .forEach(([stop, color]) => rim.addColorStop(stop, color));
-        ctx.strokeStyle = rim; ctx.lineWidth = 1.2;
-        ctx.beginPath(); ctx.arc(0, 0, 52.6, 0, TAU); ctx.stroke();
-        ctx.restore(); return;
-      }
-      ctx.strokeStyle = black ? '#050506' : '#00000030'; ctx.lineWidth = 1.3;
-      ctx.beginPath(); ctx.arc(0, .3, 52.6, Math.PI, TAU); ctx.stroke();
-      ctx.strokeStyle = black ? '#ffffff0d' : '#ffffff50'; ctx.lineWidth = .8;
-      ctx.beginPath(); ctx.arc(0, 0, 52.8, 0, Math.PI); ctx.stroke(); ctx.restore();
+      SingleClock.drawRecessRim(ctx, config); ctx.restore();
     });
     ctx.strokeStyle = '#00000050'; ctx.lineWidth = 1; ctx.strokeRect(.5, .5, w - 1, h - 1); ctx.restore();
   }

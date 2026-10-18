@@ -1,0 +1,16 @@
+clockclock24.original.html
+/timeform/
+*.tar.gz
+*.tar
+/github-publish/
+
+# Local Android build output and signing material
+android/.gradle/
+android/.kotlin/
+android/local.properties
+android/build/
+android/app/build/
+android/app/src/main/assets/
+*.jks
+*.keystore
+*.p12

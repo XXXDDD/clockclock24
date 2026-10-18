@@ -8,9 +8,9 @@
 })(globalThis, function (Presentation, Config, I18n) {
   'use strict';
   const { models, get, label, categories, fields, groups, geometryKeys, defaults, normalize, resolve } = Presentation;
-  const metadata = { AppVersion: '2.2.1.0', Title: 'TIMEFORM · 30 Clock Designs',
+  const metadata = { AppVersion: '2.2.1.0', Title: 'Shizhen · 30 Clock Designs',
     Desc: '30 circular, landscape and portrait clock designs. Works offline, with English and Simplified Chinese settings.',
-    Author: 'TIMEFORM', Type: 1, FileName: 'index.html', IsAbsolutePath: false, Thumbnail: 'thumbnail.jpg', Preview: null,
+    Author: 'Shizhen', Type: 1, FileName: 'index.html', IsAbsolutePath: false, Thumbnail: 'thumbnail.jpg', Preview: null,
     Arguments: '--pause-event true', Contact: 'https://github.com/XXXDDD/clockclock24', License: null, Version: 6 };
   function decodeProperty(key, value) {
     const field = fields[key];
@@ -44,7 +44,7 @@
       property.type === 'label' ? { value: property.value } : Object.fromEntries(['text', 'help', 'items'].filter(name => property[name] !== undefined).map(name => [name, property[name]]))])) } };
   }
   function metadataLocalization() {
-    return { Languages: { 'zh-CN': { Title: 'TIMEFORM · 30 款时钟', Desc: '圆形、横屏、竖排共 30 款时钟。离线运行，支持简体中文与英文设置。' } } };
+    return { Languages: { 'zh-CN': { Title: '时阵 · 30 款时钟', Desc: '圆形、横屏、竖排共 30 款时钟。离线运行，支持简体中文与英文设置。' } } };
   }
   function serialize(input) { return JSON.stringify({ version: 6, handGeometryVersion: 1, platform: 'lively-classic', settings: normalize(input) }, null, 2); }
   function parse(text) {

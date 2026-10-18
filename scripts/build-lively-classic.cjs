@@ -2,6 +2,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const Spec = require('../src/lively/classic-config.js');
+const releaseDefaults = Spec.normalize({ borderless: true });
 const Zip = require('../src/shared/zip.js');
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n/g, '\n');
@@ -10,16 +11,16 @@ const modules = [...require('./source-graph.cjs').complete, 'src/shared/zip.js',
 if (Spec.models.length !== 30) throw new Error('全集壁纸应包含 30 款。');
 const template = read('src/lively/classic-template.html')
   .replace('/* BUILD:STYLES */', () => read('src/lively/classic-styles.css'))
-  .replace('/* BUILD:CONFIG */', () => JSON.stringify(Spec.defaults))
+  .replace('/* BUILD:CONFIG */', () => JSON.stringify(releaseDefaults))
   .replace('/* BUILD:SCRIPTS */', () => modules.map(read).join('\n').replace(/<\/script/gi, '<\\/script'));
 const files = {
   'index.html': template.replace('BUILD:EDITOR', '0'),
   'configure.html': template.replace('BUILD:EDITOR', '1'),
   'LivelyInfo.json': JSON.stringify(Spec.metadata, null, 2) + '\n',
-  'LivelyProperties.json': JSON.stringify(Spec.livelyProperties(), null, 2) + '\n',
-  'LivelyProperties.loc.json': JSON.stringify(Spec.livelyLocalization(), null, 2) + '\n',
+  'LivelyProperties.json': JSON.stringify(Spec.livelyProperties(releaseDefaults), null, 2) + '\n',
+  'LivelyProperties.loc.json': JSON.stringify(Spec.livelyLocalization(releaseDefaults), null, 2) + '\n',
   'LivelyInfo.loc.json': JSON.stringify(Spec.metadataLocalization(), null, 2) + '\n',
-  'default-config.json': Spec.serialize(Spec.defaults) + '\n',
+  'default-config.json': Spec.serialize(releaseDefaults) + '\n',
   'thumbnail.jpg': fs.readFileSync(path.join(root, 'src/lively/classic-thumbnail.jpg')),
   'README.txt': read('src/lively/classic-README.en.txt'),
   'README.en.txt': read('src/lively/classic-README.en.txt'),

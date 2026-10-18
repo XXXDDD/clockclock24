@@ -1,0 +1,6 @@
+{
+  "name": "时阵",
+  "romanization": "Shizhen",
+  "colors": { "black": "#000000", "white": "#ffffff" },
+  "icon": { "digit": "7", "centersX": [44, 64], "centersY": [34, 54, 74], "radius": 9.25, "handLength": 8.6, "handWidth": 2.4 }
+}

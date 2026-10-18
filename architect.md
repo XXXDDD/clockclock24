@@ -1,4 +1,4 @@
-# TIMEFORM 核心架构
+# 时阵核心架构
 
 ## 跨平台公共入口
 
@@ -112,6 +112,8 @@ Lively 原生菜单与离线配置页均使用一个包含全部 30 款的统一
 附加动作按适用型号标注，离线配置页只展示当前型号适用动作。配色、时长和几何通过显式覆盖开关控制；关闭时解析为当前预设自身默认值，避免宿主初始化的通用数值覆盖各款校准结果。宿主设置保存在 Lively，浏览器配置页的保存独立；定制后重新导出 ZIP 再导入。旧指针等长默认值会迁移，新配置携带 `handGeometryVersion: 1`。`scripts/build-lively-classic.cjs` 生成独立全集包；`--publish` 同步到已有的 `wallpaper/`、`dist/wallpaper/` 和 `downloads/` 入口，发布副本的默认构建和校验包含这些输出。
 
 源代码在 `src/` 中维护，根目录及 `dist/` 的网页通过构建生成，不分别手工维护时钟逻辑。
+
+`src/shared/borderless.js` 提供跨宿主的整屏板面和表盘等比适配。公共配置保留 `borderless: false`，演示页不变；Android 固定开启，两个桌面发布包默认开启并提供开关。包装只改变几何与板面，复用原型号动作、针位及绘制材质；切换模式时 Session 释放旧渲染器并保留播放暂停状态。品牌图标由 `src/brand/identity.json` 与实际数字针位生成。`release:prepare` 构建三平台产物，`release:publish` 根据清单校验并上传正式 Release。
 
 新版工作台样式在 `src/web/workbench.css`，Lively 配置页的既有基础样式独立保存在 `src/lively/workbench.css`，避免网页版布局调整改变平台界面。
 

@@ -250,6 +250,18 @@ body[data-editing="false"]{min-width:0;background:var(--wallpaper-bg,#000);overf
   function local(context, point) {
     context.save(); context.translate(point.x, point.y); context.scale(point.radius / 53.2, point.radius / 53.2);
   }
+  // One concentric path keeps the dial wall continuous at every angle. Split
+  // shadow/highlight semicircles create visible endpoints and mismatched radii.
+  function drawRecessRim(context, config) {
+    const kind = Palette.material(config), white = kind === 'white', black = kind === 'black';
+    const rim = context.createLinearGradient(-20, -53.2, 20, 53.2);
+    const stops = white ? [[0, '#b3b0a8'], [.4, '#d7d4cd'], [.65, '#f4f2ec'], [1, '#ffffff']]
+      : black ? [[0, '#00000024'], [.45, '#00000012'], [1, '#ffffff0c']]
+      : [[0, Palette.tint(config.board, -.20)], [.5, config.board], [1, Palette.tint(config.board, .13)]];
+    stops.forEach(([offset, color]) => rim.addColorStop(offset, color));
+    context.strokeStyle = rim; context.lineWidth = white ? 1.2 : 1;
+    context.beginPath(); context.arc(0, 0, 52.6, 0, TAU); context.stroke();
+  }
   // Draw in the caller's canonical dial coordinates; lighting stays inside the
   // opening, with a quiet floor and a continuous, directionally lit inner wall.
   function drawWhiteRecess(context) {
@@ -263,11 +275,7 @@ body[data-editing="false"]{min-width:0;background:var(--wallpaper-bg,#000);overf
     [[0, '#00000000'], [.65, '#00000002'], [.9, '#00000012'], [1, '#00000032']]
       .forEach(([stop, color]) => shadow.addColorStop(stop, color));
     context.fillStyle = shadow; context.beginPath(); context.arc(0, 0, 53.2, 0, TAU); context.fill();
-    const rim = context.createLinearGradient(-20, -53.2, 20, 53.2);
-    [[0, '#b3b0a8'], [.4, '#d7d4cd'], [.65, '#f4f2ec'], [1, '#ffffff']]
-      .forEach(([stop, color]) => rim.addColorStop(stop, color));
-    context.strokeStyle = rim; context.lineWidth = 1.2;
-    context.beginPath(); context.arc(0, 0, 52.6, 0, TAU); context.stroke();
+    drawRecessRim(context, { board: '#f6f4ef' });
     context.restore();
   }
   // Geometry and hand poses are inputs; this component has no time or model state.
@@ -312,7 +320,7 @@ body[data-editing="false"]{min-width:0;background:var(--wallpaper-bg,#000);overf
     }
     context.restore();
   }
-  return { drawFace, drawHands, drawWhiteRecess };
+  return { drawFace, drawHands, drawWhiteRecess, drawRecessRim };
 });
 
 (function (root, factory) {

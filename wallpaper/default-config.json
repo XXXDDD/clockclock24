@@ -6,6 +6,7 @@
     "edition": "amt144",
     "appearance": "auto",
     "handAppearance": "auto",
+    "borderless": true,
     "scale": 90,
     "padding": 0,
     "offsetX": 0,

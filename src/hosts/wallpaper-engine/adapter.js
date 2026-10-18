@@ -56,7 +56,7 @@
       else control.type = 'textinput';
       properties[key] = control;
     }
-    return { title: 'TIMEFORM · 30 Clock Designs', type: 'web', file: 'index.html', preview: 'preview.jpg',
+    return { title: 'Shizhen · 30 Clock Designs', type: 'web', file: 'index.html', preview: 'preview.jpg',
       description: '30 offline clock designs. English and Simplified Chinese settings.', general: { properties, localization } };
   }
   return { create, decode, project };

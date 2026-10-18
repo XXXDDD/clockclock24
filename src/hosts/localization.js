@@ -6,6 +6,7 @@
   'use strict';
   const language = value => /^zh(?:-|$)/i.test(String(value || '')) ? 'zh-CN' : 'en';
   const labels = {
+    borderless: 'Borderless board',
     appearance: 'Dial lighting', handAppearance: 'Hand appearance',
     edition: 'Clock design (all 30 editions)', scale: 'Size', padding: 'Safe margin', offsetX: 'Horizontal position', offsetY: 'Vertical position',
     customColors: 'Use custom colors', background: 'Background', board: 'Clock face', long: 'Long hand', short: 'Short hand',
@@ -17,6 +18,7 @@
     centerHourLength: 'Center hour hand ratio', safeTop: 'Top safe area', safeBottom: 'Bottom safe area'
   };
   const help = {
+    borderless: 'Automatically fit and enlarge the dials on a full-screen board. Background, size, margin and position settings are ignored while enabled.',
     appearance: 'By default, black and white use original lighting and colored dials use sculpted lighting. Manual overrides are available.',
     handAppearance: 'By default, metal hands use reflections and ordinary hands retain their original appearance. Highlights vary with position and direction under one light.',
     customColors: 'Off uses the selected design\'s original colors. Turn on to use the four colors below.',
@@ -55,7 +57,7 @@
   }
   function group(key, original, locale = 'en') { return language(locale) === 'zh-CN' ? original : groups[key]; }
   const ui = {
-    title: ['TIMEFORM · Wallpaper settings', 'TIMEFORM · 壁纸设置'], badge: ['LIVELY / OFFLINE', 'LIVELY / 离线运行'],
+    title: ['Shizhen · Wallpaper settings', '时阵 · 壁纸设置'], badge: ['LIVELY / OFFLINE', 'LIVELY / 离线运行'],
     collectionEyebrow: ['THE COMPLETE COLLECTION / 30 EDITIONS', '30 款完整系列'], settingsEyebrow: ['WALLPAPER SETTINGS', '壁纸设置'],
     clockDescription: ['{name}, showing {time}', '{name}，现在显示 {time}'],
     preview: ['Wallpaper preview ↗', '纯壁纸预览 ↗'], settings: ['Wallpaper settings', '壁纸设置'], collection: ['30 editions', '30 款全集'],

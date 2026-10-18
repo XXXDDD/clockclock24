@@ -1,11 +1,11 @@
 {
   "name": "timeform-development-workbench",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "repository": "https://github.com/XXXDDD/clockclock24.git",
   "private": true,
   "scripts": {
     "build": "node scripts/build.cjs",
-    "test": "node --test tests/animation.test.cjs tests/clockclock24.test.cjs tests/amt72.test.cjs tests/amt120.test.cjs tests/amt144.test.cjs tests/amt288.test.cjs tests/amt72v.test.cjs tests/config.test.cjs tests/landscape.test.cjs tests/portrait.test.cjs tests/circular.test.cjs tests/classic.test.cjs tests/editions.test.cjs tests/new-families.test.cjs tests/renderer.test.cjs tests/appearance.test.cjs tests/shared-actions.test.cjs tests/visibility.test.cjs tests/hand-proportions.test.cjs tests/choreography-hands.test.cjs tests/lively.test.cjs tests/lively-classic.test.cjs tests/platforms.test.cjs tests/localization.test.cjs tests/gallery.test.cjs tests/release.test.cjs",
+    "test": "node --test tests/animation.test.cjs tests/clockclock24.test.cjs tests/amt72.test.cjs tests/amt120.test.cjs tests/amt144.test.cjs tests/amt288.test.cjs tests/amt72v.test.cjs tests/config.test.cjs tests/landscape.test.cjs tests/portrait.test.cjs tests/circular.test.cjs tests/classic.test.cjs tests/editions.test.cjs tests/new-families.test.cjs tests/renderer.test.cjs tests/appearance.test.cjs tests/shared-actions.test.cjs tests/visibility.test.cjs tests/hand-proportions.test.cjs tests/choreography-hands.test.cjs tests/lively.test.cjs tests/lively-classic.test.cjs tests/platforms.test.cjs tests/localization.test.cjs tests/gallery.test.cjs tests/release.test.cjs tests/android.test.cjs",
     "check": "node scripts/build.cjs --check",
     "dev": "node scripts/serve.cjs",
     "build:lively": "node scripts/build-lively.cjs",
@@ -16,9 +16,15 @@
     "build:runtime": "node scripts/build-runtime.cjs",
     "check:runtime": "node scripts/build-runtime.cjs --check",
     "test:platforms": "node --test tests/platforms.test.cjs",
-    "build:all": "npm run build && npm run build:lively && npm run build:lively:complete && npm run build:runtime",
-    "check:all": "npm run check && npm run check:lively && npm run check:lively:complete && npm run check:runtime",
-    "release:prepare": "node scripts/prepare-release.cjs"
+    "build:android": "node scripts/build-android.cjs",
+    "build:brand": "node scripts/build-brand.cjs",
+    "check:android": "node scripts/build-android.cjs --check",
+    "test:android": "node --test tests/android.test.cjs",
+    "android:apk": "node scripts/build-android.cjs --apk",
+    "build:all": "npm run build:brand && npm run build && npm run build:lively && npm run build:lively:complete && npm run build:runtime && npm run build:android",
+    "check:all": "node scripts/build-brand.cjs --check && npm run check && npm run check:lively && npm run check:lively:complete && npm run check:runtime && npm run check:android",
+    "release:prepare": "node scripts/prepare-release.cjs",
+    "release:publish": "node scripts/publish-release.cjs"
   },
   "engines": {
     "node": ">=18"

@@ -1,9 +1,10 @@
 (function (root, factory) {
   const commonJS = typeof module === 'object' && module.exports;
-  const api = factory(commonJS ? require('../../shared/palette.js') : root.Timeform.Palette);
+  const api = factory(commonJS ? require('../../shared/palette.js') : root.Timeform.Palette,
+    commonJS ? require('../../shared/single-clock.js') : root.Timeform.SingleClock);
   if (commonJS) module.exports = api;
   else (root.Timeform ||= {}).AMT72vDrawing = api;
-})(globalThis, function (Palette) {
+})(globalThis, function (Palette, SingleClock) {
   'use strict';
   const TAU = Math.PI * 2;
   // Axis-to-tip proportions measured in the rectified official reference.
@@ -27,19 +28,7 @@
         : [Palette.tint(config.board, -.20), Palette.tint(config.board, -.07), Palette.tint(config.board, -.12)];
       shades.forEach((color, i) => face.addColorStop(i / 2, color));
       ctx.beginPath(); ctx.arc(0, 0, 53.2, 0, TAU); ctx.fillStyle = face; ctx.fill();
-      if (white) {
-        // A single concentric rim avoids seams between shadow and highlight.
-        const rim = ctx.createLinearGradient(-20, -53.2, 20, 53.2);
-        [[0, '#b3b0a8'], [.4, '#d7d4cd'], [.65, '#f4f2ec'], [1, '#ffffff']]
-          .forEach(([stop, color]) => rim.addColorStop(stop, color));
-        ctx.strokeStyle = rim; ctx.lineWidth = 1.2;
-        ctx.beginPath(); ctx.arc(0, 0, 52.6, 0, TAU); ctx.stroke();
-        ctx.restore(); return;
-      }
-      ctx.strokeStyle = black ? '#050506' : '#00000030'; ctx.lineWidth = 1.3;
-      ctx.beginPath(); ctx.arc(0, .3, 52.6, Math.PI, TAU); ctx.stroke();
-      ctx.strokeStyle = black ? '#ffffff0d' : '#ffffff50'; ctx.lineWidth = .8;
-      ctx.beginPath(); ctx.arc(0, 0, 52.8, 0, Math.PI); ctx.stroke(); ctx.restore();
+      SingleClock.drawRecessRim(ctx, config); ctx.restore();
     });
     ctx.strokeStyle = '#00000050'; ctx.lineWidth = 1; ctx.strokeRect(.5, .5, w - 1, h - 1); ctx.restore();
   }

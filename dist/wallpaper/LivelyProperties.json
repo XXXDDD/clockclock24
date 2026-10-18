@@ -44,6 +44,12 @@
     "type": "label",
     "value": "Size and position"
   },
+  "borderless": {
+    "text": "Borderless board",
+    "type": "checkbox",
+    "value": true,
+    "help": "Automatically fit and enlarge the dials on a full-screen board. Background, size, margin and position settings are ignored while enabled."
+  },
   "scale": {
     "text": "Size (%)",
     "type": "slider",

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 108 108" role="img" aria-label="时阵：六枚表盘组成数字">
+<rect width="108" height="108" rx="24" fill="#000"/>
+<circle cx="44" cy="34" r="9.25" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width=".85"/><path d="M44,34L52.6,34M44,34L52.6,34" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="64" cy="34" r="9.25" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width=".85"/><path d="M64,34L64,42.6M64,34L55.4,34" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="44" cy="54" r="9.25" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width=".85"/><path d="M44,54L37.919,60.081M44,54L37.919,60.081" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="64" cy="54" r="9.25" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width=".85"/><path d="M64,54L64,45.4M64,54L64,62.6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="44" cy="74" r="9.25" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width=".85"/><path d="M44,74L37.919,80.081M44,74L37.919,80.081" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="64" cy="74" r="9.25" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width=".85"/><path d="M64,74L64,65.4M64,74L64,65.4" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

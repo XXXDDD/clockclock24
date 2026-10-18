@@ -1,5 +1,5 @@
 {
-  "title": "TIMEFORM · 30 Clock Designs",
+  "title": "Shizhen · 30 Clock Designs",
   "type": "web",
   "file": "index.html",
   "preview": "preview.jpg",
@@ -134,8 +134,14 @@
           }
         ]
       },
-      "scale": {
+      "borderless": {
         "order": 1,
+        "text": "ui_borderless",
+        "value": true,
+        "type": "bool"
+      },
+      "scale": {
+        "order": 2,
         "text": "ui_scale",
         "value": 90,
         "type": "slider",
@@ -145,7 +151,7 @@
         "precision": 0
       },
       "padding": {
-        "order": 2,
+        "order": 3,
         "text": "ui_padding",
         "value": 0,
         "type": "slider",
@@ -155,7 +161,7 @@
         "precision": 0
       },
       "offsetX": {
-        "order": 3,
+        "order": 4,
         "text": "ui_offsetX",
         "value": 0,
         "type": "slider",
@@ -165,7 +171,7 @@
         "precision": 0
       },
       "offsetY": {
-        "order": 4,
+        "order": 5,
         "text": "ui_offsetY",
         "value": 0,
         "type": "slider",
@@ -175,37 +181,37 @@
         "precision": 0
       },
       "customColors": {
-        "order": 5,
+        "order": 6,
         "text": "ui_customColors",
         "value": false,
         "type": "bool"
       },
       "background": {
-        "order": 6,
+        "order": 7,
         "text": "ui_background",
         "value": "0 0 0",
         "type": "color"
       },
       "board": {
-        "order": 7,
+        "order": 8,
         "text": "ui_board",
         "value": "0.06666666666666667 0.07058823529411765 0.07450980392156863",
         "type": "color"
       },
       "long": {
-        "order": 8,
+        "order": 9,
         "text": "ui_long",
         "value": "0.9764705882352941 0.9803921568627451 0.9686274509803922",
         "type": "color"
       },
       "short": {
-        "order": 9,
+        "order": 10,
         "text": "ui_short",
         "value": "0.9333333333333333 0.9411764705882353 0.9254901960784314",
         "type": "color"
       },
       "action": {
-        "order": 10,
+        "order": 11,
         "text": "ui_action",
         "value": "default",
         "type": "combo",
@@ -257,13 +263,13 @@
         ]
       },
       "customDuration": {
-        "order": 11,
+        "order": 12,
         "text": "ui_customDuration",
         "value": false,
         "type": "bool"
       },
       "duration": {
-        "order": 12,
+        "order": 13,
         "text": "ui_duration",
         "value": 54.4,
         "type": "slider",
@@ -273,7 +279,7 @@
         "precision": 1
       },
       "visibility": {
-        "order": 13,
+        "order": 14,
         "text": "ui_visibility",
         "value": "default",
         "type": "combo",
@@ -297,7 +303,7 @@
         ]
       },
       "playbackSpeed": {
-        "order": 14,
+        "order": 15,
         "text": "ui_playbackSpeed",
         "value": 1,
         "type": "slider",
@@ -307,25 +313,25 @@
         "precision": 1
       },
       "paused": {
-        "order": 15,
+        "order": 16,
         "text": "ui_paused",
         "value": false,
         "type": "bool"
       },
       "format24": {
-        "order": 16,
+        "order": 17,
         "text": "ui_format24",
         "value": true,
         "type": "bool"
       },
       "timezone": {
-        "order": 17,
+        "order": 18,
         "text": "ui_timezone",
         "value": "",
         "type": "textinput"
       },
       "source": {
-        "order": 18,
+        "order": 19,
         "text": "ui_source",
         "value": "live",
         "type": "combo",
@@ -341,19 +347,19 @@
         ]
       },
       "manualTime": {
-        "order": 19,
+        "order": 20,
         "text": "ui_manualTime",
         "value": "09:34",
         "type": "textinput"
       },
       "autoDemo": {
-        "order": 20,
+        "order": 21,
         "text": "ui_autoDemo",
         "value": false,
         "type": "bool"
       },
       "demoInterval": {
-        "order": 21,
+        "order": 22,
         "text": "ui_demoInterval",
         "value": 5,
         "type": "slider",
@@ -363,13 +369,13 @@
         "precision": 1
       },
       "customGeometry": {
-        "order": 22,
+        "order": 23,
         "text": "ui_customGeometry",
         "value": false,
         "type": "bool"
       },
       "radius": {
-        "order": 23,
+        "order": 24,
         "text": "ui_radius",
         "value": 43,
         "type": "slider",
@@ -379,7 +385,7 @@
         "precision": 1
       },
       "gap": {
-        "order": 24,
+        "order": 25,
         "text": "ui_gap",
         "value": 5.3,
         "type": "slider",
@@ -389,7 +395,7 @@
         "precision": 1
       },
       "longLength": {
-        "order": 25,
+        "order": 26,
         "text": "ui_longLength",
         "value": 100,
         "type": "slider",
@@ -399,7 +405,7 @@
         "precision": 0
       },
       "shortLength": {
-        "order": 26,
+        "order": 27,
         "text": "ui_shortLength",
         "value": 85,
         "type": "slider",
@@ -409,7 +415,7 @@
         "precision": 0
       },
       "longWidth": {
-        "order": 27,
+        "order": 28,
         "text": "ui_longWidth",
         "value": 8.2,
         "type": "slider",
@@ -419,7 +425,7 @@
         "precision": 1
       },
       "shortWidth": {
-        "order": 28,
+        "order": 29,
         "text": "ui_shortWidth",
         "value": 8.2,
         "type": "slider",
@@ -429,7 +435,7 @@
         "precision": 1
       },
       "centerHourLength": {
-        "order": 29,
+        "order": 30,
         "text": "ui_centerHourLength",
         "value": 98,
         "type": "slider",
@@ -439,7 +445,7 @@
         "precision": 0
       },
       "safeTop": {
-        "order": 30,
+        "order": 31,
         "text": "ui_safeTop",
         "value": 100,
         "type": "slider",
@@ -449,7 +455,7 @@
         "precision": 0
       },
       "safeBottom": {
-        "order": 31,
+        "order": 32,
         "text": "ui_safeBottom",
         "value": 100,
         "type": "slider",
@@ -492,6 +498,7 @@
         "ui_edition_option_27": "Portrait · AMT 72v · White",
         "ui_edition_option_28": "Portrait · AMT 72v · Black",
         "ui_edition_option_29": "Portrait · AMT 72v · Tidal",
+        "ui_borderless": "Borderless board",
         "ui_scale": "Size",
         "ui_padding": "Safe margin",
         "ui_offsetX": "Horizontal position",
@@ -573,6 +580,7 @@
         "ui_edition_option_27": "竖排 · AMT 72v · White",
         "ui_edition_option_28": "竖排 · AMT 72v · Black",
         "ui_edition_option_29": "竖排 · AMT 72v · Tidal",
+        "ui_borderless": "板面铺满屏幕",
         "ui_scale": "整体缩放",
         "ui_padding": "画布安全边距",
         "ui_offsetX": "水平位置",

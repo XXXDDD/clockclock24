@@ -1,4 +1,4 @@
-name: Validate TIMEFORM workbench
+name: Validate Shizhen releases
 on:
   push:
   pull_request:
@@ -12,5 +12,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      # Offline Android assets are reproducible without signing keys or an SDK.
+      - run: npm run build:android
       - run: npm test
-      - run: npm run check
+      - run: npm run check:all

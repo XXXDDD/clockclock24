@@ -121,7 +121,7 @@ test('offline bundle includes all model code and native metadata at the archive 
   const info = JSON.parse(fs.readFileSync(require.resolve('../lively-complete/LivelyInfo.json'), 'utf8'));
   assert.equal(info.Type, 1); assert.equal(info.FileName, 'index.html'); assert.equal(info.Arguments, '--pause-event true');
   const properties = JSON.parse(fs.readFileSync(require.resolve('../lively-complete/LivelyProperties.json'), 'utf8'));
-  assert.deepEqual(properties, Spec.livelyProperties());
+  assert.deepEqual(properties, Spec.livelyProperties({ borderless: true }));
   assert.equal(properties.edition.items.length, 30);
   assert.equal(properties.layout, undefined);
   assert.equal(Object.keys(properties).some(key => /Picker$|^preset(?:amt|clockclock)/.test(key)), false);

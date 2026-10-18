@@ -7,14 +7,14 @@
   'use strict';
   function create({ canvas, config: initial, Renderer, readViewport, environment,
     Spec = Presentation, onChange = () => {} }) {
-    let config = Spec.normalize(initial), disposed = false, renderer, modelId;
+    let config = Spec.normalize(initial), disposed = false, renderer, renderedModel;
     const suspensions = new Set();
     function sync() {
       const { model, settings } = Spec.resolve(config);
-      if (model.id !== modelId) {
+      if (model !== renderedModel) {
         renderer?.dispose();
         renderer = Renderer.create(canvas, settings, model, readViewport, environment);
-        modelId = model.id;
+        renderedModel = model;
       } else renderer.update(settings);
       renderer.setPaused(Boolean(config.paused) || suspensions.size > 0);
     }

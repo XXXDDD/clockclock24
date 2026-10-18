@@ -26,5 +26,5 @@ const categories = {
   portrait: unique([...portraitModules, ...editions, ...catalog])
 };
 const complete = unique([...modules, ...circularModules, ...portraitModules, ...editions, ...additionalLandscapeModules, ...catalog,
-  'src/core/presentation-config.js', 'src/core/session.js']);
+  'src/shared/borderless.js', 'src/core/presentation-config.js', 'src/core/session.js']);
 module.exports = { categories, complete };

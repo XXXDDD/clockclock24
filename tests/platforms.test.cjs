@@ -83,6 +83,38 @@ test('Lively and Wallpaper Engine decode native settings into identical sessions
   shared.dispose(); lively.dispose();
 });
 
+test('borderless fits every edition on desktop and phone, switches live and round-trips across hosts', () => {
+  for (const base of Spec.models) {
+    const config = Spec.normalize({ edition: base.id, borderless: true });
+    const { model, settings } = Spec.resolve(config);
+    assert.equal(model.id, base.id);
+    assert.equal(model.create, base.create);
+    for (const [width, height] of [[1920, 1080], [3440, 1440], [1080, 2400], [1080, 1080]]) {
+      const g = model.geometry(width, height, settings);
+      assert.equal(g.width, width); assert.equal(g.height, height);
+      assert.equal(g.x, 0); assert.equal(g.y, 0);
+      assert.equal(g.boardWidth, width); assert.equal(g.boardHeight, height);
+      g.points.forEach(p => {
+        assert.ok(p.x - p.radius >= 0 && p.x + p.radius <= width, base.id);
+        assert.ok(p.y - p.radius >= 0 && p.y + p.radius <= height, base.id);
+      });
+    }
+    assert.equal(Spec.parse(Spec.serialize(config)).borderless, true);
+    assert.equal(LivelyConfig.parse(Spec.serialize(config)).borderless, true);
+    assert.equal(Spec.resolve({ edition: base.id }).model, base);
+  }
+  const { session, renderers } = harness();
+  session.setSuspended('hidden', true);
+  session.updateConfig({ borderless: true });
+  assert.equal(renderers.length, 2); assert.equal(renderers[0].disposed, 1);
+  assert.equal(session.renderer.paused, true);
+  session.updateConfig({ customColors: true, board: '#17352a' });
+  assert.equal(renderers.length, 2);
+  Engine.create(session).applyUserProperties({ borderless: { value: false } });
+  assert.equal(renderers.length, 3); assert.equal(session.getConfig().borderless, false);
+  session.dispose();
+});
+
 test('native updates are atomic and reject malformed values without changing unrelated settings', () => {
   const { session, renderers } = harness();
   const engine = Engine.create(session), before = session.getConfig();

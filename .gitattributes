@@ -1,4 +1,8 @@
 * text=auto eol=lf
-*.zip binary
-*.png binary
-*.jpg binary
+*.zip -text
+*.apk -text
+*.jar -text
+*.jpg -text
+*.jpeg -text
+*.png -text
+*.webp -text

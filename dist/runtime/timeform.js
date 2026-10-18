@@ -195,6 +195,18 @@
   function local(context, point) {
     context.save(); context.translate(point.x, point.y); context.scale(point.radius / 53.2, point.radius / 53.2);
   }
+  // One concentric path keeps the dial wall continuous at every angle. Split
+  // shadow/highlight semicircles create visible endpoints and mismatched radii.
+  function drawRecessRim(context, config) {
+    const kind = Palette.material(config), white = kind === 'white', black = kind === 'black';
+    const rim = context.createLinearGradient(-20, -53.2, 20, 53.2);
+    const stops = white ? [[0, '#b3b0a8'], [.4, '#d7d4cd'], [.65, '#f4f2ec'], [1, '#ffffff']]
+      : black ? [[0, '#00000024'], [.45, '#00000012'], [1, '#ffffff0c']]
+      : [[0, Palette.tint(config.board, -.20)], [.5, config.board], [1, Palette.tint(config.board, .13)]];
+    stops.forEach(([offset, color]) => rim.addColorStop(offset, color));
+    context.strokeStyle = rim; context.lineWidth = white ? 1.2 : 1;
+    context.beginPath(); context.arc(0, 0, 52.6, 0, TAU); context.stroke();
+  }
   // Draw in the caller's canonical dial coordinates; lighting stays inside the
   // opening, with a quiet floor and a continuous, directionally lit inner wall.
   function drawWhiteRecess(context) {
@@ -208,11 +220,7 @@
     [[0, '#00000000'], [.65, '#00000002'], [.9, '#00000012'], [1, '#00000032']]
       .forEach(([stop, color]) => shadow.addColorStop(stop, color));
     context.fillStyle = shadow; context.beginPath(); context.arc(0, 0, 53.2, 0, TAU); context.fill();
-    const rim = context.createLinearGradient(-20, -53.2, 20, 53.2);
-    [[0, '#b3b0a8'], [.4, '#d7d4cd'], [.65, '#f4f2ec'], [1, '#ffffff']]
-      .forEach(([stop, color]) => rim.addColorStop(stop, color));
-    context.strokeStyle = rim; context.lineWidth = 1.2;
-    context.beginPath(); context.arc(0, 0, 52.6, 0, TAU); context.stroke();
+    drawRecessRim(context, { board: '#f6f4ef' });
     context.restore();
   }
   // Geometry and hand poses are inputs; this component has no time or model state.
@@ -257,7 +265,7 @@
     }
     context.restore();
   }
-  return { drawFace, drawHands, drawWhiteRecess };
+  return { drawFace, drawHands, drawWhiteRecess, drawRecessRim };
 });
 
 (function (root, factory) {
@@ -3593,10 +3601,11 @@
 
 (function (root, factory) {
   const commonJS = typeof module === 'object' && module.exports;
-  const api = factory(commonJS ? require('../../shared/palette.js') : root.Timeform.Palette);
+  const api = factory(commonJS ? require('../../shared/palette.js') : root.Timeform.Palette,
+    commonJS ? require('../../shared/single-clock.js') : root.Timeform.SingleClock);
   if (commonJS) module.exports = api;
   else (root.Timeform ||= {}).AMT72vDrawing = api;
-})(globalThis, function (Palette) {
+})(globalThis, function (Palette, SingleClock) {
   'use strict';
   const TAU = Math.PI * 2;
   // Axis-to-tip proportions measured in the rectified official reference.
@@ -3620,19 +3629,7 @@
         : [Palette.tint(config.board, -.20), Palette.tint(config.board, -.07), Palette.tint(config.board, -.12)];
       shades.forEach((color, i) => face.addColorStop(i / 2, color));
       ctx.beginPath(); ctx.arc(0, 0, 53.2, 0, TAU); ctx.fillStyle = face; ctx.fill();
-      if (white) {
-        // A single concentric rim avoids seams between shadow and highlight.
-        const rim = ctx.createLinearGradient(-20, -53.2, 20, 53.2);
-        [[0, '#b3b0a8'], [.4, '#d7d4cd'], [.65, '#f4f2ec'], [1, '#ffffff']]
-          .forEach(([stop, color]) => rim.addColorStop(stop, color));
-        ctx.strokeStyle = rim; ctx.lineWidth = 1.2;
-        ctx.beginPath(); ctx.arc(0, 0, 52.6, 0, TAU); ctx.stroke();
-        ctx.restore(); return;
-      }
-      ctx.strokeStyle = black ? '#050506' : '#00000030'; ctx.lineWidth = 1.3;
-      ctx.beginPath(); ctx.arc(0, .3, 52.6, Math.PI, TAU); ctx.stroke();
-      ctx.strokeStyle = black ? '#ffffff0d' : '#ffffff50'; ctx.lineWidth = .8;
-      ctx.beginPath(); ctx.arc(0, 0, 52.8, 0, Math.PI); ctx.stroke(); ctx.restore();
+      SingleClock.drawRecessRim(ctx, config); ctx.restore();
     });
     ctx.strokeStyle = '#00000050'; ctx.lineWidth = 1; ctx.strokeRect(.5, .5, w - 1, h - 1); ctx.restore();
   }
@@ -5249,15 +5246,64 @@
 });
 
 (function (root, factory) {
+  const api = factory(typeof module === 'object' && module.exports ? {
+    Palette: require('./palette.js'), SingleClock: require('./single-clock.js')
+  } : root.Timeform);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.Timeform.Borderless = api;
+})(globalThis, function (dependencies) {
+  'use strict';
+  const { Palette, SingleClock } = dependencies;
+  const wrappers = new WeakMap();
+  // Fit the dial array uniformly, keeping motor identities and digit layout.
+  function geometry(model, width, height, config) {
+    const original = model.geometry(1080, 1920, { ...config, scale: 100, padding: 0,
+      offsetX: 0, offsetY: 0, safeTop: 0, safeBottom: 0 });
+    const points = original.points;
+    const left = Math.min(...points.map(p => p.x - p.radius));
+    const right = Math.max(...points.map(p => p.x + p.radius));
+    const top = Math.min(...points.map(p => p.y - p.radius));
+    const bottom = Math.max(...points.map(p => p.y + p.radius));
+    const margin = Math.min(width, height) * .035;
+    const factor = Math.min((width - margin * 2) / (right - left), (height - margin * 2) / (bottom - top));
+    const centerX = (left + right) / 2, centerY = (top + bottom) / 2;
+    return { ...original, x: 0, y: 0, width, height, boardWidth: width, boardHeight: height,
+      padding: 0, safeTop: 0, safeBottom: 0,
+      points: points.map(point => ({ ...point, x: width / 2 + (point.x - centerX) * factor,
+        y: height / 2 + (point.y - centerY) * factor, radius: point.radius * factor })) };
+  }
+  function circularSurface(ctx, g, config, dials) {
+    const light = ctx.createLinearGradient(0, 0, g.boardWidth * .65, g.boardHeight);
+    light.addColorStop(0, Palette.tint(config.board, .06)); light.addColorStop(.5, config.board);
+    light.addColorStop(1, Palette.tint(config.board, -.06));
+    ctx.fillStyle = light; ctx.fillRect(0, 0, g.boardWidth, g.boardHeight);
+    if (dials) g.points.forEach(point => SingleClock.drawFace(ctx, point, config));
+  }
+  function wrap(model) {
+    if (wrappers.has(model)) return wrappers.get(model);
+    const drawing = model.Drawing;
+    const wrapped = { ...model, geometry: (w, h, settings) => geometry(model, w, h, settings),
+      Drawing: { ...drawing, appearance: { ...drawing?.appearance, boardShape: 'rect' },
+        drawSurface: model.type === 'circular'
+          ? (ctx, g, config) => circularSurface(ctx, g, config, drawing.appearance?.dials !== false)
+          : drawing.drawSurface } };
+    wrappers.set(model, wrapped);
+    return wrapped;
+  }
+  return { geometry, wrap };
+});
+
+(function (root, factory) {
   const cjs = typeof module === 'object' && module.exports;
   const api = factory(cjs ? require('../catalog/classic.js') : root.Timeform.Classic,
     cjs ? require('../models/landscape.js') : root.Timeform.Landscape,
     cjs ? require('../models/circular.js') : root.Timeform.Circular,
     cjs ? require('../models/portrait.js') : root.Timeform.Portrait,
-    cjs ? require('../shared/config.js') : root.Timeform.Config);
+    cjs ? require('../shared/config.js') : root.Timeform.Config,
+    cjs ? require('../shared/borderless.js') : root.Timeform.Borderless);
   if (cjs) module.exports = api;
   else root.Timeform.PresentationConfig = api;
-})(globalThis, function (Classic, Landscape, Circular, Portrait, Config) {
+})(globalThis, function (Classic, Landscape, Circular, Portrait, Config, Borderless) {
   'use strict';
   const categories = { landscape: '横屏', circular: '圆形', portrait: '竖排' };
   const catalogs = [Landscape, Circular, Portrait].map(source => Classic.catalog(source));
@@ -5285,6 +5331,7 @@
     // the selection without adding experimental controls to native host menus.
     appearance: { ...base.appearance, group: 'motion', hidden: true },
     handAppearance: { ...base.handAppearance, group: 'motion', hidden: true },
+    borderless: checkbox('板面铺满屏幕', 'screen', '自动适配屏幕并放大表盘；开启后忽略背景色、缩放、留白和位置设置。'),
     ...Object.fromEntries(['scale', 'padding', 'offsetX', 'offsetY'].map(key => [key, base[key]])),
     customColors: checkbox('启用自定义配色', 'colors', '关闭时使用所选款式的原作配色；开启后使用下方四项颜色。'),
     ...Object.fromEntries(['background', 'board', 'long', 'short'].map(key => [key, base[key]])),
@@ -5316,7 +5363,7 @@
       patch.duration = motion?.duration || 42;
     }
     if (config.customDuration) patch.duration = config.duration;
-    return { model, settings: model.Settings.normalize(patch) };
+    return { model: config.borderless ? Borderless.wrap(model) : model, settings: model.Settings.normalize(patch) };
   }
   function serialize(input) {
     return JSON.stringify({ schema: 'timeform.presentation', version: 1, handGeometryVersion: 1, settings: normalize(input) }, null, 2);
@@ -5349,14 +5396,14 @@
   'use strict';
   function create({ canvas, config: initial, Renderer, readViewport, environment,
     Spec = Presentation, onChange = () => {} }) {
-    let config = Spec.normalize(initial), disposed = false, renderer, modelId;
+    let config = Spec.normalize(initial), disposed = false, renderer, renderedModel;
     const suspensions = new Set();
     function sync() {
       const { model, settings } = Spec.resolve(config);
-      if (model.id !== modelId) {
+      if (model !== renderedModel) {
         renderer?.dispose();
         renderer = Renderer.create(canvas, settings, model, readViewport, environment);
-        modelId = model.id;
+        renderedModel = model;
       } else renderer.update(settings);
       renderer.setPaused(Boolean(config.paused) || suspensions.size > 0);
     }
