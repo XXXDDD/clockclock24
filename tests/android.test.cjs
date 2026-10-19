@@ -101,16 +101,19 @@ test('every edition fills portrait, landscape, square and tablet screens without
 });
 
 test('color edits keep the selected live clock and fullscreen geometry, and the application uses no visible text controls', () => {
-  const host=androidRuntime(),config={edition:'amt72v-black',board:'#21444c',long:'#ffcc88',short:'#f6f4ef'};
-  host.sandbox.TimeformAndroid.update(config);
-  const session=host.session, renderer=session.renderer, geometry=renderer.getStats().geometry;
-  assert.equal(session.getConfig().customColors,true);
-  for(const key of ['board','long','short'])assert.equal(session.getConfig()[key],config[key]);
-  assert.equal(host.viewport.style.background,config.board);
-  host.sandbox.TimeformAndroid.update({...config,board:'#6d3340'});
-  assert.equal(session.renderer,renderer);
-  assert.equal(session.renderer.getStats().geometry,geometry);
-  assert.equal(host.viewport.style.background,'#6d3340');
+  const host=androidRuntime();
+  for (const model of host.sandbox.Timeform.PresentationConfig.models) {
+    const config={edition:model.id,board:'#21444c',long:'#ffcc88',short:'#f6f4ef'};
+    host.sandbox.TimeformAndroid.update(config);
+    const session=host.session, renderer=session.renderer, geometry=renderer.getStats().geometry;
+    assert.equal(session.getConfig().customColors,true);
+    for(const key of ['board','long','short'])assert.equal(session.getConfig()[key],config[key]);
+    assert.equal(host.viewport.style.background,config.board);
+    host.sandbox.TimeformAndroid.update({...config,board:'#6d3340'});
+    assert.equal(session.renderer,renderer);
+    assert.equal(session.renderer.getStats().geometry,geometry);
+    assert.equal(host.viewport.style.background,'#6d3340');
+  }
   const activity=read('android/app/src/main/java/com/timeform/wallpaper/MainActivity.java');
   assert.doesNotMatch(activity,/\b(?:TextView|EditText|SeekBar|Spinner|setText|drawText)\b/);
   assert.match(activity,/ClockThumbnailView/);

@@ -5300,13 +5300,24 @@
     const right = Math.max(...points.map(p => p.x + p.radius));
     const top = Math.min(...points.map(p => p.y - p.radius));
     const bottom = Math.max(...points.map(p => p.y + p.radius));
-    const margin = Math.min(width, height) * .035;
-    const factor = Math.min((width - margin * 2) / (right - left), (height - margin * 2) / (bottom - top));
+    // Only the board fills the viewport. Fit and position the dial array inside
+    // its safe region so host customization continues to work in this mode.
+    const margin = Math.min(Math.min(width, height) * .035 + (config.padding || 0), (width - 1) / 2, (height - 1) / 2);
+    const innerHeight = height - margin * 2;
+    const requestedTop = config.safeTop || 0, requestedBottom = config.safeBottom || 0;
+    const requested = requestedTop + requestedBottom;
+    const safeFactor = requested ? Math.min(1, (innerHeight - 1) / requested) : 1;
+    const safeTop = requestedTop * safeFactor, safeBottom = requestedBottom * safeFactor;
+    const availableWidth = width - margin * 2, availableHeight = Math.max(1, innerHeight - safeTop - safeBottom);
+    const factor = Math.min(availableWidth / (right - left), availableHeight / (bottom - top)) * config.scale / 100;
+    const dialWidth = (right - left) * factor, dialHeight = (bottom - top) * factor;
+    const x = margin + (availableWidth - dialWidth) / 2 * (1 + config.offsetX / 100) + dialWidth / 2;
+    const y = margin + safeTop + (availableHeight - dialHeight) / 2 * (1 + config.offsetY / 100) + dialHeight / 2;
     const centerX = (left + right) / 2, centerY = (top + bottom) / 2;
     return { ...original, x: 0, y: 0, width, height, boardWidth: width, boardHeight: height,
-      padding: 0, safeTop: 0, safeBottom: 0,
-      points: points.map(point => ({ ...point, x: width / 2 + (point.x - centerX) * factor,
-        y: height / 2 + (point.y - centerY) * factor, radius: point.radius * factor })) };
+      padding: margin, safeTop, safeBottom,
+      points: points.map(point => ({ ...point, x: x + (point.x - centerX) * factor,
+        y: y + (point.y - centerY) * factor, radius: point.radius * factor })) };
   }
   function circularSurface(ctx, g, config, dials) {
     const light = ctx.createLinearGradient(0, 0, g.boardWidth * .65, g.boardHeight);
@@ -5367,10 +5378,11 @@
     // the selection without adding experimental controls to native host menus.
     appearance: { ...base.appearance, group: 'motion', hidden: true },
     handAppearance: { ...base.handAppearance, group: 'motion', hidden: true },
-    borderless: checkbox('板面铺满屏幕', 'screen', '自动适配屏幕并放大表盘；开启后忽略背景色、缩放、留白和位置设置。'),
+    borderless: checkbox('板面铺满屏幕', 'screen', '板面铺满屏幕，表盘等比适配；仍可调整缩放、留白和位置。画布背景被板面覆盖，请用背景板颜色换色。'),
     ...Object.fromEntries(['scale', 'padding', 'offsetX', 'offsetY'].map(key => [key, base[key]])),
     customColors: checkbox('启用自定义配色', 'colors', '关闭时使用所选款式的原作配色；开启后使用下方四项颜色。'),
     ...Object.fromEntries(['background', 'board', 'long', 'short'].map(key => [key, base[key]])),
+    background: { ...base.background, help: '板面铺满屏幕时，画布背景被覆盖；请调整背景板颜色。' },
     action: { type: 'select', label: '动作', value: 'default', options: actions, group: 'motion',
       help: '默认沿用各款校准动作；附加动作只适用于名称标注的型号，其他型号自动使用原动作。' },
     customDuration: checkbox('启用自定义动作时长', 'motion', '关闭时沿用当前款式或当前动作的参考时长。'),
@@ -5530,7 +5542,8 @@
     centerHourLength: 'Center hour hand ratio', safeTop: 'Top safe area', safeBottom: 'Bottom safe area'
   };
   const help = {
-    borderless: 'Automatically fit and enlarge the dials on a full-screen board. Background, size, margin and position settings are ignored while enabled.',
+    borderless: 'Fill the screen with the board and fit the dials without stretching. Size, margins and position remain adjustable. Use Clock face to change the board color; it covers Background.',
+    background: 'The full-screen board covers Background. Change Clock face to recolor it.',
     appearance: 'By default, black and white use original lighting and colored dials use sculpted lighting. Manual overrides are available.',
     handAppearance: 'By default, metal hands use reflections and ordinary hands retain their original appearance. Highlights vary with position and direction under one light.',
     customColors: 'Off uses the selected design\'s original colors. Turn on to use the four colors below.',
@@ -5786,7 +5799,7 @@
       if (entry.range) entry.range.value = value;
       if (entry.hex) entry.hex.value = value.toUpperCase();
       const disabled = inherited || key === 'manualTime' && config.source !== 'manual'
-        || config.borderless && ['background', 'scale', 'padding', 'offsetX', 'offsetY'].includes(key)
+        || config.borderless && key === 'background'
         || ['autoDemo', 'demoInterval'].includes(key) && config.source !== 'manual'
         || key === 'demoInterval' && !config.autoDemo || Spec.geometryKeys.includes(key) && !model.Settings.fields[key];
       entry.input.disabled = Boolean(disabled);

@@ -4,6 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
+const { createHash } = require('node:crypto');
 const Spec = require('../src/core/presentation-config.js');
 const Config = require('../src/shared/config.js');
 const Session = require('../src/core/session.js');
@@ -70,8 +71,11 @@ test('Lively and Wallpaper Engine decode native settings into identical sessions
   const { session: shared } = harness();
   const engine = Engine.create(shared);
   for (const model of Spec.models) {
-    const input = Spec.normalize({ edition: model.id, customColors: true, board: '#17352a',
-      customDuration: true, duration: 63.5, scale: 73, offsetX: 12, source: 'manual', manualTime: '12:36' });
+    const input = Spec.normalize({ edition: model.id, borderless: true, customColors: true, board: '#17352a',
+      long: '#eebb66', short: '#aaccee', customGeometry: true, radius: 32, gap: 10,
+      longLength: 75, shortLength: 60, longWidth: 3, shortWidth: 4, safeTop: 150, safeBottom: 50,
+      customDuration: true, duration: 63.5, scale: 73, padding: 20, offsetX: 12, offsetY: -40,
+      source: 'manual', manualTime: '12:36', format24: false, timezone: 'Asia/Hong_Kong', autoDemo: true, demoInterval: 6 });
     for (const [key, property] of Object.entries(LivelyConfig.livelyProperties(input))) {
       if (Spec.fields[key]) assert.equal(lively.property(key, property.value), true, key);
     }
@@ -113,6 +117,133 @@ test('borderless fits every edition on desktop and phone, switches live and roun
   Engine.create(session).applyUserProperties({ borderless: { value: false } });
   assert.equal(renderers.length, 3); assert.equal(session.getConfig().borderless, false);
   session.dispose();
+});
+
+test('borderless native controls resize and position the dials while the board stays full screen for all 30 editions', () => {
+  for (const base of Spec.models) for (const host of ['lively', 'engine']) {
+    const { session } = harness(host === 'lively' ? Lively : Session, {
+      edition: base.id, borderless: true, scale: 100
+    });
+    const engine = Engine.create(session);
+    const apply = patch => {
+      if (host === 'lively') for (const [key, value] of Object.entries(patch)) {
+        const field = Spec.fields[key];
+        assert.equal(session.property(key, field.type === 'select' ? field.options.findIndex(([id]) => id === value) : value), true);
+      } else assert.equal(engine.applyUserProperties(Object.fromEntries(Object.entries(patch).map(([key, value]) => [key, { value }]))), true);
+    };
+    const geometry = () => session.renderer.model.geometry(1920, 1080, session.renderer.settings);
+    const full = geometry();
+    apply({ scale: 60 }); const small = geometry();
+    assert.ok(Math.abs(small.points[0].radius / full.points[0].radius - .6) < 1e-10, base.id + ' ' + host + ' size');
+    apply({ offsetX: -100, offsetY: -100 }); const start = geometry();
+    apply({ offsetX: 100, offsetY: 100 }); const end = geometry();
+    assert.ok(end.points[0].x > start.points[0].x && end.points[0].y > start.points[0].y, base.id + ' ' + host + ' position');
+    apply({ scale: 100, padding: 120, offsetX: 0, offsetY: 0 }); const padded = geometry();
+    assert.ok(padded.points[0].radius < full.points[0].radius, base.id + ' ' + host + ' margin');
+    for (const g of [full, small, start, end, padded]) {
+      assert.deepEqual([g.x, g.y, g.width, g.height, g.boardWidth, g.boardHeight], [0, 0, 1920, 1080, 1920, 1080]);
+      for (const p of g.points) assert.ok(p.x - p.radius >= -1e-8 && p.x + p.radius <= 1920 + 1e-8
+        && p.y - p.radius >= -1e-8 && p.y + p.radius <= 1080 + 1e-8, base.id);
+    }
+    session.dispose();
+  }
+});
+
+test('portrait safe areas affect borderless dial placement and remain valid on tiny screens', () => {
+  for (const base of Spec.models.filter(model => model.type === 'portrait')) {
+    const get = patch => {
+      const { model, settings } = Spec.resolve({ edition: base.id, borderless: true, customGeometry: true,
+        scale: 100, safeTop: 0, safeBottom: 0, ...patch });
+      return model.geometry(patch.width || 1080, patch.height || 1920, settings);
+    };
+    const normal = get({}), top = get({ safeTop: 500 }), bottom = get({ safeBottom: 500 });
+    assert.ok(top.points[0].y > normal.points[0].y, base.id + ' top safe area');
+    assert.ok(bottom.points.at(-1).y < normal.points.at(-1).y, base.id + ' bottom safe area');
+    const tiny = get({ width: 20, height: 20, padding: 160, safeTop: 1200, safeBottom: 1200 });
+    for (const p of tiny.points) assert.ok(Number.isFinite(p.radius) && p.radius > 0
+      && p.x - p.radius >= -1e-8 && p.x + p.radius <= 20 + 1e-8 && p.y - p.radius >= -1e-8 && p.y + p.radius <= 20 + 1e-8);
+  }
+});
+
+// Record the actual Canvas drawing commands, including cached board content.
+// This catches accepted settings that never make it into a rendered frame.
+function drawingEnvironment() {
+  function surface() {
+    let commands = [];
+    const values = {};
+    const digest = () => createHash('sha256').update(JSON.stringify(commands)).digest('hex');
+    const context = new Proxy(values, { set(target, key, value) { target[key] = value; commands.push([key, value]); return true; },
+      get(target, key) {
+        if (Object.hasOwn(target, key)) return target[key];
+        if (/create(?:Linear|Radial)Gradient/.test(key)) return (...args) => {
+          const gradient = { type: key, args, stops: [], addColorStop(...stop) { this.stops.push(stop); } };
+          commands.push([key, gradient]); return gradient;
+        };
+        return (...args) => {
+          if (key === 'clearRect') commands = [];
+          commands.push([key, ...args.map(value => value?.digest ? value.digest() : value)]);
+        };
+      } });
+    return { style: {}, digest, getContext: () => context, setAttribute() {} };
+  }
+  const canvas = surface();
+  return { canvas, environment: { createSurface: surface, pixelRatio: () => 1, reducedMotion: () => false,
+    isHidden: () => true, requestFrame: () => 1, cancelFrame() {}, setTimer: () => 1, clearTimer() {},
+    onVisibilityChange: () => () => {}, readNow: () => 0, readDate: () => new Date('2026-10-19T13:35:00Z'), onAutoTime() {} } };
+}
+
+test('custom colors, dial geometry, hand dimensions and visibility change rendered frames in both board modes for every edition', () => {
+  const Renderer = require('../src/runtime/renderer.js');
+  for (const base of Spec.models) for (const borderless of [false, true]) {
+    const host = drawingEnvironment();
+    const initial = Spec.normalize({ ...base.Settings.defaults, edition: base.id, borderless,
+      customColors: true, customGeometry: true, scale: 80, source: 'manual', manualTime: '13:35', paused: true, visibility: 'show' });
+    const session = Lively.create({ ...host, Renderer, config: initial,
+      readViewport: () => ({ width: 1920, height: 1080, displayWidth: 640, displayHeight: 360 }) });
+    const snapshot = () => { session.command('settle'); return JSON.stringify([host.canvas.digest(), host.canvas.style]); };
+    const before = snapshot();
+    for (const [key, value] of Object.entries({ board: '#21444c', long: '#ee8844', short: '#6644ee',
+      radius: 30, gap: 20, longLength: 72, shortLength: 58, longWidth: 3, shortWidth: 3,
+      ...(base.Settings.fields.centerHourLength ? { centerHourLength: 55 } : {}),
+      ...(base.Settings.fields.safeTop ? { safeTop: 500, safeBottom: 500 } : {}) })) {
+      session.updateConfig(initial);
+      assert.equal(session.property(key, value), true);
+      assert.notEqual(snapshot(), before, base.id + ' borderless=' + borderless + ' ' + key);
+    }
+    session.updateConfig(initial);
+    if (base.Settings.fields.visibility && base.id !== 'clockclock9') {
+      session.property('visibility', Spec.fields.visibility.options.findIndex(([id]) => id === 'hide'));
+      assert.notEqual(snapshot(), before, base.id + ' idle visibility');
+    }
+    session.updateConfig({ ...initial, customColors: false, customGeometry: false });
+    const restored = Spec.resolve(session.getConfig()).settings;
+    for (const key of ['board', 'long', 'short', ...Spec.geometryKeys.filter(key => base.Settings.fields[key])]) {
+      assert.equal(restored[key], base.Settings.defaults[key], base.id + ' restores ' + key);
+    }
+    session.dispose();
+  }
+});
+
+test('every edition applies custom motion duration and time controls through the real renderer in borderless mode', () => {
+  const Renderer = require('../src/runtime/renderer.js');
+  for (const base of Spec.models) {
+    const host = drawingEnvironment();
+    const session = Lively.create({ ...host, Renderer, config: { edition: base.id, borderless: true,
+      source: 'manual', manualTime: '13:35', paused: true, customDuration: true, duration: 4 },
+      readViewport: () => ({ width: 1920, height: 1080, displayWidth: 640, displayHeight: 360 }) });
+    session.command('replay'); session.command('step', 2000);
+    const fast = host.canvas.digest();
+    session.property('duration', '120'); session.command('settle');
+    session.command('replay'); session.command('step', 2000);
+    assert.notEqual(host.canvas.digest(), fast, base.id + ' custom duration');
+    session.property('format24', false); session.command('settle');
+    assert.equal(session.renderer.getStats().display, '0135', base.id + ' 12-hour time');
+    session.property('manualTime', '23:59'); session.property('format24', true); session.command('settle');
+    assert.equal(session.renderer.getStats().display, '2359', base.id + ' manual time');
+    session.property('source', 0); session.property('timezone', 'Asia/Hong_Kong'); session.command('settle');
+    assert.equal(session.renderer.getStats().display, '2135', base.id + ' live time zone');
+    session.dispose();
+  }
 });
 
 test('native updates are atomic and reject malformed values without changing unrelated settings', () => {

@@ -36,10 +36,11 @@
     // the selection without adding experimental controls to native host menus.
     appearance: { ...base.appearance, group: 'motion', hidden: true },
     handAppearance: { ...base.handAppearance, group: 'motion', hidden: true },
-    borderless: checkbox('板面铺满屏幕', 'screen', '自动适配屏幕并放大表盘；开启后忽略背景色、缩放、留白和位置设置。'),
+    borderless: checkbox('板面铺满屏幕', 'screen', '板面铺满屏幕，表盘等比适配；仍可调整缩放、留白和位置。画布背景被板面覆盖，请用背景板颜色换色。'),
     ...Object.fromEntries(['scale', 'padding', 'offsetX', 'offsetY'].map(key => [key, base[key]])),
     customColors: checkbox('启用自定义配色', 'colors', '关闭时使用所选款式的原作配色；开启后使用下方四项颜色。'),
     ...Object.fromEntries(['background', 'board', 'long', 'short'].map(key => [key, base[key]])),
+    background: { ...base.background, help: '板面铺满屏幕时，画布背景被覆盖；请调整背景板颜色。' },
     action: { type: 'select', label: '动作', value: 'default', options: actions, group: 'motion',
       help: '默认沿用各款校准动作；附加动作只适用于名称标注的型号，其他型号自动使用原动作。' },
     customDuration: checkbox('启用自定义动作时长', 'motion', '关闭时沿用当前款式或当前动作的参考时长。'),

@@ -79,7 +79,7 @@
       if (entry.range) entry.range.value = value;
       if (entry.hex) entry.hex.value = value.toUpperCase();
       const disabled = inherited || key === 'manualTime' && config.source !== 'manual'
-        || config.borderless && ['background', 'scale', 'padding', 'offsetX', 'offsetY'].includes(key)
+        || config.borderless && key === 'background'
         || ['autoDemo', 'demoInterval'].includes(key) && config.source !== 'manual'
         || key === 'demoInterval' && !config.autoDemo || Spec.geometryKeys.includes(key) && !model.Settings.fields[key];
       entry.input.disabled = Boolean(disabled);

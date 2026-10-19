@@ -1,25 +1,25 @@
 {
-  "version": "3.4.0",
-  "tag": "v3.4.0",
+  "version": "3.4.1",
+  "tag": "v3.4.1",
   "repository": "XXXDDD/clockclock24",
   "assets": [
     {
       "name": "TIMEFORM-Lively.zip",
       "file": "downloads/TIMEFORM-Lively.zip",
-      "size": 783684,
-      "sha256": "ca309347dbf955c0a59cb34557dc35852344fc551732390fae42275ae6bbab0e"
+      "size": 786710,
+      "sha256": "54914d865b2c8e8e6b6f869ddae94986911172eadebdce306665559c3f74baf6"
     },
     {
       "name": "TIMEFORM-WallpaperEngine.zip",
       "file": "downloads/TIMEFORM-WallpaperEngine.zip",
-      "size": 384914,
-      "sha256": "c6980a8691b818cde4538518991932ea2653745dbe463ecb524555011e5c57db"
+      "size": 386538,
+      "sha256": "2014fb24d0c38d59316fbb5f64396afefd187eeca12d7f397489543d71c11c83"
     },
     {
       "name": "Shizhen-Android.apk",
       "file": "downloads/Shizhen-Android.apk",
-      "size": 755542,
-      "sha256": "f6296696b400a90c73d16c90ed2885f4802c9b09619a42bca2f1fcb2daf92fbb"
+      "size": 755890,
+      "sha256": "fda2b0b3f2cb72d1ac9a089df587d9c6217809cdcc33f2fb9a8abf7a8871e194"
     }
   ]
 }

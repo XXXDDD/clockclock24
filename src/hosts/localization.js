@@ -18,7 +18,8 @@
     centerHourLength: 'Center hour hand ratio', safeTop: 'Top safe area', safeBottom: 'Bottom safe area'
   };
   const help = {
-    borderless: 'Automatically fit and enlarge the dials on a full-screen board. Background, size, margin and position settings are ignored while enabled.',
+    borderless: 'Fill the screen with the board and fit the dials without stretching. Size, margins and position remain adjustable. Use Clock face to change the board color; it covers Background.',
+    background: 'The full-screen board covers Background. Change Clock face to recolor it.',
     appearance: 'By default, black and white use original lighting and colored dials use sculpted lighting. Manual overrides are available.',
     handAppearance: 'By default, metal hands use reflections and ordinary hands retain their original appearance. Highlights vary with position and direction under one light.',
     customColors: 'Off uses the selected design\'s original colors. Turn on to use the four colors below.',

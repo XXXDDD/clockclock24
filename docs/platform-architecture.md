@@ -43,6 +43,8 @@ flowchart TD
 
 型号参数仍由各型号 Settings 校验。统一运行配置的 `edition` 是具体预设 ID，`group` 是导航／动作分组，`family` 是实现归属；三者不能混用。CCL 仍以 `clockclockl` 保存，界面归入 24 系列。
 
+`borderless` 只把板面扩展到整个视口；表盘阵列仍遵守缩放、安全边距、位置和竖排上下留白。画布背景色在铺满模式下被板面覆盖，板面配色和指针配色继续生效。Lively 离线配置页只禁用被覆盖的画布背景色控件。
+
 公共运行配置采用：
 
 ```json
@@ -103,7 +105,7 @@ Lively 的 `livelyPropertyListener(name, value)` 解码单条属性；`livelyWal
 
 Wallpaper Engine 的 `wallpaperPropertyListener.applyUserProperties` 只处理收到的字段，一次提交一批有效设置；combo 使用稳定 ID，color 的三个 0–1 分量转成 HEX。`setPaused(boolean)` 映射独立挂起原因。接口依据 [User Properties](https://docs.wallpaperengine.io/en/web/customization/properties.html) 和 [Property Listener](https://docs.wallpaperengine.io/en/web/api/propertylistener.html)。
 
-`dist/wallpaper-engine/` 包含离线 `index.html`、生成的 `project.json`、配置和预览图；`dist/TIMEFORM-WallpaperEngine.zip` 是同内容测试归档。代码与回调协议已自动验证，Wallpaper Engine 编辑器导入和原生菜单仍需实际宿主验收；当前没有实现其 `applyGeneralProperties` FPS 限制，也未发布 Workshop。
+`dist/wallpaper-engine/` 包含离线 `index.html`、生成的 `project.json`、配置和预览图；`dist/TIMEFORM-WallpaperEngine.zip` 是同内容测试归档。2026-10-19 已在 Lively 2.2.1.0 与 Wallpaper Engine 2.8.42 的原生菜单实际调整全部 33 个公开配置项，并以 AMT144、ClockClock 9、AMT72v Black 覆盖三种版式；实际渲染、自动演示、暂停与恢复的像素核对见[原生验收记录](native-validation.md)。这不等于逐一完成 30 款 × 33 项的原生全组合验收。WE 的弹出预览保留打开时的配置，属性批次调整后需重新打开预览对照。当前没有实现其 `applyGeneralProperties` FPS 限制，也未发布 Workshop。
 
 ## 构建与验证
 
